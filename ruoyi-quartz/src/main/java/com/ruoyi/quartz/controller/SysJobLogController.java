@@ -83,8 +83,7 @@ public class SysJobLogController extends BaseController
     @RequiresPermissions("monitor:job:remove")
     @PostMapping("/clean")
     @ResponseBody
-    public AjaxResult clean()
-    {
+    public AjaxResult clean() {
         jobLogService.cleanJobLog();
         return success();
     }
