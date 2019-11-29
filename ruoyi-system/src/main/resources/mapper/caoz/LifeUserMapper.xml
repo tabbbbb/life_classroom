@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.caoz.mapper.LifeUserMapper">
+    
+    <resultMap type="LifeUser" id="LifeUserResult">
+        <result property="userId"    column="user_id"    />
+        <result property="cardNumber"    column="card_number"    />
+        <result property="sex"    column="sex"    />
+        <result property="nikName"    column="nik_name"    />
+        <result property="address"    column="address"    />
+        <result property="phone"    column="phone"    />
+        <result property="imgUrl"    column="img_url"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="leadId"    column="lead_id"    />
+        <result property="shareId"    column="share_id"    />
+        <result property="type"    column="type"    />
+        <result property="qrcode"    column="qrcode"    />
+        <result property="createDate"    column="create_date"    />
+        <result property="birthday"    column="birthday"    />
+    </resultMap>
+
+    <sql id="selectLifeUserVo">
+        select user_id, card_number, sex, nik_name, address, phone, img_url, parent_id, lead_id, share_id, type, qrcode, create_date, birthday from life_user
+    </sql>
+
+    <select id="selectLifeUserList" parameterType="LifeUser" resultMap="LifeUserResult">
+        <include refid="selectLifeUserVo"/>
+        <where>  
+            <if test="cardNumber != null  and cardNumber != ''"> and card_number = #{cardNumber}</if>
+            <if test="sex != null "> and sex = #{sex}</if>
+            <if test="nikName != null  and nikName != ''"> and nik_name like concat('%', #{nikName}, '%')</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="imgUrl != null  and imgUrl != ''"> and img_url = #{imgUrl}</if>
+            <if test="parentId != null "> and parent_id = #{parentId}</if>
+            <if test="leadId != null "> and lead_id = #{leadId}</if>
+            <if test="shareId != null "> and share_id = #{shareId}</if>
+            <if test="type != null "> and type = #{type}</if>
+            <if test="qrcode != null  and qrcode != ''"> and qrcode = #{qrcode}</if>
+            <if test="createDate != null "> and create_date = #{createDate}</if>
+            <if test="birthday != null "> and birthday = #{birthday}</if>
+        </where>
+    </select>
+    
+    <select id="selectLifeUserById" parameterType="Long" resultMap="LifeUserResult">
+        <include refid="selectLifeUserVo"/>
+        where user_id = #{userId}
+    </select>
+        
+    <insert id="insertLifeUser" parameterType="LifeUser" useGeneratedKeys="true" keyProperty="userId">
+        insert into life_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cardNumber != null  and cardNumber != ''">card_number,</if>
+            <if test="sex != null ">sex,</if>
+            <if test="nikName != null  and nikName != ''">nik_name,</if>
+            <if test="address != null  and address != ''">address,</if>
+            <if test="phone != null  and phone != ''">phone,</if>
+            <if test="imgUrl != null  and imgUrl != ''">img_url,</if>
+            <if test="parentId != null ">parent_id,</if>
+            <if test="leadId != null ">lead_id,</if>
+            <if test="shareId != null ">share_id,</if>
+            <if test="type != null ">type,</if>
+            <if test="qrcode != null  and qrcode != ''">qrcode,</if>
+            <if test="createDate != null ">create_date,</if>
+            <if test="birthday != null ">birthday,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cardNumber != null  and cardNumber != ''">#{cardNumber},</if>
+            <if test="sex != null ">#{sex},</if>
+            <if test="nikName != null  and nikName != ''">#{nikName},</if>
+            <if test="address != null  and address != ''">#{address},</if>
+            <if test="phone != null  and phone != ''">#{phone},</if>
+            <if test="imgUrl != null  and imgUrl != ''">#{imgUrl},</if>
+            <if test="parentId != null ">#{parentId},</if>
+            <if test="leadId != null ">#{leadId},</if>
+            <if test="shareId != null ">#{shareId},</if>
+            <if test="type != null ">#{type},</if>
+            <if test="qrcode != null  and qrcode != ''">#{qrcode},</if>
+            <if test="createDate != null ">#{createDate},</if>
+            <if test="birthday != null ">#{birthday},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLifeUser" parameterType="LifeUser">
+        update life_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="cardNumber != null  and cardNumber != ''">card_number = #{cardNumber},</if>
+            <if test="sex != null ">sex = #{sex},</if>
+            <if test="nikName != null  and nikName != ''">nik_name = #{nikName},</if>
+            <if test="address != null  and address != ''">address = #{address},</if>
+            <if test="phone != null  and phone != ''">phone = #{phone},</if>
+            <if test="imgUrl != null  and imgUrl != ''">img_url = #{imgUrl},</if>
+            <if test="parentId != null ">parent_id = #{parentId},</if>
+            <if test="leadId != null ">lead_id = #{leadId},</if>
+            <if test="shareId != null ">share_id = #{shareId},</if>
+            <if test="type != null ">type = #{type},</if>
+            <if test="qrcode != null  and qrcode != ''">qrcode = #{qrcode},</if>
+            <if test="createDate != null ">create_date = #{createDate},</if>
+            <if test="birthday != null ">birthday = #{birthday},</if>
+        </trim>
+        where user_id = #{userId}
+    </update>
+
+    <delete id="deleteLifeUserById" parameterType="Long">
+        delete from life_user where user_id = #{userId}
+    </delete>
+
+    <delete id="deleteLifeUserByIds" parameterType="String">
+        delete from life_user where user_id in 
+        <foreach item="userId" collection="array" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </delete>
+    
+</mapper>
