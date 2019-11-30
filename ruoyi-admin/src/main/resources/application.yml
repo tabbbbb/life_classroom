@@ -128,3 +128,12 @@ xss:
   excludes: /system/notice/*
   # 匹配链接
   urlPatterns: /system/*,/monitor/*,/tool/*
+
+sms:
+  tencent:
+    enable: true
+    appid: 1400254922
+    appkey: 4f203cce3b07e03bf2471e44b2a5bb21
+    template:
+      verificationCode: 418781
+      remind: 123456
