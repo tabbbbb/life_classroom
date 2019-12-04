@@ -2,6 +2,7 @@ package com.ruoyi.caoz.service;
 
 
 import com.ruoyi.caoz.domain.LifeUser;
+import com.ruoyi.common.response.UserResponse;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * @author ruoyi
  * @date 2019-11-29
  */
-public interface ILifeUserService 
+public interface LifeUserService
 {
     /**
      * 查询用户
@@ -60,4 +61,12 @@ public interface ILifeUserService
      * @return 结果
      */
     public int deleteLifeUserById(Long userId);
+
+
+    /**
+     * 设置密码
+     * @param body
+     * @return UserResponse
+     */
+    UserResponse setPassword(Long userId,String body);
 }

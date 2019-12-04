@@ -20,7 +20,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @create 2019/11/30 0030
  * @since 1.0.0
  */
-@ConfigurationProperties("pay.wx")
+@ConfigurationProperties("life.wx")
 public class WxProperties {
     private String appId;
 

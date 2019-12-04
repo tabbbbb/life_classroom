@@ -137,3 +137,11 @@ sms:
     template:
       verificationCode: 418781
       remind: 123456
+
+life:
+  wx:
+    app-id: wx1ca0daac8ee8a9ef
+    app-secret: b3f00d4f9c6b92e5639e20557fc9727d
+    mch-id: 1546464881
+    mch-key: 33cbc407ecf54de38d41cc3660924911
+    notify-url:  http://7p2zs4.natappfree.cc/wx/order/pay-notify

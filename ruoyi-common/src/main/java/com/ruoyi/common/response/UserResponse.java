@@ -25,34 +25,38 @@ public class UserResponse {
 
     private Object data;
 
-    public static Object fail(){
+    public static UserResponse fail(){
         UserResponse userResponse = new UserResponse();
         userResponse.code = UserResponseCode.ERROR;
         userResponse.errmsg = "错误";
         return userResponse;
     }
 
-    public static Object fail(Integer code,String errmsg){
+    public static UserResponse fail(Integer code,String errmsg){
         UserResponse userResponse = new UserResponse();
         userResponse.code = code;
         userResponse.errmsg = errmsg;
         return userResponse;
     }
 
-    public static Object succeed(){
+    public static UserResponse succeed(){
         UserResponse userResponse = new UserResponse();
         userResponse.code = UserResponseCode.SUCCEED;
         userResponse.errmsg = "成功";
         return userResponse;
     }
 
-    public static Object succeed(Object data){
+    public static UserResponse succeed(Object data){
         UserResponse userResponse = new UserResponse();
         userResponse.code = UserResponseCode.SUCCEED;
         userResponse.errmsg = "成功";
         userResponse.data = data;
         return userResponse;
     }
+
+
+
+
 
     public Integer getCode() {
         return code;

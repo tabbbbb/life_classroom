@@ -4,11 +4,17 @@ import java.util.List;
 
 import com.ruoyi.caoz.domain.LifeUser;
 import com.ruoyi.caoz.mapper.LifeUserMapper;
-import com.ruoyi.caoz.service.ILifeUserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ruoyi.caoz.service.LifeUserService;
+import com.ruoyi.common.response.UserResponse;
+import com.ruoyi.common.response.UserResponseCode;
+import com.ruoyi.common.utils.JacksonUtil;
+import com.ruoyi.common.utils.security.Md5Utils;
+import jodd.util.StringUtil;
 import org.springframework.stereotype.Service;
 
 import com.ruoyi.common.core.text.Convert;
+
+import javax.annotation.Resource;
 
 /**
  * 用户Service业务层处理
@@ -17,10 +23,10 @@ import com.ruoyi.common.core.text.Convert;
  * @date 2019-11-29
  */
 @Service
-public class LifeUserServiceImpl implements ILifeUserService
+public class LifeUserServiceImpl implements LifeUserService
 {
-    @Autowired
-    private LifeUserMapper lifeUserMapper;
+    @Resource
+    private LifeUserMapper userMapper;
 
     /**
      * 查询用户
@@ -31,7 +37,7 @@ public class LifeUserServiceImpl implements ILifeUserService
     @Override
     public LifeUser selectLifeUserById(Long userId)
     {
-        return lifeUserMapper.selectLifeUserById(userId);
+        return userMapper.selectLifeUserById(userId);
     }
 
     /**
@@ -43,7 +49,7 @@ public class LifeUserServiceImpl implements ILifeUserService
     @Override
     public List<LifeUser> selectLifeUserList(LifeUser lifeUser)
     {
-        return lifeUserMapper.selectLifeUserList(lifeUser);
+        return userMapper.selectLifeUserList(lifeUser);
     }
 
     /**
@@ -55,7 +61,7 @@ public class LifeUserServiceImpl implements ILifeUserService
     @Override
     public int insertLifeUser(LifeUser lifeUser)
     {
-        return lifeUserMapper.insertLifeUser(lifeUser);
+        return userMapper.insertLifeUser(lifeUser);
     }
 
     /**
@@ -67,7 +73,7 @@ public class LifeUserServiceImpl implements ILifeUserService
     @Override
     public int updateLifeUser(LifeUser lifeUser)
     {
-        return lifeUserMapper.updateLifeUser(lifeUser);
+        return userMapper.updateLifeUser(lifeUser);
     }
 
     /**
@@ -79,7 +85,7 @@ public class LifeUserServiceImpl implements ILifeUserService
     @Override
     public int deleteLifeUserByIds(String ids)
     {
-        return lifeUserMapper.deleteLifeUserByIds(Convert.toStrArray(ids));
+        return userMapper.deleteLifeUserByIds(Convert.toStrArray(ids));
     }
 
     /**
@@ -91,6 +97,26 @@ public class LifeUserServiceImpl implements ILifeUserService
     @Override
     public int deleteLifeUserById(Long userId)
     {
-        return lifeUserMapper.deleteLifeUserById(userId);
+        return userMapper.deleteLifeUserById(userId);
+    }
+
+    @Override
+    public UserResponse setPassword(Long userId,String body) {
+        String password = JacksonUtil.parseString(body,"password");
+        LifeUser user = userMapper.selectLifeUserById(userId);
+        if (!StringUtil.isEmpty(user.getPassword())){
+            return UserResponse.fail(UserResponseCode.PASSWORD_EXIST_ERROR,"密码已存在，不能设置");
+        }
+        if (password.length() < 6){
+            return UserResponse.fail(UserResponseCode.REGISTER_ERROR,"密码小于6");
+        }
+        password = Md5Utils.hash(password);
+        LifeUser setUser = new LifeUser();
+        setUser.setUserId(user.getUserId());
+        setUser.setPassword(password);
+        if (userMapper.updateLifeUser(setUser) == 1){
+            return UserResponse.succeed();
+        }
+        return UserResponse.fail(UserResponseCode.SET_PASSWORD_ERROR,"设置密码错误");
     }
 }

@@ -1,20 +1,24 @@
 package com.ruoyi.web.controller.caoz;
 
-import java.util.List;
-
 import com.ruoyi.caoz.domain.LifeUser;
-import com.ruoyi.caoz.service.ILifeUserService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.ruoyi.caoz.service.LifeUserService;
+import com.ruoyi.common.response.UserResponse;
+import com.ruoyi.common.response.UserResponseCode;
+import com.ruoyi.common.utils.JacksonUtil;
+import com.ruoyi.common.utils.security.Md5Utils;
+import com.ruoyi.framework.userlogin.LoginResponse;
+import com.ruoyi.framework.userlogin.annotation.LoginInfo;
+import com.ruoyi.framework.userlogin.info.UserLoginInfo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import jodd.util.StringUtil;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import com.ruoyi.common.annotation.Log;
-import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.core.controller.BaseController;
-import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.common.core.page.TableDataInfo;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 用户Controller
@@ -22,19 +26,26 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * @author ruoyi
  * @date 2019-11-29
  */
-@Controller
+@RestController
 @RequestMapping("/user/user")
+@Api(value = "/user/user",description = "用户服务")
 public class LifeUserController extends BaseController
 {
 
 
     @Autowired
-    private ILifeUserService lifeUserService;
+    private LifeUserService userService;
 
 
 
 
-
+    @PutMapping("password")
+    @ApiOperation(value = "设置密码")
+    public UserResponse setPassword(@ApiIgnore @LoginInfo UserLoginInfo loginInfo, @RequestBody @ApiParam(name = "body",value = "password:密码") String body){
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null) return response;
+        return userService.setPassword(loginInfo.getId(),body);
+    }
 
 
 

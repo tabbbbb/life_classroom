@@ -10,9 +10,6 @@
  */
 package com.ruoyi.framework.userlogin.info;
 
-import com.ruoyi.caoz.domain.LifeUser;
-import com.ruoyi.framework.userlogin.token.UserToken;
-
 import java.time.LocalDateTime;
 
 /**
@@ -48,6 +45,7 @@ public class UserLoginInfo {
      * 状态信息
      */
     private String message;
+
 
 
 

@@ -48,9 +48,9 @@ public class SmsCache {
     public static boolean compareSmsCache(String phone,String code){
         if (smsCache.containsKey(phone)){
             if (smsCache.get(phone).equals(code) && codeTimeCache.get(phone).isAfter(LocalDateTime.now())){
+                smsCache.remove(phone);
                 return true;
             }
-            removeCodeCache(phone);
             return false;
         }else{
             return false;
@@ -58,10 +58,7 @@ public class SmsCache {
     }
 
 
-    private static void removeCodeCache(String phone){
-        smsCache.remove(phone);
-        codeTimeCache.remove(phone);
-    }
+
 
     public static void putUpdateTimeCache(String phone){
         updateTimeCache.put(phone,LocalDateTime.now().plusMinutes(UPDATE_ENABLE_MINUTER));

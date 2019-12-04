@@ -19,11 +19,10 @@ package com.ruoyi.framework.userlogin.token;
  * @since 1.0.0
  */
 
-import com.ruoyi.caoz.domain.LifeUser;
 import com.ruoyi.common.utils.CharUtil;
 import com.ruoyi.framework.userlogin.info.UserLoginInfo;
-import org.apache.shiro.crypto.hash.SimpleHash;
-import org.apache.shiro.util.ByteSource;
+import com.sun.org.apache.bcel.internal.generic.RETURN;
+import org.springframework.scheduling.annotation.Scheduled;
 
 
 import java.time.LocalDateTime;
@@ -34,21 +33,20 @@ import java.util.Map;
  * 用户token保存
  */
 public class UserToken {
-    private Map<String,UserLoginInfo> tokenMap = new HashMap<>();
+    private static Map<String,UserLoginInfo> tokenMap = new HashMap<>();
 
-    private Map<Long,UserLoginInfo> idTokenMap = new HashMap<>();
+    private static Map<Long,UserLoginInfo> idTokenMap = new HashMap<>();
 
     /**
      * 获取token
      * @param token
      * @return
      */
-    public boolean getTokenFlag(String token){
+    public static boolean getTokenFlag(String token){
         UserLoginInfo userLoginInfo = get(token);
         if (userLoginInfo != null) {
             if (userLoginInfo.getEndTime().plusDays(1).isBefore(LocalDateTime.now())){
-                removeToken(token);
-                removeIdToken(token);
+                removeLoginCache(token);
                 return false;
             }
             return true;
@@ -57,11 +55,11 @@ public class UserToken {
         }
     }
 
-    private UserLoginInfo get(String key){
+    public static UserLoginInfo get(String key){
         return tokenMap.get(key);
     }
 
-    public void addToken(Long id){
+    public static UserLoginInfo addToken(Long id){
         if (idTokenMap.containsKey(id)){
             setTokenMapStatus(id);
         }
@@ -76,10 +74,11 @@ public class UserToken {
         userLoginInfo.setToken(token);
         tokenMap.put(userLoginInfo.getToken(),userLoginInfo);
         idTokenMap.put(id,userLoginInfo);
+        return userLoginInfo;
     }
 
 
-    private void setTokenMapStatus(Long id){
+    private static void setTokenMapStatus(Long id){
         UserLoginInfo userLoginInfo = idTokenMap.get(id);
         userLoginInfo.setEnabled(false);
         userLoginInfo.setMessage("您的账号在另一端登录");
@@ -91,7 +90,7 @@ public class UserToken {
      * 删除token
      * @param token
      */
-    public void removeToken(String token){
+    public static void removeToken(String token){
         if (tokenMap.containsKey(token)){
             tokenMap.remove(token);
         }
@@ -100,7 +99,7 @@ public class UserToken {
     /**
      * 删除idToken
      */
-    public void removeIdToken(String token){
+    public static void removeIdToken(String token){
         for (Long id : idTokenMap.keySet()) {
             if (idTokenMap.get(id).getToken().equals(token)){
                 idTokenMap.remove(id);
@@ -109,16 +108,16 @@ public class UserToken {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
+    /**
+     * 删除登录缓存
+     */
+    public static void removeLoginCache(String token){
+        if (tokenMap.containsKey(token)){
+            Long id = get(token).getId();
+            idTokenMap.remove(id);
+            tokenMap.remove(token);
+        }
+    }
 
 
 

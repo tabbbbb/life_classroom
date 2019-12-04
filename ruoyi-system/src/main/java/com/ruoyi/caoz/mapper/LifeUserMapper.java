@@ -29,6 +29,27 @@ public interface LifeUserMapper
      */
     public List<LifeUser> selectLifeUserList(LifeUser lifeUser);
 
+
+    /**
+     * 根据用户邀请码查询用户
+     * @param InvitationCard
+     * @return
+     */
+    LifeUser selectLifeUserByInvitationCard(String InvitationCard);
+
+
+    /**
+     *根据手机号获取用户信息
+     * @param phone
+     * @return
+     */
+    LifeUser selectLifeUserByPhone(String phone);
+
+
+
+    LifeUser selectLifeUserByOpenId(String openId);
+
+
     /**
      * 新增用户
      * 
