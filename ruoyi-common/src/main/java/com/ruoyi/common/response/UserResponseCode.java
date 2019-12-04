@@ -99,6 +99,55 @@ public class UserResponseCode {
     public static final Integer WX_LOGIN_ERROR = 100012;
 
 
+    /**
+     * 文件上传错误
+     */
+    public static final Integer UP_FILE_ERROR = 100013;
+
+
+    /**
+     * 头像修改错误
+     */
+    public static final Integer USER_AVATAR_UPDATE_ERROR = 100014;
+
+
+    /**
+     * 昵称修改错误
+     */
+    public static final Integer USER_NICKNAME_UPDATE_ERROR = 100015;
+
+
+    /**
+     * 生日修改错误
+     */
+    public static final Integer USER_BIRTHDAY_UPDATE_ERROR = 100016;
+
+
+
+    /**
+     * 性别修改错误
+     */
+    public static final Integer USER_SEX_UPDATE_ERROR = 100017;
+
+
+
+    /**
+     * 地址修改错误
+     */
+    public static final Integer USER_ADDRESS_UPDATE_ERROR = 100017;
+
+
+
+    /**
+     * 绑定修改错误
+     */
+    public static final Integer USER_BIND_RELATION_UPDATE_ERROR = 100017;
+
+
+    /**
+     * 修改用户信息错误
+     */
+    public static final Integer USER_UPDATE_INFO_ERROR = 100018;
 
 
 }

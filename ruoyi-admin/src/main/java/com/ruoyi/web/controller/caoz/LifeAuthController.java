@@ -23,9 +23,7 @@ import com.ruoyi.framework.userlogin.WxLoginUserInfo;
 import com.ruoyi.framework.userlogin.annotation.LoginInfo;
 import com.ruoyi.framework.userlogin.info.UserLoginInfo;
 import com.ruoyi.framework.userlogin.token.UserToken;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
@@ -105,16 +103,16 @@ public class LifeAuthController {
     public UserResponse bindPhone(@ApiIgnore @LoginInfo UserLoginInfo loginInfo,@RequestBody @ApiParam(name = "body",value = "phone:手机号,code:短信验证码")  String body){
         UserResponse response = LoginResponse.toMessage(loginInfo);
         if (response != null) return response;
-        return autoService.bindPhone(body);
+        return autoService.bindPhone(loginInfo.getId(),body);
     }
 
 
     @PostMapping("verifycode")
     @ApiOperation(value = "验证验证码",response = UserResponse.class,notes = "")
-    public UserResponse bindUpdateTime(@ApiIgnore @LoginInfo UserLoginInfo loginInfo,@RequestBody @ApiParam(name = "body",value = "phone:手机号,code:短信验证码")  String body){
+    public UserResponse bindUpdateTime(@ApiIgnore @LoginInfo UserLoginInfo loginInfo,@RequestBody @ApiParam(name = "body",value = "code:短信验证码")  String body){
         UserResponse response = LoginResponse.toMessage(loginInfo);
         if (response != null) return response;
-        return null;
+        return autoService.bindUpdateTime(loginInfo.getId(),body);
     }
 
 
@@ -122,9 +120,24 @@ public class LifeAuthController {
 
     @PostMapping("bindwx")
     @ApiOperation(value = "绑定微信",response = UserResponse.class,notes = "")
-    public Object bindWx(@ApiIgnore @LoginInfo UserLoginInfo loginInfo,@RequestBody @ApiParam(name = "code:微信code")  String body){
-        return null;
+    public Object bindWx(@ApiIgnore @LoginInfo UserLoginInfo loginInfo,@RequestBody @ApiParam(name = "body",value = "code:微信code")  String body){
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null) return response;
+        return autoService.bindWx(loginInfo.getId(),body);
     }
+
+
+
+    @PostMapping("getToken")
+    @ApiOperation(value = "获取某用户的token",response = UserResponse.class,notes = "")
+    @ApiImplicitParams(
+            @ApiImplicitParam(name = "userId",value = "用户id")
+    )
+    public Object getToken(Long userId){
+        return UserResponse.succeed(UserToken.addToken(userId));
+    }
+
+
 
 
 

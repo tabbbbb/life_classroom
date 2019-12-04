@@ -166,26 +166,29 @@ public class LifeAutoServiceImpl implements LifeAutoService {
      * @return
      */
     @Override
-    public UserResponse bindPhone(String body) {
+    public UserResponse bindPhone(Long id,String body) {
         String phone = JacksonUtil.parseString(body,"phone");
         String code = JacksonUtil.parseString(body,"code");
         if (SmsCache.compareSmsCache(phone,code)){
-            LifeUser oldUser = phoneIsBind(phone);
+            LifeUser oldUser = userMapper.selectLifeUserById(id);
             String updateType = "绑定";
             LifeUser newUser = new LifeUser();
-            newUser.setUserId(oldUser.getUserId());
+            newUser.setUserId(id);
             newUser.setPhone(phone);
-            if (oldUser.getPhone() != null){ //修改
+            newUser.setCardNumber(phone.substring(7)+random());
+            if (oldUser.getPhone() != null && oldUser.getPhone().length() != 0){ //修改
                 updateType = "修改";
-                if (!SmsCache.compareUpdateCache(phone)){
+                if (!SmsCache.compareUpdateCache(oldUser.getPhone())){
                     return UserResponse.fail(UserResponseCode.UPDATE_TIME_PAST,"修改时间到期");
                 }
+                newUser.setCardNumber(phone.substring(7)+oldUser.getInvitationCard());
             }
             if (userMapper.updateLifeUser(newUser) == 0){
                 return UserResponse.fail(UserResponseCode.BIND_PHONE_ERROR,updateType+"手机号错误");
             }
+            return UserResponse.succeed();
         }
-        return UserResponse.succeed();
+       return UserResponse.fail(UserResponseCode.CODE_ERROR,"验证码输入错误");
     }
 
     /**
@@ -195,12 +198,33 @@ public class LifeAutoServiceImpl implements LifeAutoService {
      * @return
      */
     @Override
-    public UserResponse bindWx(String body) {
-        return null;
+    public UserResponse bindWx(Long userId,String body) {
+        LifeUser oldUser = userMapper.selectLifeUserById(userId);
+        if (oldUser.getOpenId() != null){
+            return UserResponse.fail(UserResponseCode.BIND_WX_ERROR,"微信已被绑定");
+        }
+        String code = JacksonUtil.parseString(body,"code");
+        String openId = operation.login(code);
+        if (openId == null){
+            return UserResponse.fail(UserResponseCode.BIND_WX_ERROR,"绑定微信错误：openId获取失败");
+        }
+        LifeUser newUser = new LifeUser();
+        newUser.setUserId(userId);
+        newUser.setOpenId(openId);
+        if (userMapper.updateLifeUser(newUser) == 0){
+            return UserResponse.fail(UserResponseCode.BIND_WX_ERROR,"绑定微信错误：修改时失败");
+        }
+        return UserResponse.succeed();
     }
 
     @Override
-    public UserResponse bindUpdateTime(String body) {
-        return null;
+    public UserResponse bindUpdateTime(Long userId,String body) {
+        String code = JacksonUtil.parseString(body,"code");
+        LifeUser user = userMapper.selectLifeUserById(userId);
+        if (SmsCache.compareSmsCache(user.getPhone(),code)){
+            SmsCache.putUpdateTimeCache(user.getPhone());
+            return UserResponse.succeed();
+        }
+        return UserResponse.fail(UserResponseCode.CODE_ERROR,"验证码输入错误");
     }
 }

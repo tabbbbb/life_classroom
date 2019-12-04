@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.caoz.mapper.LifeVipCouponMapper">
+    
+    <resultMap type="LifeVipCoupon" id="LifeVipCouponResult">
+        <result property="id"    column="id"    />
+        <result property="vipId"    column="vip_id"    />
+        <result property="couponId"    column="coupon_id"    />
+    </resultMap>
+
+    <sql id="selectLifeVipCouponVo">
+        select id, vip_id, coupon_id from life_vip_coupon
+    </sql>
+
+    <select id="selectLifeVipCouponList" parameterType="LifeVipCoupon" resultMap="LifeVipCouponResult">
+        <include refid="selectLifeVipCouponVo"/>
+        <where>  
+            <if test="vipId != null "> and vip_id = #{vipId}</if>
+            <if test="couponId != null "> and coupon_id = #{couponId}</if>
+        </where>
+    </select>
+    
+    <select id="selectLifeVipCouponById" parameterType="Long" resultMap="LifeVipCouponResult">
+        <include refid="selectLifeVipCouponVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertLifeVipCoupon" parameterType="LifeVipCoupon">
+        insert into life_vip_coupon
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="vipId != null ">vip_id,</if>
+            <if test="couponId != null ">coupon_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="vipId != null ">#{vipId},</if>
+            <if test="couponId != null ">#{couponId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLifeVipCoupon" parameterType="LifeVipCoupon">
+        update life_vip_coupon
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="vipId != null ">vip_id = #{vipId},</if>
+            <if test="couponId != null ">coupon_id = #{couponId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteLifeVipCouponById" parameterType="Long">
+        delete from life_vip_coupon where id = #{id}
+    </delete>
+
+    <delete id="deleteLifeVipCouponByIds" parameterType="String">
+        delete from life_vip_coupon where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

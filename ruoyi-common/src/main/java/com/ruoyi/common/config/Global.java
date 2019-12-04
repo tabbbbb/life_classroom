@@ -91,11 +91,19 @@ public class Global
     }
 
     /**
-     * 获取头像上传路径
+     * 获取管理员头像上传路径
      */
-    public static String getAvatarPath()
+    public static String getAdminAvatarPath()
     {
-        return getProfile() + "/avatar";
+        return getProfile() + "/admin/avatar";
+    }
+
+    /**
+     * 获取用户头像上传路径
+     */
+    public static String getUserAvatarPath()
+    {
+        return getProfile() + "/user/avatar";
     }
 
     /**

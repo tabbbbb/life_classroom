@@ -1,5 +1,8 @@
 package com.ruoyi.caoz.service.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import com.ruoyi.caoz.domain.LifeUser;
@@ -100,6 +103,12 @@ public class LifeUserServiceImpl implements LifeUserService
         return userMapper.deleteLifeUserById(userId);
     }
 
+    /**
+     * 设置密码
+     * @param userId
+     * @param body
+     * @return
+     */
     @Override
     public UserResponse setPassword(Long userId,String body) {
         String password = JacksonUtil.parseString(body,"password");
@@ -118,5 +127,48 @@ public class LifeUserServiceImpl implements LifeUserService
             return UserResponse.succeed();
         }
         return UserResponse.fail(UserResponseCode.SET_PASSWORD_ERROR,"设置密码错误");
+    }
+
+    @Override
+    public UserResponse setProperty(Long userId,String body) {
+        String nickName = JacksonUtil.parseString(body,"nickname");
+        String birthday = JacksonUtil.parseString(body,"birthday");
+        Long sex = JacksonUtil.parseLong(body,"sex");
+        String address = JacksonUtil.parseString(body,"address");
+        LifeUser user = new LifeUser();
+        user.setUserId(userId);
+        Integer errorCode = 0;
+        String updateType = "";
+        if (nickName != null){
+            errorCode = UserResponseCode.USER_NICKNAME_UPDATE_ERROR;
+            updateType = "昵称";
+            user.setNickName(nickName);
+        }else if (birthday != null){
+            errorCode = UserResponseCode.USER_BIRTHDAY_UPDATE_ERROR;
+            updateType = "生日";
+            Date date = null;
+            try {
+                date = new SimpleDateFormat("yyyy-MM-dd").parse(birthday);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            user.setBirthday(date);
+        }else if (sex != null){
+            errorCode = UserResponseCode.USER_SEX_UPDATE_ERROR;
+            updateType = "性别";
+            user.setSex(sex);
+        }else if (address != null){
+            errorCode = UserResponseCode.USER_ADDRESS_UPDATE_ERROR;
+            updateType = "地址";
+            user.setAddress(address);
+        }else{
+            return UserResponse.fail(UserResponseCode.USER_UPDATE_INFO_ERROR,"修改信息为空");
+        }
+
+        if (userMapper.updateLifeUser(user) == 0){
+            return UserResponse.fail(errorCode,updateType);
+        }
+
+        return UserResponse.succeed();
     }
 }

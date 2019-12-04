@@ -53,19 +53,20 @@ public interface LifeAutoService {
      * 绑定手机
      * @return
      */
-    UserResponse bindPhone(String body);
+    UserResponse bindPhone(Long userId,String body);
 
 
     /**
      * 绑定
-     * @param body
+     * @param userId 用户id
+     * @param body 参数
      * @return
      */
-    UserResponse bindWx(String body);
+    UserResponse bindWx(Long userId,String body);
 
 
 
-    UserResponse bindUpdateTime(String body);
+    UserResponse bindUpdateTime(Long userId,String body);
 
 
 }

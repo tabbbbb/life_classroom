@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.caoz.mapper.LifeOrderMapper">
+    
+    <resultMap type="LifeOrder" id="LifeOrderResult">
+        <result property="orderId"    column="order_id"    />
+        <result property="pid"    column="pid"    />
+        <result property="shareId"    column="share_id"    />
+        <result property="courseDetailId"    column="course_detail_id"    />
+        <result property="orderTime"    column="order_time"    />
+        <result property="courseName"    column="course_name"    />
+        <result property="totalPoint"    column="total_point"    />
+        <result property="payPoint"    column="pay_point"    />
+        <result property="useTime"    column="use_time"    />
+        <result property="checkId"    column="check_id"    />
+        <result property="couponId"    column="coupon_id"    />
+        <result property="couponPoint"    column="coupon_point"    />
+        <result property="consumeDate"    column="consume_date"    />
+        <result property="type"    column="type"    />
+        <result property="status"    column="status"    />
+        <result property="price"    column="price"    />
+        <result property="saleUser"    column="sale_user"    />
+        <result property="courseType"    column="course_type"    />
+    </resultMap>
+
+    <sql id="selectLifeOrderVo">
+        select order_id, pid, share_id, course_detail_id, order_time, course_name, total_point, pay_point, use_time, check_id, coupon_id, coupon_point, consume_date, type, status, price, sale_user, course_type from life_order
+    </sql>
+
+    <select id="selectLifeOrderList" parameterType="LifeOrder" resultMap="LifeOrderResult">
+        <include refid="selectLifeOrderVo"/>
+        <where>  
+            <if test="pid != null "> and pid = #{pid}</if>
+            <if test="shareId != null "> and share_id = #{shareId}</if>
+            <if test="courseDetailId != null "> and course_detail_id = #{courseDetailId}</if>
+            <if test="orderTime != null "> and order_time = #{orderTime}</if>
+            <if test="courseName != null  and courseName != ''"> and course_name like concat('%', #{courseName}, '%')</if>
+            <if test="totalPoint != null "> and total_point = #{totalPoint}</if>
+            <if test="payPoint != null "> and pay_point = #{payPoint}</if>
+            <if test="useTime != null "> and use_time = #{useTime}</if>
+            <if test="checkId != null "> and check_id = #{checkId}</if>
+            <if test="couponId != null "> and coupon_id = #{couponId}</if>
+            <if test="couponPoint != null "> and coupon_point = #{couponPoint}</if>
+            <if test="consumeDate != null "> and consume_date = #{consumeDate}</if>
+            <if test="type != null "> and type = #{type}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="saleUser != null "> and sale_user = #{saleUser}</if>
+            <if test="courseType != null "> and course_type = #{courseType}</if>
+        </where>
+    </select>
+    
+    <select id="selectLifeOrderById" parameterType="String" resultMap="LifeOrderResult">
+        <include refid="selectLifeOrderVo"/>
+        where order_id = #{orderId}
+    </select>
+        
+    <insert id="insertLifeOrder" parameterType="LifeOrder">
+        insert into life_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderId != null  and orderId != ''">order_id,</if>
+            <if test="pid != null ">pid,</if>
+            <if test="shareId != null ">share_id,</if>
+            <if test="courseDetailId != null ">course_detail_id,</if>
+            <if test="orderTime != null ">order_time,</if>
+            <if test="courseName != null  and courseName != ''">course_name,</if>
+            <if test="totalPoint != null ">total_point,</if>
+            <if test="payPoint != null ">pay_point,</if>
+            <if test="useTime != null ">use_time,</if>
+            <if test="checkId != null ">check_id,</if>
+            <if test="couponId != null ">coupon_id,</if>
+            <if test="couponPoint != null ">coupon_point,</if>
+            <if test="consumeDate != null ">consume_date,</if>
+            <if test="type != null ">type,</if>
+            <if test="status != null ">status,</if>
+            <if test="price != null ">price,</if>
+            <if test="saleUser != null ">sale_user,</if>
+            <if test="courseType != null ">course_type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderId != null  and orderId != ''">#{orderId},</if>
+            <if test="pid != null ">#{pid},</if>
+            <if test="shareId != null ">#{shareId},</if>
+            <if test="courseDetailId != null ">#{courseDetailId},</if>
+            <if test="orderTime != null ">#{orderTime},</if>
+            <if test="courseName != null  and courseName != ''">#{courseName},</if>
+            <if test="totalPoint != null ">#{totalPoint},</if>
+            <if test="payPoint != null ">#{payPoint},</if>
+            <if test="useTime != null ">#{useTime},</if>
+            <if test="checkId != null ">#{checkId},</if>
+            <if test="couponId != null ">#{couponId},</if>
+            <if test="couponPoint != null ">#{couponPoint},</if>
+            <if test="consumeDate != null ">#{consumeDate},</if>
+            <if test="type != null ">#{type},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="price != null ">#{price},</if>
+            <if test="saleUser != null ">#{saleUser},</if>
+            <if test="courseType != null ">#{courseType},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLifeOrder" parameterType="LifeOrder">
+        update life_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pid != null ">pid = #{pid},</if>
+            <if test="shareId != null ">share_id = #{shareId},</if>
+            <if test="courseDetailId != null ">course_detail_id = #{courseDetailId},</if>
+            <if test="orderTime != null ">order_time = #{orderTime},</if>
+            <if test="courseName != null  and courseName != ''">course_name = #{courseName},</if>
+            <if test="totalPoint != null ">total_point = #{totalPoint},</if>
+            <if test="payPoint != null ">pay_point = #{payPoint},</if>
+            <if test="useTime != null ">use_time = #{useTime},</if>
+            <if test="checkId != null ">check_id = #{checkId},</if>
+            <if test="couponId != null ">coupon_id = #{couponId},</if>
+            <if test="couponPoint != null ">coupon_point = #{couponPoint},</if>
+            <if test="consumeDate != null ">consume_date = #{consumeDate},</if>
+            <if test="type != null ">type = #{type},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="price != null ">price = #{price},</if>
+            <if test="saleUser != null ">sale_user = #{saleUser},</if>
+            <if test="courseType != null ">course_type = #{courseType},</if>
+        </trim>
+        where order_id = #{orderId}
+    </update>
+
+    <delete id="deleteLifeOrderById" parameterType="String">
+        delete from life_order where order_id = #{orderId}
+    </delete>
+
+    <delete id="deleteLifeOrderByIds" parameterType="String">
+        delete from life_order where order_id in 
+        <foreach item="orderId" collection="array" open="(" separator="," close=")">
+            #{orderId}
+        </foreach>
+    </delete>
+    
+</mapper>

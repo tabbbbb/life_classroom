@@ -65,7 +65,7 @@ public class SmsCache {
     }
 
     public static boolean compareUpdateCache(String phone){
-        if (updateTimeCache.get(phone).isBefore(LocalDateTime.now())){
+        if (updateTimeCache.get(phone) == null || updateTimeCache.get(phone).isBefore(LocalDateTime.now())){
             return false;
         }
         updateTimeCache.remove(phone);

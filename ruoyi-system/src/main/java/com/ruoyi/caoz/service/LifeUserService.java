@@ -69,4 +69,13 @@ public interface LifeUserService
      * @return UserResponse
      */
     UserResponse setPassword(Long userId,String body);
+
+
+    /**
+     * 修改用户信息
+     * @param userId
+     * @param body
+     * @return
+     */
+    UserResponse setProperty(Long userId,String body);
 }

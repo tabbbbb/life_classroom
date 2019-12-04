@@ -42,6 +42,9 @@ public class TokenResolver implements HandlerMethodArgumentResolver {
     public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
         String token = nativeWebRequest.getHeader(USER_TOKEN);
         UserLoginInfo userLoginInfo = UserToken.get(token);
+        if (userLoginInfo == null){
+            return null;
+        }
         userLoginInfo.setEndTime(LocalDateTime.now());
         return userLoginInfo;
     }
