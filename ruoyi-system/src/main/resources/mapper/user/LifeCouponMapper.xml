@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.user.mapper.LifeCouponMapper">
+    
+    <resultMap type="LifeCoupon" id="LifeCouponResult">
+        <result property="couponId"    column="coupon_id"    />
+        <result property="type"    column="type"    />
+        <result property="name"    column="name"    />
+        <result property="img"    column="img"    />
+        <result property="fullPoint"    column="full_point"    />
+        <result property="point"    column="point"    />
+        <result property="enableTime"    column="enable_time"   javaType="INTEGER" />
+        <result property="remarks"    column="remarks"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectLifeCouponVo">
+        select coupon_id, type, name, img, full_point, point, enable_time, remarks, create_time from life_coupon
+    </sql>
+
+    <select id="selectLifeCouponList" parameterType="LifeCoupon" resultMap="LifeCouponResult">
+        <include refid="selectLifeCouponVo"/>
+        <where>  
+            <if test="type != null "> and type = #{type}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="img != null  and img != ''"> and img = #{img}</if>
+            <if test="fullPoint != null "> and full_point = #{fullPoint}</if>
+            <if test="point != null "> and point = #{point}</if>
+            <if test="enableTime != null "> and enable_time = #{enableTime}</if>
+            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+        </where>
+    </select>
+    
+    <select id="selectLifeCouponById" parameterType="Long" resultMap="LifeCouponResult">
+        <include refid="selectLifeCouponVo"/>
+        where coupon_id = #{couponId}
+    </select>
+
+
+    <select id="selectLifeCouponListByIds"  resultMap="LifeCouponResult">
+        <include refid="selectLifeCouponVo"/>
+        <where>
+            <foreach collection="ids" item="item" separator="," open="coupon_id in (" close=")">
+                #{item}
+            </foreach>
+        </where>
+    </select>
+
+    <insert id="insertLifeCoupon" parameterType="LifeCoupon" useGeneratedKeys="true" keyProperty="couponId">
+        insert into life_coupon
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="type != null ">type,</if>
+            <if test="name != null  and name != ''">name,</if>
+            <if test="img != null  and img != ''">img,</if>
+            <if test="fullPoint != null ">full_point,</if>
+            <if test="point != null ">point,</if>
+            <if test="enableTime != null ">enable_time,</if>
+            <if test="remarks != null  and remarks != ''">remarks,</if>
+            <if test="createTime != null ">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="type != null ">#{type},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="img != null  and img != ''">#{img},</if>
+            <if test="fullPoint != null ">#{fullPoint},</if>
+            <if test="point != null ">#{point},</if>
+            <if test="enableTime != null ">#{enableTime},</if>
+            <if test="remarks != null  and remarks != ''">#{remarks},</if>
+            <if test="createTime != null ">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLifeCoupon" parameterType="LifeCoupon" >
+        update life_coupon
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="type != null ">type = #{type},</if>
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="img != null  and img != ''">img = #{img},</if>
+            <if test="fullPoint != null ">full_point = #{fullPoint},</if>
+            <if test="point != null ">point = #{point},</if>
+            <if test="enableTime != null ">enable_time = #{enableTime},</if>
+            <if test="remarks != null  and remarks != ''">remarks = #{remarks},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+        </trim>
+        where coupon_id = #{couponId}
+    </update>
+
+    <delete id="deleteLifeCouponById" parameterType="Long">
+        delete from life_coupon where coupon_id = #{couponId}
+    </delete>
+
+    <delete id="deleteLifeCouponByIds" parameterType="String">
+        delete from life_coupon where coupon_id in 
+        <foreach item="couponId" collection="array" open="(" separator="," close=")">
+            #{couponId}
+        </foreach>
+    </delete>
+    
+</mapper>

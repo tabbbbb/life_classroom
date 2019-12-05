@@ -21,8 +21,17 @@ package com.ruoyi.common.weixin;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
+import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
+import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
+import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import me.chanjar.weixin.common.error.WxErrorException;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.ws.spi.http.HttpContext;
+import java.math.BigDecimal;
 
 /**
  * 微信支付
@@ -43,7 +52,7 @@ public class WxOperation {
     }
 
 
-    public String login(String code){
+    public String getOpen(String code){
         try {
             WxMaJscode2SessionResult result = maService.getUserService().getSessionInfo(code);
             if (result.getSessionKey() != null && result.getOpenid() != null){
@@ -54,5 +63,27 @@ public class WxOperation {
             e.printStackTrace();
         }
         return null;
+    }
+
+
+    public Object pay(String unique, String openId,String message, BigDecimal price){
+//        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+        WxPayMpOrderResult result = null;
+
+        try {
+            WxPayUnifiedOrderRequest orderRequest = new WxPayUnifiedOrderRequest();
+            orderRequest.setOutTradeNo(unique);
+            orderRequest.setOpenid(openId);
+            orderRequest.setBody(message);
+            orderRequest.setTotalFee(price.add(new BigDecimal(100)).intValue());
+            result = payService.createOrder(orderRequest);
+        } catch (WxPayException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public WxPayService getPayService() {
+        return payService;
     }
 }

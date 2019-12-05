@@ -139,7 +139,7 @@ public class UserResponseCode {
 
 
     /**
-     * 绑定修改错误
+     * 绑定家属错误
      */
     public static final Integer USER_BIND_RELATION_UPDATE_ERROR = 100017;
 
@@ -149,5 +149,10 @@ public class UserResponseCode {
      */
     public static final Integer USER_UPDATE_INFO_ERROR = 100018;
 
+
+    /**
+     * 充值错误
+     */
+    public static final Integer USER_RECHARGE_ERROR = 100019;
 
 }

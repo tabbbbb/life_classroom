@@ -16,6 +16,6 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	</settings>
 
 	<typeAliases>
-		<package name="com.ruoyi.caoz.domain"/>
+		<package name="com.ruoyi.user.domain"/>
 	</typeAliases>
 </configuration>
