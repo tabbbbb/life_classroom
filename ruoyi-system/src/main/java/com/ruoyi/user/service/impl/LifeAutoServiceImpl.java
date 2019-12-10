@@ -11,6 +11,8 @@
 package com.ruoyi.user.service.impl;
 
 
+import com.ruoyi.user.domain.LifeCompany;
+import com.ruoyi.user.domain.LifeShare;
 import com.ruoyi.user.domain.LifeUser;
 import com.ruoyi.user.mapper.LifeUserMapper;
 import com.ruoyi.user.service.LifeAutoService;
@@ -20,6 +22,8 @@ import com.ruoyi.common.sms.cache.SmsCache;
 import com.ruoyi.common.utils.JacksonUtil;
 import com.ruoyi.common.utils.security.Md5Utils;
 import com.ruoyi.common.weixin.WxOperation;
+import com.ruoyi.user.service.LifeCompanyService;
+import com.ruoyi.user.service.LifeShareService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -43,6 +47,12 @@ public class LifeAutoServiceImpl implements LifeAutoService {
     @Resource
     private WxOperation operation;
 
+    @Resource
+    private LifeShareService shareService;
+
+    @Resource
+    private LifeCompanyService companyService;
+
     /**
      * 手机号注册和登录
      * @param body
@@ -53,15 +63,17 @@ public class LifeAutoServiceImpl implements LifeAutoService {
         String phone = JacksonUtil.parseString(body,"phone");
         String code = JacksonUtil.parseString(body,"code");
         String invitationCard = JacksonUtil.parseString(body,"invitationCard");
+        String companyInvitationCard = JacksonUtil.parseString(body,"companyInvitationCard");
         if (SmsCache.compareSmsCache(phone,code)){
             LifeUser user = this.phoneIsBind(phone);
             if (user == null){
+                user = new LifeUser();
                 String random = this.random();
                 user.setPhone(phone);
                 user.setCardNumber(phone.substring(7)+random);
-                user.setCreateDate(new Date());
                 user.setNickName("用户"+phone);
                 this.setParent(user,invitationCard);
+                this.setCompany(user,companyInvitationCard);
                 if (userMapper.insertLifeUser(user) == 0){
                     return UserResponse.fail(UserResponseCode.REGISTER_ERROR,"用户添加失败");
                 }
@@ -70,6 +82,21 @@ public class LifeAutoServiceImpl implements LifeAutoService {
         }
         return UserResponse.fail(UserResponseCode.CODE_ERROR,"验证码输入有误");
     }
+
+
+
+
+
+    private void setCompany(LifeUser user,String companyInvitationCard){
+        LifeCompany company = companyService.selectLifeCompanyByCode(companyInvitationCard);
+        if (company != null) {
+            user.setCompanyId(company.getCompanyId());
+            user.setCompanyName(company.getCompanyName());
+        }
+    }
+
+
+
 
 
     /**
@@ -95,6 +122,19 @@ public class LifeAutoServiceImpl implements LifeAutoService {
         if (parentUser == null)return;
         user.setParentId(parentUser.getUserId());
         user.setLeadId(parentUser.getLeadId());
+        user.setCreateDate(new Date());
+        LifeShare share = shareService.selectLifeShareById(parentUser.getUserId());
+        if (share == null){
+            share = new LifeShare();
+            share.setEnable(1);
+            share.setNumber(1);
+            share.setUserId(user.getUserId());
+            shareService.insertLifeShare(share);
+        }else{
+            share.setNumber(share.getNumber()+1);
+            shareService.updateLifeShare(share);
+        }
+
     }
 
     /**
@@ -142,12 +182,16 @@ public class LifeAutoServiceImpl implements LifeAutoService {
         }
         LifeUser user = userMapper.selectLifeUserByOpenId(openId);
         if (user == null){
+            user = new LifeUser();
             user.setOpenId(openId);
             user.setSex(Long.valueOf(map.get("sex")));
             user.setAddress(map.get("country")+" "+map.get("province")+" "+ map.get("city"));
             user.setNickName(map.get("nickName"));
             user.setImgUrl(map.get("avatarUrl"));
+            user.setWxImgUrl(map.get("avatarUrl"));
+            user.setWxNickName(map.get("nickName"));
             this.setParent(user,map.get("InvitationCard"));
+            this.setCompany(user,map.get("companyInvitationCard"));
             if (userMapper.insertLifeUser(user) == 0){
                 return UserResponse.fail(UserResponseCode.REGISTER_ERROR,"用户添加失败");
             }
@@ -201,6 +245,8 @@ public class LifeAutoServiceImpl implements LifeAutoService {
             return UserResponse.fail(UserResponseCode.BIND_WX_ERROR,"微信已被绑定");
         }
         String code = JacksonUtil.parseString(body,"code");
+        String imgUrl = JacksonUtil.parseString(body,"avatarUrl");
+        String nickName = JacksonUtil.parseString(body,"nickName");
         String openId = operation.getOpen(code);
         if (openId == null){
             return UserResponse.fail(UserResponseCode.BIND_WX_ERROR,"绑定微信错误：openId获取失败");
@@ -208,6 +254,8 @@ public class LifeAutoServiceImpl implements LifeAutoService {
         LifeUser newUser = new LifeUser();
         newUser.setUserId(userId);
         newUser.setOpenId(openId);
+        newUser.setWxNickName(nickName);
+        newUser.setWxImgUrl(imgUrl);
         if (userMapper.updateLifeUser(newUser) == 0){
             return UserResponse.fail(UserResponseCode.BIND_WX_ERROR,"绑定微信错误：修改时失败");
         }

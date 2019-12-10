@@ -9,7 +9,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 优惠卷对象 life_coupon
  * 
  * @author ruoyi
- * @date 2019-12-05
+ * @date 2019-12-09
  */
 public class LifeCoupon extends BaseEntity
 {
@@ -18,8 +18,8 @@ public class LifeCoupon extends BaseEntity
     /** $column.columnComment */
     private Long couponId;
 
-    /** 优惠券类型 0打折 1:满减 */
-    @Excel(name = "优惠券类型 0打折 1:满减")
+    /** 优惠券类型 0产品抵扣券，1实物抵用券，3充值券，4余额抵用券 */
+    @Excel(name = "优惠券类型 0产品抵扣券，1实物抵用券，3充值券，4余额抵用券")
     private Long type;
 
     /** 名称 */
@@ -32,15 +32,27 @@ public class LifeCoupon extends BaseEntity
 
     /** 积分满足要求 */
     @Excel(name = "积分满足要求")
-    private Long fullPoint;
+    private Integer fullPoint;
 
-    /** 抵扣积分 */
-    @Excel(name = "抵扣积分")
-    private Long point;
+    /** 折扣 */
+    @Excel(name = "折扣")
+    private Integer discount;
+
+    /** 抵用积分 */
+    @Excel(name = "抵用积分")
+    private Integer point;
+
+    /** 间隔天数 */
+    @Excel(name = "间隔天数")
+    private Integer intervalDay;
 
     /** 有效天数 */
     @Excel(name = "有效天数")
-    private Integer enableTime;
+    private Integer enableDay;
+
+    /** -1外联课程 -2自有课程 <0限定课程 0所有课程 */
+    @Excel(name = "-1外联课程 -2自有课程 <0限定课程 0所有课程")
+    private Long astrict;
 
     /** 优惠券说明 */
     @Excel(name = "优惠券说明")
@@ -82,32 +94,59 @@ public class LifeCoupon extends BaseEntity
     {
         return img;
     }
-    public void setFullPoint(Long fullPoint) 
+    public void setFullPoint(Integer fullPoint) 
     {
         this.fullPoint = fullPoint;
     }
 
-    public Long getFullPoint() 
+    public Integer getFullPoint() 
     {
         return fullPoint;
     }
-    public void setPoint(Long point) 
+    public void setDiscount(Integer discount) 
+    {
+        this.discount = discount;
+    }
+
+    public Integer getDiscount() 
+    {
+        return discount;
+    }
+    public void setPoint(Integer point) 
     {
         this.point = point;
     }
 
-    public Long getPoint() 
+    public Integer getPoint() 
     {
         return point;
     }
-    public void setEnableTime(Integer enableTime) 
+    public void setIntervalDay(Integer intervalDay) 
     {
-        this.enableTime = enableTime;
+        this.intervalDay = intervalDay;
     }
 
-    public Integer getEnableTime() 
+    public Integer getIntervalDay() 
     {
-        return enableTime;
+        return intervalDay;
+    }
+    public void setEnableDay(Integer enableDay) 
+    {
+        this.enableDay = enableDay;
+    }
+
+    public Integer getEnableDay() 
+    {
+        return enableDay;
+    }
+    public void setAstrict(Long astrict) 
+    {
+        this.astrict = astrict;
+    }
+
+    public Long getAstrict() 
+    {
+        return astrict;
     }
     public void setRemarks(String remarks) 
     {
@@ -127,8 +166,11 @@ public class LifeCoupon extends BaseEntity
             .append("name", getName())
             .append("img", getImg())
             .append("fullPoint", getFullPoint())
+            .append("discount", getDiscount())
             .append("point", getPoint())
-            .append("enableTime", getEnableTime())
+            .append("intervalDay", getIntervalDay())
+            .append("enableDay", getEnableDay())
+            .append("astrict", getAstrict())
             .append("remarks", getRemarks())
             .append("createTime", getCreateTime())
             .toString();

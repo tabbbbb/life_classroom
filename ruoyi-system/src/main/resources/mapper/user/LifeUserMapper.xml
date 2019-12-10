@@ -7,11 +7,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="LifeUser" id="LifeUserResult">
         <result property="userId"    column="user_id"    />
         <result property="cardNumber"    column="card_number"    />
-        <result property="invitationCard"    column="Invitation_card"    />
+        <result property="invitationCard"    column="invitation_card"    />
+        <result property="wxNickName"    column="wx_nick_name"    />
+        <result property="wxImgUrl"    column="wx_img_url"    />
         <result property="sex"    column="sex"    />
         <result property="nickName"    column="nick_name"    />
         <result property="address"    column="address"    />
         <result property="openId"    column="open_id"    />
+        <result property="balance"    column="balance"    />
         <result property="phone"    column="phone"    />
         <result property="paymentCode"    column="payment_code"    />
         <result property="password"    column="password"    />
@@ -20,23 +23,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="leadId"    column="lead_id"    />
         <result property="shareId"    column="share_id"    />
         <result property="qrcode"    column="qrcode"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="companyId"    column="company_id"    />
         <result property="birthday"    column="birthday"    />
         <result property="createDate"    column="create_date"    />
     </resultMap>
 
     <sql id="selectLifeUserVo">
-        select user_id, card_number, Invitation_card, sex, nick_name, address, open_id, phone, payment_code, password, img_url, parent_id, lead_id, share_id, qrcode, birthday, create_date from life_user
+        select user_id, card_number, invitation_card, wx_nick_name, wx_img_url, sex, nick_name, address, open_id, balance, phone, payment_code, password, img_url, parent_id, lead_id, share_id, qrcode, company_name, company_id, birthday, create_date from life_user
     </sql>
 
     <select id="selectLifeUserList" parameterType="LifeUser" resultMap="LifeUserResult">
         <include refid="selectLifeUserVo"/>
         <where>  
             <if test="cardNumber != null  and cardNumber != ''"> and card_number = #{cardNumber}</if>
-            <if test="invitationCard != null  and invitationCard != ''"> and Invitation_card = #{invitationCard}</if>
+            <if test="invitationCard != null  and invitationCard != ''"> and invitation_card = #{invitationCard}</if>
+            <if test="wxNickName != null  and wxNickName != ''"> and wx_nick_name like concat('%', #{wxNickName}, '%')</if>
+            <if test="wxImgUrl != null  and wxImgUrl != ''"> and wx_img_url = #{wxImgUrl}</if>
             <if test="sex != null "> and sex = #{sex}</if>
             <if test="nickName != null  and nickName != ''"> and nick_name like concat('%', #{nickName}, '%')</if>
             <if test="address != null  and address != ''"> and address = #{address}</if>
             <if test="openId != null  and openId != ''"> and open_id = #{openId}</if>
+            <if test="balance != null "> and balance = #{balance}</if>
             <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
             <if test="paymentCode != null "> and payment_code = #{paymentCode}</if>
             <if test="password != null  and password != ''"> and password = #{password}</if>
@@ -45,6 +53,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="leadId != null "> and lead_id = #{leadId}</if>
             <if test="shareId != null "> and share_id = #{shareId}</if>
             <if test="qrcode != null  and qrcode != ''"> and qrcode = #{qrcode}</if>
+            <if test="companyName != null  and companyName != ''"> and company_name like concat('%', #{companyName}, '%')</if>
+            <if test="companyId != null "> and company_id = #{companyId}</if>
             <if test="birthday != null "> and birthday = #{birthday}</if>
             <if test="createDate != null "> and create_date = #{createDate}</if>
         </where>
@@ -59,11 +69,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into life_user
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="cardNumber != null  and cardNumber != ''">card_number,</if>
-            <if test="invitationCard != null  and invitationCard != ''">Invitation_card,</if>
+            <if test="invitationCard != null  and invitationCard != ''">invitation_card,</if>
+            <if test="wxNickName != null  and wxNickName != ''">wx_nick_name,</if>
+            <if test="wxImgUrl != null  and wxImgUrl != ''">wx_img_url,</if>
             <if test="sex != null ">sex,</if>
             <if test="nickName != null  and nickName != ''">nick_name,</if>
             <if test="address != null  and address != ''">address,</if>
             <if test="openId != null  and openId != ''">open_id,</if>
+            <if test="balance != null ">balance,</if>
             <if test="phone != null  and phone != ''">phone,</if>
             <if test="paymentCode != null ">payment_code,</if>
             <if test="password != null  and password != ''">password,</if>
@@ -72,16 +85,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="leadId != null ">lead_id,</if>
             <if test="shareId != null ">share_id,</if>
             <if test="qrcode != null  and qrcode != ''">qrcode,</if>
+            <if test="companyName != null  and companyName != ''">company_name,</if>
+            <if test="companyId != null ">company_id,</if>
             <if test="birthday != null ">birthday,</if>
             <if test="createDate != null ">create_date,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="cardNumber != null  and cardNumber != ''">#{cardNumber},</if>
             <if test="invitationCard != null  and invitationCard != ''">#{invitationCard},</if>
+            <if test="wxNickName != null  and wxNickName != ''">#{wxNickName},</if>
+            <if test="wxImgUrl != null  and wxImgUrl != ''">#{wxImgUrl},</if>
             <if test="sex != null ">#{sex},</if>
             <if test="nickName != null  and nickName != ''">#{nickName},</if>
             <if test="address != null  and address != ''">#{address},</if>
             <if test="openId != null  and openId != ''">#{openId},</if>
+            <if test="balance != null ">#{balance},</if>
             <if test="phone != null  and phone != ''">#{phone},</if>
             <if test="paymentCode != null ">#{paymentCode},</if>
             <if test="password != null  and password != ''">#{password},</if>
@@ -90,6 +108,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="leadId != null ">#{leadId},</if>
             <if test="shareId != null ">#{shareId},</if>
             <if test="qrcode != null  and qrcode != ''">#{qrcode},</if>
+            <if test="companyName != null  and companyName != ''">#{companyName},</if>
+            <if test="companyId != null ">#{companyId},</if>
             <if test="birthday != null ">#{birthday},</if>
             <if test="createDate != null ">#{createDate},</if>
          </trim>
@@ -99,11 +119,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update life_user
         <trim prefix="SET" suffixOverrides=",">
             <if test="cardNumber != null  and cardNumber != ''">card_number = #{cardNumber},</if>
-            <if test="invitationCard != null  and invitationCard != ''">Invitation_card = #{invitationCard},</if>
+            <if test="invitationCard != null  and invitationCard != ''">invitation_card = #{invitationCard},</if>
+            <if test="wxNickName != null  and wxNickName != ''">wx_nick_name = #{wxNickName},</if>
+            <if test="wxImgUrl != null  and wxImgUrl != ''">wx_img_url = #{wxImgUrl},</if>
             <if test="sex != null ">sex = #{sex},</if>
             <if test="nickName != null  and nickName != ''">nick_name = #{nickName},</if>
             <if test="address != null  and address != ''">address = #{address},</if>
             <if test="openId != null  and openId != ''">open_id = #{openId},</if>
+            <if test="balance != null ">balance = #{balance},</if>
             <if test="phone != null  and phone != ''">phone = #{phone},</if>
             <if test="paymentCode != null ">payment_code = #{paymentCode},</if>
             <if test="password != null  and password != ''">password = #{password},</if>
@@ -112,6 +135,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="leadId != null ">lead_id = #{leadId},</if>
             <if test="shareId != null ">share_id = #{shareId},</if>
             <if test="qrcode != null  and qrcode != ''">qrcode = #{qrcode},</if>
+            <if test="companyName != null  and companyName != ''">company_name = #{companyName},</if>
+            <if test="companyId != null ">company_id = #{companyId},</if>
             <if test="birthday != null ">birthday = #{birthday},</if>
             <if test="createDate != null ">create_date = #{createDate},</if>
         </trim>
@@ -128,5 +153,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{userId}
         </foreach>
     </delete>
+
+    <select id="selectLifeUserByInvitationCard" resultMap="LifeUserResult">
+        <include refid="selectLifeUserVo"/>
+        where invitation_card = #{InvitationCard}
+    </select>
+    <select id="selectLifeUserByPhone" resultMap="LifeUserResult">
+        <include refid="selectLifeUserVo"/>
+        where phone = #{phone}
+    </select>
+    <select id="selectLifeUserByOpenId" resultMap="LifeUserResult">
+        <include refid="selectLifeUserVo"/>
+        where open_id = #{openId}
+    </select>
+
     
 </mapper>

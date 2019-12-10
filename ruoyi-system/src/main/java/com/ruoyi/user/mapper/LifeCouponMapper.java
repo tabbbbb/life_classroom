@@ -3,7 +3,6 @@ package com.ruoyi.user.mapper;
 
 import com.ruoyi.user.domain.LifeCoupon;
 import org.apache.ibatis.annotations.Param;
-import sun.rmi.log.LogInputStream;
 
 import java.util.List;
 
@@ -15,14 +14,7 @@ import java.util.List;
  */
 public interface LifeCouponMapper 
 {
-    /** <select id="selectLifeCouponListByIds"  resultMap="LifeCouponResult">
-     <include refid="selectLifeCouponVo"/>
-     <where>
-     <foreach collection="ids" item="item" separator="," open="coupon_id in (" close=")">
-     #{item}
-     </foreach>
-     </where>
-     </select>
+    /**
      * 查询优惠卷
      * 
      * @param couponId 优惠卷ID

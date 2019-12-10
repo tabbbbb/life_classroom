@@ -10,7 +10,7 @@ import java.util.Date;
  * 用户对象 life_user
  * 
  * @author ruoyi
- * @date 2019-12-05
+ * @date 2019-12-10
  */
 public class LifeUser extends BaseEntity
 {
@@ -27,6 +27,14 @@ public class LifeUser extends BaseEntity
     @Excel(name = "会员卡号后6位")
     private String invitationCard;
 
+    /** 微信昵称 */
+    @Excel(name = "微信昵称")
+    private String wxNickName;
+
+    /** 微信头像 */
+    @Excel(name = "微信头像")
+    private String wxImgUrl;
+
     /** 性别 0/女 1/男 */
     @Excel(name = "性别 0/女 1/男")
     private Long sex;
@@ -42,6 +50,10 @@ public class LifeUser extends BaseEntity
     /** openId */
     @Excel(name = "openId")
     private String openId;
+
+    /** 余额 */
+    @Excel(name = "余额")
+    private Long balance;
 
     /** 会员电话 */
     @Excel(name = "会员电话")
@@ -75,12 +87,20 @@ public class LifeUser extends BaseEntity
     @Excel(name = "二维码")
     private String qrcode;
 
+    /** 公司名称 */
+    @Excel(name = "公司名称")
+    private String companyName;
+
+    /** 公司id */
+    @Excel(name = "公司id")
+    private Long companyId;
+
     /** 生日 */
     @Excel(name = "生日", width = 30, dateFormat = "yyyy-MM-dd")
     private Date birthday;
 
-    /** 创建时间 */
-    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd")
+    /** 绑定上级时间 */
+    @Excel(name = "绑定上级时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date createDate;
 
     public void setUserId(Long userId) 
@@ -109,6 +129,24 @@ public class LifeUser extends BaseEntity
     public String getInvitationCard() 
     {
         return invitationCard;
+    }
+    public void setWxNickName(String wxNickName) 
+    {
+        this.wxNickName = wxNickName;
+    }
+
+    public String getWxNickName() 
+    {
+        return wxNickName;
+    }
+    public void setWxImgUrl(String wxImgUrl) 
+    {
+        this.wxImgUrl = wxImgUrl;
+    }
+
+    public String getWxImgUrl() 
+    {
+        return wxImgUrl;
     }
     public void setSex(Long sex) 
     {
@@ -145,6 +183,15 @@ public class LifeUser extends BaseEntity
     public String getOpenId() 
     {
         return openId;
+    }
+    public void setBalance(Long balance) 
+    {
+        this.balance = balance;
+    }
+
+    public Long getBalance() 
+    {
+        return balance;
     }
     public void setPhone(String phone) 
     {
@@ -218,6 +265,24 @@ public class LifeUser extends BaseEntity
     {
         return qrcode;
     }
+    public void setCompanyName(String companyName) 
+    {
+        this.companyName = companyName;
+    }
+
+    public String getCompanyName() 
+    {
+        return companyName;
+    }
+    public void setCompanyId(Long companyId) 
+    {
+        this.companyId = companyId;
+    }
+
+    public Long getCompanyId() 
+    {
+        return companyId;
+    }
     public void setBirthday(Date birthday) 
     {
         this.birthday = birthday;
@@ -243,10 +308,13 @@ public class LifeUser extends BaseEntity
             .append("userId", getUserId())
             .append("cardNumber", getCardNumber())
             .append("invitationCard", getInvitationCard())
+            .append("wxNickName", getWxNickName())
+            .append("wxImgUrl", getWxImgUrl())
             .append("sex", getSex())
             .append("nickName", getNickName())
             .append("address", getAddress())
             .append("openId", getOpenId())
+            .append("balance", getBalance())
             .append("phone", getPhone())
             .append("paymentCode", getPaymentCode())
             .append("password", getPassword())
@@ -255,6 +323,8 @@ public class LifeUser extends BaseEntity
             .append("leadId", getLeadId())
             .append("shareId", getShareId())
             .append("qrcode", getQrcode())
+            .append("companyName", getCompanyName())
+            .append("companyId", getCompanyId())
             .append("birthday", getBirthday())
             .append("createDate", getCreateDate())
             .toString();

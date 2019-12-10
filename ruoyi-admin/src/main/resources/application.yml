@@ -136,7 +136,8 @@ sms:
     appkey: 4f203cce3b07e03bf2471e44b2a5bb21
     template:
       verificationCode: 418781
-      remind: 123456
+      beginsRemind: 490586
+      rechargeRemind: 490581
 
 life:
   wx:

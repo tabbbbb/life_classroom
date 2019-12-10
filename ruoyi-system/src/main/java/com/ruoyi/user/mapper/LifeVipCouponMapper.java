@@ -31,7 +31,7 @@ public interface LifeVipCouponMapper
 
 
 
-    Long [] selectLifeCouponIds(Long vipId);
+    List<LifeVipCoupon> selectLifeCouponIds(Long vipId);
 
     /**
      * 新增充值会员赠送优惠卷

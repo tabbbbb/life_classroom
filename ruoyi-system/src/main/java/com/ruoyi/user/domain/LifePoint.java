@@ -12,7 +12,7 @@ import java.util.Date;
  * 会员积分和开通记录对象 life_point
  * 
  * @author ruoyi
- * @date 2019-12-05
+ * @date 2019-12-06
  */
 public class LifePoint extends BaseEntity
 {
@@ -49,9 +49,13 @@ public class LifePoint extends BaseEntity
     @Excel(name = "用户id")
     private Long userId;
 
-    /** 是否可以设置小孩 0 FALSE, <1 TRUE */
-    @Excel(name = "是否可以设置小孩 0 FALSE, <1 TRUE")
-    private Integer isSetChile;
+    /** 是否可以设置小孩 0 FALSE, 1 TRUE */
+    @Excel(name = "是否可以设置小孩 0 FALSE, 1 TRUE")
+    private Integer isSetChild;
+
+    /** 可以添加几个小孩 0 false <1 true */
+    @Excel(name = "0 false <1 true")
+    private Integer isAddChild;
 
     public void setPointId(Long pointId) 
     {
@@ -62,16 +66,33 @@ public class LifePoint extends BaseEntity
     {
         return pointId;
     }
-    public void setVipId(Long vipId)
+    public void setVipId(Long vipId) 
     {
         this.vipId = vipId;
     }
 
-    public Long getVipId()
+    public Long getVipId() 
     {
         return vipId;
     }
+    public void setStartDate(LocalDateTime startDate)
+    {
+        this.startDate = startDate;
+    }
 
+    public LocalDateTime getStartDate()
+    {
+        return startDate;
+    }
+    public void setEndDate(LocalDateTime endDate)
+    {
+        this.endDate = endDate;
+    }
+
+    public LocalDateTime getEndDate()
+    {
+        return endDate;
+    }
     public void setShareId(Long shareId) 
     {
         this.shareId = shareId;
@@ -81,21 +102,21 @@ public class LifePoint extends BaseEntity
     {
         return shareId;
     }
-    public void setPoint(Integer point)
+    public void setPoint(Integer point) 
     {
         this.point = point;
     }
 
-    public Integer getPoint()
+    public Integer getPoint() 
     {
         return point;
     }
-    public void setUsePoint(Integer usePoint)
+    public void setUsePoint(Integer usePoint) 
     {
         this.usePoint = usePoint;
     }
 
-    public Integer getUsePoint()
+    public Integer getUsePoint() 
     {
         return usePoint;
     }
@@ -108,30 +129,23 @@ public class LifePoint extends BaseEntity
     {
         return userId;
     }
-    public void setIsSetChile(Integer isSetChile) 
+    public void setIsSetChild(Integer isSetChild) 
     {
-        this.isSetChile = isSetChile;
+        this.isSetChild = isSetChild;
     }
 
-    public Integer getIsSetChile() 
+    public Integer getIsSetChild() 
     {
-        return isSetChile;
+        return isSetChild;
+    }
+    public void setIsAddChild(Integer isAddChild) 
+    {
+        this.isAddChild = isAddChild;
     }
 
-    public LocalDateTime getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDateTime startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDateTime getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDateTime endDate) {
-        this.endDate = endDate;
+    public Integer getIsAddChild() 
+    {
+        return isAddChild;
     }
 
     @Override
@@ -145,7 +159,8 @@ public class LifePoint extends BaseEntity
             .append("point", getPoint())
             .append("usePoint", getUsePoint())
             .append("userId", getUserId())
-            .append("isSetChile", getIsSetChile())
+            .append("isSetChild", getIsSetChild())
+            .append("isAddChild", getIsAddChild())
             .toString();
     }
 }

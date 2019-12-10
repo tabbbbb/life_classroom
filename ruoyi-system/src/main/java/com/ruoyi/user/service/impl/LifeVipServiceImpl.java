@@ -1,6 +1,7 @@
 package com.ruoyi.user.service.impl;
 
 
+import com.ruoyi.common.sms.NotifySms;
 import com.ruoyi.user.domain.*;
 import com.ruoyi.user.mapper.LifeVipMapper;
 
@@ -49,9 +50,8 @@ public class LifeVipServiceImpl implements LifeVipService
     @Autowired
     private LifeCouponReserveService couponReserveService;
 
-
     @Autowired
-    private LifeCouponService couponService;
+    private NotifySms sms;
 
 
 
@@ -170,17 +170,18 @@ public class LifeVipServiceImpl implements LifeVipService
             return UserResponse.fail(UserResponseCode.USER_RECHARGE_ERROR,"充值金额与所充值会员金额不对");
         }
         LocalDateTime start = LocalDateTime.now();
-        LocalDateTime end = start.plusMonths(vip.getValidity());
+        LocalDateTime end = start.plusMonths(vip.getValidity()).plusDays(1);
         Long shareId = user.getShareId();
         LifePoint point = new LifePoint();
         point.setPoint(vip.getPoint());
         point.setStartDate(start);
         point.setEndDate(end);
-        point.setIsSetChile(vip.getChild());
+        point.setIsSetChild(1);
         point.setVipId(vip.getVipId());
         point.setUserId(userId);
         point.setShareId(shareId);
         point.setUsePoint(vip.getPoint());
+        point.setIsAddChild(vip.getChild());
         pointService.insertLifePoint(point);
         LifePointLog pointLog = new LifePointLog();
         pointLog.setLogType(1);
@@ -192,8 +193,8 @@ public class LifeVipServiceImpl implements LifeVipService
         pointLogService.insertLifePointLog(pointLog);
         LifeVipCoupon selectVipCoupon = new LifeVipCoupon();
         selectVipCoupon.setVipId(vipId);
-        Long [] ids = vipCouponService.selectLifeCouponIds(vipId);
-        couponReserveService.insertLifeCouponReserve(shareId,ids);
+        List<LifeVipCoupon> list = vipCouponService.selectLifeCouponIds(vipId);
+        couponReserveService.insertLifeCouponReserve(shareId,list);
         return UserResponse.succeed();
     }
 }

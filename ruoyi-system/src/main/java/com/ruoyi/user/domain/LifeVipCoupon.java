@@ -9,7 +9,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 充值会员赠送优惠卷对象 life_vip_coupon
  * 
  * @author ruoyi
- * @date 2019-12-04
+ * @date 2019-12-09
  */
 public class LifeVipCoupon extends BaseEntity
 {
@@ -18,13 +18,17 @@ public class LifeVipCoupon extends BaseEntity
     /** $column.columnComment */
     private Long id;
 
-    /** vip等级 */
-    @Excel(name = "vip等级")
+    /** vip等级  -1 新用户注册缩松 */
+    @Excel(name = "vip等级  -1 新用户注册缩松")
     private Long vipId;
 
     /** 优惠券id */
     @Excel(name = "优惠券id")
     private Long couponId;
+
+    /** 数量 */
+    @Excel(name = "数量")
+    private Integer number;
 
     public void setId(Long id) 
     {
@@ -53,6 +57,15 @@ public class LifeVipCoupon extends BaseEntity
     {
         return couponId;
     }
+    public void setNumber(Integer number) 
+    {
+        this.number = number;
+    }
+
+    public Integer getNumber() 
+    {
+        return number;
+    }
 
     @Override
     public String toString() {
@@ -60,6 +73,7 @@ public class LifeVipCoupon extends BaseEntity
             .append("id", getId())
             .append("vipId", getVipId())
             .append("couponId", getCouponId())
+            .append("number", getNumber())
             .toString();
     }
 }

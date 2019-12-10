@@ -19,6 +19,8 @@ package com.ruoyi.framework.userlogin;
  * @since 1.0.0
  */
 
+import com.ruoyi.common.utils.JacksonUtil;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,6 +64,21 @@ public class WxLoginUserInfo {
      * 邀请码
      */
     private String InvitationCard;
+
+
+    /**
+     * 公司邀请码
+     */
+    private  String companyInvitationCard;
+
+
+    public String getCompanyInvitationCard() {
+        return companyInvitationCard;
+    }
+
+    public void setCompanyInvitationCard(String companyInvitationCard) {
+        this.companyInvitationCard = companyInvitationCard;
+    }
 
     public String getInvitationCard() {
         return InvitationCard;
@@ -141,6 +158,7 @@ public class WxLoginUserInfo {
         map.put("country",this.country);
         map.put("city",this.city);
         map.put("gender",this.gender+"");
+        map.put("companyInvitationCard",this.companyInvitationCard);
         return map;
     }
 }

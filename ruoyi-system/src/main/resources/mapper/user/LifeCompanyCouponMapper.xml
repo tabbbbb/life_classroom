@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.user.mapper.LifeCompanyCouponMapper">
+    
+    <resultMap type="LifeCompanyCoupon" id="LifeCompanyCouponResult">
+        <result property="comparyCouponId"    column="compary_coupon_id"    />
+        <result property="couponId"    column="coupon_id"    />
+        <result property="comparyId"    column="compary_id"    />
+        <result property="number"    column="number"    />
+        <result property="conditionPrice"    column="condition_price"    />
+    </resultMap>
+
+    <sql id="selectLifeCompanyCouponVo">
+        select compary_coupon_id, coupon_id, compary_id, number, condition_price from life_company_coupon
+    </sql>
+
+    <select id="selectLifeCompanyCouponList" parameterType="LifeCompanyCoupon" resultMap="LifeCompanyCouponResult">
+        <include refid="selectLifeCompanyCouponVo"/>
+        <where>  
+            <if test="couponId != null "> and coupon_id = #{couponId}</if>
+            <if test="comparyId != null "> and compary_id = #{comparyId}</if>
+            <if test="number != null "> and number = #{number}</if>
+            <if test="conditionPrice != null "> and condition_price = #{conditionPrice}</if>
+        </where>
+    </select>
+    
+    <select id="selectLifeCompanyCouponById" parameterType="Long" resultMap="LifeCompanyCouponResult">
+        <include refid="selectLifeCompanyCouponVo"/>
+        where compary_coupon_id = #{comparyCouponId}
+    </select>
+        
+    <insert id="insertLifeCompanyCoupon" parameterType="LifeCompanyCoupon">
+        insert into life_company_coupon
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="comparyCouponId != null ">compary_coupon_id,</if>
+            <if test="couponId != null ">coupon_id,</if>
+            <if test="comparyId != null ">compary_id,</if>
+            <if test="number != null ">number,</if>
+            <if test="conditionPrice != null ">condition_price,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="comparyCouponId != null ">#{comparyCouponId},</if>
+            <if test="couponId != null ">#{couponId},</if>
+            <if test="comparyId != null ">#{comparyId},</if>
+            <if test="number != null ">#{number},</if>
+            <if test="conditionPrice != null ">#{conditionPrice},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLifeCompanyCoupon" parameterType="LifeCompanyCoupon">
+        update life_company_coupon
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="couponId != null ">coupon_id = #{couponId},</if>
+            <if test="comparyId != null ">compary_id = #{comparyId},</if>
+            <if test="number != null ">number = #{number},</if>
+            <if test="conditionPrice != null ">condition_price = #{conditionPrice},</if>
+        </trim>
+        where compary_coupon_id = #{comparyCouponId}
+    </update>
+
+    <delete id="deleteLifeCompanyCouponById" parameterType="Long">
+        delete from life_company_coupon where compary_coupon_id = #{comparyCouponId}
+    </delete>
+
+    <delete id="deleteLifeCompanyCouponByIds" parameterType="String">
+        delete from life_company_coupon where compary_coupon_id in 
+        <foreach item="comparyCouponId" collection="array" open="(" separator="," close=")">
+            #{comparyCouponId}
+        </foreach>
+    </delete>
+    
+</mapper>

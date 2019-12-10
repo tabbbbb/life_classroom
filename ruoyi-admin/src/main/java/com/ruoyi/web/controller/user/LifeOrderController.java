@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/user/order")
-@Api(value = "/user/vip",description = "订单")
+@Api(value = "/user/order",description = "订单")
 public class LifeOrderController {
 
 

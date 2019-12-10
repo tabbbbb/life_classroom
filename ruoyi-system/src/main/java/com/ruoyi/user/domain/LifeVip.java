@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  * 【请填写功能名称】对象 life_vip
  * 
  * @author ruoyi
- * @date 2019-12-05
+ * @date 2019-12-06
  */
 public class LifeVip extends BaseEntity
 {
@@ -24,8 +24,12 @@ public class LifeVip extends BaseEntity
     @Excel(name = "vip等级：0普通 1 卓越")
     private Integer vipLevel;
 
-    /** 积分 最大为99999999 */
-    @Excel(name = "积分 最大为99999999")
+    /** 会员名称 */
+    @Excel(name = "会员名称")
+    private String vipName;
+
+    /** 积分 最大为2147483647 */
+    @Excel(name = "积分 最大为2147483647")
     private Integer point;
 
     /** 有效月份，最大为99 */
@@ -66,6 +70,15 @@ public class LifeVip extends BaseEntity
     {
         return vipLevel;
     }
+    public void setVipName(String vipName) 
+    {
+        this.vipName = vipName;
+    }
+
+    public String getVipName() 
+    {
+        return vipName;
+    }
     public void setPoint(Integer point) 
     {
         this.point = point;
@@ -84,16 +97,16 @@ public class LifeVip extends BaseEntity
     {
         return validity;
     }
-    public void setPrint(BigDecimal print)
-    {
+
+    public BigDecimal getPrint() {
+        return print;
+    }
+
+    public void setPrint(BigDecimal print) {
         this.print = print;
     }
 
-    public BigDecimal getPrint()
-    {
-        return print;
-    }
-    public void setChild(Integer child) 
+    public void setChild(Integer child)
     {
         this.child = child;
     }
@@ -126,6 +139,7 @@ public class LifeVip extends BaseEntity
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("vipId", getVipId())
             .append("vipLevel", getVipLevel())
+            .append("vipName", getVipName())
             .append("point", getPoint())
             .append("validity", getValidity())
             .append("print", getPrint())

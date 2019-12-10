@@ -13,11 +13,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="point"    column="point"    />
         <result property="usePoint"    column="use_point"    />
         <result property="userId"    column="user_id"    />
-        <result property="isSetChile"    column="is_set_chile"    />
+        <result property="isSetChild"    column="is_set_child"    />
+        <result property="isAddChild"    column="is_add_child"    />
     </resultMap>
 
     <sql id="selectLifePointVo">
-        select point_id, vip_id, start_date, end_date, share_id, point, use_point, user_id, is_set_chile from life_point
+        select point_id, vip_id, start_date, end_date, share_id, point, use_point, user_id, is_set_child, is_add_child from life_point
     </sql>
 
     <select id="selectLifePointList" parameterType="LifePoint" resultMap="LifePointResult">
@@ -30,7 +31,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="point != null "> and point = #{point}</if>
             <if test="usePoint != null "> and use_point = #{usePoint}</if>
             <if test="userId != null "> and user_id = #{userId}</if>
-            <if test="isSetChile != null "> and is_set_chile = #{isSetChile}</if>
+            <if test="isSetChild != null "> and is_set_child = #{isSetChild}</if>
+            <if test="isAddChild != null "> and is_add_child = #{isAddChild}</if>
         </where>
     </select>
     
@@ -49,7 +51,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="point != null ">point,</if>
             <if test="usePoint != null ">use_point,</if>
             <if test="userId != null ">user_id,</if>
-            <if test="isSetChile != null ">is_set_chile,</if>
+            <if test="isSetChild != null ">is_set_child,</if>
+            <if test="isAddChild != null ">is_add_child,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="vipId != null ">#{vipId},</if>
@@ -59,7 +62,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="point != null ">#{point},</if>
             <if test="usePoint != null ">#{usePoint},</if>
             <if test="userId != null ">#{userId},</if>
-            <if test="isSetChile != null ">#{isSetChile},</if>
+            <if test="isSetChild != null ">#{isSetChild},</if>
+            <if test="isAddChild != null ">#{isAddChild},</if>
          </trim>
     </insert>
 
@@ -73,10 +77,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="point != null ">point = #{point},</if>
             <if test="usePoint != null ">use_point = #{usePoint},</if>
             <if test="userId != null ">user_id = #{userId},</if>
-            <if test="isSetChile != null ">is_set_chile = #{isSetChile},</if>
+            <if test="isSetChild != null ">is_set_child = #{isSetChild},</if>
+            <if test="isAddChild != null ">is_add_child = #{isAddChild},</if>
         </trim>
         where point_id = #{pointId}
     </update>
+    <delete id="pastPoint">
+        delete from life_point
+        where now() >= end_date
+    </delete>
 
     <delete id="deleteLifePointById" parameterType="Long">
         delete from life_point where point_id = #{pointId}
@@ -88,5 +97,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{pointId}
         </foreach>
     </delete>
-    
+
+    <select id="selectNotSetChildPoint" resultMap="LifePointResult">
+        <include refid="selectLifePointVo"/>
+        where user_id = #{userId} and is_set_child > 0
+    </select>
 </mapper>

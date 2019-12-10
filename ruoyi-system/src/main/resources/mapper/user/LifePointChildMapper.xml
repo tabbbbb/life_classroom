@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.user.mapper.LifePointChildMapper">
+    
+    <resultMap type="LifePointChild" id="LifePointChildResult">
+        <result property="id"    column="id"    />
+        <result property="userChildId"    column="user_child_id"    />
+        <result property="pointId"    column="point_id"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+    </resultMap>
+
+    <sql id="selectLifePointChildVo">
+        select id, user_child_id, point_id, start_time, end_time from life_point_child
+    </sql>
+
+    <select id="selectLifePointChildList" parameterType="LifePointChild" resultMap="LifePointChildResult">
+        <include refid="selectLifePointChildVo"/>
+        <where>  
+            <if test="userChildId != null "> and user_child_id = #{userChildId}</if>
+            <if test="pointId != null "> and point_id = #{pointId}</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectLifePointChildById" parameterType="Long" resultMap="LifePointChildResult">
+        <include refid="selectLifePointChildVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertLifePointChild" parameterType="LifePointChild" useGeneratedKeys="true" keyProperty="id">
+        insert into life_point_child
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userChildId != null ">user_child_id,</if>
+            <if test="pointId != null ">point_id,</if>
+            <if test="startTime != null ">start_time,</if>
+            <if test="endTime != null ">end_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userChildId != null ">#{userChildId},</if>
+            <if test="pointId != null ">#{pointId},</if>
+            <if test="startTime != null ">#{startTime},</if>
+            <if test="endTime != null ">#{endTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLifePointChild" parameterType="LifePointChild">
+        update life_point_child
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userChildId != null ">user_child_id = #{userChildId},</if>
+            <if test="pointId != null ">point_id = #{pointId},</if>
+            <if test="startTime != null ">start_time = #{startTime},</if>
+            <if test="endTime != null ">end_time = #{endTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteLifePointChildById" parameterType="Long">
+        delete from life_point_child where id = #{id}
+    </delete>
+
+    <delete id="deleteLifePointChildByIds" parameterType="String">
+        delete from life_point_child where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <delete id="pastPointChild">
+        delete from life_point_child
+        where now() >= end_time
+    </delete>
+
+</mapper>

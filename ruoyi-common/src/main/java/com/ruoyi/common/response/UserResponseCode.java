@@ -155,4 +155,17 @@ public class UserResponseCode {
      */
     public static final Integer USER_RECHARGE_ERROR = 100019;
 
+
+    /**
+     * 添加小孩错误
+     */
+    public static final Integer USER_ADD_CHILD_ERROR = 100020;
+
+
+    /**
+     * 绑定小孩错误
+     */
+    public static final Integer USER_BIND_CHILD_ERROR = 100021;
+
+
 }

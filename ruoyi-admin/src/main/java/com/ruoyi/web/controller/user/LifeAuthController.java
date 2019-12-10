@@ -23,10 +23,14 @@ import com.ruoyi.framework.userlogin.WxLoginUserInfo;
 import com.ruoyi.framework.userlogin.annotation.LoginInfo;
 import com.ruoyi.framework.userlogin.info.UserLoginInfo;
 import com.ruoyi.framework.userlogin.token.UserToken;
+import com.ruoyi.user.service.LifePointService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -47,6 +51,9 @@ public class LifeAuthController {
     @Autowired
     private LifeAutoService autoService;
 
+    @Autowired
+    private LifePointService pointService;
+
 
     @PostMapping("phonelogin")
     @ApiOperation(value = "手机号登录")
@@ -59,7 +66,7 @@ public class LifeAuthController {
 
     @PostMapping("wxlogin")
     @ApiOperation(value = "微信登录或注册")
-    public Object wxLogin(@RequestBody WxLoginUserInfo wxLoginUserInfo){
+    public Object wxLogin(@RequestBody  WxLoginUserInfo wxLoginUserInfo){
         UserResponse response = autoService.wxLogin(wxLoginUserInfo.toMap());
         toResponse(response);
         return response;
@@ -70,7 +77,7 @@ public class LifeAuthController {
 
     @PutMapping("registerandlogin")
     @ApiOperation(value = "手机号注册或登录")
-    public Object register(@ApiParam(name = "body",value = "phone:手机号,code:短信,invitationCard:邀请人邀请码") @RequestBody String body){
+    public Object register(@ApiParam(name = "body",value = "phone:手机号,code:短信,invitationCard:邀请人邀请码,companyInvitationCard:公司邀请码") @RequestBody String body){
         UserResponse response = autoService.register(body);
         toResponse(response);
         return response;
@@ -147,7 +154,10 @@ public class LifeAuthController {
         if (response.getCode() == UserResponseCode.SUCCEED){
             LifeUser user = (LifeUser) response.getData();
             UserLoginInfo info = UserToken.addToken(user.getUserId());
-            response.setData(info);
+            Map<String,Object> map = new HashMap<>();
+            map.put("info",info);
+            map.put("points",pointService.selectNotSetChildPoint(info.getId()));
+            response.setData(map);
         }
     }
 

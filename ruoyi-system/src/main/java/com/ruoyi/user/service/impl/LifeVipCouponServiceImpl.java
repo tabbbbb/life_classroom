@@ -103,7 +103,7 @@ public class LifeVipCouponServiceImpl implements LifeVipCouponService
      * @return
      */
     @Override
-    public Long[] selectLifeCouponIds(Long vipId) {
+    public List<LifeVipCoupon> selectLifeCouponIds(Long vipId) {
         return lifeVipCouponMapper.selectLifeCouponIds(vipId);
     }
 }

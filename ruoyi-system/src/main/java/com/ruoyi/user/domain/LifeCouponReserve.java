@@ -12,7 +12,7 @@ import java.util.Date;
  * 用户优惠卷对象 life_coupon_reserve
  * 
  * @author ruoyi
- * @date 2019-12-04
+ * @date 2019-12-09
  */
 public class LifeCouponReserve extends BaseEntity
 {
@@ -29,9 +29,17 @@ public class LifeCouponReserve extends BaseEntity
     @Excel(name = "优惠券id")
     private Long couponId;
 
+    /** 核销码 */
+    @Excel(name = "核销码")
+    private String destroy;
+
     /** 优惠券状态，1为已使用，0为已领取未使用，-1为已过期 */
     @Excel(name = "优惠券状态，1为已使用，0为已领取未使用，-1为已过期")
-    private Long status;
+    private Integer status;
+
+    /** 开始时间 */
+    @Excel(name = "开始时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private LocalDateTime startTime;
 
     /** 失效时间 */
     @Excel(name = "失效时间", width = 30, dateFormat = "yyyy-MM-dd")
@@ -64,14 +72,31 @@ public class LifeCouponReserve extends BaseEntity
     {
         return couponId;
     }
-    public void setStatus(Long status) 
+    public void setDestroy(String destroy) 
+    {
+        this.destroy = destroy;
+    }
+
+    public String getDestroy() 
+    {
+        return destroy;
+    }
+    public void setStatus(Integer status) 
     {
         this.status = status;
     }
 
-    public Long getStatus() 
+    public Integer getStatus() 
     {
         return status;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 
     public LocalDateTime getEndTime() {
@@ -88,8 +113,9 @@ public class LifeCouponReserve extends BaseEntity
             .append("receiveId", getReceiveId())
             .append("shareId", getShareId())
             .append("couponId", getCouponId())
-            .append("createTime", getCreateTime())
+            .append("destroy", getDestroy())
             .append("status", getStatus())
+            .append("startTime", getStartTime())
             .append("endTime", getEndTime())
             .toString();
     }

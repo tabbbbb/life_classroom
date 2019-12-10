@@ -41,14 +41,6 @@ public interface LifeCouponReserveMapper
 
 
     /**
-     * 新增用户优惠卷集合
-     *
-     * @param list 用户优惠卷
-     * @return 结果
-     */
-    public int insertLifeCouponReserves(@Param("couponReserveList") List<LifeCouponReserve> list);
-
-    /**
      * 修改用户优惠卷
      * 
      * @param lifeCouponReserve 用户优惠卷
@@ -71,4 +63,21 @@ public interface LifeCouponReserveMapper
      * @return 结果
      */
     public int deleteLifeCouponReserveByIds(String[] receiveIds);
+
+
+
+    /**
+     * 新增用户优惠卷集合
+     *
+     * @param list 用户优惠卷
+     * @return 结果
+     */
+    public int insertLifeCouponReserves(@Param("couponReserveList") List<LifeCouponReserve> list);
+
+
+    /**
+     * 删除掉过期的优惠券
+     * @return
+     */
+    int pastCoupon();
 }

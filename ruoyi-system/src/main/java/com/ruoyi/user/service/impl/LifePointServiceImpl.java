@@ -93,4 +93,26 @@ public class LifePointServiceImpl implements LifePointService
     {
         return lifePointMapper.deleteLifePointById(pointId);
     }
+
+    /**
+     * 获取未设置的会员集合
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<LifePoint> selectNotSetChildPoint(Long userId) {
+        return lifePointMapper.selectNotSetChildPoint(userId);
+    }
+
+
+    /**
+     * 删除到期的积分记录
+     *
+     * @return
+     */
+    @Override
+    public int pastPoint() {
+        return lifePointMapper.pastPoint();
+    }
 }

@@ -2,6 +2,7 @@ package com.ruoyi.user.service;
 
 
 import com.ruoyi.user.domain.LifeCouponReserve;
+import com.ruoyi.user.domain.LifeVipCoupon;
 
 import java.util.List;
 
@@ -42,10 +43,10 @@ public interface LifeCouponReserveService
     /**
      * 新增用户优惠卷集合
      *
-     * @param ids 优惠卷ids
+     * @param list 优惠卷ids
      * @return 结果
      */
-    public int insertLifeCouponReserve(Long shareId,Long [] ids);
+    public int insertLifeCouponReserve(Long shareId, List<LifeVipCoupon> list);
 
     /**
      * 修改用户优惠卷
@@ -70,4 +71,8 @@ public interface LifeCouponReserveService
      * @return 结果
      */
     public int deleteLifeCouponReserveById(Long receiveId);
+
+
+
+    void pastCoupon();
 }

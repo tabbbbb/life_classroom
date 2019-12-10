@@ -3,6 +3,7 @@ package com.ruoyi.user.service.impl;
 
 import com.ruoyi.user.domain.LifeCoupon;
 import com.ruoyi.user.domain.LifeCouponReserve;
+import com.ruoyi.user.domain.LifeVipCoupon;
 import com.ruoyi.user.mapper.LifeCouponReserveMapper;
 import com.ruoyi.user.service.LifeCouponReserveService;
 import com.ruoyi.common.core.text.Convert;
@@ -109,23 +110,36 @@ public class LifeCouponReserveServiceImpl implements LifeCouponReserveService
     /**
      * 新增用户优惠卷集合
      *
-     * @param ids 优惠卷ids
+     * @param list 优惠卷ids
      * @return 结果
      */
     @Override
-    public int insertLifeCouponReserve(Long shareId,Long [] ids) {
-        List<LifeCoupon> couponList = couponService.selectLifeCouponListByIds(ids);
+    public int insertLifeCouponReserve(Long shareId, List<LifeVipCoupon> list) {
         List<LifeCouponReserve> couponReserveList = new ArrayList<>();
-        LocalDateTime start = LocalDateTime.now();
-        for (LifeCoupon lifeCoupon : couponList) {
+        LocalDateTime start = LocalDateTime.now().plusDays(1);
+        for (LifeVipCoupon vipCoupon : list) {
+            LifeCoupon lifeCoupon = couponService.selectLifeCouponById(vipCoupon.getCouponId());
             LifeCouponReserve couponReserve = new LifeCouponReserve();
-            LocalDateTime end = LocalDateTime.of(start.getYear(),start.getMonth(),start.getDayOfMonth(),0,0,0).plusDays(lifeCoupon.getEnableTime());
+            LocalDateTime end = LocalDateTime.of(start.getYear(),start.getMonth(),start.getDayOfMonth(),0,0,0).plusDays(lifeCoupon.getEnableDay());
             couponReserve.setCouponId(lifeCoupon.getCouponId());
             couponReserve.setShareId(shareId);
-            couponReserve.setStatus(0L);
+            couponReserve.setStatus(0);
             couponReserve.setEndTime(end);
-            couponReserveList.add(couponReserve);
+            couponReserve.setStartTime(LocalDateTime.now());
+            for (int i = 0; i < vipCoupon.getNumber(); i++) {
+                if (lifeCoupon.getType().equals(2L)){
+                    couponReserve.setStartTime(couponReserve.getEndTime().plusDays(lifeCoupon.getIntervalDay()));
+                }
+                couponReserveList.add(couponReserve);
+            }
+
         }
         return couponReserveMapper.insertLifeCouponReserves(couponReserveList);
+    }
+
+
+    @Override
+    public void pastCoupon() {
+        couponReserveMapper.pastCoupon();
     }
 }

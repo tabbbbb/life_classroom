@@ -8,10 +8,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="id"    column="id"    />
         <result property="vipId"    column="vip_id"    />
         <result property="couponId"    column="coupon_id"    />
+        <result property="number"    column="number"    />
     </resultMap>
 
     <sql id="selectLifeVipCouponVo">
-        select id, vip_id, coupon_id from life_vip_coupon
+        select id, vip_id, coupon_id, number from life_vip_coupon
     </sql>
 
     <select id="selectLifeVipCouponList" parameterType="LifeVipCoupon" resultMap="LifeVipCouponResult">
@@ -19,6 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="vipId != null "> and vip_id = #{vipId}</if>
             <if test="couponId != null "> and coupon_id = #{couponId}</if>
+            <if test="number != null "> and number = #{number}</if>
         </where>
     </select>
     
@@ -26,22 +28,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectLifeVipCouponVo"/>
         where id = #{id}
     </select>
-    <select id="selectLifeCouponIds"  resultType="long">
-         select coupon_id from life_vip_coupon
-         where vip_id = #{vipId}
-    </select>
-
-    <insert id="insertLifeVipCoupon" parameterType="LifeVipCoupon">
+        
+    <insert id="insertLifeVipCoupon" parameterType="LifeVipCoupon" useGeneratedKeys="true" keyProperty="id">
         insert into life_vip_coupon
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null ">id,</if>
             <if test="vipId != null ">vip_id,</if>
             <if test="couponId != null ">coupon_id,</if>
+            <if test="number != null ">number,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null ">#{id},</if>
             <if test="vipId != null ">#{vipId},</if>
             <if test="couponId != null ">#{couponId},</if>
+            <if test="number != null ">#{number},</if>
          </trim>
     </insert>
 
@@ -50,6 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="vipId != null ">vip_id = #{vipId},</if>
             <if test="couponId != null ">coupon_id = #{couponId},</if>
+            <if test="number != null ">number = #{number},</if>
         </trim>
         where id = #{id}
     </update>
@@ -64,5 +63,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+
+    <select id="selectLifeCouponIds"  resultMap="LifeVipCouponResult">
+         <include refid="selectLifeVipCouponVo"/>
+         where vip_id = #{vipId}
+    </select>
     
 </mapper>

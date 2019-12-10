@@ -60,4 +60,19 @@ public interface LifePointMapper
      * @return 结果
      */
     public int deleteLifePointByIds(String[] pointIds);
+
+
+    /**
+     *  获取未设置的会员集合
+     * @param userId
+     * @return
+     */
+    List<LifePoint> selectNotSetChildPoint(Long userId);
+
+
+    /**
+     * 删除到期的积分记录
+     * @return
+     */
+    int pastPoint();
 }

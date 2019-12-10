@@ -8,16 +8,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="receiveId"    column="receive_id"    />
         <result property="shareId"    column="share_id"    />
         <result property="couponId"    column="coupon_id"    />
+        <result property="destroy"    column="destroy"    />
         <result property="status"    column="status"    />
+        <result property="startTime"    column="start_time"    />
         <result property="endTime"    column="end_time"    />
     </resultMap>
 
     <sql id="selectLifeCouponReserveVo">
-        select receive_id, share_id, coupon_id, status, end_time from life_coupon_reserve
-    </sql>
-
-    <sql id="column" >
-        share_id, coupon_id, status, end_time
+        select receive_id, share_id, coupon_id, destroy, status, start_time, end_time from life_coupon_reserve
     </sql>
 
     <select id="selectLifeCouponReserveList" parameterType="LifeCouponReserve" resultMap="LifeCouponReserveResult">
@@ -25,7 +23,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="shareId != null "> and share_id = #{shareId}</if>
             <if test="couponId != null "> and coupon_id = #{couponId}</if>
+            <if test="destroy != null  and destroy != ''"> and destroy = #{destroy}</if>
             <if test="status != null "> and status = #{status}</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
             <if test="endTime != null "> and end_time = #{endTime}</if>
         </where>
     </select>
@@ -40,30 +40,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="shareId != null ">share_id,</if>
             <if test="couponId != null ">coupon_id,</if>
+            <if test="destroy != null  and destroy != ''">destroy,</if>
             <if test="status != null ">status,</if>
+            <if test="startTime != null ">start_time,</if>
             <if test="endTime != null ">end_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="shareId != null ">#{shareId},</if>
             <if test="couponId != null ">#{couponId},</if>
+            <if test="destroy != null  and destroy != ''">#{destroy},</if>
             <if test="status != null ">#{status},</if>
+            <if test="startTime != null ">#{startTime},</if>
             <if test="endTime != null ">#{endTime},</if>
          </trim>
-    </insert>
-    <insert id="insertLifeCouponReserves" parameterType="list" useGeneratedKeys="true" keyProperty="receiveId">
-        insert into life_coupon_reserve
-        <trim prefix="(" suffix=")" >
-            <include refid="column"/>
-        </trim>
-        VALUES
-        <foreach collection="couponReserveList" item="item" separator=",">
-            <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="item.shareId != null ">#{item.shareId},</if>
-                <if test="item.couponId != null ">#{item.couponId},</if>
-                <if test="item.status != null ">#{item.status},</if>
-                <if test="item.endTime != null ">#{item.endTime},</if>
-            </trim>
-        </foreach>
     </insert>
 
     <update id="updateLifeCouponReserve" parameterType="LifeCouponReserve">
@@ -71,7 +60,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="shareId != null ">share_id = #{shareId},</if>
             <if test="couponId != null ">coupon_id = #{couponId},</if>
+            <if test="destroy != null  and destroy != ''">destroy = #{destroy},</if>
             <if test="status != null ">status = #{status},</if>
+            <if test="startTime != null ">start_time = #{startTime},</if>
             <if test="endTime != null ">end_time = #{endTime},</if>
         </trim>
         where receive_id = #{receiveId}
@@ -87,5 +78,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{receiveId}
         </foreach>
     </delete>
+
+    <insert id="insertLifeCouponReserves" parameterType="list" useGeneratedKeys="true" keyProperty="receiveId">
+        insert into life_coupon_reserve
+        <trim prefix="(" suffix=")" >
+            (share_id,coupon_id,status,end_time)
+        </trim>
+        VALUES
+        <foreach collection="couponReserveList" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.shareId != null ">#{item.shareId},</if>
+                <if test="item.couponId != null ">#{item.couponId},</if>
+                <if test="item.status != null ">#{item.status},</if>
+                <if test="item.endTime != null ">#{item.endTime},</if>
+            </trim>
+        </foreach>
+    </insert>
+
+
+    <update id="pastCoupon">
+        update life_coupon_reserve set status = -1
+        where now() >= end_time
+    </update>
+
     
 </mapper>
