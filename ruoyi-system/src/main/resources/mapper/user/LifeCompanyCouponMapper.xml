@@ -30,7 +30,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectLifeCompanyCouponVo"/>
         where compary_coupon_id = #{comparyCouponId}
     </select>
-        
+
+
     <insert id="insertLifeCompanyCoupon" parameterType="LifeCompanyCoupon">
         insert into life_company_coupon
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -70,5 +71,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{comparyCouponId}
         </foreach>
     </delete>
+
+
+    <select id="selectLifeCompanyCouponByPrice" resultMap="LifeCompanyCouponResult">
+        <include refid="selectLifeCompanyCouponVo"/>
+        where condition_price = (
+          select condition_price from  life_company_coupon
+          where #{price} >= condition_price
+          order by condition_price desc
+          limit 1
+        )
+    </select>
     
 </mapper>

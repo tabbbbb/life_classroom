@@ -1,6 +1,9 @@
 package com.ruoyi.framework.web.exception;
 
 import javax.servlet.http.HttpServletRequest;
+
+import com.ruoyi.common.exception.recharge.RechargerException;
+import com.ruoyi.common.response.UserResponse;
 import org.apache.shiro.authz.AuthorizationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,5 +115,11 @@ public class GlobalExceptionHandler
     public AjaxResult demoModeException(DemoModeException e)
     {
         return AjaxResult.error("演示模式，不允许操作");
+    }
+
+
+    @ExceptionHandler(RechargerException.class)
+    public UserResponse rechargerException(RechargerException e){
+        return e.getUserResponse();
     }
 }

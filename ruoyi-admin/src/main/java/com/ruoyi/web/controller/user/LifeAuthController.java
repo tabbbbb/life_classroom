@@ -86,7 +86,11 @@ public class LifeAuthController {
     @PostMapping("send")
     @ApiOperation(value = "发送验证码到手机",response = UserResponse.class,notes = "")
     public Object send(@RequestBody @ApiParam(value = "phone:xxx",name = "body")  String body){
+
         String phone = JacksonUtil.parseString(body,"phone");
+        if (phone == null || phone.length() != 11){
+            return UserResponse.fail(UserResponseCode.PHONE_INPUT_ERROR,"手机号输入错误");
+        }
         Integer random = (int)(Math.floor(Math.random()*900000)) + 100000;
         notifySms.notifySend(phone,TemplatesType.code,new String[]{random+"","2"});
         SmsCache.putSmsCache(phone,random+"");

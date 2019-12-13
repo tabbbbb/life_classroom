@@ -1,7 +1,6 @@
 package com.ruoyi.user.service.impl;
 
 
-import com.alibaba.fastjson.JSON;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.common.response.UserResponseCode;
@@ -16,10 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 积分小孩关联Service业务层处理

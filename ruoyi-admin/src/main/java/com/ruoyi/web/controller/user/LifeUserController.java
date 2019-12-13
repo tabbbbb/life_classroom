@@ -12,9 +12,7 @@ import com.ruoyi.common.utils.file.MimeTypeUtils;
 import com.ruoyi.framework.userlogin.LoginResponse;
 import com.ruoyi.framework.userlogin.annotation.LoginInfo;
 import com.ruoyi.framework.userlogin.info.UserLoginInfo;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.core.controller.BaseController;
@@ -22,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 /**
  * 用户Controller
@@ -86,6 +85,16 @@ public class LifeUserController extends BaseController
         UserResponse response = LoginResponse.toMessage(loginInfo);
         if (response != null) return response;
         return userService.setProperty(loginInfo.getId(),body);
+    }
+
+
+    @GetMapping ("succeedbalance")
+    @ApiImplicitParams({
+                    @ApiImplicitParam(name = "outTradeNo"),
+                    @ApiImplicitParam(name = "price")
+    })
+    public UserResponse succeedBalance(String outTradeNo,Integer price){
+        return userService.rechargeBalanceSucceed(outTradeNo,new BigDecimal(price));
     }
 
 

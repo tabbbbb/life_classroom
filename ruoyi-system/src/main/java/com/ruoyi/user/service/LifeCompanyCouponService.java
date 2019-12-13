@@ -60,4 +60,13 @@ public interface LifeCompanyCouponService
      * @return 结果
      */
     public int deleteLifeCompanyCouponById(Long comparyCouponId);
+
+
+
+    /**
+     * 获取充值金额最匹配的优惠券赠送
+     * @param price
+     * @return
+     */
+    List<LifeCompanyCoupon> selectLifeCompanyCouponByPrice(Integer price);
 }

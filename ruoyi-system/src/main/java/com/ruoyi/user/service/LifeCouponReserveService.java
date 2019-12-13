@@ -1,10 +1,13 @@
 package com.ruoyi.user.service;
 
 
+import com.ruoyi.user.domain.LifeCompanyCoupon;
 import com.ruoyi.user.domain.LifeCouponReserve;
+import com.ruoyi.user.domain.LifeVip;
 import com.ruoyi.user.domain.LifeVipCoupon;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户优惠卷Service接口
@@ -40,13 +43,6 @@ public interface LifeCouponReserveService
 
 
 
-    /**
-     * 新增用户优惠卷集合
-     *
-     * @param list 优惠卷ids
-     * @return 结果
-     */
-    public int insertLifeCouponReserve(Long shareId, List<LifeVipCoupon> list);
 
     /**
      * 修改用户优惠卷
@@ -73,6 +69,42 @@ public interface LifeCouponReserveService
     public int deleteLifeCouponReserveById(Long receiveId);
 
 
+    /**
+     * 删除过期的优惠券
+     */
+    int pastCoupon();
 
-    void pastCoupon();
+
+    /**
+     * 新增充值余额所送优惠券
+     *
+     * @param list 优惠卷ids
+     * @return 结果
+     */
+    int insertLifeCouponReserveBalance(Long shareId, List<LifeCompanyCoupon> list);
+
+
+
+    /**
+     * 新增充值vip所送优惠券
+     *
+     * @param list 优惠卷ids
+     * @return 结果
+     */
+    int insertLifeCouponReserveVip(Long shareId, List<LifeVipCoupon> list);
+
+
+    /**
+     * 获取增加的行数
+     * @param list
+     * @return
+     */
+    int insertNumVip(List<LifeVipCoupon> list);
+
+    /**
+     * 获取增加的行数
+     * @param list
+     * @return
+     */
+    int insertNumBalance(List<LifeCompanyCoupon> list);
 }

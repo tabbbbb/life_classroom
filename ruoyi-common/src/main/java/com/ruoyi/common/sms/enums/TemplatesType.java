@@ -2,7 +2,9 @@ package com.ruoyi.common.sms.enums;
 
 public enum TemplatesType {
     code("verificationCode"),
-    remind("remind");
+    beginsRemind("beginsRemind"),
+    payRemind("payRemind"),
+    rechargeRemind("rechargeRemind");
 
     private String type;
 

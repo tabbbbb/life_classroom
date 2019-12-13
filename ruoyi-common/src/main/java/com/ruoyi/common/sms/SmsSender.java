@@ -21,4 +21,6 @@ package com.ruoyi.common.sms;
 public interface SmsSender {
 
     void sendWithTemplate(String phone,int template,String [] params);
+
+    void sendWithTemplate(String [] phone ,int template,String [] params);
 }

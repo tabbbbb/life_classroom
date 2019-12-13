@@ -1,6 +1,7 @@
 package com.ruoyi.user.service.impl;
 
 
+import com.ruoyi.common.exception.recharge.RechargerException;
 import com.ruoyi.common.sms.NotifySms;
 import com.ruoyi.user.domain.*;
 import com.ruoyi.user.mapper.LifeVipMapper;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -177,24 +179,31 @@ public class LifeVipServiceImpl implements LifeVipService
         point.setStartDate(start);
         point.setEndDate(end);
         point.setIsSetChild(1);
+        point.setPointType(1);
         point.setVipId(vip.getVipId());
         point.setUserId(userId);
         point.setShareId(shareId);
         point.setUsePoint(vip.getPoint());
         point.setIsAddChild(vip.getChild());
-        pointService.insertLifePoint(point);
+        if (pointService.insertLifePoint(point) == 0){
+            throw new RechargerException(UserResponseCode.USER_RECHARGE_ERROR,"积分添加失败，请联系管理员",userId);
+        }
         LifePointLog pointLog = new LifePointLog();
-        pointLog.setLogType(1);
+        pointLog.setLogType(4);
         pointLog.setExplain("充值"+vip.getPrint()+"元会员");
         pointLog.setUserId(userId);
         pointLog.setPoint(vip.getPoint());
         pointLog.setLogUserId(userId);
-        pointLog.setAddTime(LocalDateTime.now());
-        pointLogService.insertLifePointLog(pointLog);
+        pointLog.setAddTime(new Date());
+        if (pointLogService.insertLifePointLog(pointLog) == 0){
+            throw new RechargerException(UserResponseCode.USER_RECHARGE_ERROR,"积分日志添加失败，请联系管理员",userId);
+        }
         LifeVipCoupon selectVipCoupon = new LifeVipCoupon();
         selectVipCoupon.setVipId(vipId);
         List<LifeVipCoupon> list = vipCouponService.selectLifeCouponIds(vipId);
-        couponReserveService.insertLifeCouponReserve(shareId,list);
+        if (couponReserveService.insertLifeCouponReserveVip(userId,list)!= couponReserveService.insertNumVip(list)){
+            throw new RechargerException(UserResponseCode.USER_RECHARGE_ERROR,"充值所送优惠券添加失败，请联系管理员",userId);
+        }
         return UserResponse.succeed();
     }
 }

@@ -4,13 +4,17 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import org.springframework.cglib.core.Local;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
  * 用户对象 life_user
  * 
  * @author ruoyi
- * @date 2019-12-10
+ * @date 2019-12-12
  */
 public class LifeUser extends BaseEntity
 {
@@ -53,7 +57,7 @@ public class LifeUser extends BaseEntity
 
     /** 余额 */
     @Excel(name = "余额")
-    private Long balance;
+    private BigDecimal balance;
 
     /** 会员电话 */
     @Excel(name = "会员电话")
@@ -99,9 +103,13 @@ public class LifeUser extends BaseEntity
     @Excel(name = "生日", width = 30, dateFormat = "yyyy-MM-dd")
     private Date birthday;
 
+    /** 创建时间 */
+    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private LocalDateTime createDate;
+
     /** 绑定上级时间 */
     @Excel(name = "绑定上级时间", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date createDate;
+    private LocalDateTime bindDate;
 
     public void setUserId(Long userId) 
     {
@@ -184,16 +192,16 @@ public class LifeUser extends BaseEntity
     {
         return openId;
     }
-    public void setBalance(Long balance) 
-    {
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 
-    public Long getBalance() 
-    {
-        return balance;
-    }
-    public void setPhone(String phone) 
+    public void setPhone(String phone)
     {
         this.phone = phone;
     }
@@ -292,14 +300,21 @@ public class LifeUser extends BaseEntity
     {
         return birthday;
     }
-    public void setCreateDate(Date createDate) 
-    {
+
+    public LocalDateTime getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(LocalDateTime createDate) {
         this.createDate = createDate;
     }
 
-    public Date getCreateDate() 
-    {
-        return createDate;
+    public LocalDateTime getBindDate() {
+        return bindDate;
+    }
+
+    public void setBindDate(LocalDateTime bindDate) {
+        this.bindDate = bindDate;
     }
 
     @Override
@@ -327,6 +342,7 @@ public class LifeUser extends BaseEntity
             .append("companyId", getCompanyId())
             .append("birthday", getBirthday())
             .append("createDate", getCreateDate())
+            .append("bindDate", getBindDate())
             .toString();
     }
 }

@@ -93,4 +93,15 @@ public class LifeOrderServiceImpl implements LifeOrderService
     {
         return lifeOrderMapper.deleteLifeOrderById(orderId);
     }
+
+    /**
+     * 查询今天需要发短信的订单
+     *
+     * @param courseId
+     * @return
+     */
+    @Override
+    public String[] selectNowOrder(Long courseId) {
+        return lifeOrderMapper.selectNowOrder(courseId);
+    }
 }

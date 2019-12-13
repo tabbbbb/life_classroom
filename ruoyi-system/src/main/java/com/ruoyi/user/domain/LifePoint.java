@@ -12,7 +12,7 @@ import java.util.Date;
  * 会员积分和开通记录对象 life_point
  * 
  * @author ruoyi
- * @date 2019-12-06
+ * @date 2019-12-10
  */
 public class LifePoint extends BaseEntity
 {
@@ -24,6 +24,10 @@ public class LifePoint extends BaseEntity
     /** 开通的会员id */
     @Excel(name = "开通的会员id")
     private Long vipId;
+
+    /** 1:开通会员，2退款，3优惠券 */
+    @Excel(name = "1:开通会员，2退款，3优惠券")
+    private Integer pointType;
 
     /** 开始日期 */
     @Excel(name = "开始日期", width = 30, dateFormat = "yyyy-MM-dd")
@@ -53,7 +57,7 @@ public class LifePoint extends BaseEntity
     @Excel(name = "是否可以设置小孩 0 FALSE, 1 TRUE")
     private Integer isSetChild;
 
-    /** 可以添加几个小孩 0 false <1 true */
+    /** 0 false <1 true */
     @Excel(name = "0 false <1 true")
     private Integer isAddChild;
 
@@ -75,25 +79,33 @@ public class LifePoint extends BaseEntity
     {
         return vipId;
     }
-    public void setStartDate(LocalDateTime startDate)
+    public void setPointType(Integer pointType) 
     {
+        this.pointType = pointType;
+    }
+
+    public Integer getPointType() 
+    {
+        return pointType;
+    }
+
+    public LocalDateTime getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDateTime getStartDate()
-    {
-        return startDate;
+    public LocalDateTime getEndDate() {
+        return endDate;
     }
-    public void setEndDate(LocalDateTime endDate)
-    {
+
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 
-    public LocalDateTime getEndDate()
-    {
-        return endDate;
-    }
-    public void setShareId(Long shareId) 
+    public void setShareId(Long shareId)
     {
         this.shareId = shareId;
     }
@@ -153,6 +165,7 @@ public class LifePoint extends BaseEntity
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("pointId", getPointId())
             .append("vipId", getVipId())
+            .append("pointType", getPointType())
             .append("startDate", getStartDate())
             .append("endDate", getEndDate())
             .append("shareId", getShareId())

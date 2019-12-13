@@ -81,15 +81,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <insert id="insertLifeCouponReserves" parameterType="list" useGeneratedKeys="true" keyProperty="receiveId">
         insert into life_coupon_reserve
-        <trim prefix="(" suffix=")" >
-            (share_id,coupon_id,status,end_time)
-        </trim>
+        (share_id,coupon_id,destroy,status,start_time,end_time)
         VALUES
         <foreach collection="couponReserveList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 <if test="item.shareId != null ">#{item.shareId},</if>
                 <if test="item.couponId != null ">#{item.couponId},</if>
+                <if test="item.destroy != null and item.destroy != '' ">#{item.destroy},</if>
                 <if test="item.status != null ">#{item.status},</if>
+                <if test="item.startTime != null ">#{item.startTime},</if>
                 <if test="item.endTime != null ">#{item.endTime},</if>
             </trim>
         </foreach>

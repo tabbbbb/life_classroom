@@ -27,6 +27,7 @@ import com.ruoyi.user.service.LifeShareService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Map;
 
@@ -72,6 +73,7 @@ public class LifeAutoServiceImpl implements LifeAutoService {
                 user.setPhone(phone);
                 user.setCardNumber(phone.substring(7)+random);
                 user.setNickName("用户"+phone);
+                user.setCreateDate(LocalDateTime.now());
                 this.setParent(user,invitationCard);
                 this.setCompany(user,companyInvitationCard);
                 if (userMapper.insertLifeUser(user) == 0){
@@ -122,7 +124,7 @@ public class LifeAutoServiceImpl implements LifeAutoService {
         if (parentUser == null)return;
         user.setParentId(parentUser.getUserId());
         user.setLeadId(parentUser.getLeadId());
-        user.setCreateDate(new Date());
+        user.setBindDate(LocalDateTime.now());
         LifeShare share = shareService.selectLifeShareById(parentUser.getUserId());
         if (share == null){
             share = new LifeShare();
@@ -184,6 +186,7 @@ public class LifeAutoServiceImpl implements LifeAutoService {
         if (user == null){
             user = new LifeUser();
             user.setOpenId(openId);
+            user.setCreateDate(LocalDateTime.now());
             user.setSex(Long.valueOf(map.get("sex")));
             user.setAddress(map.get("country")+" "+map.get("province")+" "+ map.get("city"));
             user.setNickName(map.get("nickName"));

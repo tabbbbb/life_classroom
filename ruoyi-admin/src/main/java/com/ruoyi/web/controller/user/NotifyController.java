@@ -12,29 +12,24 @@ package com.ruoyi.web.controller.user;
 
 import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
-import com.github.binarywang.wxpay.bean.result.BaseWxPayResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
-import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.common.weixin.WxOperation;
 import com.ruoyi.user.domain.LifeOrder;
 import com.ruoyi.user.service.LifeOrderService;
+import com.ruoyi.user.service.LifeUserService;
 import com.ruoyi.user.service.LifeVipService;
-import com.ruoyi.util.order.OrderUtil;
-import io.swagger.annotations.Api;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
-import springfox.documentation.service.Operation;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 /**
  * 〈微信支付回调方法〉<br>
@@ -59,6 +54,9 @@ public class NotifyController {
     @Autowired
     private LifeVipService vipService;
 
+    @Autowired
+    private LifeUserService userService;
+
 
 
     @PostMapping("notify")
@@ -81,9 +79,12 @@ public class NotifyController {
         LifeOrder order = orderService.selectLifeOrderById(outTradeNo);
 
         if (order != null){
-            return null;
+            return null;   //微信购买课程 --  已取消
         }else {
-            return vipService.rechargeSucceed(outTradeNo,price);
+            if (outTradeNo.indexOf("price") != -1){ //充值余额
+                return userService.rechargeBalanceSucceed(outTradeNo,price);
+            }
+            return vipService.rechargeSucceed(outTradeNo,price); //充值会员 -- 已取消
         }
     }
 

@@ -10,9 +10,15 @@
  */
 package com.ruoyi.common.sms.impl;
 
+import com.github.qcloudsms.SmsMultiSender;
+import com.github.qcloudsms.SmsMultiSenderResult;
 import com.github.qcloudsms.SmsSingleSender;
+import com.github.qcloudsms.SmsSingleSenderResult;
 import com.github.qcloudsms.httpclient.HTTPException;
+import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.sms.SmsSender;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -28,8 +34,12 @@ public class TencentSmsSender implements SmsSender {
 
     private SmsSingleSender smsSingleSender;
 
-    public SmsSingleSender getSmsSingleSender() {
-        return smsSingleSender;
+    private SmsMultiSender smsMultiSender;
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    public void setSmsMultiSender(SmsMultiSender smsMultiSender) {
+        this.smsMultiSender = smsMultiSender;
     }
 
     public void setSmsSingleSender(SmsSingleSender smsSingleSender) {
@@ -39,7 +49,20 @@ public class TencentSmsSender implements SmsSender {
     @Override
     public void sendWithTemplate(String phone, int template, String[] params) {
         try {
-            smsSingleSender.sendWithParam("86", phone, template, params, "", "", "");
+            SmsSingleSenderResult result = smsSingleSender.sendWithParam("86", phone, template, params, "", "", "");
+            logger.debug(result.toString());
+        } catch (HTTPException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendWithTemplate(String[] phone, int template, String[] params) {
+        try {
+            SmsMultiSenderResult result =smsMultiSender.sendWithParam("86",phone,template,params,"","","");
+            logger.debug(result.toString());
         } catch (HTTPException e) {
             e.printStackTrace();
         } catch (IOException e) {

@@ -60,4 +60,12 @@ public interface LifePointLogService
      * @return 结果
      */
     public int deleteLifePointLogById(Integer logId);
+
+
+
+
+
+    int pastPointLog();
+
+
 }

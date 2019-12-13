@@ -4,15 +4,14 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
-
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
  * 积分日志对象 life_point_log
  * 
  * @author ruoyi
- * @date 2019-12-05
+ * @date 2019-12-10
  */
 public class LifePointLog extends BaseEntity
 {
@@ -28,6 +27,10 @@ public class LifePointLog extends BaseEntity
     /** 积分 */
     @Excel(name = "积分")
     private Integer point;
+
+    /** 余额 */
+    @Excel(name = "余额")
+    private BigDecimal price;
 
     /** 用户id */
     @Excel(name = "用户id")
@@ -47,7 +50,7 @@ public class LifePointLog extends BaseEntity
 
     /** 添加时间 */
     @Excel(name = "添加时间", width = 30, dateFormat = "yyyy-MM-dd")
-    private LocalDateTime addTime;
+    private Date addTime;
 
     public void setLogId(Integer logId) 
     {
@@ -75,6 +78,15 @@ public class LifePointLog extends BaseEntity
     public Integer getPoint() 
     {
         return point;
+    }
+    public void setPrice(BigDecimal price) 
+    {
+        this.price = price;
+    }
+
+    public BigDecimal getPrice() 
+    {
+        return price;
     }
     public void setUserId(Long userId) 
     {
@@ -112,13 +124,14 @@ public class LifePointLog extends BaseEntity
     {
         return orderId;
     }
-
-    public LocalDateTime getAddTime() {
-        return addTime;
+    public void setAddTime(Date addTime) 
+    {
+        this.addTime = addTime;
     }
 
-    public void setAddTime(LocalDateTime addTime) {
-        this.addTime = addTime;
+    public Date getAddTime() 
+    {
+        return addTime;
     }
 
     @Override
@@ -127,6 +140,7 @@ public class LifePointLog extends BaseEntity
             .append("logId", getLogId())
             .append("logType", getLogType())
             .append("point", getPoint())
+            .append("price", getPrice())
             .append("userId", getUserId())
             .append("logUserId", getLogUserId())
             .append("explain", getExplain())

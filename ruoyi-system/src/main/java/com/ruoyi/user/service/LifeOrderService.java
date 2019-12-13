@@ -60,4 +60,12 @@ public interface LifeOrderService
      * @return 结果
      */
     public int deleteLifeOrderById(String orderId);
+
+
+    /**
+     * 查询今天需要发短信的订单
+     * @return
+     */
+    String[] selectNowOrder(Long  courseId);
+
 }

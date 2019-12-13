@@ -93,4 +93,10 @@ public class LifePointLogServiceImpl implements LifePointLogService
     {
         return lifePointLogMapper.deleteLifePointLogById(logId);
     }
+
+
+    @Override
+    public int pastPointLog() {
+        return lifePointLogMapper.pastPointLog();
+    }
 }

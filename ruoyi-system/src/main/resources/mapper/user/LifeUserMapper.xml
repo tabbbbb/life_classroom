@@ -27,10 +27,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="companyId"    column="company_id"    />
         <result property="birthday"    column="birthday"    />
         <result property="createDate"    column="create_date"    />
+        <result property="bindDate"    column="bind_date"    />
     </resultMap>
 
     <sql id="selectLifeUserVo">
-        select user_id, card_number, invitation_card, wx_nick_name, wx_img_url, sex, nick_name, address, open_id, balance, phone, payment_code, password, img_url, parent_id, lead_id, share_id, qrcode, company_name, company_id, birthday, create_date from life_user
+        select user_id, card_number, invitation_card, wx_nick_name, wx_img_url, sex, nick_name, address, open_id, balance, phone, payment_code, password, img_url, parent_id, lead_id, share_id, qrcode, company_name, company_id, birthday, create_date, bind_date from life_user
     </sql>
 
     <select id="selectLifeUserList" parameterType="LifeUser" resultMap="LifeUserResult">
@@ -57,6 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="companyId != null "> and company_id = #{companyId}</if>
             <if test="birthday != null "> and birthday = #{birthday}</if>
             <if test="createDate != null "> and create_date = #{createDate}</if>
+            <if test="bindDate != null "> and bind_date = #{bindDate}</if>
         </where>
     </select>
     
@@ -89,6 +91,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="companyId != null ">company_id,</if>
             <if test="birthday != null ">birthday,</if>
             <if test="createDate != null ">create_date,</if>
+            <if test="bindDate != null ">bind_date,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="cardNumber != null  and cardNumber != ''">#{cardNumber},</if>
@@ -112,6 +115,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="companyId != null ">#{companyId},</if>
             <if test="birthday != null ">#{birthday},</if>
             <if test="createDate != null ">#{createDate},</if>
+            <if test="bindDate != null ">#{bindDate},</if>
          </trim>
     </insert>
 
@@ -139,6 +143,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="companyId != null ">company_id = #{companyId},</if>
             <if test="birthday != null ">birthday = #{birthday},</if>
             <if test="createDate != null ">create_date = #{createDate},</if>
+            <if test="bindDate != null ">bind_date = #{bindDate},</if>
         </trim>
         where user_id = #{userId}
     </update>
@@ -153,6 +158,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{userId}
         </foreach>
     </delete>
+
+
+
+
+
+
+    <update id="rechargeBalance">
+        update life_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="lifeUser.balance != null ">balance = #{lifeUser.balance},</if>
+        </trim>
+        where user_id = #{lifeUser.userId} and balance = #{oldBalance}
+
+    </update>
 
     <select id="selectLifeUserByInvitationCard" resultMap="LifeUserResult">
         <include refid="selectLifeUserVo"/>

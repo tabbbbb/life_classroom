@@ -4,13 +4,15 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
  * 订单对象 life_order
  * 
  * @author ruoyi
- * @date 2019-12-04
+ * @date 2019-12-13
  */
 public class LifeOrder extends BaseEntity
 {
@@ -19,37 +21,29 @@ public class LifeOrder extends BaseEntity
     /** 订单id */
     private String orderId;
 
-    /** 支付方式 1现金 2积分 */
-    @Excel(name = "支付方式 1现金 2积分")
+    /** 支付方式 1积分 2余额 */
+    @Excel(name = "支付方式 1积分 2余额")
     private Long pid;
+
+    /** 课程类型 0普通课程 1小团课 */
+    @Excel(name = "课程类型 0普通课程 1小团课")
+    private Long courseType;
+
+    /** 101：待付款 102：已取消  201进行中 301：退款中 302：已退款 401：已完成 */
+    @Excel(name = "101：待付款 102：已取消  201进行中 301：退款中 302：已退款 401：已完成")
+    private Long status;
 
     /** 用户id */
     @Excel(name = "用户id")
+    private Long userId;
+
+    /** 家属id */
+    @Excel(name = "家属id")
     private Long shareId;
 
     /** 课程id */
     @Excel(name = "课程id")
     private Long courseDetailId;
-
-    /** 订单时间 */
-    @Excel(name = "订单时间", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date orderTime;
-
-    /** 课程名称 */
-    @Excel(name = "课程名称")
-    private String courseName;
-
-    /** 总积分 */
-    @Excel(name = "总积分")
-    private Long totalPoint;
-
-    /** 实际积分 */
-    @Excel(name = "实际积分")
-    private Long payPoint;
-
-    /** 核销时间 */
-    @Excel(name = "核销时间", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date useTime;
 
     /** 核销员 */
     @Excel(name = "核销员")
@@ -63,29 +57,45 @@ public class LifeOrder extends BaseEntity
     @Excel(name = "优惠积分")
     private Integer couponPoint;
 
-    /** 核销时间 */
-    @Excel(name = "核销时间", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date consumeDate;
+    /** -1用户去，<-1 绑定成员 */
+    @Excel(name = "-1用户去，<-1 绑定成员")
+    private Long saleUser;
 
-    /** 订单类型 1消费，2充值 */
-    @Excel(name = "订单类型 1消费，2充值")
-    private Long type;
+    /** 实际积分 */
+    @Excel(name = "实际积分")
+    private Long payPoint;
 
-    /** 订单状态 1待支付 2进行中 3已完成 4已退款 */
-    @Excel(name = "订单状态 1待支付 2进行中 3已完成 4已退款")
-    private Long status;
+    /** 总积分 */
+    @Excel(name = "总积分")
+    private Long totalPoint;
+
+    /** 联系人手机号 */
+    @Excel(name = "联系人手机号")
+    private String phone;
+
+    /** 是否可捐赠 0false 1true */
+    @Excel(name = "是否可捐赠 0false 1true")
+    private Integer donate;
 
     /** 金额 */
     @Excel(name = "金额")
     private Double price;
 
-    /** 0成人 1小孩 */
-    @Excel(name = "0成人 1小孩")
-    private Long saleUser;
+    /** 核销时间 */
+    @Excel(name = "核销时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private LocalDateTime consumeTime;
 
-    /** 课程类型 0普通课程 1小团课 */
-    @Excel(name = "课程类型 0普通课程 1小团课")
-    private Long courseType;
+    /** 订单时间 */
+    @Excel(name = "订单时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private LocalDateTime orderTime;
+
+    /** 开始时间 */
+    @Excel(name = "开始时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private LocalDateTime useTime;
+
+    /** 有效退款时间 */
+    @Excel(name = "有效退款时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private LocalDateTime validRefundTime;
 
     public void setOrderId(String orderId) 
     {
@@ -105,6 +115,33 @@ public class LifeOrder extends BaseEntity
     {
         return pid;
     }
+    public void setCourseType(Long courseType) 
+    {
+        this.courseType = courseType;
+    }
+
+    public Long getCourseType() 
+    {
+        return courseType;
+    }
+    public void setStatus(Long status) 
+    {
+        this.status = status;
+    }
+
+    public Long getStatus() 
+    {
+        return status;
+    }
+    public void setUserId(Long userId) 
+    {
+        this.userId = userId;
+    }
+
+    public Long getUserId() 
+    {
+        return userId;
+    }
     public void setShareId(Long shareId) 
     {
         this.shareId = shareId;
@@ -122,51 +159,6 @@ public class LifeOrder extends BaseEntity
     public Long getCourseDetailId() 
     {
         return courseDetailId;
-    }
-    public void setOrderTime(Date orderTime) 
-    {
-        this.orderTime = orderTime;
-    }
-
-    public Date getOrderTime() 
-    {
-        return orderTime;
-    }
-    public void setCourseName(String courseName) 
-    {
-        this.courseName = courseName;
-    }
-
-    public String getCourseName() 
-    {
-        return courseName;
-    }
-    public void setTotalPoint(Long totalPoint) 
-    {
-        this.totalPoint = totalPoint;
-    }
-
-    public Long getTotalPoint() 
-    {
-        return totalPoint;
-    }
-    public void setPayPoint(Long payPoint) 
-    {
-        this.payPoint = payPoint;
-    }
-
-    public Long getPayPoint() 
-    {
-        return payPoint;
-    }
-    public void setUseTime(Date useTime) 
-    {
-        this.useTime = useTime;
-    }
-
-    public Date getUseTime() 
-    {
-        return useTime;
     }
     public void setCheckId(Long checkId) 
     {
@@ -195,32 +187,50 @@ public class LifeOrder extends BaseEntity
     {
         return couponPoint;
     }
-    public void setConsumeDate(Date consumeDate) 
+    public void setSaleUser(Long saleUser) 
     {
-        this.consumeDate = consumeDate;
+        this.saleUser = saleUser;
     }
 
-    public Date getConsumeDate() 
+    public Long getSaleUser() 
     {
-        return consumeDate;
+        return saleUser;
     }
-    public void setType(Long type) 
+    public void setPayPoint(Long payPoint) 
     {
-        this.type = type;
-    }
-
-    public Long getType() 
-    {
-        return type;
-    }
-    public void setStatus(Long status) 
-    {
-        this.status = status;
+        this.payPoint = payPoint;
     }
 
-    public Long getStatus() 
+    public Long getPayPoint() 
     {
-        return status;
+        return payPoint;
+    }
+    public void setTotalPoint(Long totalPoint) 
+    {
+        this.totalPoint = totalPoint;
+    }
+
+    public Long getTotalPoint() 
+    {
+        return totalPoint;
+    }
+    public void setPhone(String phone) 
+    {
+        this.phone = phone;
+    }
+
+    public String getPhone() 
+    {
+        return phone;
+    }
+    public void setDonate(Integer donate) 
+    {
+        this.donate = donate;
+    }
+
+    public Integer getDonate() 
+    {
+        return donate;
     }
     public void setPrice(Double price) 
     {
@@ -231,23 +241,37 @@ public class LifeOrder extends BaseEntity
     {
         return price;
     }
-    public void setSaleUser(Long saleUser) 
-    {
-        this.saleUser = saleUser;
+
+    public LocalDateTime getConsumeTime() {
+        return consumeTime;
     }
 
-    public Long getSaleUser() 
-    {
-        return saleUser;
-    }
-    public void setCourseType(Long courseType) 
-    {
-        this.courseType = courseType;
+    public void setConsumeTime(LocalDateTime consumeTime) {
+        this.consumeTime = consumeTime;
     }
 
-    public Long getCourseType() 
-    {
-        return courseType;
+    public LocalDateTime getOrderTime() {
+        return orderTime;
+    }
+
+    public void setOrderTime(LocalDateTime orderTime) {
+        this.orderTime = orderTime;
+    }
+
+    public LocalDateTime getUseTime() {
+        return useTime;
+    }
+
+    public void setUseTime(LocalDateTime useTime) {
+        this.useTime = useTime;
+    }
+
+    public LocalDateTime getValidRefundTime() {
+        return validRefundTime;
+    }
+
+    public void setValidRefundTime(LocalDateTime validRefundTime) {
+        this.validRefundTime = validRefundTime;
     }
 
     @Override
@@ -255,22 +279,25 @@ public class LifeOrder extends BaseEntity
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("orderId", getOrderId())
             .append("pid", getPid())
+            .append("courseType", getCourseType())
+            .append("status", getStatus())
+            .append("userId", getUserId())
             .append("shareId", getShareId())
             .append("courseDetailId", getCourseDetailId())
-            .append("orderTime", getOrderTime())
-            .append("courseName", getCourseName())
-            .append("totalPoint", getTotalPoint())
-            .append("payPoint", getPayPoint())
-            .append("useTime", getUseTime())
+            .append("remark", getRemark())
             .append("checkId", getCheckId())
             .append("couponId", getCouponId())
             .append("couponPoint", getCouponPoint())
-            .append("consumeDate", getConsumeDate())
-            .append("type", getType())
-            .append("status", getStatus())
-            .append("price", getPrice())
             .append("saleUser", getSaleUser())
-            .append("courseType", getCourseType())
+            .append("payPoint", getPayPoint())
+            .append("totalPoint", getTotalPoint())
+            .append("phone", getPhone())
+            .append("donate", getDonate())
+            .append("price", getPrice())
+            .append("consumeTime", getConsumeTime())
+            .append("orderTime", getOrderTime())
+            .append("useTime", getUseTime())
+            .append("validRefundTime", getValidRefundTime())
             .toString();
     }
 }

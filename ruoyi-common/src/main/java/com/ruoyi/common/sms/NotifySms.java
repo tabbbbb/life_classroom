@@ -44,6 +44,19 @@ public class NotifySms {
         smsSender.sendWithTemplate(phone,templatesId,params);
     }
 
+
+
+    @Async
+    public void notifySend(String[] phone,TemplatesType type,String [] params){
+        Integer templatesId = getTemplates(type);
+        if (templatesId == 0){
+            return ;
+        }
+        smsSender.sendWithTemplate(phone,templatesId,params);
+    }
+
+
+
     private Integer getTemplates(TemplatesType type){
         if (templatesList.containsKey(type.getType())){
             return Integer.valueOf(templatesList.get(type.getType()));

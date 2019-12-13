@@ -136,13 +136,14 @@ sms:
     appkey: 4f203cce3b07e03bf2471e44b2a5bb21
     template:
       verificationCode: 418781
-      beginsRemind: 490586
-      rechargeRemind: 490581
+      beginsRemind: 496176
+      payRemind: 496174
+      rechargeRemind: 496169
 
 life:
   wx:
-    app-id: wx1ca0daac8ee8a9ef
-    app-secret: b3f00d4f9c6b92e5639e20557fc9727d
+    app-id: wx972c956af1ffc2ca
+    app-secret: 9b29d2f8aa79549b80c009a5964a3a36
     mch-id: 1546464881
     mch-key: 33cbc407ecf54de38d41cc3660924911
     notify-url:  http://7p2zs4.natappfree.cc/wx/order/pay-notify

@@ -1,12 +1,20 @@
 package com.ruoyi.user.service.impl;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import com.ruoyi.common.exception.recharge.RechargerException;
+import com.ruoyi.common.weixin.WxOperation;
+import com.ruoyi.user.domain.LifeCompanyCoupon;
+import com.ruoyi.user.domain.LifePointLog;
 import com.ruoyi.user.domain.LifeUser;
 import com.ruoyi.user.mapper.LifeUserMapper;
+import com.ruoyi.user.service.LifeCompanyCouponService;
+import com.ruoyi.user.service.LifeCouponReserveService;
+import com.ruoyi.user.service.LifePointLogService;
 import com.ruoyi.user.service.LifeUserService;
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.common.response.UserResponseCode;
@@ -16,6 +24,7 @@ import jodd.util.StringUtil;
 import org.springframework.stereotype.Service;
 
 import com.ruoyi.common.core.text.Convert;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -30,6 +39,18 @@ public class LifeUserServiceImpl implements LifeUserService
 {
     @Resource
     private LifeUserMapper userMapper;
+
+    @Resource
+    private WxOperation wxOperation;
+
+    @Resource
+    private LifeCompanyCouponService companyCouponService;
+
+    @Resource
+    private LifeCouponReserveService couponReserveService;
+
+    @Resource
+    private LifePointLogService pointLogService;
 
     /**
      * 查询用户
@@ -133,6 +154,12 @@ public class LifeUserServiceImpl implements LifeUserService
         return UserResponse.fail(UserResponseCode.SET_PASSWORD_ERROR,"设置密码错误");
     }
 
+    /**
+     * 修改用户信息
+     * @param userId
+     * @param body
+     * @return
+     */
     @Override
     public UserResponse setProperty(Long userId,String body) {
         String nickName = JacksonUtil.parseString(body,"nickname");
@@ -175,4 +202,73 @@ public class LifeUserServiceImpl implements LifeUserService
 
         return UserResponse.succeed();
     }
+
+    /**
+     * 充值余额
+     *
+     * @param userId
+     * @param body
+     * @return
+     */
+    @Override
+    public UserResponse payBalance(Long userId, String body) {
+        Integer payPrice = JacksonUtil.parseInteger(body,"price");
+        String code = JacksonUtil.parseString(body,"code");
+        String outTradeNo = userId+"_"+System.currentTimeMillis()+"_price_"+payPrice;
+        String openId = wxOperation.getOpen(code);
+        if (openId == null) return UserResponse.fail(UserResponseCode.USER_RECHARGE_BALANCE_ERROR,"微信拉起支付失败");
+        return UserResponse.succeed(wxOperation.pay(outTradeNo,openId,"充值余额"+payPrice,new BigDecimal(payPrice)));
+    }
+
+
+    /**
+     * 充值余额充值成功
+     * @param outTradeNo
+     * @param price
+     * @return
+     */
+    @Override
+    @Transactional
+    public UserResponse rechargeBalanceSucceed(String outTradeNo,BigDecimal price) {
+        Long userId = Long.valueOf(outTradeNo.substring(0,outTradeNo.indexOf("_")));
+        LifeUser user = this.selectLifeUserById(userId);
+        if (user.getCompanyId() != null){
+            List<LifeCompanyCoupon> list = companyCouponService.selectLifeCompanyCouponByPrice(price.intValue());
+            if (list != null && couponReserveService.insertLifeCouponReserveBalance(user.getUserId(),list) != couponReserveService.insertNumBalance(list)) {
+                throw new RechargerException(UserResponseCode.USER_RECHARGE_BALANCE_ERROR, "赠送优惠券失败，请联系管理员",userId);
+            }
+        }
+        int i = 3;
+        while (this.rechargeBalance(userId,price)== 0){
+            i--;
+            if (i == 0){
+                throw new RechargerException(UserResponseCode.USER_RECHARGE_BALANCE_ERROR,"增加余额失败，请联系管理员",userId);
+            }
+        }
+        LifePointLog pointLog = new LifePointLog();
+        pointLog.setPrice(price);
+        pointLog.setLogUserId(userId);
+        pointLog.setExplain("充值余额"+price);
+        pointLog.setLogType(4);
+        pointLog.setAddTime(new Date());
+        pointLog.setUserId(userId);
+        if (pointLogService.insertLifePointLog(pointLog) == 0){
+            throw new RechargerException(UserResponseCode.USER_RECHARGE_BALANCE_ERROR,"充值增加日志失败，请联系管理员",userId);
+        }
+        return UserResponse.succeed();
+    }
+
+    /**
+     * 充值余额
+     *
+     * @return
+     */
+    @Override
+    public int rechargeBalance(Long userId,BigDecimal price) {
+        LifeUser user = this.selectLifeUserById(userId);
+        BigDecimal oldBalance = user.getBalance();
+        user.setBalance(oldBalance.add(price));
+        return userMapper.rechargeBalance(user,oldBalance);
+    }
+
 }

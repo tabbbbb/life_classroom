@@ -10,6 +10,7 @@
  */
 package com.ruoyi.common.sms.config;
 
+import com.github.qcloudsms.SmsMultiSender;
 import com.github.qcloudsms.SmsSingleSender;
 import com.ruoyi.common.sms.NotifySms;
 import com.ruoyi.common.sms.impl.TencentSmsSender;
@@ -40,6 +41,8 @@ public class TencentSmsBean {
         TencentSmsSender tencentSmsSender = new TencentSmsSender();
         SmsSingleSender smsSingleSender = new SmsSingleSender(properties.getAppId(),properties.getAppKey());
         tencentSmsSender.setSmsSingleSender(smsSingleSender);
+        SmsMultiSender smsMultiSender = new SmsMultiSender(properties.getAppId(),properties.getAppKey());
+        tencentSmsSender.setSmsMultiSender(smsMultiSender);
         return tencentSmsSender;
     }
 
@@ -50,5 +53,6 @@ public class TencentSmsBean {
         notifySms.setSmsSender(tencentSmsSender());
         return notifySms;
     }
+
 
 }

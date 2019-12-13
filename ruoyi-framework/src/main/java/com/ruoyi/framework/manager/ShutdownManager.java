@@ -25,6 +25,7 @@ public class ShutdownManager
     {
         shutdownSpringSessionValidationScheduler();
         shutdownAsyncManager();
+
     }
 
     /**

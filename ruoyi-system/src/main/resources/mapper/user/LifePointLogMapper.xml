@@ -8,6 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="logId"    column="log_id"    />
         <result property="logType"    column="log_type"    />
         <result property="point"    column="point"    />
+        <result property="price"    column="price"    />
         <result property="userId"    column="user_id"    />
         <result property="logUserId"    column="log_user_id"    />
         <result property="explain"    column="explain"    />
@@ -16,7 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectLifePointLogVo">
-        select log_id, log_type, point, user_id, log_user_id, explain, order_id, add_time from life_point_log
+        select log_id, log_type, point, price, user_id, log_user_id, explain, order_id, add_time from life_point_log
     </sql>
 
     <select id="selectLifePointLogList" parameterType="LifePointLog" resultMap="LifePointLogResult">
@@ -24,6 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="logType != null "> and log_type = #{logType}</if>
             <if test="point != null "> and point = #{point}</if>
+            <if test="price != null "> and price = #{price}</if>
             <if test="userId != null "> and user_id = #{userId}</if>
             <if test="logUserId != null "> and log_user_id = #{logUserId}</if>
             <if test="explain != null  and explain != ''"> and explain = #{explain}</if>
@@ -42,6 +44,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="logType != null ">log_type,</if>
             <if test="point != null ">point,</if>
+            <if test="price != null ">price,</if>
             <if test="userId != null ">user_id,</if>
             <if test="logUserId != null ">log_user_id,</if>
             <if test="explain != null  and explain != ''">`explain`,</if>
@@ -51,6 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="logType != null ">#{logType},</if>
             <if test="point != null ">#{point},</if>
+            <if test="price != null ">#{price},</if>
             <if test="userId != null ">#{userId},</if>
             <if test="logUserId != null ">#{logUserId},</if>
             <if test="explain != null  and explain != ''">#{explain},</if>
@@ -59,11 +63,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
+
     <update id="updateLifePointLog" parameterType="LifePointLog">
         update life_point_log
         <trim prefix="SET" suffixOverrides=",">
             <if test="logType != null ">log_type = #{logType},</if>
             <if test="point != null ">point = #{point},</if>
+            <if test="price != null ">price = #{price},</if>
             <if test="userId != null ">user_id = #{userId},</if>
             <if test="logUserId != null ">log_user_id = #{logUserId},</if>
             <if test="explain != null  and explain != ''">explain = #{explain},</if>
@@ -83,5 +89,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{logId}
         </foreach>
     </delete>
+
+
+    <insert id="pastPointLog">
+      insert into life_point_log(log_type, point, price, user_id, log_user_id, `explain`, order_id, add_time)
+        select -2 as log_type,use_point,0 as price,user_id,user_id as log_user_id,'积分过期' as `explain`,null as order_id,end_date from life_point
+        where NOW() >= end_date
+    </insert>
     
 </mapper>

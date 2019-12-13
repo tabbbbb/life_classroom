@@ -60,4 +60,9 @@ public interface LifePointLogMapper
      * @return 结果
      */
     public int deleteLifePointLogByIds(String[] logIds);
+
+
+
+
+    int pastPointLog();
 }

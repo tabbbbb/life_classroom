@@ -2,7 +2,9 @@ package com.ruoyi.user.mapper;
 
 
 import com.ruoyi.user.domain.LifeUser;
+import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -81,4 +83,11 @@ public interface LifeUserMapper
      * @return 结果
      */
     public int deleteLifeUserByIds(String[] userIds);
+
+
+    /**
+     * 充值余额
+     * @return
+     */
+    int rechargeBalance(@Param("lifeUser")LifeUser lifeUser, @Param("oldBalance") BigDecimal oldBalance);
 }

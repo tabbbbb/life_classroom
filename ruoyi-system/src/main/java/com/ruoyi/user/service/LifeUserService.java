@@ -4,6 +4,7 @@ package com.ruoyi.user.service;
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.user.domain.LifeUser;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -78,4 +79,30 @@ public interface LifeUserService
      * @return
      */
     UserResponse setProperty(Long userId,String body);
+
+
+    /**
+     * 充值余额
+     * @return
+     */
+    UserResponse payBalance(Long userId,String body);
+
+
+    /**
+     * 充值余额充值成功
+     * @param outTradeNo
+     * @param price
+     * @return
+     */
+    UserResponse rechargeBalanceSucceed(String outTradeNo,BigDecimal price);
+
+
+
+    /**
+     * 充值余额
+     * @return
+     */
+    int rechargeBalance(Long userId,BigDecimal price);
+
+
 }

@@ -94,4 +94,16 @@ public class LifeCompanyCouponServiceImpl implements LifeCompanyCouponService
     {
         return lifeCompanyCouponMapper.deleteLifeCompanyCouponById(comparyCouponId);
     }
+
+
+    /**
+     * 获取充值金额最匹配的优惠券赠送
+     *
+     * @param price
+     * @return
+     */
+    @Override
+    public List<LifeCompanyCoupon> selectLifeCompanyCouponByPrice(Integer price) {
+        return lifeCompanyCouponMapper.selectLifeCompanyCouponByPrice(price);
+    }
 }

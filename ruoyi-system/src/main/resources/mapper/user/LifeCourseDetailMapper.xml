@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.user.mapper.LifeCourseDetailMapper">
+    
+    <resultMap type="LifeCourseDetail" id="LifeCourseDetailResult">
+        <result property="couponDetailId"    column="coupon_detail_id"    />
+        <result property="couponId"    column="coupon_id"    />
+        <result property="week"    column="week"    />
+        <result property="startHour"    column="start_hour"    />
+        <result property="startMinute"    column="start_minute"    />
+        <result property="couponDuration"    column="coupon_duration"    />
+        <result property="couponRefundHour"    column="coupon_refund_hour"    />
+    </resultMap>
+
+    <sql id="selectLifeCourseDetailVo">
+        select coupon_detail_id, coupon_id, week, start_hour, start_minute, coupon_duration, coupon_refund_hour from life_course_detail
+    </sql>
+
+    <select id="selectLifeCourseDetailList" parameterType="LifeCourseDetail" resultMap="LifeCourseDetailResult">
+        <include refid="selectLifeCourseDetailVo"/>
+        <where>  
+            <if test="couponId != null "> and coupon_id = #{couponId}</if>
+            <if test="week != null "> and week = #{week}</if>
+            <if test="startHour != null "> and start_hour = #{startHour}</if>
+            <if test="startMinute != null "> and start_minute = #{startMinute}</if>
+            <if test="couponDuration != null "> and coupon_duration = #{couponDuration}</if>
+            <if test="couponRefundHour != null "> and coupon_refund_hour = #{couponRefundHour}</if>
+        </where>
+    </select>
+    
+    <select id="selectLifeCourseDetailById" parameterType="Long" resultMap="LifeCourseDetailResult">
+        <include refid="selectLifeCourseDetailVo"/>
+        where coupon_detail_id = #{couponDetailId}
+    </select>
+        
+    <insert id="insertLifeCourseDetail" parameterType="LifeCourseDetail" useGeneratedKeys="true" keyProperty="couponDetailId">
+        insert into life_course_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="couponId != null ">coupon_id,</if>
+            <if test="week != null ">week,</if>
+            <if test="startHour != null ">start_hour,</if>
+            <if test="startMinute != null ">start_minute,</if>
+            <if test="couponDuration != null ">coupon_duration,</if>
+            <if test="couponRefundHour != null ">coupon_refund_hour,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="couponId != null ">#{couponId},</if>
+            <if test="week != null ">#{week},</if>
+            <if test="startHour != null ">#{startHour},</if>
+            <if test="startMinute != null ">#{startMinute},</if>
+            <if test="couponDuration != null ">#{couponDuration},</if>
+            <if test="couponRefundHour != null ">#{couponRefundHour},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLifeCourseDetail" parameterType="LifeCourseDetail">
+        update life_course_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="couponId != null ">coupon_id = #{couponId},</if>
+            <if test="week != null ">week = #{week},</if>
+            <if test="startHour != null ">start_hour = #{startHour},</if>
+            <if test="startMinute != null ">start_minute = #{startMinute},</if>
+            <if test="couponDuration != null ">coupon_duration = #{couponDuration},</if>
+            <if test="couponRefundHour != null ">coupon_refund_hour = #{couponRefundHour},</if>
+        </trim>
+        where coupon_detail_id = #{couponDetailId}
+    </update>
+
+    <delete id="deleteLifeCourseDetailById" parameterType="Long">
+        delete from life_course_detail where coupon_detail_id = #{couponDetailId}
+    </delete>
+
+    <delete id="deleteLifeCourseDetailByIds" parameterType="String">
+        delete from life_course_detail where coupon_detail_id in 
+        <foreach item="couponDetailId" collection="array" open="(" separator="," close=")">
+            #{couponDetailId}
+        </foreach>
+    </delete>
+
+    <select id="selectNowCourse" resultMap="LifeCourseDetailResult">
+        <include refid="selectLifeCourseDetailVo"/>
+        where week = 0 or week = date_format(current_date,'%w') ;
+    </select>
+
+
+</mapper>

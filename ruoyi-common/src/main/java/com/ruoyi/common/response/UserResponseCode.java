@@ -168,4 +168,16 @@ public class UserResponseCode {
     public static final Integer USER_BIND_CHILD_ERROR = 100021;
 
 
+    /**
+     * 充值余额错误
+     */
+    public static final Integer USER_RECHARGE_BALANCE_ERROR = 100022;
+
+
+    /**
+     * 手机号输入错误
+     */
+    public static final Integer PHONE_INPUT_ERROR = 100023;
+
+
 }
