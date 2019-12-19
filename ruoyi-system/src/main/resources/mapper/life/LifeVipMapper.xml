@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.life.mapper.LifeVipMapper">
+    
+    <resultMap type="LifeVip" id="LifeVipResult">
+        <result property="vipId"    column="vip_id"    />
+        <result property="vipLevel"    column="vip_level"    />
+        <result property="vipName"    column="vip_name"    />
+        <result property="point"    column="point"    />
+        <result property="validity"    column="validity"    />
+        <result property="print"    column="print"    />
+        <result property="child"    column="child"    />
+        <result property="bindRelative"    column="bind_relative"    />
+        <result property="enable"    column="enable"    />
+    </resultMap>
+
+    <sql id="selectLifeVipVo">
+        select vip_id, vip_level, vip_name, point, validity, print, child, bind_relative, enable from life_vip
+    </sql>
+
+    <select id="selectLifeVipList" parameterType="LifeVip" resultMap="LifeVipResult">
+        <include refid="selectLifeVipVo"/>
+        <where>  
+            <if test="vipLevel != null "> and vip_level = #{vipLevel}</if>
+            <if test="vipName != null  and vipName != ''"> and vip_name like concat('%', #{vipName}, '%')</if>
+            <if test="point != null "> and point = #{point}</if>
+            <if test="validity != null "> and validity = #{validity}</if>
+            <if test="print != null "> and print = #{print}</if>
+            <if test="child != null "> and child = #{child}</if>
+            <if test="bindRelative != null "> and bind_relative = #{bindRelative}</if>
+            <if test="enable != null "> and enable = #{enable}</if>
+        </where>
+    </select>
+    
+    <select id="selectLifeVipById" parameterType="Long" resultMap="LifeVipResult">
+        <include refid="selectLifeVipVo"/>
+        where vip_id = #{vipId}
+    </select>
+        
+    <insert id="insertLifeVip" parameterType="LifeVip" useGeneratedKeys="true" keyProperty="vipId">
+        insert into life_vip
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="vipLevel != null ">vip_level,</if>
+            <if test="vipName != null  and vipName != ''">vip_name,</if>
+            <if test="point != null ">point,</if>
+            <if test="validity != null ">validity,</if>
+            <if test="print != null ">print,</if>
+            <if test="child != null ">child,</if>
+            <if test="bindRelative != null ">bind_relative,</if>
+            <if test="enable != null ">enable,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="vipLevel != null ">#{vipLevel},</if>
+            <if test="vipName != null  and vipName != ''">#{vipName},</if>
+            <if test="point != null ">#{point},</if>
+            <if test="validity != null ">#{validity},</if>
+            <if test="print != null ">#{print},</if>
+            <if test="child != null ">#{child},</if>
+            <if test="bindRelative != null ">#{bindRelative},</if>
+            <if test="enable != null ">#{enable},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLifeVip" parameterType="LifeVip">
+        update life_vip
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="vipLevel != null ">vip_level = #{vipLevel},</if>
+            <if test="vipName != null  and vipName != ''">vip_name = #{vipName},</if>
+            <if test="point != null ">point = #{point},</if>
+            <if test="validity != null ">validity = #{validity},</if>
+            <if test="print != null ">print = #{print},</if>
+            <if test="child != null ">child = #{child},</if>
+            <if test="bindRelative != null ">bind_relative = #{bindRelative},</if>
+            <if test="enable != null ">enable = #{enable},</if>
+        </trim>
+        where vip_id = #{vipId}
+    </update>
+
+    <delete id="deleteLifeVipById" parameterType="Long">
+        delete from life_vip where vip_id = #{vipId}
+    </delete>
+
+    <delete id="deleteLifeVipByIds" parameterType="String">
+        delete from life_vip where vip_id in 
+        <foreach item="vipId" collection="array" open="(" separator="," close=")">
+            #{vipId}
+        </foreach>
+    </delete>
+    
+</mapper>

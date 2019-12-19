@@ -11,8 +11,8 @@
 package com.ruoyi.quartz.job.order;
 
 import com.ruoyi.quartz.LifeScheduler;
-import com.ruoyi.user.domain.LifeCourseDetail;
-import com.ruoyi.user.service.LifeCourseDetailService;
+import com.ruoyi.life.domain.LifeCourseDetail;
+import com.ruoyi.life.service.LifeCourseDetailService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -62,14 +62,14 @@ public class SmsOrderJob implements Job {
             List<Long> courseIds2H = map2H.get(startTime.minusHours(2));
             if (courseIds15M == null){
                 courseIds15M = new ArrayList<>();
-                courseIds15M.add(courseDetail.getCouponDetailId());
+                courseIds15M.add(courseDetail.getCourseDetailId());
                 map15M.put(startTime.minusMinutes(15),courseIds15M);
                 courseIds2H = new ArrayList<>();
-                courseIds2H.add(courseDetail.getCouponDetailId());
+                courseIds2H.add(courseDetail.getCourseDetailId());
                 map2H.put(startTime.minusHours(2),courseIds2H);
             }
-            courseIds15M.add(courseDetail.getCouponDetailId());
-            courseIds2H.add(courseDetail.getCouponDetailId());
+            courseIds15M.add(courseDetail.getCourseDetailId());
+            courseIds2H.add(courseDetail.getCourseDetailId());
         }
         for (LocalDateTime time : map15M.keySet()) {
             scheduler.smsDayOrder("15分钟", (Long[]) map15M.get(time).toArray(),time);

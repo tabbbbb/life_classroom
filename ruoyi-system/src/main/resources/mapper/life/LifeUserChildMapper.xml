@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.life.mapper.LifeUserChildMapper">
+    
+    <resultMap type="LifeUserChild" id="LifeUserChildResult">
+        <result property="childId"    column="child_id"    />
+        <result property="shareId"    column="share_id"    />
+        <result property="name"    column="name"    />
+        <result property="sex"    column="sex"    />
+        <result property="birthday"    column="birthday"    />
+        <result property="enable"    column="enable"    />
+    </resultMap>
+
+    <sql id="selectLifeUserChildVo">
+        select child_id, share_id, name, sex, birthday, enable from life_user_child
+    </sql>
+
+    <select id="selectLifeUserChildList" parameterType="LifeUserChild" resultMap="LifeUserChildResult">
+        <include refid="selectLifeUserChildVo"/>
+        <where>  
+            <if test="shareId != null "> and share_id = #{shareId}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="sex != null "> and sex = #{sex}</if>
+            <if test="birthday != null "> and birthday = #{birthday}</if>
+            <if test="enable != null "> and enable = #{enable}</if>
+        </where>
+    </select>
+    
+    <select id="selectLifeUserChildById" parameterType="Long" resultMap="LifeUserChildResult">
+        <include refid="selectLifeUserChildVo"/>
+        where child_id = #{childId}
+    </select>
+    <select id="getChileByUserId" resultMap="LifeUserChildResult">
+        select uc.child_id as childId, uc.share_id as shareId,  uc.name as `name` ,  uc.sex as sex,  uc.birthday as birthday,  uc.enable as enable  from life_user_child as uc
+        inner join life_point_child as pc on child_id = pc.user_child_id
+        where uc.share_id = #{shareId}
+        group by uc.child_id
+    </select>
+    <select id="selectLifeUserChildListByIds" resultMap="LifeUserChildResult">
+        <include refid="selectLifeUserChildVo"/>
+        where child_id in
+          <foreach collection="list" item="item" open="(" close=")" separator=",">
+              #{item}
+          </foreach>
+    </select>
+
+    <insert id="insertLifeUserChild" parameterType="LifeUserChild">
+        insert into life_user_child
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="childId != null ">child_id,</if>
+            <if test="shareId != null ">share_id,</if>
+            <if test="name != null  and name != ''">name,</if>
+            <if test="sex != null ">sex,</if>
+            <if test="birthday != null ">birthday,</if>
+            <if test="enable != null ">enable,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="childId != null ">#{childId},</if>
+            <if test="shareId != null ">#{shareId},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="sex != null ">#{sex},</if>
+            <if test="birthday != null ">#{birthday},</if>
+            <if test="enable != null ">#{enable},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLifeUserChild" parameterType="LifeUserChild">
+        update life_user_child
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="shareId != null ">share_id = #{shareId},</if>
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="sex != null ">sex = #{sex},</if>
+            <if test="birthday != null ">birthday = #{birthday},</if>
+            <if test="enable != null ">enable = #{enable},</if>
+        </trim>
+        where child_id = #{childId}
+    </update>
+
+    <delete id="deleteLifeUserChildById" parameterType="Long">
+        delete from life_user_child where child_id = #{childId}
+    </delete>
+
+    <delete id="deleteLifeUserChildByIds" parameterType="String">
+        delete from life_user_child where child_id in 
+        <foreach item="childId" collection="array" open="(" separator="," close=")">
+            #{childId}
+        </foreach>
+    </delete>
+
+
+</mapper>

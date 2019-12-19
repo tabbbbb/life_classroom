@@ -12,7 +12,7 @@ package com.ruoyi.web.controller.user;
 
 
 import com.ruoyi.common.utils.JacksonUtil;
-import com.ruoyi.user.service.LifeVipService;
+import com.ruoyi.life.service.LifeVipService;
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.framework.userlogin.LoginResponse;
 import com.ruoyi.framework.userlogin.annotation.LoginInfo;
@@ -36,7 +36,7 @@ import java.math.BigDecimal;
  */
 @RestController
 @RequestMapping("/user/vip")
-@Api(value = "/user/vip",description = "vip充值")
+@Api(value = "/life/vip",description = "vip充值")
 public class LifeVipController {
 
     @Resource

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.life.mapper.LifeReserveMapper">
+    
+    <resultMap type="com.ruoyi.life.domain.LifeReserve" id="LifeReserveResult">
+        <result property="reserveId"    column="reserve_id"    />
+        <result property="courseDetailId"    column="course_detail_id"    />
+        <result property="reserveDate"    column="reserve_date"    />
+        <result property="reserveNum"    column="reserve_num"    />
+    </resultMap>
+
+    <sql id="selectLifeReserveVo">
+        select reserve_id, course_detail_id, reserve_date, reserve_num from life_reserve
+    </sql>
+
+    <select id="selectLifeReserveList" parameterType="LifeReserve" resultMap="LifeReserveResult">
+        <include refid="selectLifeReserveVo"/>
+        <where>  
+            <if test="courseDetailId != null "> and course_detail_id = #{courseDetailId}</if>
+            <if test="reserveDate != null "> and reserve_date = #{reserveDate}</if>
+            <if test="reserveNum != null "> and reserve_num = #{reserveNum}</if>
+        </where>
+    </select>
+    
+    <select id="selectLifeReserveById" parameterType="Long" resultMap="LifeReserveResult">
+        <include refid="selectLifeReserveVo"/>
+        where reserve_id = #{reserveId}
+    </select>
+
+
+    <insert id="insertLifeReserve" parameterType="LifeReserve" useGeneratedKeys="true" keyProperty="reserveId">
+        insert into life_reserve
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="courseDetailId != null ">course_detail_id,</if>
+            <if test="reserveDate != null ">reserve_date,</if>
+            <if test="reserveNum != null ">reserve_num,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="courseDetailId != null ">#{courseDetailId},</if>
+            <if test="reserveDate != null ">#{reserveDate},</if>
+            <if test="reserveNum != null ">#{reserveNum},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLifeReserve" parameterType="LifeReserve">
+        update life_reserve
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="courseDetailId != null ">course_detail_id = #{courseDetailId},</if>
+            <if test="reserveDate != null ">reserve_date = #{reserveDate},</if>
+            <if test="reserveNum != null ">reserve_num = #{reserveNum},</if>
+        </trim>
+        where reserve_id = #{reserveId}
+    </update>
+
+    <delete id="deleteLifeReserveById" parameterType="Long">
+        delete from life_reserve where reserve_id = #{reserveId}
+    </delete>
+
+    <delete id="deleteLifeReserveByIds" parameterType="String">
+        delete from life_reserve where reserve_id in 
+        <foreach item="reserveId" collection="array" open="(" separator="," close=")">
+            #{reserveId}
+        </foreach>
+    </delete>
+
+    <update id="reduceCourseSales">
+      update life_reserve set reserve_num = reserve_num -#{num}
+      where course_detail_id = #{courseDetailId} and reserve_num >= #{num} and reserve_date = date_format(#{time},'%Y-%m-%d')
+    </update>
+    <select id="selectLifeReserveNum" resultType="java.lang.Integer">
+        select reserve_num from life_reserve
+        where course_detail_id = #{courseDetailId} and reserve_date = date_format(#{time},'%Y-%m-%d')
+    </select>
+</mapper>

@@ -10,7 +10,14 @@
  */
 package com.ruoyi.web.controller.user;
 
+import com.ruoyi.common.response.UserResponse;
+import com.ruoyi.life.domain.vo.LifeCourseConditionVo;
+import com.ruoyi.life.service.LifeCourseService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,13 +32,24 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/user/course")
-@Api(value = "/user/course",description = "课程")
+@Api(value = "/life/course",description = "课程")
 public class LifeCourseController {
+
+    @Autowired
+    private LifeCourseService courseService;
 
 
     @GetMapping("course")
-    public void getCourse(){
-
+    @ApiOperation(value = "课程首页条件查询")
+    @ApiImplicitParams(
+            @ApiImplicitParam(paramType="query",name="conditionVo",value="课程首页条件",dataTypeClass = LifeCourseConditionVo.class)
+    )
+    public UserResponse getCourse(LifeCourseConditionVo conditionVo){
+        return UserResponse.succeed(courseService.selectLifeCourseBySearchVo(conditionVo));
     }
+
+
+
+
 
 }

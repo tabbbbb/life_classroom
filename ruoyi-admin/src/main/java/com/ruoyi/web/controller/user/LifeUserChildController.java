@@ -14,16 +14,13 @@ import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.framework.userlogin.LoginResponse;
 import com.ruoyi.framework.userlogin.annotation.LoginInfo;
 import com.ruoyi.framework.userlogin.info.UserLoginInfo;
-import com.ruoyi.user.service.LifePointService;
-import com.ruoyi.user.service.LifeUserChildService;
+import com.ruoyi.life.service.LifePointService;
+import com.ruoyi.life.service.LifeUserChildService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -35,7 +32,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/user/child")
-@Api(value = "/user/child",description = "小孩")
+@Api(value = "/life/child",description = "小孩")
 public class LifeUserChildController {
 
 

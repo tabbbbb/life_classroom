@@ -32,8 +32,10 @@
 		<poi.version>3.17</poi.version>
 		<velocity.version>1.7</velocity.version>
 	</properties>
-	
-    <!-- 依赖声明 -->
+
+
+
+	<!-- 依赖声明 -->
     <dependencyManagement>
         <dependencies>
         
@@ -215,16 +217,25 @@
         <module>ruoyi-common</module>
     </modules>
     <packaging>pom</packaging>
-
-
 	<dependencies>
 
-		 
+
 
 	</dependencies>
 
 	<build>
         <plugins>
+
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <fork>true</fork>
+                    <executable>C:\Program Files\Java\jdk1.8.0_131</executable>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

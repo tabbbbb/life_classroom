@@ -10,17 +10,12 @@
  */
 package com.ruoyi.quartz.job.past;
 
-import com.ruoyi.user.domain.LifeCoupon;
-import com.ruoyi.user.domain.LifeCouponReserve;
-import com.ruoyi.user.service.LifeCouponReserveService;
-import com.ruoyi.user.service.LifeCouponService;
-import com.ruoyi.user.service.impl.LifeCouponReserveServiceImpl;
+import com.ruoyi.life.service.LifeCouponReserveService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 

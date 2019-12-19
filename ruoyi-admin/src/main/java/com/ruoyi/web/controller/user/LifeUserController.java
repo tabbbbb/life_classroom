@@ -1,7 +1,7 @@
 package com.ruoyi.web.controller.user;
 
-import com.ruoyi.user.domain.LifeUser;
-import com.ruoyi.user.service.LifeUserService;
+import com.ruoyi.life.domain.LifeUser;
+import com.ruoyi.life.service.LifeUserService;
 import com.ruoyi.common.config.Global;
 import com.ruoyi.common.config.ServerConfig;
 import com.ruoyi.common.exception.file.InvalidExtensionException;
@@ -30,7 +30,7 @@ import java.math.BigDecimal;
  */
 @RestController
 @RequestMapping("/user/user")
-@Api(value = "/user/user",description = "用户服务")
+@Api(value = "/life/life",description = "用户服务")
 public class LifeUserController extends BaseController
 {
 

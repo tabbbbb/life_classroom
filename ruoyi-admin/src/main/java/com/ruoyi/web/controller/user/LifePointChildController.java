@@ -14,8 +14,7 @@ import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.framework.userlogin.LoginResponse;
 import com.ruoyi.framework.userlogin.annotation.LoginInfo;
 import com.ruoyi.framework.userlogin.info.UserLoginInfo;
-import com.ruoyi.user.domain.LifePointChild;
-import com.ruoyi.user.service.LifePointChildService;
+import com.ruoyi.life.service.LifePointChildService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +23,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -38,7 +34,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/user/pointchild")
-@Api(value = "/user/pointchild",description = "启用或禁用小孩")
+@Api(value = "/life/pointchild",description = "启用或禁用小孩")
 public class LifePointChildController {
 
     @Autowired

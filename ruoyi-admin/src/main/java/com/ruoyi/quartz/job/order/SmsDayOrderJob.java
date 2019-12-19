@@ -12,8 +12,8 @@ package com.ruoyi.quartz.job.order;
 
 import com.ruoyi.common.sms.NotifySms;
 import com.ruoyi.common.sms.enums.TemplatesType;
-import com.ruoyi.user.service.LifeCourseService;
-import com.ruoyi.user.service.LifeOrderService;
+import com.ruoyi.life.service.LifeCourseService;
+import com.ruoyi.life.service.LifeOrderService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;

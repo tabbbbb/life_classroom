@@ -180,4 +180,16 @@ public class UserResponseCode {
     public static final Integer PHONE_INPUT_ERROR = 100023;
 
 
+    /**
+     * 预约课程错误
+     */
+    public static final Integer PAY_COURSE_ERROR = 100024;
+
+
+    /**
+     * 操作收藏错误
+     */
+    public static final Integer COLLECT_ERROR = 100025;
+
+
 }

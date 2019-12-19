@@ -10,8 +10,8 @@
  */
 package com.ruoyi.web.controller.user;
 
-import com.ruoyi.user.domain.LifeUser;
-import com.ruoyi.user.service.LifeAutoService;
+import com.ruoyi.life.domain.LifeUser;
+import com.ruoyi.life.service.LifeAutoService;
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.common.response.UserResponseCode;
 import com.ruoyi.common.sms.NotifySms;
@@ -23,7 +23,7 @@ import com.ruoyi.framework.userlogin.WxLoginUserInfo;
 import com.ruoyi.framework.userlogin.annotation.LoginInfo;
 import com.ruoyi.framework.userlogin.info.UserLoginInfo;
 import com.ruoyi.framework.userlogin.token.UserToken;
-import com.ruoyi.user.service.LifePointService;
+import com.ruoyi.life.service.LifePointService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +42,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/user/auth")
-@Api(value = "/user/auth",description = "用户认证")
+@Api(value = "/life/auth",description = "用户认证")
 public class LifeAuthController {
 
     @Autowired

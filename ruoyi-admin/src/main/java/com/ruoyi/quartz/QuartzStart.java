@@ -10,24 +10,12 @@
  */
 package com.ruoyi.quartz;
 
-import com.ruoyi.user.service.LifeCouponReserveService;
-import com.ruoyi.user.service.LifePointChildService;
-import com.ruoyi.user.service.LifePointLogService;
-import com.ruoyi.user.service.LifePointService;
-import com.ruoyi.user.service.impl.LifeCouponReserveServiceImpl;
-import com.ruoyi.user.service.impl.LifePointChildServiceImpl;
-import com.ruoyi.user.service.impl.LifePointLogServiceImpl;
-import com.ruoyi.user.service.impl.LifePointServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
 
 /**
  * 〈一句话功能简述〉<br> 

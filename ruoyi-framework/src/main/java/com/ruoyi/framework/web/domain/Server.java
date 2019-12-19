@@ -168,7 +168,7 @@ public class Server
         sys.setComputerIp(IpUtils.getHostIp());
         sys.setOsName(props.getProperty("os.name"));
         sys.setOsArch(props.getProperty("os.arch"));
-        sys.setUserDir(props.getProperty("user.dir"));
+        sys.setUserDir(props.getProperty("life.dir"));
     }
 
     /**

@@ -10,20 +10,13 @@
  */
 package com.ruoyi.quartz.job.past;
 
-import com.ruoyi.user.domain.LifePoint;
-import com.ruoyi.user.domain.LifePointChild;
-import com.ruoyi.user.domain.LifePointLog;
-import com.ruoyi.user.service.LifeCouponReserveService;
-import com.ruoyi.user.service.LifePointLogService;
-import com.ruoyi.user.service.LifePointService;
-import com.ruoyi.user.service.impl.LifePointLogServiceImpl;
-import com.ruoyi.user.service.impl.LifePointServiceImpl;
+import com.ruoyi.life.service.LifePointLogService;
+import com.ruoyi.life.service.LifePointService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 

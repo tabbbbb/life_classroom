@@ -2,6 +2,7 @@ package com.ruoyi.framework.web.exception;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.ruoyi.common.exception.order.OrderException;
 import com.ruoyi.common.exception.recharge.RechargerException;
 import com.ruoyi.common.response.UserResponse;
 import org.apache.shiro.authz.AuthorizationException;
@@ -9,7 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.ModelAndView;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -17,6 +20,12 @@ import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.exception.DemoModeException;
 import com.ruoyi.common.utils.ServletUtils;
 import com.ruoyi.common.utils.security.PermissionUtils;
+
+import java.beans.PropertyEditorSupport;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * 全局异常处理器
@@ -120,6 +129,37 @@ public class GlobalExceptionHandler
 
     @ExceptionHandler(RechargerException.class)
     public UserResponse rechargerException(RechargerException e){
+        e.printStackTrace();
         return e.getUserResponse();
+    }
+
+    @ExceptionHandler(OrderException.class)
+    public UserResponse orderException(OrderException e){
+        e.printStackTrace();
+        return e.getUserResponse();
+    }
+
+
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(LocalDate.class, new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) throws IllegalArgumentException {
+                setValue(LocalDate.parse(text, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            }
+        });
+        binder.registerCustomEditor(LocalDateTime.class, new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) throws IllegalArgumentException {
+                setValue(LocalDateTime.parse(text, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            }
+        });
+        binder.registerCustomEditor(LocalTime.class, new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) throws IllegalArgumentException {
+                setValue(LocalTime.parse(text, DateTimeFormatter.ofPattern("HH:mm:ss")));
+            }
+        });
     }
 }

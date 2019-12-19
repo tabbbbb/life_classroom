@@ -159,7 +159,7 @@ public class DemoOperateController extends BaseController
     @GetMapping("/edit/{userId}")
     public String edit(@PathVariable("userId") Integer userId, ModelMap mmap)
     {
-        mmap.put("user", users.get(userId));
+        mmap.put("life", users.get(userId));
         return prefix + "/edit";
     }
 
@@ -230,7 +230,7 @@ public class DemoOperateController extends BaseController
     @GetMapping("/detail/{userId}")
     public String detail(@PathVariable("userId") Integer userId, ModelMap mmap)
     {
-        mmap.put("user", users.get(userId));
+        mmap.put("life", users.get(userId));
         return prefix + "/detail";
     }
 

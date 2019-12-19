@@ -16,15 +16,13 @@ import com.ruoyi.quartz.job.order.SmsOrderJob;
 import com.ruoyi.quartz.job.past.PastCouponJob;
 import com.ruoyi.quartz.job.past.PastPointChildJob;
 import com.ruoyi.quartz.job.past.PastPointJob;
-import com.ruoyi.user.service.*;
+import com.ruoyi.life.service.*;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 
 /**

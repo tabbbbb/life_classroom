@@ -10,7 +10,7 @@
  */
 package com.ruoyi.util.order;
 
-import com.ruoyi.user.domain.LifeOrder;
+import com.ruoyi.life.domain.LifeOrder;
 
 /**
  * 〈一句话功能简述〉<br> 

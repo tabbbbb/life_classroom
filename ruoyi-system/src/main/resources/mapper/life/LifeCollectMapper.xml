@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.life.mapper.LifeCollectMapper">
+    
+    <resultMap type="LifeCollect" id="LifeCollectResult">
+        <result property="collectId"    column="collect_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="collectCourseId"    column="collect_course_id"    />
+        <result property="addTime"    column="add_time"    />
+    </resultMap>
+
+    <sql id="selectLifeCollectVo">
+        select collect_id, user_id, collect_course_id, add_time from life_collect
+    </sql>
+
+    <select id="selectLifeCollectList" parameterType="LifeCollect" resultMap="LifeCollectResult">
+        <include refid="selectLifeCollectVo"/>
+        <where>  
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="collectCourseId != null "> and collect_course_id = #{collectCourseId}</if>
+            <if test="addTime != null "> and add_time = #{addTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectLifeCollectById" parameterType="Long" resultMap="LifeCollectResult">
+        <include refid="selectLifeCollectVo"/>
+        where collect_id = #{collectId}
+    </select>
+        
+    <insert id="insertLifeCollect" parameterType="LifeCollect" useGeneratedKeys="true" keyProperty="collectId">
+        insert into life_collect
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null ">user_id,</if>
+            <if test="collectCourseId != null ">collect_course_id,</if>
+            <if test="addTime != null ">add_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null ">#{userId},</if>
+            <if test="collectCourseId != null ">#{collectCourseId},</if>
+            <if test="addTime != null ">#{addTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLifeCollect" parameterType="LifeCollect">
+        update life_collect
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null ">user_id = #{userId},</if>
+            <if test="collectCourseId != null ">collect_course_id = #{collectCourseId},</if>
+            <if test="addTime != null ">add_time = #{addTime},</if>
+        </trim>
+        where collect_id = #{collectId}
+    </update>
+
+    <delete id="deleteLifeCollectById" parameterType="Long">
+        delete from life_collect where collect_id = #{collectId}
+    </delete>
+
+    <delete id="deleteLifeCollectByIds" parameterType="String">
+        delete from life_collect where collect_id in 
+        <foreach item="collectId" collection="array" open="(" separator="," close=")">
+            #{collectId}
+        </foreach>
+    </delete>
+    
+</mapper>
