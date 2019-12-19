@@ -120,5 +120,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where share_id = #{shareId}
         order by end_date asc,point_type desc
     </select>
+    <select id="getRecentlyPoint" resultMap="LifePointResult">
+        <include refid="selectLifePointVo"/>
+        where share_id = #{shareId}
+        order by end_date asc
+        limit 1
+    </select>
 
 </mapper>

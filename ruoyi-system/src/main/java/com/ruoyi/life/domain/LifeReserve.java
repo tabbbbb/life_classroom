@@ -14,7 +14,7 @@ import java.util.Date;
  * @author ruoyi
  * @date 2019-12-18
  */
-public class LifeReserve extends BaseEntity
+public class LifeReserve
 {
     private static final long serialVersionUID = 1L;
 

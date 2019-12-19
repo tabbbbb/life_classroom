@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.life.mapper.LifeCouponMapper">
     
-    <resultMap type="LifeCoupon" id="LifeCouponResult">
+    <resultMap type="com.ruoyi.life.domain.LifeCoupon" id="LifeCouponResult">
         <result property="couponId"    column="coupon_id"    />
         <result property="type"    column="type"    />
         <result property="name"    column="name"    />
@@ -45,7 +45,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectLifeCouponVo"/>
         where coupon_id = #{couponId}
     </select>
-        
+
+
     <insert id="insertLifeCoupon" parameterType="LifeCoupon" useGeneratedKeys="true" keyProperty="couponId">
         insert into life_coupon
         <trim prefix="(" suffix=")" suffixOverrides=",">

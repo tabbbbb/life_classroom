@@ -2,6 +2,7 @@ package com.ruoyi.life.mapper;
 
 
 import com.ruoyi.life.domain.LifeUserChild;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -78,10 +79,22 @@ public interface LifeUserChildMapper
      * @param shareId
      * @return
      */
-    List<LifeUserChild> getChileByUserId(Long shareId);
+    List<LifeUserChild> getChileByShareId(Long shareId);
 
 
+    /**
+     *
+     * @param shareId
+     * @return
+     */
+    List<LifeUserChild> getChildAllByShareId(Long shareId);
 
 
+    /**
+     * 获取child数组属于的shareId
+     * @param childIds
+     * @return
+     */
+    List<Long> getChildArrayShareId(@Param("childIds") String[] childIds);
 
 }

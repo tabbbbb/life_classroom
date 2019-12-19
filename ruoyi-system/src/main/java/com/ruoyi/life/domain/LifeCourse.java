@@ -11,9 +11,9 @@ import java.math.BigDecimal;
  * 课程对象 life_course
  * 
  * @author ruoyi
- * @date 2019-12-13
+ * @date 2019-12-19
  */
-public class LifeCourse extends BaseEntity
+public class LifeCourse
 {
     private static final long serialVersionUID = 1L;
 
@@ -27,6 +27,10 @@ public class LifeCourse extends BaseEntity
     /** 图片 */
     @Excel(name = "图片")
     private String imgUrl;
+
+    /** 轮播图 */
+    @Excel(name = "轮播图")
+    private String carouselUrl;
 
     /** 课程类型 1、普通 2、团课 */
     @Excel(name = "课程类型 1、普通 2、团课")
@@ -51,6 +55,14 @@ public class LifeCourse extends BaseEntity
     /** 年龄结束 -1不限 */
     @Excel(name = "年龄结束 -1不限")
     private Integer ageEnd;
+
+    /** 老师名称 */
+    @Excel(name = "老师名称")
+    private String teacherName;
+
+    /** 师资介绍 */
+    @Excel(name = "师资介绍")
+    private String teacherExplain;
 
     /** 数量 */
     @Excel(name = "数量")
@@ -100,8 +112,8 @@ public class LifeCourse extends BaseEntity
     @Excel(name = "销量")
     private Long sales;
 
-    /** 用户点击是否推荐时排序，最大为99 */
-    @Excel(name = "用户点击是否推荐时排序，最大为99")
+    /** 用户点击是否推荐时排序，最大为2147483647 */
+    @Excel(name = "用户点击是否推荐时排序，最大为2147483647")
     private Integer recommend;
 
     public void setCourseId(Long courseId) 
@@ -130,6 +142,15 @@ public class LifeCourse extends BaseEntity
     public String getImgUrl() 
     {
         return imgUrl;
+    }
+    public void setCarouselUrl(String carouselUrl) 
+    {
+        this.carouselUrl = carouselUrl;
+    }
+
+    public String getCarouselUrl() 
+    {
+        return carouselUrl;
     }
     public void setCourseType(Integer courseType) 
     {
@@ -185,12 +206,30 @@ public class LifeCourse extends BaseEntity
     {
         return ageEnd;
     }
-    public void setNumber(Integer number)
+    public void setTeacherName(String teacherName) 
+    {
+        this.teacherName = teacherName;
+    }
+
+    public String getTeacherName() 
+    {
+        return teacherName;
+    }
+    public void setTeacherExplain(String teacherExplain) 
+    {
+        this.teacherExplain = teacherExplain;
+    }
+
+    public String getTeacherExplain() 
+    {
+        return teacherExplain;
+    }
+    public void setNumber(Integer number) 
     {
         this.number = number;
     }
 
-    public Integer getNumber()
+    public Integer getNumber() 
     {
         return number;
     }
@@ -309,12 +348,15 @@ public class LifeCourse extends BaseEntity
             .append("courseId", getCourseId())
             .append("name", getName())
             .append("imgUrl", getImgUrl())
+            .append("carouselUrl", getCarouselUrl())
             .append("courseType", getCourseType())
             .append("courseLabelId", getCourseLabelId())
             .append("courseClassifyId", getCourseClassifyId())
             .append("courseKind", getCourseKind())
             .append("ageOnset", getAgeOnset())
             .append("ageEnd", getAgeEnd())
+            .append("teacherName", getTeacherName())
+            .append("teacherExplain", getTeacherExplain())
             .append("number", getNumber())
             .append("describe", getDescribe())
             .append("businessId", getBusinessId())

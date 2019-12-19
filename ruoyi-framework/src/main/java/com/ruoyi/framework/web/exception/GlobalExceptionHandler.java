@@ -2,8 +2,9 @@ package com.ruoyi.framework.web.exception;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.ruoyi.common.exception.order.OrderException;
-import com.ruoyi.common.exception.recharge.RechargerException;
+import com.ruoyi.common.exception.life.OrderException;
+import com.ruoyi.common.exception.life.RechargerException;
+import com.ruoyi.common.exception.life.SetChildException;
 import com.ruoyi.common.response.UserResponse;
 import org.apache.shiro.authz.AuthorizationException;
 import org.slf4j.Logger;
@@ -135,6 +136,12 @@ public class GlobalExceptionHandler
 
     @ExceptionHandler(OrderException.class)
     public UserResponse orderException(OrderException e){
+        e.printStackTrace();
+        return e.getUserResponse();
+    }
+
+    @ExceptionHandler(SetChildException.class)
+    public UserResponse setChildException(SetChildException e){
         e.printStackTrace();
         return e.getUserResponse();
     }

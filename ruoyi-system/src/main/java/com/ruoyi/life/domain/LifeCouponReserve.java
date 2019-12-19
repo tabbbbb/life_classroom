@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * @author ruoyi
  * @date 2019-12-09
  */
-public class LifeCouponReserve extends BaseEntity
+public class LifeCouponReserve
 {
     private static final long serialVersionUID = 1L;
 

@@ -45,8 +45,8 @@ public class LifeVipController {
 
 
 
-    @PostMapping("recharge")
-    @ApiOperation(value = "会员充值")
+//    @PostMapping("recharge")
+//    @ApiOperation(value = "会员充值")
     public UserResponse recharge(@ApiIgnore @LoginInfo UserLoginInfo loginInfo, @RequestBody @ApiParam(name = "body",value = "vipId:选择,code:微信code") String body){
         UserResponse response = LoginResponse.toMessage(loginInfo);
         if (response != null) return response;
@@ -54,12 +54,21 @@ public class LifeVipController {
     }
 
 
-    @PostMapping("gg")
-    @ApiOperation(value = "充值成功")
+//    @PostMapping("gg")
+//    @ApiOperation(value = "充值成功")
     public UserResponse gg(@RequestBody @ApiParam(name = "body") String body){
         String outTradeNo = JacksonUtil.parseString(body,"outTradeNo");
         BigDecimal price = new BigDecimal(JacksonUtil.parseInteger(body,"price").doubleValue());;
         return vipService.rechargeSucceed(outTradeNo,price);
+    }
+
+
+    @PostMapping("priceRechargeVip")
+    @ApiOperation(value = "充值成功")
+    public UserResponse priceRechargeVip(@ApiIgnore @LoginInfo UserLoginInfo loginInfo, @RequestBody @ApiParam(name = "body",value = "vipId:选择vip") String body){
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null) return response;
+        return vipService.priceRechargeVip(loginInfo.getId(),body);
     }
 
 

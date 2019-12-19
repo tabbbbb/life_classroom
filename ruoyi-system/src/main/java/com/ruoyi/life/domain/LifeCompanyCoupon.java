@@ -11,7 +11,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * @author ruoyi
  * @date 2019-12-09
  */
-public class LifeCompanyCoupon extends BaseEntity
+public class LifeCompanyCoupon
 {
     private static final long serialVersionUID = 1L;
 

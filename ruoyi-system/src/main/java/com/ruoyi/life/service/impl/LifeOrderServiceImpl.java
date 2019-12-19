@@ -1,8 +1,7 @@
 package com.ruoyi.life.service.impl;
 
 
-import com.github.qcloudsms.TtsVoiceSender;
-import com.ruoyi.common.exception.order.OrderException;
+import com.ruoyi.common.exception.life.OrderException;
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.common.response.UserResponseCode;
 import com.ruoyi.common.utils.security.Md5Utils;
@@ -11,23 +10,16 @@ import com.ruoyi.life.domain.vo.LifePayOrderVo;
 import com.ruoyi.life.mapper.LifeOrderMapper;
 import com.ruoyi.life.service.*;
 import com.ruoyi.common.core.text.Convert;
-import jdk.nashorn.internal.runtime.linker.LinkerCallSite;
-import org.apache.poi.ss.formula.functions.T;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sun.rmi.log.LogInputStream;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * 订单Service业务层处理
@@ -340,6 +332,8 @@ public class LifeOrderServiceImpl implements LifeOrderService
                 throw new OrderException(UserResponseCode.PAY_COURSE_ERROR,"积分支付失败");
             }else if (flag == -1){
                 throw new OrderException(UserResponseCode.PAY_COURSE_ERROR,"积分不足");
+            }else if (flag == -2){
+                throw new OrderException(UserResponseCode.PAY_COURSE_ERROR,"删除积分对应用户时失败");
             }
             log.setPoint(point);
             log.setLogType(-2);
@@ -360,9 +354,9 @@ public class LifeOrderServiceImpl implements LifeOrderService
             log.setPrice(price);
         }
 
-        log.setAddTime(new Date());
+        log.setAddTime(LocalDateTime.now());
         log.setExplain("预定《"+course.getName()+"》");
-        log.setUserId(userId);
+        log.setUserId(user.getShareId());
         log.setLogUserId(userId);
         if (logService.insertLifePointLog(log) == 0){
             throw new OrderException(UserResponseCode.PAY_COURSE_ERROR,"日志添加失败");

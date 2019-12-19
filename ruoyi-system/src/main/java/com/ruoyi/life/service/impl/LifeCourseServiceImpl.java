@@ -2,12 +2,17 @@ package com.ruoyi.life.service.impl;
 
 
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.life.domain.LifeCourse;
+import com.ruoyi.life.domain.LifeCourseDetail;
 import com.ruoyi.life.domain.vo.LifeCourseConditionVo;
 import com.ruoyi.life.domain.vo.LifeCourseByConditionVo;
+import com.ruoyi.life.domain.vo.LifeCourseDetailVo;
 import com.ruoyi.life.mapper.LifeCourseMapper;
+import com.ruoyi.life.service.LifeCourseDetailService;
 import com.ruoyi.life.service.LifeCourseService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -23,6 +28,10 @@ public class LifeCourseServiceImpl implements LifeCourseService
 {
     @Resource
     private LifeCourseMapper lifeCourseMapper;
+
+
+    @Resource
+    private LifeCourseDetailService courseDetailService;
 
     /**
      * 查询课程
@@ -104,7 +113,27 @@ public class LifeCourseServiceImpl implements LifeCourseService
      * @return
      */
     @Override
-    public List<LifeCourseByConditionVo> selectLifeCourseBySearchVo(LifeCourseConditionVo searchVo) {
-        return lifeCourseMapper.selectLifeCourseBySearchVo(searchVo);
+    public UserResponse selectLifeCourseBySearchVo(LifeCourseConditionVo searchVo) {
+        List<LifeCourseByConditionVo> list = lifeCourseMapper.selectLifeCourseBySearchVo(searchVo);
+        for (LifeCourseByConditionVo conditionVo : list) {
+            List<LifeCourseDetail> lifeCourseDetails = courseDetailService.getListByCourseId(conditionVo.getCourseId());
+            conditionVo.setCourseDetails(lifeCourseDetails);
+        }
+        return UserResponse.succeed(list);
+    }
+
+
+    /**
+     * 根据课程id获取详细
+     *
+     * @param courseId
+     * @return
+     */
+    @Override
+    public UserResponse getLifeCourseDetailByCourseId(Long courseId) {
+        LifeCourseDetailVo detailVo = lifeCourseMapper.getLifeCourseDetailByCourseId(courseId);
+        List<LifeCourseDetail> lifeCourseDetails = courseDetailService.getListByCourseId(detailVo.getCourseId());
+        detailVo.setDetails(lifeCourseDetails);
+        return UserResponse.succeed(detailVo);
     }
 }

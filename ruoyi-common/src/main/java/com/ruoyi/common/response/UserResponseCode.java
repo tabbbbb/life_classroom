@@ -192,4 +192,10 @@ public class UserResponseCode {
     public static final Integer COLLECT_ERROR = 100025;
 
 
+    /**
+     * 余额充值vip错误
+     */
+    public static final Integer PRICE_RECHARGE_VIP_ERROR = 100026;
+
+
 }

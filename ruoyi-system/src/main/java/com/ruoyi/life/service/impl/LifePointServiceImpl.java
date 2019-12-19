@@ -2,7 +2,9 @@ package com.ruoyi.life.service.impl;
 
 
 import com.ruoyi.life.domain.LifePoint;
+import com.ruoyi.life.domain.LifePointChild;
 import com.ruoyi.life.mapper.LifePointMapper;
+import com.ruoyi.life.service.LifePointChildService;
 import com.ruoyi.life.service.LifePointService;
 import com.ruoyi.common.core.text.Convert;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,10 @@ public class LifePointServiceImpl implements LifePointService
 {
     @Resource
     private LifePointMapper lifePointMapper;
+
+
+    @Resource
+    private LifePointChildService pointChildService;
 
     /**
      * 查询会员积分和开通记录
@@ -159,10 +165,25 @@ public class LifePointServiceImpl implements LifePointService
             if (flag != deletePointList.size()){
                 return 0;
             }
+            flag = pointChildService.deleteLifePointChildByIds(deletePointArray);
+            if (flag != deletePointList.size()){
+                return -2;
+            }
         }
         if(updatePoint != null){
             return lifePointMapper.updateLifePoint(updatePoint);
         }
        return 1;
+    }
+
+
+    /**
+     * 获取最近过期的积分
+     *
+     * @return
+     */
+    @Override
+    public LifePoint getRecentlyPoint(Long shareId) {
+        return lifePointMapper.getRecentlyPoint(shareId);
     }
 }

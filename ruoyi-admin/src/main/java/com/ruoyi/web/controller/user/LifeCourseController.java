@@ -49,7 +49,13 @@ public class LifeCourseController {
     }
 
 
-
-
+    @GetMapping("courseDetail")
+    @ApiOperation(value = "课程详细")
+    @ApiImplicitParams(
+            @ApiImplicitParam(paramType="query",name="courseId",value="课程id",dataTypeClass = Long.class)
+    )
+    public UserResponse getCourseDetail(Long courseId){
+        return UserResponse.succeed(courseService.getLifeCourseDetailByCourseId(courseId));
+    }
 
 }

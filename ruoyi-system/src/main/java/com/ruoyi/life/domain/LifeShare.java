@@ -11,7 +11,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * @author ruoyi
  * @date 2019-12-09
  */
-public class LifeShare extends BaseEntity
+public class LifeShare
 {
     private static final long serialVersionUID = 1L;
 

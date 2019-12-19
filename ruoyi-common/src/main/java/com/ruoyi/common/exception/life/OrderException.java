@@ -1,14 +1,14 @@
 /**
  * Copyright (C), 2019, 蓝煌信息科技公司
- * FileName: RechargerException
+ * FileName: OrderException
  * Author:   Administrator
- * Date:     2019/12/10 0010 15:02
+ * Date:     2019/12/17 0017 17:40
  * Description:
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package com.ruoyi.common.exception.recharge;
+package com.ruoyi.common.exception.life;
 
 import com.ruoyi.common.response.UserResponse;
 
@@ -17,10 +17,10 @@ import com.ruoyi.common.response.UserResponse;
  * 〈〉
  *
  * @author Administrator
- * @create 2019/12/10 0010
+ * @create 2019/12/17 0017
  * @since 1.0.0
  */
-public class RechargerException extends RuntimeException{
+public class OrderException extends RuntimeException{
 
     private UserResponse userResponse;
 
@@ -28,10 +28,9 @@ public class RechargerException extends RuntimeException{
         return userResponse;
     }
 
-    public RechargerException(Integer errcode, String errmsg,Long userId){
+    public OrderException(Integer errcode, String errmsg){
         super(errmsg);
-        userResponse = UserResponse.fail(errcode,errmsg+"，用户编号："+userId);
+        userResponse = UserResponse.fail(errcode,errmsg);
     }
-
 
 }

@@ -92,4 +92,12 @@ public interface LifePointMapper
      * @return
      */
     int deleteAllPoint(Long shareId);
+
+
+    /**
+     * 获取最近过期的积分
+     * @param shareId
+     * @return
+     */
+    LifePoint getRecentlyPoint(Long shareId);
 }

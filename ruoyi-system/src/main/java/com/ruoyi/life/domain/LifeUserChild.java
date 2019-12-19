@@ -12,7 +12,7 @@ import java.util.Date;
  * @author ruoyi
  * @date 2019-12-06
  */
-public class LifeUserChild extends BaseEntity
+public class LifeUserChild
 {
     private static final long serialVersionUID = 1L;
 

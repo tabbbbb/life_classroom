@@ -2,14 +2,16 @@ package com.ruoyi.life.service.impl;
 
 
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.exception.life.SetChildException;
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.common.response.UserResponseCode;
 import com.ruoyi.common.utils.JacksonUtil;
 import com.ruoyi.life.domain.LifePoint;
 import com.ruoyi.life.domain.LifePointChild;
+import com.ruoyi.life.domain.LifeUser;
+import com.ruoyi.life.domain.LifeUserChild;
 import com.ruoyi.life.mapper.LifePointChildMapper;
-import com.ruoyi.life.service.LifePointChildService;
-import com.ruoyi.life.service.LifePointService;
+import com.ruoyi.life.service.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +33,16 @@ public class LifePointChildServiceImpl implements LifePointChildService
 
     @Resource
     private LifePointService pointService;
+
+    @Resource
+    private LifeVipService  vipService;
+
+    @Resource
+    private LifeUserChildService userChildService;
+
+
+    @Resource
+    private LifeUserService userService;
 
     /**
      * 查询积分小孩关联
@@ -93,6 +105,17 @@ public class LifePointChildServiceImpl implements LifePointChildService
     }
 
     /**
+     * 批量删除积分小孩关联
+     *
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+    @Override
+    public int deleteLifePointChildByIds(String[] ids) {
+        return lifePointChildMapper.deleteLifePointChildByIds(ids);
+    }
+
+    /**
      * 删除积分小孩关联信息
      * 
      * @param id 积分小孩关联ID
@@ -117,18 +140,28 @@ public class LifePointChildServiceImpl implements LifePointChildService
         String childIdsString = JacksonUtil.parseString(body,"childIds");
         Long pointId = JacksonUtil.parseLong(body,"pointId");
         if (pointId == null || childIdsString == null){
-            return UserResponse.fail(UserResponseCode.USER_BIND_CHILD_ERROR,"参数错误");
+            throw new SetChildException(UserResponseCode.USER_BIND_CHILD_ERROR,"参数错误");
         }
+        LifeUser user = userService.selectLifeUserById(userId);
         LifePoint point = pointService.selectLifePointById(pointId);
         String []childIds = childIdsString.split(",");
+        boolean flag = userChildService.childBySoleShareId(childIds,user.getShareId());
+        if (!flag){
+            throw new SetChildException(UserResponseCode.USER_BIND_CHILD_ERROR,"选择错误");
+        }
+        int num = vipService.selectLifeVipById(point.getVipId()).getChild();
+        if (childIds.length != num){
+            throw new SetChildException(UserResponseCode.USER_BIND_CHILD_ERROR,"选择数量错误");
+        }
+
         if (point == null){
-            return UserResponse.fail(UserResponseCode.USER_BIND_CHILD_ERROR,"会员过期");
+            throw new SetChildException(UserResponseCode.USER_BIND_CHILD_ERROR,"会员过期");
         }
         if (point.getUserId() != userId){
-            return UserResponse.fail(UserResponseCode.USER_BIND_CHILD_ERROR,"警告！");
+            throw new SetChildException(UserResponseCode.USER_BIND_CHILD_ERROR,"警告！");
         }
         if (point.getIsSetChild() < 1 ){
-            return UserResponse.fail(UserResponseCode.USER_BIND_CHILD_ERROR,"设置次数为0");
+            throw new SetChildException(UserResponseCode.USER_BIND_CHILD_ERROR,"设置次数为0");
         }
         LocalDateTime now = LocalDateTime.now();
         for (String childId : childIds) {
@@ -138,13 +171,13 @@ public class LifePointChildServiceImpl implements LifePointChildService
             pointChild.setPointId(pointId);
             pointChild.setStartTime(now);
             if (this.insertLifePointChild(pointChild) == 0){
-                return UserResponse.fail(UserResponseCode.USER_BIND_CHILD_ERROR,"设置失败，请重试或者联系管理员");
+                throw new SetChildException(UserResponseCode.USER_BIND_CHILD_ERROR,"设置失败，请重试或者联系管理员");
             }
         }
         point.setIsAddChild(0);
         point.setIsSetChild(0);
         if (pointService.updateLifePoint(point) == 0){
-            return UserResponse.fail(UserResponseCode.USER_BIND_CHILD_ERROR,"清空次数时失败，请联系管理员");
+            throw new SetChildException(UserResponseCode.USER_BIND_CHILD_ERROR,"清空次数时失败，请联系管理员");
         }
         return UserResponse.succeed();
     }

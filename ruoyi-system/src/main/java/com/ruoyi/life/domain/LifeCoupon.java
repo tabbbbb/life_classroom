@@ -5,13 +5,15 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
+import java.time.LocalDateTime;
+
 /**
  * 优惠卷对象 life_coupon
  * 
  * @author ruoyi
  * @date 2019-12-17
  */
-public class LifeCoupon extends BaseEntity
+public class LifeCoupon
 {
     private static final long serialVersionUID = 1L;
 
@@ -57,6 +59,13 @@ public class LifeCoupon extends BaseEntity
     /** 优惠券说明 */
     @Excel(name = "优惠券说明")
     private String remarks;
+
+
+
+    /** 创建时间 */
+    @Excel(name = "创建时间")
+    private LocalDateTime createTime;
+
 
     /** 1删除 */
     @Excel(name = "1删除")
@@ -171,6 +180,14 @@ public class LifeCoupon extends BaseEntity
         return deleteFlag;
     }
 
+    public LocalDateTime getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -185,7 +202,6 @@ public class LifeCoupon extends BaseEntity
             .append("enableDay", getEnableDay())
             .append("astrict", getAstrict())
             .append("remarks", getRemarks())
-            .append("createTime", getCreateTime())
             .append("deleteFlag", getDeleteFlag())
             .toString();
     }

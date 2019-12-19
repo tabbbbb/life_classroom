@@ -113,4 +113,11 @@ public interface LifeUserService
      */
     int deductBalance(Long userId,BigDecimal price);
 
+
+    /**
+     * 获取用户页信息
+     * @return
+     */
+    UserResponse getUserHome(Long userId);
+
 }

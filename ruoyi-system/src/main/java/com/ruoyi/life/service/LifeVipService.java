@@ -79,4 +79,13 @@ public interface LifeVipService
      * @return
      */
     UserResponse rechargeSucceed(String outTradeNo, BigDecimal price);
+
+
+    /**
+     * 余额充值会员
+     * @param userId
+     * @param body
+     * @return
+     */
+    UserResponse priceRechargeVip(Long userId, String body);
 }

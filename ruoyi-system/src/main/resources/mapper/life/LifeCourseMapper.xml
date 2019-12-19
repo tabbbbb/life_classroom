@@ -8,12 +8,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="courseId"    column="course_id"    />
         <result property="name"    column="name"    />
         <result property="imgUrl"    column="img_url"    />
+        <result property="carouselUrl"    column="carousel_url"    />
         <result property="courseType"    column="course_type"    />
         <result property="courseLabelId"    column="course_label_id"    />
         <result property="courseClassifyId"    column="course_classify_id"    />
         <result property="courseKind"    column="course_kind"    />
         <result property="ageOnset"    column="age_onset"    />
         <result property="ageEnd"    column="age_end"    />
+        <result property="teacherName"    column="teacher_name"    />
+        <result property="teacherExplain"    column="teacher_explain"    />
         <result property="number"    column="number"    />
         <result property="describe"    column="describe"    />
         <result property="businessId"    column="business_id"    />
@@ -30,8 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectLifeCourseVo">
-        select course_id, `name`, img_url, course_type, course_label_id, course_classify_id, course_kind, age_onset,
-        age_end, `number`, `describe`, business_id, rule_url, information, rule_price, status, delete_flage, price, point, orderBy, sales, recommend from life_course
+        select course_id, name, img_url, carousel_url, course_type, course_label_id, course_classify_id, course_kind, age_onset, age_end, teacher_name, teacher_explain, number, describe, business_id, rule_url, information, rule_price, status, delete_flage, price, point, orderBy, sales, recommend from life_course
     </sql>
 
     <select id="selectLifeCourseList" parameterType="LifeCourse" resultMap="LifeCourseResult">
@@ -39,12 +41,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
             <if test="imgUrl != null  and imgUrl != ''"> and img_url = #{imgUrl}</if>
+            <if test="carouselUrl != null  and carouselUrl != ''"> and carousel_url = #{carouselUrl}</if>
             <if test="courseType != null "> and course_type = #{courseType}</if>
             <if test="courseLabelId != null "> and course_label_id = #{courseLabelId}</if>
             <if test="courseClassifyId != null "> and course_classify_id = #{courseClassifyId}</if>
             <if test="courseKind != null "> and course_kind = #{courseKind}</if>
             <if test="ageOnset != null "> and age_onset = #{ageOnset}</if>
             <if test="ageEnd != null "> and age_end = #{ageEnd}</if>
+            <if test="teacherName != null  and teacherName != ''"> and teacher_name like concat('%', #{teacherName}, '%')</if>
+            <if test="teacherExplain != null  and teacherExplain != ''"> and teacher_explain = #{teacherExplain}</if>
             <if test="number != null "> and number = #{number}</if>
             <if test="describe != null  and describe != ''"> and describe = #{describe}</if>
             <if test="businessId != null "> and business_id = #{businessId}</if>
@@ -71,12 +76,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="name != null  and name != ''">name,</if>
             <if test="imgUrl != null  and imgUrl != ''">img_url,</if>
+            <if test="carouselUrl != null  and carouselUrl != ''">carousel_url,</if>
             <if test="courseType != null ">course_type,</if>
             <if test="courseLabelId != null ">course_label_id,</if>
             <if test="courseClassifyId != null ">course_classify_id,</if>
             <if test="courseKind != null ">course_kind,</if>
             <if test="ageOnset != null ">age_onset,</if>
             <if test="ageEnd != null ">age_end,</if>
+            <if test="teacherName != null  and teacherName != ''">teacher_name,</if>
+            <if test="teacherExplain != null  and teacherExplain != ''">teacher_explain,</if>
             <if test="number != null ">number,</if>
             <if test="describe != null  and describe != ''">describe,</if>
             <if test="businessId != null ">business_id,</if>
@@ -94,12 +102,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="name != null  and name != ''">#{name},</if>
             <if test="imgUrl != null  and imgUrl != ''">#{imgUrl},</if>
+            <if test="carouselUrl != null  and carouselUrl != ''">#{carouselUrl},</if>
             <if test="courseType != null ">#{courseType},</if>
             <if test="courseLabelId != null ">#{courseLabelId},</if>
             <if test="courseClassifyId != null ">#{courseClassifyId},</if>
             <if test="courseKind != null ">#{courseKind},</if>
             <if test="ageOnset != null ">#{ageOnset},</if>
             <if test="ageEnd != null ">#{ageEnd},</if>
+            <if test="teacherName != null  and teacherName != ''">#{teacherName},</if>
+            <if test="teacherExplain != null  and teacherExplain != ''">#{teacherExplain},</if>
             <if test="number != null ">#{number},</if>
             <if test="describe != null  and describe != ''">#{describe},</if>
             <if test="businessId != null ">#{businessId},</if>
@@ -121,12 +132,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="name != null  and name != ''">name = #{name},</if>
             <if test="imgUrl != null  and imgUrl != ''">img_url = #{imgUrl},</if>
+            <if test="carouselUrl != null  and carouselUrl != ''">carousel_url = #{carouselUrl},</if>
             <if test="courseType != null ">course_type = #{courseType},</if>
             <if test="courseLabelId != null ">course_label_id = #{courseLabelId},</if>
             <if test="courseClassifyId != null ">course_classify_id = #{courseClassifyId},</if>
             <if test="courseKind != null ">course_kind = #{courseKind},</if>
             <if test="ageOnset != null ">age_onset = #{ageOnset},</if>
             <if test="ageEnd != null ">age_end = #{ageEnd},</if>
+            <if test="teacherName != null  and teacherName != ''">teacher_name = #{teacherName},</if>
+            <if test="teacherExplain != null  and teacherExplain != ''">teacher_explain = #{teacherExplain},</if>
             <if test="number != null ">number = #{number},</if>
             <if test="describe != null  and describe != ''">describe = #{describe},</if>
             <if test="businessId != null ">business_id = #{businessId},</if>
@@ -155,17 +169,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
+    <select id="selectLifeCourseBySearchVo" resultType="com.ruoyi.life.domain.vo.LifeCourseByConditionVo">
+        select
+        course.course_id as course_id,
+        course.img_url as url,course.name as `name`,
+        classify.img as classifyUrl,
+        classify.course_classify_name as classifyName,
+        course.point as point,
+        course.price as price,
+        course.age_onset as startAge,
+        course.age_end as endAge,
+        IF(course.teacher_name is null ,address.business_address_name,course.teacher_name) as addressOrTeacherName,
+        course.number as maxPeople ,
+        IF(reserve.reserve_num is null ,course.number,reserve.reserve_num)  as residuePeople,
+        IF(collect.collect_id is null,'false','true') as isCollect,
+        round(st_distance_sphere (point (#{conditionVo.lon},#{conditionVo.lat}),point (address.lon,address.lat))/1000,1) as addressNum
 
-
-
-    <select id="selectLifeCourseBySearchVo" resultType="LifeCourseByConditionVo">
-        select course.course_id as course_id, course.img_url as url,course.name as `name`,classify.img as classifyUrl,
-          classify.course_classify_name as classifyName,course.point as point,course.price as price,course.age_onset as startAge,
-          course.age_end as endAge,IF(course.teacher_name is null ,address.business_address_name,course.teacher_name) as addressOrTeacherName,
-          course.number as maxPeople ,IF(reserve.reserve_num is null ,course.number,reserve.reserve_num)  as residuePeople, IF(collect.collect_id is null,'false','true')
-          from life_course as course
+        from life_course as course
         left join life_collect as collect on collect.collect_course_id = course.course_id
-		inner join life_business_address as address on address.business_id = course.business_id
+        inner join life_business_address as address on address.business_id = course.business_id
         inner join life_course_classify as classify on classify.course_classify_id = course.course_classify_id
         inner join life_course_detail as detail on detail.course_id = course.course_id
         left join life_reserve as reserve on reserve.course_detail_id = detail.course_detail_id
@@ -215,5 +237,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </when>
         </choose>
     </select>
-    
+    <select id="getLifeCourseDetailByCourseId" resultType="com.ruoyi.life.domain.vo.LifeCourseDetailVo">
+        select
+        course.course_id as course_id,
+        course.name as `name`,
+        classify.img as classifyUrl,
+        classify.course_classify_name as classifyName,
+        round(st_distance_sphere (point (#{conditionVo.lon},#{conditionVo.lat}),point (address.lon,address.lat))/1000,1) as addressNum
+        address.business_address_name as address,
+        course.age_onset as startAge,
+        course.age_end as endAge,
+        course.img_url as courseUrl,
+        course.carousel_url as carouselUrl,
+        course.point as point,
+        course.price as price,
+        course.describe as `describe`,
+        business.name as businessName,
+        course.information as information,
+        course.teacher_name as teacherName,
+        course.teacher_explain as teacherExplain,
+        IF(collect.collect_id is null,'false','true') as isCollect
+
+        from life_course as course
+        left join life_collect as collect on collect.collect_course_id = course.course_id
+        inner join life_business_address as address on address.business_id = course.business_id
+        inner join life_business as business on business.business_id = course.business_id
+        inner join life_course_classify as classify on classify.course_classify_id = course.course_classify_id
+        inner join life_course_detail as detail on detail.course_id = course.course_id
+        left join life_reserve as reserve on reserve.course_detail_id = detail.course_detail_id
+        where course.course_id = #{courseId}
+    </select>
 </mapper>

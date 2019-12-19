@@ -3,19 +3,16 @@ package com.ruoyi.life.service.impl;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
-import com.ruoyi.common.exception.recharge.RechargerException;
+import com.ruoyi.common.exception.life.RechargerException;
 import com.ruoyi.common.weixin.WxOperation;
-import com.ruoyi.life.domain.LifeCompanyCoupon;
-import com.ruoyi.life.domain.LifePointLog;
-import com.ruoyi.life.domain.LifeUser;
+import com.ruoyi.life.domain.*;
+import com.ruoyi.life.domain.vo.LifeUserHomeVo;
 import com.ruoyi.life.mapper.LifeUserMapper;
-import com.ruoyi.life.service.LifeCompanyCouponService;
-import com.ruoyi.life.service.LifeCouponReserveService;
-import com.ruoyi.life.service.LifePointLogService;
-import com.ruoyi.life.service.LifeUserService;
+import com.ruoyi.life.service.*;
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.common.response.UserResponseCode;
 import com.ruoyi.common.utils.JacksonUtil;
@@ -51,6 +48,12 @@ public class LifeUserServiceImpl implements LifeUserService
 
     @Resource
     private LifePointLogService pointLogService;
+
+    @Resource
+    private LifePointService pointService;
+
+    @Resource
+    private LifeUserChildService userChildService;
 
     /**
      * 查询用户
@@ -247,10 +250,10 @@ public class LifeUserServiceImpl implements LifeUserService
         }
         LifePointLog pointLog = new LifePointLog();
         pointLog.setPrice(price);
-        pointLog.setLogUserId(userId);
+        pointLog.setLogUserId(user.getShareId());
         pointLog.setExplain("充值余额"+price);
         pointLog.setLogType(1);
-        pointLog.setAddTime(new Date());
+        pointLog.setAddTime(LocalDateTime.now());
         pointLog.setUserId(userId);
         if (pointLogService.insertLifePointLog(pointLog) == 0){
             throw new RechargerException(UserResponseCode.USER_RECHARGE_BALANCE_ERROR,"充值增加日志失败，请联系管理员",userId);
@@ -288,5 +291,24 @@ public class LifeUserServiceImpl implements LifeUserService
         }
         user.setBalance(balance);
         return userMapper.rechargeBalance(user,oldBalance);
+    }
+
+
+    /**
+     * 获取用户页信息
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public UserResponse getUserHome(Long userId) {
+        LifeUser user = this.selectLifeUserById(userId);
+        LifePoint point = pointService.getRecentlyPoint(user.getShareId());
+        List<LifeUserChild> userChildList = (List<LifeUserChild>) userChildService.getChildByShareId(user.getShareId()).getData();
+        LifeUserHomeVo userHomeVo = new LifeUserHomeVo();
+        userHomeVo.setChildList(userChildList);
+        userHomeVo.setPoint(point);
+        userHomeVo.setUser(user);
+        return UserResponse.succeed(userHomeVo);
     }
 }

@@ -2,8 +2,10 @@ package com.ruoyi.life.mapper;
 
 
 import com.ruoyi.life.domain.LifeCourse;
+import com.ruoyi.life.domain.LifeCourseDetail;
 import com.ruoyi.life.domain.vo.LifeCourseConditionVo;
 import com.ruoyi.life.domain.vo.LifeCourseByConditionVo;
+import com.ruoyi.life.domain.vo.LifeCourseDetailVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -71,5 +73,13 @@ public interface LifeCourseMapper
      * @return
      */
     List<LifeCourseByConditionVo> selectLifeCourseBySearchVo(@Param("conditionVo")LifeCourseConditionVo conditionVo);
+
+
+    /**
+     * 根据课程id获取详细
+     * @param courseId
+     * @return
+     */
+    LifeCourseDetailVo getLifeCourseDetailByCourseId(Long courseId);
 
 }

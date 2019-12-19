@@ -74,11 +74,25 @@ public interface LifeUserChildService
 
 
     /**
-     * 获取用户的小孩
-     * @param userId
+     * 获取用户会员期有效的小孩
+     * @param shareId
      * @return
      */
-    UserResponse getChileByUserId(Long userId);
+    UserResponse getChildByShareId(Long shareId);
 
 
+    /**
+     * 获取用户添加的所有小孩
+     * @param shareId
+     * @return
+     */
+    UserResponse getChildAllByShareId(Long shareId);
+
+
+    /**
+     *  获取绑定用户数组是否属于唯一的id
+     * @param childIds
+     * @return
+     */
+    boolean childBySoleShareId(String [] childIds,Long shareId);
 }

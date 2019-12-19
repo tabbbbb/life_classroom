@@ -1,5 +1,6 @@
 package com.ruoyi.web.controller.user;
 
+import com.ruoyi.framework.userlogin.WxLoginUserInfo;
 import com.ruoyi.life.domain.LifeUser;
 import com.ruoyi.life.service.LifeUserService;
 import com.ruoyi.common.config.Global;
@@ -95,6 +96,13 @@ public class LifeUserController extends BaseController
     })
     public UserResponse succeedBalance(String outTradeNo,Integer price){
         return userService.rechargeBalanceSucceed(outTradeNo,new BigDecimal(price));
+    }
+
+
+    @GetMapping ("userHome")
+    @ApiOperation(value = "用户页信息")
+    public UserResponse userHome(@ApiIgnore @LoginInfo UserLoginInfo loginInfo){
+        return userService.getUserHome(loginInfo.getId());
     }
 
 

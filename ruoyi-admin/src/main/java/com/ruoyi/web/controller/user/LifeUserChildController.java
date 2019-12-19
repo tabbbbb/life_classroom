@@ -17,6 +17,7 @@ import com.ruoyi.framework.userlogin.info.UserLoginInfo;
 import com.ruoyi.life.service.LifePointService;
 import com.ruoyi.life.service.LifeUserChildService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +44,7 @@ public class LifeUserChildController {
     @Autowired
     private LifeUserChildService userChildService;
 
+    @ApiOperation(value = "添加小孩")
     @PutMapping("child")
     public UserResponse setChild(@ApiIgnore @LoginInfo UserLoginInfo loginInfo,
                                  @RequestBody @ApiParam(name = "body",value = "child:LifeUserChild,pointId:LifePoint.pointId") String body){
@@ -51,14 +53,22 @@ public class LifeUserChildController {
         return userChildService.insertLifeUserChild(loginInfo.getId(),body);
     }
 
-
+    @ApiOperation(value = "获取可选小孩")
     @GetMapping("child")
     public UserResponse getChild(@ApiIgnore @LoginInfo UserLoginInfo loginInfo){
         UserResponse response = LoginResponse.toMessage(loginInfo);
         if (response != null) return response;
-        return userChildService.getChileByUserId(loginInfo.getId());
+        return userChildService.getChildByShareId(loginInfo.getId());
     }
 
+
+    @ApiOperation(value = "获取所有小孩")
+    @GetMapping("childAll")
+    public UserResponse getChildAll(@ApiIgnore @LoginInfo UserLoginInfo loginInfo){
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null) return response;
+        return userChildService.getChildAllByShareId(loginInfo.getId());
+    }
 
 
 

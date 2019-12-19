@@ -1,7 +1,7 @@
 package com.ruoyi.life.service.impl;
 
 
-import com.ruoyi.common.exception.recharge.RechargerException;
+import com.ruoyi.common.exception.life.RechargerException;
 import com.ruoyi.common.sms.NotifySms;
 import com.ruoyi.life.domain.*;
 import com.ruoyi.life.mapper.LifeVipMapper;
@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -191,10 +190,10 @@ public class LifeVipServiceImpl implements LifeVipService
         LifePointLog pointLog = new LifePointLog();
         pointLog.setLogType(4);
         pointLog.setExplain("充值"+vip.getPrint()+"元会员");
-        pointLog.setUserId(userId);
+        pointLog.setUserId(user.getShareId());
         pointLog.setPoint(vip.getPoint());
         pointLog.setLogUserId(userId);
-        pointLog.setAddTime(new Date());
+        pointLog.setAddTime(start);
         if (pointLogService.insertLifePointLog(pointLog) == 0){
             throw new RechargerException(UserResponseCode.USER_RECHARGE_ERROR,"积分日志添加失败，请联系管理员",userId);
         }
@@ -204,6 +203,85 @@ public class LifeVipServiceImpl implements LifeVipService
         if (couponReserveService.insertLifeCouponReserveVip(userId,list)!= couponReserveService.insertNumVip(list)){
             throw new RechargerException(UserResponseCode.USER_RECHARGE_ERROR,"充值所送优惠券添加失败，请联系管理员",userId);
         }
-        return UserResponse.succeed();
+        return UserResponse.succeed(point);
+    }
+
+
+    /**
+     * 余额充值会员
+     *
+     * @param userId
+     * @param body
+     * @return
+     */
+    @Override
+    @Transactional
+    public UserResponse priceRechargeVip(Long userId, String body) {
+        LifeUser user = userService.selectLifeUserById(userId);
+        Long vipId = JacksonUtil.parseLong(body,"vipId");
+        if (vipId == null){
+            throw new RechargerException(UserResponseCode.PRICE_RECHARGE_VIP_ERROR,"参数错误",userId);
+        }
+        LifeVip vip = this.selectLifeVipById(vipId);
+        if (vip == null){
+            throw new RechargerException(UserResponseCode.PRICE_RECHARGE_VIP_ERROR,"没有此vip类型",userId);
+        }
+        int flag = userService.deductBalance(userId,vip.getPrint());
+        if (flag == -1){
+            throw new RechargerException(UserResponseCode.PRICE_RECHARGE_VIP_ERROR,"余额不足",userId);
+        }else if (flag == 0){
+            throw new RechargerException(UserResponseCode.PRICE_RECHARGE_VIP_ERROR,"请重试！",userId);
+        }
+
+        LocalDateTime start = LocalDateTime.now();
+        LocalDateTime end = start.plusMonths(vip.getValidity()).plusDays(1);
+        Long shareId = user.getShareId();
+        LifePoint point = new LifePoint();
+        point.setPoint(vip.getPoint());
+        point.setStartDate(start);
+        point.setEndDate(end);
+        point.setIsSetChild(1);
+        point.setPointType(1);
+        point.setVipId(vip.getVipId());
+        point.setUserId(userId);
+        point.setShareId(shareId);
+        point.setUsePoint(vip.getPoint());
+        point.setIsAddChild(vip.getChild());
+        if (pointService.insertLifePoint(point) == 0){
+            throw new RechargerException(UserResponseCode.USER_RECHARGE_ERROR,"积分添加失败，请联系管理员",userId);
+        }
+
+
+
+
+        //余额减少日志
+        LifePointLog pointLogPrice = new LifePointLog();
+        pointLogPrice.setLogType(-3);
+        pointLogPrice.setExplain("充值"+vip.getPrint()+"元会员");
+        pointLogPrice.setUserId(user.getShareId());
+        pointLogPrice.setPrice(vip.getPrint());
+        pointLogPrice.setLogUserId(userId);
+        pointLogPrice.setAddTime(start);
+        if (pointLogService.insertLifePointLog(pointLogPrice) == 0){
+            throw new RechargerException(UserResponseCode.USER_RECHARGE_ERROR,"余额减少日志添加失败，请联系管理员",userId);
+        }
+        //积分增加日志
+        LifePointLog pointLogPoint = new LifePointLog();
+        pointLogPoint.setLogType(2);
+        pointLogPoint.setExplain("充值"+vip.getPrint()+"元会员");
+        pointLogPoint.setUserId(user.getShareId());
+        pointLogPoint.setPoint(vip.getPoint());
+        pointLogPoint.setLogUserId(userId);
+        pointLogPoint.setAddTime(start);
+        if (pointLogService.insertLifePointLog(pointLogPoint) == 0){
+            throw new RechargerException(UserResponseCode.USER_RECHARGE_ERROR,"积分增加日志添加失败，请联系管理员",userId);
+        }
+        LifeVipCoupon selectVipCoupon = new LifeVipCoupon();
+        selectVipCoupon.setVipId(vipId);
+        List<LifeVipCoupon> list = vipCouponService.selectLifeCouponIds(vipId);
+        if (couponReserveService.insertLifeCouponReserveVip(userId,list)!= couponReserveService.insertNumVip(list)){
+            throw new RechargerException(UserResponseCode.USER_RECHARGE_ERROR,"充值所送优惠券添加失败，请联系管理员",userId);
+        }
+        return UserResponse.succeed(point);
     }
 }

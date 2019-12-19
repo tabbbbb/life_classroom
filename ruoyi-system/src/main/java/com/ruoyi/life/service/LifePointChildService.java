@@ -55,6 +55,14 @@ public interface LifePointChildService
     public int deleteLifePointChildByIds(String ids);
 
     /**
+     * 批量删除积分小孩关联
+     *
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+    public int deleteLifePointChildByIds(String [] ids);
+
+    /**
      * 删除积分小孩关联信息
      * 
      * @param id 积分小孩关联ID

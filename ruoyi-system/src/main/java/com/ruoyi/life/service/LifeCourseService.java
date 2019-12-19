@@ -1,9 +1,11 @@
 package com.ruoyi.life.service;
 
 
+import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.life.domain.LifeCourse;
 import com.ruoyi.life.domain.vo.LifeCourseConditionVo;
 import com.ruoyi.life.domain.vo.LifeCourseByConditionVo;
+import com.ruoyi.life.domain.vo.LifeCourseDetailVo;
 
 import java.util.List;
 
@@ -70,5 +72,16 @@ public interface LifeCourseService
      * @param searchVo
      * @return
      */
-    List<LifeCourseByConditionVo> selectLifeCourseBySearchVo(LifeCourseConditionVo searchVo);
+    UserResponse selectLifeCourseBySearchVo(LifeCourseConditionVo searchVo);
+
+
+
+    /**
+     * 根据课程id获取详细
+     * @param courseId
+     * @return
+     */
+    UserResponse getLifeCourseDetailByCourseId(Long courseId);
+
+
 }

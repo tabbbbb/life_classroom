@@ -83,4 +83,12 @@ public interface LifeCourseDetailService
      * @return
      */
     Long getListInCourseId(List<Long> list);
+
+
+
+    /**
+     * 根据课程id获取详细时间
+     * @return
+     */
+    List<LifeCourseDetail> getListByCourseId(Long courseId);
 }

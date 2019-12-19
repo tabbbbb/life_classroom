@@ -112,9 +112,8 @@ public class LifeCollectServiceImpl implements LifeCollectService
         selectCollect.setCollectCourseId(courseId);
         selectCollect.setUserId(userId);
         List<LifeCollect> list = lifeCollectMapper.selectLifeCollectList(selectCollect);
-        LifeCollect collect = list.get(0);
-        if (collect == null){
-            collect = new LifeCollect();
+        if (list == null || list.size() == 0){
+            LifeCollect collect = new LifeCollect();
             collect.setUserId(userId);
             collect.setAddTime(new Date());
             collect.setCollectCourseId(courseId);
@@ -122,7 +121,7 @@ public class LifeCollectServiceImpl implements LifeCollectService
                 UserResponse.fail(UserResponseCode.COLLECT_ERROR,"添加收藏失败");
             }
         }else{
-            if (lifeCollectMapper.deleteLifeCollectById(collect.getCollectId()) == 0){
+            if (lifeCollectMapper.deleteLifeCollectById(list.get(0).getCollectId()) == 0){
                 UserResponse.fail(UserResponseCode.COLLECT_ERROR,"删除收藏失败");
             }
         }

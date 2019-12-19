@@ -98,8 +98,21 @@ public class LifeCourseByConditionVo {
     /**
      * 是否收藏
      */
-    private boolean is_collect;
+    private boolean isCollect;
 
+
+    /**
+     * 距离多少千米
+     */
+    private BigDecimal addressNum;
+
+    public BigDecimal getAddressNum() {
+        return addressNum;
+    }
+
+    public void setAddressNum(BigDecimal addressNum) {
+        this.addressNum = addressNum;
+    }
 
     public Long getCourseId() {
         return courseId;
@@ -205,11 +218,11 @@ public class LifeCourseByConditionVo {
         this.residuePeople = residuePeople;
     }
 
-    public boolean isIs_collect() {
-        return is_collect;
+    public boolean isCollect() {
+        return isCollect;
     }
 
-    public void setIs_collect(boolean is_collect) {
-        this.is_collect = is_collect;
+    public void setCollect(boolean collect) {
+        isCollect = collect;
     }
 }

@@ -13,7 +13,7 @@ import java.math.BigDecimal;
  * @author ruoyi
  * @date 2019-12-06
  */
-public class LifeVip extends BaseEntity
+public class LifeVip
 {
     private static final long serialVersionUID = 1L;
 

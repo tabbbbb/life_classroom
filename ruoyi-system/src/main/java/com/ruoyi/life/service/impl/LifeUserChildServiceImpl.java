@@ -147,15 +147,42 @@ public class LifeUserChildServiceImpl implements LifeUserChildService
 
 
     /**
-     * 获取用户的小孩
+     * 获取用户会员期有效的小孩
      * @param userId
      * @return
      */
     @Override
-    public UserResponse getChileByUserId(Long userId) {
+    public UserResponse getChildByShareId(Long userId) {
         LifeUser user = userService.selectLifeUserById(userId);
-        return UserResponse.succeed(lifeUserChildMapper.getChileByUserId(user.getShareId()));
+        return UserResponse.succeed(lifeUserChildMapper.getChileByShareId(user.getShareId()));
     }
 
 
+    /**
+     * 获取用户添加的所有小孩
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public UserResponse getChildAllByShareId(Long userId) {
+        LifeUser user = userService.selectLifeUserById(userId);
+        return UserResponse.succeed(lifeUserChildMapper.getChildAllByShareId(user.getShareId()));
+    }
+
+
+    /**
+     * 获取绑定用户数组是否属于唯一的id
+     * @param childIds
+     * @param shareId
+     * @return
+     */
+    @Override
+    public boolean childBySoleShareId(String[] childIds, Long shareId) {
+        List<Long> shareIds = lifeUserChildMapper.getChildArrayShareId(childIds);
+        if (shareIds.size() == 1 && shareIds.get(0).equals(shareId)){
+            return true;
+        }
+        return false;
+    }
 }

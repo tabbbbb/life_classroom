@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * @author ruoyi
  * @date 2019-12-10
  */
-public class LifePoint extends BaseEntity
+public class LifePoint
 {
     private static final long serialVersionUID = 1L;
 

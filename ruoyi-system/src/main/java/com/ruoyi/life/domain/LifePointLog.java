@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Date;
  * @author ruoyi
  * @date 2019-12-10
  */
-public class LifePointLog extends BaseEntity
+public class LifePointLog
 {
     private static final long serialVersionUID = 1L;
 
@@ -50,7 +51,7 @@ public class LifePointLog extends BaseEntity
 
     /** 添加时间 */
     @Excel(name = "添加时间", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date addTime;
+    private LocalDateTime addTime;
 
     public void setLogId(Integer logId) 
     {
@@ -124,12 +125,12 @@ public class LifePointLog extends BaseEntity
     {
         return orderId;
     }
-    public void setAddTime(Date addTime) 
+    public void setAddTime(LocalDateTime addTime)
     {
         this.addTime = addTime;
     }
 
-    public Date getAddTime() 
+    public LocalDateTime getAddTime()
     {
         return addTime;
     }

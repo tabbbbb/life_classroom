@@ -63,7 +63,7 @@ public interface LifePointService
 
 
     /**
-     * 获取未设置的会员集合
+     * 获取未设置绑定的会员集合
      * @param userId
      * @return
      */
@@ -83,4 +83,12 @@ public interface LifePointService
      * @return
      */
     int payPoint(Long shareId,Long point);
+
+
+    /**
+     * 获取最近过期的积分
+     * @return
+     */
+    LifePoint getRecentlyPoint(Long shareId);
+
 }

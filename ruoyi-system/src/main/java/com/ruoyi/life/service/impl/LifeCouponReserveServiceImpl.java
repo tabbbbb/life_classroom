@@ -71,7 +71,7 @@ public class LifeCouponReserveServiceImpl implements LifeCouponReserveService
     @Override
     public int insertLifeCouponReserve(LifeCouponReserve lifeCouponReserve)
     {
-        lifeCouponReserve.setCreateTime(DateUtils.getNowDate());
+
         return couponReserveMapper.insertLifeCouponReserve(lifeCouponReserve);
     }
 
