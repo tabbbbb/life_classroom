@@ -62,8 +62,9 @@ public class LifeUserChildController {
     }
 
 
-    @ApiOperation(value = "获取所有小孩")
+
     @GetMapping("childAll")
+    @ApiOperation(value = "获取所有小孩",notes = "childUsable:可选，childDisabled：不可选")
     public UserResponse getChildAll(@ApiIgnore @LoginInfo UserLoginInfo loginInfo){
         UserResponse response = LoginResponse.toMessage(loginInfo);
         if (response != null) return response;

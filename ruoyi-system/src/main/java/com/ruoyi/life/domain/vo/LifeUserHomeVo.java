@@ -17,18 +17,30 @@ import com.ruoyi.life.domain.LifeUserChild;
 import java.util.List;
 
 /**
- * 〈一句话功能简述〉<br> 
- * 〈〉
- *
- * @author Administrator
- * @create 2019/12/19 0019
- * @since 1.0.0
+ *  用户页信息
  */
 public class LifeUserHomeVo {
     /**
-     * 用户
+     * 用户 id
      */
-    private LifeUser user;
+    private Long userId;
+
+
+    /**
+     * 图片
+     */
+    private String imgUrl;
+
+
+    /**
+     * 会员号
+     */
+    private String cardNumber;
+
+    /**
+     * 邀请码
+     */
+    private String invitationCard;
 
     /**
      * 积分信息
@@ -42,12 +54,36 @@ public class LifeUserHomeVo {
     private List<LifeUserChild> childList;
 
 
-    public LifeUser getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(LifeUser user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
+    public String getInvitationCard() {
+        return invitationCard;
+    }
+
+    public void setInvitationCard(String invitationCard) {
+        this.invitationCard = invitationCard;
     }
 
     public LifePoint getPoint() {

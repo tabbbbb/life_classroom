@@ -35,6 +35,7 @@ public class QuartzStart implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+        lifeScheduler.pastTarget();
         lifeScheduler.pastCoupon();
         lifeScheduler.pastPoint();
         lifeScheduler.pastPointChild();

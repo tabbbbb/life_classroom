@@ -11,6 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="carouselUrl"    column="carousel_url"    />
         <result property="courseType"    column="course_type"    />
         <result property="courseLabelId"    column="course_label_id"    />
+        <result property="courseClassifyPid"    column="course_classify_pid"    />
         <result property="courseClassifyId"    column="course_classify_id"    />
         <result property="courseKind"    column="course_kind"    />
         <result property="ageOnset"    column="age_onset"    />
@@ -33,7 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectLifeCourseVo">
-        select course_id, name, img_url, carousel_url, course_type, course_label_id, course_classify_id, course_kind, age_onset, age_end, teacher_name, teacher_explain, number, describe, business_id, rule_url, information, rule_price, status, delete_flage, price, point, orderBy, sales, recommend from life_course
+        select course_id, name, img_url, carousel_url, course_type, course_label_id, course_classify_pid, course_classify_id, course_kind, age_onset, age_end, teacher_name, teacher_explain, number, `describe`, business_id, rule_url, information, rule_price, status, delete_flage, price, point, orderBy, sales, recommend from life_course
     </sql>
 
     <select id="selectLifeCourseList" parameterType="LifeCourse" resultMap="LifeCourseResult">
@@ -44,6 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="carouselUrl != null  and carouselUrl != ''"> and carousel_url = #{carouselUrl}</if>
             <if test="courseType != null "> and course_type = #{courseType}</if>
             <if test="courseLabelId != null "> and course_label_id = #{courseLabelId}</if>
+            <if test="courseClassifyPid != null "> and course_classify_pid = #{courseClassifyPid}</if>
             <if test="courseClassifyId != null "> and course_classify_id = #{courseClassifyId}</if>
             <if test="courseKind != null "> and course_kind = #{courseKind}</if>
             <if test="ageOnset != null "> and age_onset = #{ageOnset}</if>
@@ -79,6 +81,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="carouselUrl != null  and carouselUrl != ''">carousel_url,</if>
             <if test="courseType != null ">course_type,</if>
             <if test="courseLabelId != null ">course_label_id,</if>
+            <if test="courseClassifyPid != null ">course_classify_pid,</if>
             <if test="courseClassifyId != null ">course_classify_id,</if>
             <if test="courseKind != null ">course_kind,</if>
             <if test="ageOnset != null ">age_onset,</if>
@@ -105,6 +108,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="carouselUrl != null  and carouselUrl != ''">#{carouselUrl},</if>
             <if test="courseType != null ">#{courseType},</if>
             <if test="courseLabelId != null ">#{courseLabelId},</if>
+            <if test="courseClassifyPid != null ">#{courseClassifyPid},</if>
             <if test="courseClassifyId != null ">#{courseClassifyId},</if>
             <if test="courseKind != null ">#{courseKind},</if>
             <if test="ageOnset != null ">#{ageOnset},</if>
@@ -135,6 +139,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="carouselUrl != null  and carouselUrl != ''">carousel_url = #{carouselUrl},</if>
             <if test="courseType != null ">course_type = #{courseType},</if>
             <if test="courseLabelId != null ">course_label_id = #{courseLabelId},</if>
+            <if test="courseClassifyPid != null ">course_classify_pid = #{courseClassifyPid},</if>
             <if test="courseClassifyId != null ">course_classify_id = #{courseClassifyId},</if>
             <if test="courseKind != null ">course_kind = #{courseKind},</if>
             <if test="ageOnset != null ">age_onset = #{ageOnset},</if>
@@ -209,7 +214,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="conditionVo.courseLabelId != null">
                 course.course_label_id = #{conditionVo.courseLabelId} and
             </if>
-            course.course_kind = #{conditionVo.courseKind}
+            course.course_kind = #{conditionVo.courseKind} and course.status = 1
         </where>
 
         <choose>
@@ -237,6 +242,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </when>
         </choose>
     </select>
+
+
     <select id="getLifeCourseDetailByCourseId" resultType="com.ruoyi.life.domain.vo.LifeCourseDetailVo">
         select
         course.course_id as course_id,
@@ -257,6 +264,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         course.teacher_name as teacherName,
         course.teacher_explain as teacherExplain,
         IF(collect.collect_id is null,'false','true') as isCollect
+        course.status as status
 
         from life_course as course
         left join life_collect as collect on collect.collect_course_id = course.course_id
@@ -267,4 +275,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join life_reserve as reserve on reserve.course_detail_id = detail.course_detail_id
         where course.course_id = #{courseId}
     </select>
+    
 </mapper>

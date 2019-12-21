@@ -122,6 +122,20 @@ public class LifeCourseDetailVo {
      */
     private boolean isCollect;
 
+
+    /**
+     * 状态 0上架
+     */
+    private int status;
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     public boolean isCollect() {
         return isCollect;
     }

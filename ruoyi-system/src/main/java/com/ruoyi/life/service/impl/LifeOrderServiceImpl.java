@@ -6,6 +6,8 @@ import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.common.response.UserResponseCode;
 import com.ruoyi.common.utils.security.Md5Utils;
 import com.ruoyi.life.domain.*;
+import com.ruoyi.life.domain.dto.LifeDataDetailDto;
+import com.ruoyi.life.domain.vo.LifeDataDetailVo;
 import com.ruoyi.life.domain.vo.LifePayOrderVo;
 import com.ruoyi.life.mapper.LifeOrderMapper;
 import com.ruoyi.life.service.*;
@@ -19,7 +21,9 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 订单Service业务层处理
@@ -145,21 +149,6 @@ public class LifeOrderServiceImpl implements LifeOrderService
     }
 
 
-    /**
-     * 预定课程
-     * @param payOrderVos
-     * @return
-     */
-    @Override
-    @Transactional
-    public UserResponse payCourse(List<LifePayOrderVo> payOrderVos,Long userId) {
-        if (payOrderVos.size() == 1){
-            return payCourse(payOrderVos.get(0),userId);
-        }else if (payOrderVos.size() > 1){
-            return payCourses(payOrderVos);
-        }
-        return UserResponse.fail(UserResponseCode.PAY_COURSE_ERROR,"请选择商品！");
-    }
 
 
     /**
@@ -167,7 +156,9 @@ public class LifeOrderServiceImpl implements LifeOrderService
      * @param payOrderVo
      * @return
      */
-    private UserResponse payCourse(LifePayOrderVo payOrderVo,Long userId){
+    @Override
+    @Transactional
+    public UserResponse payCourse(LifePayOrderVo payOrderVo,Long userId){
         List<Long> courseDetailIdList = toCourseDetailIdList(payOrderVo.getChooseDetails());
         if (courseDetailIdList.size() == 0){
             throw new OrderException(UserResponseCode.PAY_COURSE_ERROR,"请选择课程");
@@ -177,6 +168,9 @@ public class LifeOrderServiceImpl implements LifeOrderService
             throw new OrderException(UserResponseCode.PAY_COURSE_ERROR,"预约课程不唯一");
         }
         LifeCourse course = courseService.selectLifeCourseById(courseId);
+        if (course.getStatus() == 1){
+            throw new OrderException(UserResponseCode.PAY_COURSE_ERROR,"课程已下架");
+        }
         List<Long> userChildIds = payOrderVo.getUserChildIds();
         if (userChildIds == null || userChildIds.size() == 0){
             throw new OrderException(UserResponseCode.PAY_COURSE_ERROR,"没有选择用户");
@@ -275,6 +269,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
                 order.setStatus(101L);
                 order.setUserId(userId);
                 order.setShareId(user.getShareId());
+                order.setCourseId(course.getCourseId());
                 order.setCourseDetailId(courseDetail.getCourseDetailId());
                 order.setRemark(payOrderVo.getRemark());
                 order.setOrderTime(orderTime);
@@ -369,16 +364,6 @@ public class LifeOrderServiceImpl implements LifeOrderService
     }
 
 
-    /**
-     * 小团课购买
-     * @param payOrderVos
-     * @return
-     */
-    private UserResponse payCourses(List<LifePayOrderVo> payOrderVos){
-        return  null;
-    }
-
-
 
     private List<Long> toCourseDetailIdList(List<LifePayOrderVo.ChooseDetail> list){
         List<Long> courseDetailIds = new ArrayList<>();
@@ -419,5 +404,39 @@ public class LifeOrderServiceImpl implements LifeOrderService
     }
 
 
-
+    /**
+     * 获取历史数据
+     */
+    @Override
+    public UserResponse getDataDetail(Long userId,LocalDateTime startTime,LocalDateTime endTime) {
+        LifeUser user = userService.selectLifeUserById(userId);
+        endTime = endTime.plusDays(1);
+        List<LifeDataDetailDto> list = lifeOrderMapper.getDataDetail(user.getShareId(),startTime,endTime);
+        List<LifeDataDetailVo> listVo = new ArrayList<>();
+        LocalDateTime time = startTime.plusWeeks(1);
+        LifeDataDetailVo dataDetailVo = new LifeDataDetailVo();
+        Map<String,Long> map = new HashMap<>();
+        dataDetailVo.setStartTime(startTime);
+        dataDetailVo.setMap(map);
+        for (int i = 0; i < list.size(); i++) {
+            LifeDataDetailDto dataDetailDto = list.get(i);
+            if (dataDetailDto.getTime().isBefore(time.plusDays(1))){
+                Long courseDuration = map.get(dataDetailDto.getClassifyName());
+                if (courseDuration == null) {
+                    courseDuration = 0L;
+                }
+                map.put(dataDetailDto.getClassifyName(),courseDuration+dataDetailDto.getCourseDuration());
+            }else{
+                dataDetailVo.setEndTime(time);
+                listVo.add(dataDetailVo);
+                dataDetailVo = new LifeDataDetailVo();
+                dataDetailVo.setMap(new HashMap<>());
+                dataDetailVo.setStartTime(time.plusDays(1));
+                time = time.plusWeeks(1);
+                i--;
+            }
+        }
+        dataDetailVo.setEndTime(endTime);
+        return UserResponse.succeed(listVo);
+    }
 }

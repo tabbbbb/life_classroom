@@ -16,7 +16,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectLifeShareList" parameterType="LifeShare" resultMap="LifeShareResult">
         <include refid="selectLifeShareVo"/>
-        <where>  
+        <where>
+            <if test="user_id != null "> and user_id = #{userId}</if>
             <if test="number != null "> and number = #{number}</if>
             <if test="enable != null "> and enable = #{enable}</if>
         </where>

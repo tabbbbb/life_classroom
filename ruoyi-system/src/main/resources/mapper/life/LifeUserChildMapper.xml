@@ -85,7 +85,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
-    <select id="getChileByShareId" resultMap="LifeUserChildResult">
+    <select id="getChildByShareId" resultMap="LifeUserChildResult">
         select uc.child_id as child_id, uc.share_id as share_id,  uc.name as `name` ,  uc.sex as sex,  uc.birthday as birthday,  uc.enable as enable  from life_user_child as uc
         inner join life_point_child as pc on child_id = pc.user_child_id
         where uc.share_id = #{shareId}
@@ -105,4 +105,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
           </foreach>
         group by share_id
     </select>
+
 </mapper>

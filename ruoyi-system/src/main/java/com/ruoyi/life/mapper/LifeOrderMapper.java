@@ -2,8 +2,10 @@ package com.ruoyi.life.mapper;
 
 
 import com.ruoyi.life.domain.LifeOrder;
+import com.ruoyi.life.domain.dto.LifeDataDetailDto;
 import org.apache.ibatis.annotations.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -78,4 +80,13 @@ public interface LifeOrderMapper
      * @return 结果
      */
     public int insertLifeOrders(@Param("lifeOrders") List<LifeOrder> lifeOrders);
+
+
+    /**
+     *  获取数据详细
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    List<LifeDataDetailDto> getDataDetail(@Param("shareId") Long shareId,@Param("startTime")LocalDateTime startTime,@Param("endTime")LocalDateTime endTime);
 }

@@ -17,7 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectLifePointLogVo">
-        select log_id, log_type, point, price, user_id, log_user_id, explain, order_id, add_time from life_point_log
+        select log_id, log_type, point, price, user_id, log_user_id, `explain`, order_id, add_time from life_point_log
     </sql>
 
     <select id="selectLifePointLogList" parameterType="LifePointLog" resultMap="LifePointLogResult">

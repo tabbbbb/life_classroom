@@ -308,7 +308,41 @@ public class LifeUserServiceImpl implements LifeUserService
         LifeUserHomeVo userHomeVo = new LifeUserHomeVo();
         userHomeVo.setChildList(userChildList);
         userHomeVo.setPoint(point);
-        userHomeVo.setUser(user);
+        userHomeVo.setUserId(user.getUserId());
+        userHomeVo.setImgUrl(user.getImgUrl());
+        userHomeVo.setCardNumber(user.getCardNumber());
+        userHomeVo.setInvitationCard(user.getInvitationCard());
         return UserResponse.succeed(userHomeVo);
+    }
+
+
+    /**
+     * 根据用户邀请码查询用户
+     * @param invitationCard
+     * @return
+     */
+    @Override
+    public LifeUser selectLifeUserByInvitationCard(String invitationCard) {
+        return userMapper.selectLifeUserByInvitationCard(invitationCard);
+    }
+
+    /**
+     * 根据手机号获取用户信息
+     * @param phone
+     * @return
+     */
+    @Override
+    public LifeUser selectLifeUserByPhone(String phone) {
+        return userMapper.selectLifeUserByPhone(phone);
+    }
+
+    /**
+     * 根据openId获取user
+     * @param openId
+     * @return
+     */
+    @Override
+    public LifeUser selectLifeUserByOpenId(String openId) {
+        return userMapper.selectLifeUserByOpenId(openId);
     }
 }

@@ -48,7 +48,11 @@ public interface LifeUserMapper
     LifeUser selectLifeUserByPhone(String phone);
 
 
-
+    /**
+     * 根据openId获取user
+     * @param openId
+     * @return
+     */
     LifeUser selectLifeUserByOpenId(String openId);
 
 

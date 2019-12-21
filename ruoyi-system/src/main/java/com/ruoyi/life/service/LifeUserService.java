@@ -120,4 +120,28 @@ public interface LifeUserService
      */
     UserResponse getUserHome(Long userId);
 
+
+    /**
+     * 根据用户邀请码查询用户
+     * @param InvitationCard
+     * @return
+     */
+    LifeUser selectLifeUserByInvitationCard(String InvitationCard);
+
+
+    /**
+     *根据手机号获取用户信息
+     * @param phone
+     * @return
+     */
+    LifeUser selectLifeUserByPhone(String phone);
+
+
+    /**
+     * 根据openId获取user
+     * @param openId
+     * @return
+     */
+    LifeUser selectLifeUserByOpenId(String openId);
+
 }

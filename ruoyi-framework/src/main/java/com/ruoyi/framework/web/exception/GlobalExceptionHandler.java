@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.ruoyi.common.exception.life.OrderException;
 import com.ruoyi.common.exception.life.RechargerException;
 import com.ruoyi.common.exception.life.SetChildException;
+import com.ruoyi.common.exception.life.TargetException;
 import com.ruoyi.common.response.UserResponse;
 import org.apache.shiro.authz.AuthorizationException;
 import org.slf4j.Logger;
@@ -142,6 +143,12 @@ public class GlobalExceptionHandler
 
     @ExceptionHandler(SetChildException.class)
     public UserResponse setChildException(SetChildException e){
+        e.printStackTrace();
+        return e.getUserResponse();
+    }
+
+    @ExceptionHandler(TargetException.class)
+    public UserResponse targetException(TargetException e){
         e.printStackTrace();
         return e.getUserResponse();
     }

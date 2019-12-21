@@ -79,11 +79,11 @@ public interface LifeUserChildMapper
      * @param shareId
      * @return
      */
-    List<LifeUserChild> getChileByShareId(Long shareId);
+    List<LifeUserChild> getChildByShareId(Long shareId);
 
 
     /**
-     *
+     *获取用户所有的小孩
      * @param shareId
      * @return
      */

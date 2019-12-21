@@ -13,6 +13,7 @@ package com.ruoyi.framework.config;
 import com.ruoyi.life.domain.LifeConfig;
 import com.ruoyi.life.service.LifeConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
@@ -27,30 +28,26 @@ import java.util.Map;
  * @create 2019/12/16 0016
  * @since 1.0.0
  */
+@Component
 public class LifeSystemConfig {
 
-    private static Map<String,String> styMap ;
+
 
     @Autowired
     private LifeConfigService configService;
 
     @PostConstruct
     public void into(){
-        styMap = new HashMap<>();
+        Map <String,String> styMap = new HashMap<>();
         List<LifeConfig> list = configService.selectLifeConfigList(new LifeConfig());
         for (LifeConfig lifeConfig : list) {
             styMap.put(lifeConfig.getName(),lifeConfig.getConfig());
         }
+        com.ruoyi.common.config.LifeConfig.setMap(styMap);
     }
 
 
-    public synchronized  static void setStyMap(String key,String value){
-        styMap.put(key,value);
-    }
 
-    public static  String getStyMap(String key){
-        return styMap.get(key);
-    }
 
 
 }

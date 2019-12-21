@@ -97,6 +97,19 @@ public class LifeCourseConditionVo {
      */
     private int courseKind;
 
+
+    /**
+     * 页数
+     */
+    private int page = 1;
+
+
+    /**
+     * 页面数量
+     */
+    private int limit = 10;
+
+
     public Date getDate() {
         return date;
     }
@@ -207,5 +220,22 @@ public class LifeCourseConditionVo {
 
     public void setCourseKind(int courseKind) {
         this.courseKind = courseKind;
+    }
+
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public void setLimit(int limit) {
+        this.limit = limit;
     }
 }

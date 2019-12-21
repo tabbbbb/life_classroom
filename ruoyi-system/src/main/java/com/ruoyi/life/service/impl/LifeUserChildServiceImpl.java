@@ -18,7 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 小孩Service业务层处理
@@ -154,7 +156,7 @@ public class LifeUserChildServiceImpl implements LifeUserChildService
     @Override
     public UserResponse getChildByShareId(Long userId) {
         LifeUser user = userService.selectLifeUserById(userId);
-        return UserResponse.succeed(lifeUserChildMapper.getChileByShareId(user.getShareId()));
+        return UserResponse.succeed(lifeUserChildMapper.getChildByShareId(user.getShareId()));
     }
 
 
@@ -167,7 +169,19 @@ public class LifeUserChildServiceImpl implements LifeUserChildService
     @Override
     public UserResponse getChildAllByShareId(Long userId) {
         LifeUser user = userService.selectLifeUserById(userId);
-        return UserResponse.succeed(lifeUserChildMapper.getChildAllByShareId(user.getShareId()));
+        List<LifeUserChild> childAll = lifeUserChildMapper.getChildAllByShareId(user.getShareId());
+        List<LifeUserChild> childUsable = lifeUserChildMapper.getChildByShareId(user.getShareId());
+        for (int i = 0;i < childAll.size();i++) {
+            for (LifeUserChild userChild : childUsable) {
+                if (childAll.get(i).equals(userChild.getChildId())){
+                    childAll.remove(i);
+                }
+            }
+        }
+        Map<String,List<LifeUserChild>> map = new HashMap<>();
+        map.put("childUsable",childUsable);
+        map.put("childDisabled",childAll);
+        return UserResponse.succeed(map);
     }
 
 

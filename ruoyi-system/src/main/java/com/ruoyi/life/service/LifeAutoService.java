@@ -49,7 +49,7 @@ public interface LifeAutoService {
 
 
     /**
-     * 绑定手机
+     * 绑定手机或者修改
      * @return
      */
     UserResponse bindPhone(Long userId,String body);
@@ -64,7 +64,12 @@ public interface LifeAutoService {
     UserResponse bindWx(Long userId,String body);
 
 
-
+    /**
+     * 绑定手机号修改时间
+     * @param userId
+     * @param body
+     * @return
+     */
     UserResponse bindUpdateTime(Long userId,String body);
 
 

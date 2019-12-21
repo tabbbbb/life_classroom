@@ -4,8 +4,6 @@ package com.ruoyi.life.service;
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.life.domain.LifeCourse;
 import com.ruoyi.life.domain.vo.LifeCourseConditionVo;
-import com.ruoyi.life.domain.vo.LifeCourseByConditionVo;
-import com.ruoyi.life.domain.vo.LifeCourseDetailVo;
 
 import java.util.List;
 

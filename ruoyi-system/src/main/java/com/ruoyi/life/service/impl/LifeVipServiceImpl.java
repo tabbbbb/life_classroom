@@ -1,6 +1,7 @@
 package com.ruoyi.life.service.impl;
 
 
+import com.ruoyi.common.config.LifeConfig;
 import com.ruoyi.common.exception.life.RechargerException;
 import com.ruoyi.common.sms.NotifySms;
 import com.ruoyi.life.domain.*;
@@ -251,8 +252,45 @@ public class LifeVipServiceImpl implements LifeVipService
             throw new RechargerException(UserResponseCode.USER_RECHARGE_ERROR,"积分添加失败，请联系管理员",userId);
         }
 
+        //返佣
+        if (user.getParentId() != null){
+            LifePointLog pointLog = new LifePointLog();
+            pointLog.setLogType(2);
+            pointLog.setLogUserId(user.getUserId());
+            int num = pointLogService.selectLifePointLogList(pointLog).size();
+            if (num == 0){
+                Long commission = Long.valueOf(LifeConfig.getStyMap("commission"));
+                Long commissionDays =  Long.valueOf(LifeConfig.getStyMap("commissionDays"));
+                LifeUser parentUser = userService.selectLifeUserById(user.getParentId());
+                LifePoint pointCommission = new LifePoint();
+                pointCommission.setPoint(commission);
+                pointCommission.setStartDate(start);
+                pointCommission.setEndDate(start.plusDays(commissionDays));
+                pointCommission.setIsSetChild(0);
+                pointCommission.setPointType(0);
+                pointCommission.setVipId(-1L);
+                pointCommission.setUserId(parentUser.getUserId());
+                pointCommission.setShareId(parentUser.getShareId());
+                pointCommission.setUsePoint(commission);
+                pointCommission.setIsAddChild(0);
+                if (pointService.insertLifePoint(pointCommission) == 0){
+                    throw new RechargerException(UserResponseCode.USER_RECHARGE_ERROR,"返佣失败----上级用户id：",parentUser.getUserId());
+                }
 
+                //返佣积分日志
+                LifePointLog pointLogCommission = new LifePointLog();
+                pointLogCommission.setLogType(5);
+                pointLogCommission.setExplain("返佣"+commission+"积分");
+                pointLogCommission.setUserId(parentUser.getShareId());
+                pointLogCommission.setPoint(commission);
+                pointLogCommission.setLogUserId(parentUser.getUserId());
+                pointLogCommission.setAddTime(start);
+                if (pointLogService.insertLifePointLog(pointLogCommission) == 0){
+                    throw new RechargerException(UserResponseCode.USER_RECHARGE_ERROR,"返佣积分增加日志添加失败，请联系管理员",parentUser.getUserId());
+                }
 
+            }
+        }
 
         //余额减少日志
         LifePointLog pointLogPrice = new LifePointLog();
@@ -282,6 +320,9 @@ public class LifeVipServiceImpl implements LifeVipService
         if (couponReserveService.insertLifeCouponReserveVip(userId,list)!= couponReserveService.insertNumVip(list)){
             throw new RechargerException(UserResponseCode.USER_RECHARGE_ERROR,"充值所送优惠券添加失败，请联系管理员",userId);
         }
+
+
+
         return UserResponse.succeed(point);
     }
 }

@@ -7,12 +7,13 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * 订单对象 life_order
  * 
  * @author ruoyi
- * @date 2019-12-13
+ * @date 2019-12-21
  */
 public class LifeOrder extends BaseEntity
 {
@@ -21,16 +22,16 @@ public class LifeOrder extends BaseEntity
     /** 订单id */
     private String orderId;
 
-    /** 支付方式 1积分 2余额 */
-    @Excel(name = "支付方式 1积分 2余额")
+    /** 支付方式0积分 1余额 */
+    @Excel(name = "支付方式0积分 1余额")
     private Long pid;
 
     /** 课程类型 0普通课程 1小团课 */
     @Excel(name = "课程类型 0普通课程 1小团课")
     private Long courseType;
 
-    /** 101：待付款 102：已取消  201进行中 301：退款中 302：已退款 401：已完成 */
-    @Excel(name = "101：待付款 102：已取消  201进行中 301：退款中 302：已退款 401：已完成")
+    /** 101：已付款 201 退款中 202 退款成功 301已完成 */
+    @Excel(name = "101：已付款 201 退款中 202 退款成功 301已完成")
     private Long status;
 
     /** 用户id */
@@ -43,22 +44,26 @@ public class LifeOrder extends BaseEntity
 
     /** 课程id */
     @Excel(name = "课程id")
+    private Long courseId;
+
+    /** 课程详细id */
+    @Excel(name = "课程详细id")
     private Long courseDetailId;
 
     /** 核销员 */
     @Excel(name = "核销员")
     private Long checkId;
 
-    /** 优惠券id */
-    @Excel(name = "优惠券id")
+    /** 用户优惠券id */
+    @Excel(name = "用户优惠券id")
     private Long couponId;
 
     /** 优惠积分 */
     @Excel(name = "优惠积分")
     private Integer couponPoint;
 
-    /** -1用户去，<-1 绑定成员 */
-    @Excel(name = "-1用户去，<-1 绑定成员")
+    /** -1用户去 0 绑定家属去，<0 绑定成员 */
+    @Excel(name = "-1用户去 0 绑定家属去，<0 绑定成员")
     private Long saleUser;
 
     /** 实际积分 */
@@ -115,7 +120,7 @@ public class LifeOrder extends BaseEntity
     {
         return pid;
     }
-    public void setCourseType(Long courseType) 
+    public void setCourseType(Long courseType)
     {
         this.courseType = courseType;
     }
@@ -150,6 +155,15 @@ public class LifeOrder extends BaseEntity
     public Long getShareId() 
     {
         return shareId;
+    }
+    public void setCourseId(Long courseId) 
+    {
+        this.courseId = courseId;
+    }
+
+    public Long getCourseId() 
+    {
+        return courseId;
     }
     public void setCourseDetailId(Long courseDetailId) 
     {
@@ -283,6 +297,7 @@ public class LifeOrder extends BaseEntity
             .append("status", getStatus())
             .append("userId", getUserId())
             .append("shareId", getShareId())
+            .append("courseId", getCourseId())
             .append("courseDetailId", getCourseDetailId())
             .append("remark", getRemark())
             .append("checkId", getCheckId())

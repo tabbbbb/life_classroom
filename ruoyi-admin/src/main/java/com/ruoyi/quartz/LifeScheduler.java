@@ -17,6 +17,7 @@ import com.ruoyi.quartz.job.past.PastCouponJob;
 import com.ruoyi.quartz.job.past.PastPointChildJob;
 import com.ruoyi.quartz.job.past.PastPointJob;
 import com.ruoyi.life.service.*;
+import com.ruoyi.quartz.job.past.PastTargetJob;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,8 +63,18 @@ public class LifeScheduler {
     @Autowired
     private NotifySms notifySms;
 
+    @Autowired
+    private LifeUserTargetService userTargetService;
 
 
+
+
+
+    public void pastTarget() {
+        JobDataMap jobDataMap= new JobDataMap();
+        jobDataMap.put("userTargetService",userTargetService);
+        this.groupStart(PastTargetJob.class,"30 0 0 1/1 * ? *",jobDataMap);
+    }
 
 
     public void pastCoupon(){
@@ -80,6 +91,7 @@ public class LifeScheduler {
     }
 
 
+
     public void pastPoint(){
         JobDataMap jobDataMap= new JobDataMap();
         jobDataMap.put("pointLogService",pointLogService);
@@ -93,6 +105,9 @@ public class LifeScheduler {
         jobDataMap.put("courseDetailService",courseDetailService);
         this.groupStart(SmsOrderJob.class,"0 3 0 1/1 * ? *",jobDataMap);
     }
+
+
+
 
 
     public void smsDayOrder(String type, Long[] courseIds, LocalDateTime dateTime){

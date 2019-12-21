@@ -11,9 +11,9 @@ import java.math.BigDecimal;
  * 课程对象 life_course
  * 
  * @author ruoyi
- * @date 2019-12-19
+ * @date 2019-12-20
  */
-public class LifeCourse
+public class LifeCourse extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
@@ -39,6 +39,10 @@ public class LifeCourse
     /** 课程标签 */
     @Excel(name = "课程标签")
     private Long courseLabelId;
+
+    /** 课程一级类型 */
+    @Excel(name = "课程一级类型")
+    private Long courseClassifyPid;
 
     /** 课程类型  例如健身类 */
     @Excel(name = "课程类型  例如健身类")
@@ -169,6 +173,15 @@ public class LifeCourse
     public Long getCourseLabelId() 
     {
         return courseLabelId;
+    }
+    public void setCourseClassifyPid(Long courseClassifyPid) 
+    {
+        this.courseClassifyPid = courseClassifyPid;
+    }
+
+    public Long getCourseClassifyPid() 
+    {
+        return courseClassifyPid;
     }
     public void setCourseClassifyId(Long courseClassifyId) 
     {
@@ -305,12 +318,12 @@ public class LifeCourse
     {
         return price;
     }
-    public void setPoint(Long point)
+    public void setPoint(Long point) 
     {
         this.point = point;
     }
 
-    public Long getPoint()
+    public Long getPoint() 
     {
         return point;
     }
@@ -351,6 +364,7 @@ public class LifeCourse
             .append("carouselUrl", getCarouselUrl())
             .append("courseType", getCourseType())
             .append("courseLabelId", getCourseLabelId())
+            .append("courseClassifyPid", getCourseClassifyPid())
             .append("courseClassifyId", getCourseClassifyId())
             .append("courseKind", getCourseKind())
             .append("ageOnset", getAgeOnset())

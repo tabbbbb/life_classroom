@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.life.mapper.LifeCourseClassifyMapper">
+    
+    <resultMap type="LifeCourseClassify" id="LifeCourseClassifyResult">
+        <result property="courseClassifyId"    column="course_classify_id"    />
+        <result property="courseClassifyName"    column="course_classify_name"    />
+        <result property="pid"    column="pid"    />
+        <result property="level"    column="level"    />
+        <result property="img"    column="img"    />
+    </resultMap>
+
+    <sql id="selectLifeCourseClassifyVo">
+        select course_classify_id, course_classify_name, pid, level, img from life_course_classify
+    </sql>
+
+    <select id="selectLifeCourseClassifyList" parameterType="LifeCourseClassify" resultMap="LifeCourseClassifyResult">
+        <include refid="selectLifeCourseClassifyVo"/>
+        <where>  
+            <if test="courseClassifyName != null  and courseClassifyName != ''"> and course_classify_name like concat('%', #{courseClassifyName}, '%')</if>
+            <if test="pid != null "> and pid = #{pid}</if>
+            <if test="level != null "> and level = #{level}</if>
+            <if test="img != null  and img != ''"> and img = #{img}</if>
+        </where>
+    </select>
+    
+    <select id="selectLifeCourseClassifyById" parameterType="Long" resultMap="LifeCourseClassifyResult">
+        <include refid="selectLifeCourseClassifyVo"/>
+        where course_classify_id = #{courseClassifyId}
+    </select>
+
+
+    <insert id="insertLifeCourseClassify" parameterType="LifeCourseClassify" useGeneratedKeys="true" keyProperty="courseClassifyId">
+        insert into life_course_classify
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="courseClassifyName != null  and courseClassifyName != ''">course_classify_name,</if>
+            <if test="pid != null ">pid,</if>
+            <if test="level != null ">level,</if>
+            <if test="img != null  and img != ''">img,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="courseClassifyName != null  and courseClassifyName != ''">#{courseClassifyName},</if>
+            <if test="pid != null ">#{pid},</if>
+            <if test="level != null ">#{level},</if>
+            <if test="img != null  and img != ''">#{img},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLifeCourseClassify" parameterType="LifeCourseClassify">
+        update life_course_classify
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="courseClassifyName != null  and courseClassifyName != ''">course_classify_name = #{courseClassifyName},</if>
+            <if test="pid != null ">pid = #{pid},</if>
+            <if test="level != null ">level = #{level},</if>
+            <if test="img != null  and img != ''">img = #{img},</if>
+        </trim>
+        where course_classify_id = #{courseClassifyId}
+    </update>
+
+    <delete id="deleteLifeCourseClassifyById" parameterType="Long">
+        delete from life_course_classify where course_classify_id = #{courseClassifyId}
+    </delete>
+
+    <delete id="deleteLifeCourseClassifyByIds" parameterType="String">
+        delete from life_course_classify where course_classify_id in 
+        <foreach item="courseClassifyId" collection="array" open="(" separator="," close=")">
+            #{courseClassifyId}
+        </foreach>
+    </delete>
+
+    <select id="get1LevelBy3Level" resultMap="LifeCourseClassifyResult">
+        <include refid="selectLifeCourseClassifyVo"/>
+        where course_classify_id = (
+          select pid from life_course_classify
+          where course_classify_id = #{classifyId}
+        )
+    </select>
+    
+</mapper>

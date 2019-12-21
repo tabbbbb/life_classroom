@@ -198,4 +198,8 @@ public class UserResponseCode {
     public static final Integer PRICE_RECHARGE_VIP_ERROR = 100026;
 
 
+    /**
+     * 添加目标错误
+     */
+    public static final Integer ADD_TARGET_ERROR = 100027;
 }

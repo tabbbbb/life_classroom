@@ -24,6 +24,7 @@ import com.ruoyi.common.utils.security.Md5Utils;
 import com.ruoyi.common.weixin.WxOperation;
 import com.ruoyi.life.service.LifeCompanyService;
 import com.ruoyi.life.service.LifeShareService;
+import com.ruoyi.life.service.LifeUserService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -42,7 +43,7 @@ import java.util.Map;
 public class LifeAutoServiceImpl implements LifeAutoService {
 
     @Resource
-    private LifeUserMapper userMapper;
+    private LifeUserService userService;
 
     @Resource
     private WxOperation operation;
@@ -75,7 +76,7 @@ public class LifeAutoServiceImpl implements LifeAutoService {
                 user.setCreateDate(LocalDateTime.now());
                 this.setParent(user,invitationCard);
                 this.setCompany(user,companyInvitationCard);
-                if (userMapper.insertLifeUser(user) == 0){
+                if (userService.insertLifeUser(user) == 0){
                     return UserResponse.fail(UserResponseCode.REGISTER_ERROR,"用户添加失败");
                 }
             }
@@ -106,7 +107,7 @@ public class LifeAutoServiceImpl implements LifeAutoService {
 
     private String random(){
         String random = (int)(Math.random()*900000)+100000+"";
-        while (userMapper.selectLifeUserByInvitationCard(random) != null){
+        while (userService.selectLifeUserByInvitationCard(random) != null){
             random = ""+(int)(Math.random()*900000)+100000;
         }
         return random;
@@ -119,7 +120,7 @@ public class LifeAutoServiceImpl implements LifeAutoService {
      * @param invitationCard
      */
     private void setParent(LifeUser user,String invitationCard){
-        LifeUser parentUser = userMapper.selectLifeUserByInvitationCard(invitationCard);
+        LifeUser parentUser = userService.selectLifeUserByInvitationCard(invitationCard);
         if (parentUser == null)return;
         user.setParentId(parentUser.getUserId());
         user.setLeadId(parentUser.getLeadId());
@@ -129,9 +130,10 @@ public class LifeAutoServiceImpl implements LifeAutoService {
             share = new LifeShare();
             share.setEnable(1);
             share.setNumber(1);
-            share.setUserId(user.getUserId());
+            share.setUserId(parentUser.getUserId());
             shareService.insertLifeShare(share);
         }else{
+            share.setUserId(parentUser.getUserId());
             share.setNumber(share.getNumber()+1);
             shareService.updateLifeShare(share);
         }
@@ -166,7 +168,7 @@ public class LifeAutoServiceImpl implements LifeAutoService {
      * @return
      */
     private LifeUser phoneIsBind(String phone){
-        LifeUser user = userMapper.selectLifeUserByPhone(phone);
+        LifeUser user = userService.selectLifeUserByPhone(phone);
         return user;
     }
 
@@ -181,7 +183,7 @@ public class LifeAutoServiceImpl implements LifeAutoService {
         if (openId == null){
             return UserResponse.fail(UserResponseCode.WX_LOGIN_ERROR,"微信登录错误");
         }
-        LifeUser user = userMapper.selectLifeUserByOpenId(openId);
+        LifeUser user = userService.selectLifeUserByOpenId(openId);
         if (user == null){
             user = new LifeUser();
             user.setOpenId(openId);
@@ -194,7 +196,7 @@ public class LifeAutoServiceImpl implements LifeAutoService {
             user.setWxNickName(map.get("nickName"));
             this.setParent(user,map.get("InvitationCard"));
             this.setCompany(user,map.get("companyInvitationCard"));
-            if (userMapper.insertLifeUser(user) == 0){
+            if (userService.insertLifeUser(user) == 0){
                 return UserResponse.fail(UserResponseCode.REGISTER_ERROR,"用户添加失败");
             }
         }
@@ -213,7 +215,7 @@ public class LifeAutoServiceImpl implements LifeAutoService {
         String phone = JacksonUtil.parseString(body,"phone");
         String code = JacksonUtil.parseString(body,"code");
         if (SmsCache.compareSmsCache(phone,code)){
-            LifeUser oldUser = userMapper.selectLifeUserById(id);
+            LifeUser oldUser = userService.selectLifeUserById(id);
             String updateType = "绑定";
             LifeUser newUser = new LifeUser();
             newUser.setUserId(id);
@@ -226,7 +228,7 @@ public class LifeAutoServiceImpl implements LifeAutoService {
                 }
                 newUser.setCardNumber(phone.substring(7)+oldUser.getInvitationCard());
             }
-            if (userMapper.updateLifeUser(newUser) == 0){
+            if (userService.updateLifeUser(newUser) == 0){
                 return UserResponse.fail(UserResponseCode.BIND_PHONE_ERROR,updateType+"手机号错误");
             }
             return UserResponse.succeed();
@@ -242,7 +244,7 @@ public class LifeAutoServiceImpl implements LifeAutoService {
      */
     @Override
     public UserResponse bindWx(Long userId,String body) {
-        LifeUser oldUser = userMapper.selectLifeUserById(userId);
+        LifeUser oldUser = userService.selectLifeUserById(userId);
         if (oldUser.getOpenId() != null){
             return UserResponse.fail(UserResponseCode.BIND_WX_ERROR,"微信已被绑定");
         }
@@ -258,16 +260,23 @@ public class LifeAutoServiceImpl implements LifeAutoService {
         newUser.setOpenId(openId);
         newUser.setWxNickName(nickName);
         newUser.setWxImgUrl(imgUrl);
-        if (userMapper.updateLifeUser(newUser) == 0){
+        if (userService.updateLifeUser(newUser) == 0){
             return UserResponse.fail(UserResponseCode.BIND_WX_ERROR,"绑定微信错误：修改时失败");
         }
         return UserResponse.succeed();
     }
 
+
+    /**
+     * 绑定手机号修改时间
+     * @param userId
+     * @param body
+     * @return
+     */
     @Override
     public UserResponse bindUpdateTime(Long userId,String body) {
         String code = JacksonUtil.parseString(body,"code");
-        LifeUser user = userMapper.selectLifeUserById(userId);
+        LifeUser user = userService.selectLifeUserById(userId);
         if (SmsCache.compareSmsCache(user.getPhone(),code)){
             SmsCache.putUpdateTimeCache(user.getPhone());
             return UserResponse.succeed();

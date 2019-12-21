@@ -1,6 +1,7 @@
 package com.ruoyi.life.service.impl;
 
 
+import com.github.pagehelper.PageHelper;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.life.domain.LifeCourse;
@@ -12,7 +13,6 @@ import com.ruoyi.life.mapper.LifeCourseMapper;
 import com.ruoyi.life.service.LifeCourseDetailService;
 import com.ruoyi.life.service.LifeCourseService;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -114,6 +114,7 @@ public class LifeCourseServiceImpl implements LifeCourseService
      */
     @Override
     public UserResponse selectLifeCourseBySearchVo(LifeCourseConditionVo searchVo) {
+        PageHelper.startPage(searchVo.getPage(),searchVo.getLimit());
         List<LifeCourseByConditionVo> list = lifeCourseMapper.selectLifeCourseBySearchVo(searchVo);
         for (LifeCourseByConditionVo conditionVo : list) {
             List<LifeCourseDetail> lifeCourseDetails = courseDetailService.getListByCourseId(conditionVo.getCourseId());

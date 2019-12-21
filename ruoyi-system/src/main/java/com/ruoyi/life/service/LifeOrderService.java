@@ -5,6 +5,7 @@ import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.life.domain.LifeOrder;
 import com.ruoyi.life.domain.vo.LifePayOrderVo;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -73,9 +74,15 @@ public interface LifeOrderService
 
     /**
      * 预定课程
-     * @param payOrderVos
+     * @param payOrderVo
      * @return
      */
-    UserResponse payCourse(List<LifePayOrderVo> payOrderVos,Long userId);
+    UserResponse payCourse(LifePayOrderVo payOrderVo,Long userId);
+
+
+    /**
+     * 获取数据详细
+     */
+    UserResponse getDataDetail(Long userId,LocalDateTime startTime,LocalDateTime endTime);
 
 }

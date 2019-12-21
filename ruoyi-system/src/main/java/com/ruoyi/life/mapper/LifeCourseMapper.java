@@ -2,7 +2,6 @@ package com.ruoyi.life.mapper;
 
 
 import com.ruoyi.life.domain.LifeCourse;
-import com.ruoyi.life.domain.LifeCourseDetail;
 import com.ruoyi.life.domain.vo.LifeCourseConditionVo;
 import com.ruoyi.life.domain.vo.LifeCourseByConditionVo;
 import com.ruoyi.life.domain.vo.LifeCourseDetailVo;

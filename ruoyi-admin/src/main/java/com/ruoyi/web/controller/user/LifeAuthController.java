@@ -107,7 +107,7 @@ public class LifeAuthController {
 
 
     @PostMapping("bindphone")
-    @ApiOperation(value = "绑定手机号",response = UserResponse.class,notes = "")
+    @ApiOperation(value = "绑定手机或者修改",response = UserResponse.class,notes = "")
     public UserResponse bindPhone(@ApiIgnore @LoginInfo UserLoginInfo loginInfo,@RequestBody @ApiParam(name = "body",value = "phone:手机号,code:短信验证码")  String body){
         UserResponse response = LoginResponse.toMessage(loginInfo);
         if (response != null) return response;

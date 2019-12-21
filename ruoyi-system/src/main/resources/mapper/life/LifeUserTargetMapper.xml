@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.life.mapper.LifeUserTargetMapper">
+    
+    <resultMap type="LifeUserTarget" id="LifeUserTargetResult">
+        <result property="targetId"    column="target_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="targetClassifyName"    column="target_classify_name"    />
+        <result property="targetClassifyId"    column="target_classify_id"    />
+        <result property="targetExplain"    column="target_explain"    />
+        <result property="endTime"    column="end_time"    />
+    </resultMap>
+
+    <sql id="selectLifeUserTargetVo">
+        select target_id, user_id, target_classify_name, target_classify_id, target_explain, end_time from life_user_target
+    </sql>
+
+    <select id="selectLifeUserTargetList" parameterType="LifeUserTarget" resultMap="LifeUserTargetResult">
+        <include refid="selectLifeUserTargetVo"/>
+        <where>  
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="targetClassifyName != null  and targetClassifyName != ''"> and target_classify_name like concat('%', #{targetClassifyName}, '%')</if>
+            <if test="targetClassifyId != null "> and target_classify_id = #{targetClassifyId}</if>
+            <if test="targetExplain != null  and targetExplain != ''"> and target_explain = #{targetExplain}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectLifeUserTargetById" parameterType="Long" resultMap="LifeUserTargetResult">
+        <include refid="selectLifeUserTargetVo"/>
+        where target_id = #{targetId}
+    </select>
+
+
+    <insert id="insertLifeUserTarget" parameterType="LifeUserTarget" useGeneratedKeys="true" keyProperty="targetId">
+        insert into life_user_target
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null ">user_id,</if>
+            <if test="targetClassifyName != null  and targetClassifyName != ''">target_classify_name,</if>
+            <if test="targetClassifyId != null ">target_classify_id,</if>
+            <if test="targetExplain != null  and targetExplain != ''">target_explain,</if>
+            <if test="endTime != null ">end_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null ">#{userId},</if>
+            <if test="targetClassifyName != null  and targetClassifyName != ''">#{targetClassifyName},</if>
+            <if test="targetClassifyId != null ">#{targetClassifyId},</if>
+            <if test="targetExplain != null  and targetExplain != ''">#{targetExplain},</if>
+            <if test="endTime != null ">#{endTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLifeUserTarget" parameterType="LifeUserTarget">
+        update life_user_target
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null ">user_id = #{userId},</if>
+            <if test="targetClassifyName != null  and targetClassifyName != ''">target_classify_name = #{targetClassifyName},</if>
+            <if test="targetClassifyId != null ">target_classify_id = #{targetClassifyId},</if>
+            <if test="targetExplain != null  and targetExplain != ''">target_explain = #{targetExplain},</if>
+            <if test="endTime != null ">end_time = #{endTime},</if>
+        </trim>
+        where target_id = #{targetId}
+    </update>
+
+    <delete id="deleteLifeUserTargetById" parameterType="Long">
+        delete from life_user_target where target_id = #{targetId}
+    </delete>
+
+    <delete id="deleteLifeUserTargetByIds" parameterType="String">
+        delete from life_user_target where target_id in 
+        <foreach item="targetId" collection="array" open="(" separator="," close=")">
+            #{targetId}
+        </foreach>
+    </delete>
+
+
+    <select id="getPastTarget" resultMap="LifeUserTargetResult">
+        <include refid="selectLifeUserTargetVo"/>
+        where current_date   >= end_time,'%Y-%m-%d'
+    </select>
+
+</mapper>
