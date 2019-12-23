@@ -23,6 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="phone"    column="phone"    />
         <result property="donate"    column="donate"    />
         <result property="price"    column="price"    />
+        <result property="courseDuration"    column="course_duration"    />
         <result property="consumeTime"    column="consume_time"    />
         <result property="orderTime"    column="order_time"    />
         <result property="useTime"    column="use_time"    />
@@ -30,7 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectLifeOrderVo">
-        select order_id, pid, course_type, status, user_id, share_id, course_id, course_detail_id, remark, check_id, coupon_id, coupon_point, sale_user, pay_point, total_point, phone, donate, price, consume_time, order_time, use_time, valid_refund_time from life_order
+        select order_id, pid, course_type, status, user_id, share_id, course_id, course_detail_id, remark, check_id, coupon_id, coupon_point, sale_user, pay_point, total_point, phone, donate, price, course_duration, consume_time, order_time, use_time, valid_refund_time from life_order
     </sql>
 
     <select id="selectLifeOrderList" parameterType="LifeOrder" resultMap="LifeOrderResult">
@@ -52,6 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
             <if test="donate != null "> and donate = #{donate}</if>
             <if test="price != null "> and price = #{price}</if>
+            <if test="courseDuration != null "> and course_duration = #{courseDuration}</if>
             <if test="consumeTime != null "> and consume_time = #{consumeTime}</if>
             <if test="orderTime != null "> and order_time = #{orderTime}</if>
             <if test="useTime != null "> and use_time = #{useTime}</if>
@@ -85,6 +87,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="phone != null  and phone != ''">phone,</if>
             <if test="donate != null ">donate,</if>
             <if test="price != null ">price,</if>
+            <if test="courseDuration != null ">course_duration,</if>
             <if test="consumeTime != null ">consume_time,</if>
             <if test="orderTime != null ">order_time,</if>
             <if test="useTime != null ">use_time,</if>
@@ -109,6 +112,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="phone != null  and phone != ''">#{phone},</if>
             <if test="donate != null ">#{donate},</if>
             <if test="price != null ">#{price},</if>
+            <if test="courseDuration != null ">#{courseDuration},</if>
             <if test="consumeTime != null ">#{consumeTime},</if>
             <if test="orderTime != null ">#{orderTime},</if>
             <if test="useTime != null ">#{useTime},</if>
@@ -136,6 +140,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="phone != null  and phone != ''">phone = #{phone},</if>
             <if test="donate != null ">donate = #{donate},</if>
             <if test="price != null ">price = #{price},</if>
+            <if test="courseDuration != null ">course_duration = #{courseDuration},</if>
             <if test="consumeTime != null ">consume_time = #{consumeTime},</if>
             <if test="orderTime != null ">order_time = #{orderTime},</if>
             <if test="useTime != null ">use_time = #{useTime},</if>
@@ -143,6 +148,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         where order_id = #{orderId}
     </update>
+
 
     <delete id="deleteLifeOrderById" parameterType="String">
         delete from life_order where order_id = #{orderId}
@@ -164,48 +170,48 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <insert id="insertLifeOrders">
         insert life_order(
-            order_id,pid,
-            course_type,
-            status, user_id,
-            share_id,
-            course_id,
-            course_detail_id,
-            remark,
-            coupon_id,
-            coupon_point,
-            sale_user,
-            pay_point,
-            total_point,
-            phone,
-            donate,
-            price,
-            order_time,
-            use_time,
-            valid_refund_time
+        order_id,pid,
+        course_type,
+        status, user_id,
+        share_id,
+        course_id,
+        course_detail_id,
+        remark,
+        coupon_id,
+        coupon_point,
+        sale_user,
+        pay_point,
+        total_point,
+        phone,
+        donate,
+        price,
+        order_time,
+        use_time,
+        valid_refund_time
         )
         values
         <foreach collection="lifeOrders" item="item"  separator="," >
             (
-                #{item.orderId},
-                #{item.pid},
-                #{item.courseType},
-                #{item.status},
-                #{item.userId},
-                #{item.shareId},
-                #{item.courseId},
-                #{item.courseDetailId},
-                #{item.remark},
-                #{item.couponId},
-                #{item.couponPoint},
-                #{item.saleUser},
-                #{item.payPoint},
-                #{item.totalPoint},
-                #{item.phone},
-                #{item.donate},
-                #{item.price},
-                #{item.orderTime},
-                #{item.useTime},
-                #{item.validRefundTime}
+            #{item.orderId},
+            #{item.pid},
+            #{item.courseType},
+            #{item.status},
+            #{item.userId},
+            #{item.shareId},
+            #{item.courseId},
+            #{item.courseDetailId},
+            #{item.remark},
+            #{item.couponId},
+            #{item.couponPoint},
+            #{item.saleUser},
+            #{item.payPoint},
+            #{item.totalPoint},
+            #{item.phone},
+            #{item.donate},
+            #{item.price},
+            #{item.orderTime},
+            #{item.useTime},
+            #{item.validRefundTime}
             )
         </foreach>
     </insert>
@@ -220,8 +226,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         inner join life_course_detail as detail on detail.course_detail_id = order.course_detail_id
         inner join life_course as course on course.course_id = detail.course_id
         inner join life_course_classify as classify on classify.course_classify_id = course.course_classify_pid
-        where consume_time between #{startTime} and #{endTime} and `order`.share_id = #{shareId}
+        where date_format(consume_time,'%Y-%m-%d') between #{startTime} and #{endTime} and `order`.share_id = #{shareId}
     </select>
 
-    
+
+    <update id="donateOrder">
+        update life_order set donate = 0
+        where user_id = #{userId} and donate = 1 and date_format(consume_time,'%Y-%m-%d') = current_date
+    </update>
+
+    <select id="getNowCourseDuration" resultType="java.lang.Integer">
+        select sum(course_duration) from life_order
+        where user_id = #{userId} and date_format(consume_time,'%Y-%m-%d') = current_date and donate = 1
+        group by user_id
+    </select>
+    <select id="getDonate" resultType="com.ruoyi.life.domain.vo.LifeDonateVo">
+        select user.wx_img_url as wxImg , user.wx_nick_name ,sum(`order`.course_duration) as `min` from life_order as `order`
+        inner join life_user as user on user.user_id = `order`.user_id
+        where date_format(consume_time,'%Y-%m-%d') between #{start} and #{end} and `order`.user_id = #{userId} and donate = 0
+        group by `order`.user_id
+        order by `min` desc
+    </select>
+    <select id="getSumOrderClassify" resultType="java.lang.Integer">
+        select count(0) from life_order as `order`
+        inner join life_course as course on course.course_id = `order`.course_id
+        where `order`.user_id = #{userId}
+        group by course.course_classify_id
+    </select>
+
 </mapper>

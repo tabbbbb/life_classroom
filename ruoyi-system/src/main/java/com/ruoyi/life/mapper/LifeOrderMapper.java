@@ -1,10 +1,13 @@
 package com.ruoyi.life.mapper;
 
 
+import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.life.domain.LifeOrder;
 import com.ruoyi.life.domain.dto.LifeDataDetailDto;
+import com.ruoyi.life.domain.vo.LifeDonateVo;
 import org.apache.ibatis.annotations.Param;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -89,4 +92,42 @@ public interface LifeOrderMapper
      * @return
      */
     List<LifeDataDetailDto> getDataDetail(@Param("shareId") Long shareId,@Param("startTime")LocalDateTime startTime,@Param("endTime")LocalDateTime endTime);
+
+
+
+
+    /**
+     * 捐赠时间
+     * @return
+     */
+    int donateOrder(Long userId);
+
+
+    /**
+     * 获取今天为捐赠的时间数
+     * @param userId
+     * @return
+     */
+    Integer getNowCourseDuration(Long userId);
+
+
+    /**
+     * 获取最近一周的捐赠时间
+     * @param userId
+     * @param start
+     * @param end
+     * @return
+     */
+    List<LifeDonateVo> getDonate(@Param("userId") Long userId, @Param("start") LocalDate start, @Param("end")LocalDate end);
+
+
+
+
+    /**
+     * 获取总体验数量
+     * @param userId
+     * @return
+     */
+    Integer getSumOrderClassify(Long userId);
+
 }

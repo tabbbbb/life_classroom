@@ -3,6 +3,7 @@ package com.ruoyi.life.service;
 
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.life.domain.LifeUserTarget;
+import com.ruoyi.life.domain.vo.LifeUserTargetVo;
 
 import java.util.List;
 
@@ -77,4 +78,12 @@ public interface LifeUserTargetService
      */
     int pastTarget();
 
+
+
+    /**
+     * 获取所有目标
+     * @param userId
+     * @return
+     */
+    UserResponse getTargetAll(Long userId);
 }

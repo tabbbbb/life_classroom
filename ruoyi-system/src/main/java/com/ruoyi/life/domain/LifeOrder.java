@@ -15,7 +15,7 @@ import java.util.Date;
  * @author ruoyi
  * @date 2019-12-21
  */
-public class LifeOrder extends BaseEntity
+public class LifeOrder
 {
     private static final long serialVersionUID = 1L;
 
@@ -78,6 +78,11 @@ public class LifeOrder extends BaseEntity
     @Excel(name = "联系人手机号")
     private String phone;
 
+
+    /**备注*/
+    @Excel(name = "备注")
+    private String remark;
+
     /** 是否可捐赠 0false 1true */
     @Excel(name = "是否可捐赠 0false 1true")
     private Integer donate;
@@ -85,6 +90,10 @@ public class LifeOrder extends BaseEntity
     /** 金额 */
     @Excel(name = "金额")
     private BigDecimal price;
+
+    /** 上课时长 */
+    @Excel(name = "上课时长")
+    private Integer courseDuration;
 
     /** 核销时间 */
     @Excel(name = "核销时间", width = 30, dateFormat = "yyyy-MM-dd")
@@ -107,6 +116,7 @@ public class LifeOrder extends BaseEntity
         this.orderId = orderId;
     }
 
+
     public String getOrderId() 
     {
         return orderId;
@@ -120,7 +130,7 @@ public class LifeOrder extends BaseEntity
     {
         return pid;
     }
-    public void setCourseType(Long courseType)
+    public void setCourseType(Long courseType) 
     {
         this.courseType = courseType;
     }
@@ -179,7 +189,16 @@ public class LifeOrder extends BaseEntity
         this.checkId = checkId;
     }
 
-    public Long getCheckId() 
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public Long getCheckId()
     {
         return checkId;
     }
@@ -255,6 +274,15 @@ public class LifeOrder extends BaseEntity
     {
         return price;
     }
+    public void setCourseDuration(Integer courseDuration) 
+    {
+        this.courseDuration = courseDuration;
+    }
+
+    public Integer getCourseDuration() 
+    {
+        return courseDuration;
+    }
 
     public LocalDateTime getConsumeTime() {
         return consumeTime;
@@ -309,6 +337,7 @@ public class LifeOrder extends BaseEntity
             .append("phone", getPhone())
             .append("donate", getDonate())
             .append("price", getPrice())
+            .append("courseDuration", getCourseDuration())
             .append("consumeTime", getConsumeTime())
             .append("orderTime", getOrderTime())
             .append("useTime", getUseTime())

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.life.mapper.LifeDonateMapper">
+    
+    <resultMap type="LifeDonate" id="LifeDonateResult">
+        <result property="donateId"    column="donate_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="donateMinute"    column="donate_minute"    />
+        <result property="donateDate"    column="donate_date"    />
+    </resultMap>
+
+    <sql id="selectLifeDonateVo">
+        select donate_id, user_id, donate_minute, donate_date from life_donate
+    </sql>
+
+    <select id="selectLifeDonateList" parameterType="LifeDonate" resultMap="LifeDonateResult">
+        <include refid="selectLifeDonateVo"/>
+        <where>  
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="donateMinute != null "> and donate_minute = #{donateMinute}</if>
+            <if test="donateDate != null "> and donate_date = #{donateDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectLifeDonateById" parameterType="Long" resultMap="LifeDonateResult">
+        <include refid="selectLifeDonateVo"/>
+        where donate_id = #{donateId}
+    </select>
+        
+    <insert id="insertLifeDonate" parameterType="LifeDonate" useGeneratedKeys="true" keyProperty="donateId">
+        insert into life_donate
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null ">user_id,</if>
+            <if test="donateMinute != null ">donate_minute,</if>
+            <if test="donateDate != null ">donate_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null ">#{userId},</if>
+            <if test="donateMinute != null ">#{donateMinute},</if>
+            <if test="donateDate != null ">#{donateDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLifeDonate" parameterType="LifeDonate">
+        update life_donate
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null ">user_id = #{userId},</if>
+            <if test="donateMinute != null ">donate_minute = #{donateMinute},</if>
+            <if test="donateDate != null ">donate_date = #{donateDate},</if>
+        </trim>
+        where donate_id = #{donateId}
+    </update>
+
+    <delete id="deleteLifeDonateById" parameterType="Long">
+        delete from life_donate where donate_id = #{donateId}
+    </delete>
+
+    <delete id="deleteLifeDonateByIds" parameterType="String">
+        delete from life_donate where donate_id in 
+        <foreach item="donateId" collection="array" open="(" separator="," close=")">
+            #{donateId}
+        </foreach>
+    </delete>
+    
+</mapper>

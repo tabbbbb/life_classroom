@@ -10,6 +10,7 @@ import com.ruoyi.life.domain.LifeCourseClassify;
 import com.ruoyi.life.domain.LifeUser;
 import com.ruoyi.life.domain.LifeUserTarget;
 import com.ruoyi.life.domain.LifeUserTargetDetail;
+import com.ruoyi.life.domain.vo.LifeUserTargetVo;
 import com.ruoyi.life.mapper.LifeUserTargetMapper;
 import com.ruoyi.life.service.LifeCourseClassifyService;
 import com.ruoyi.life.service.LifeUserTargetDetailService;
@@ -154,7 +155,10 @@ public class LifeUserTargetServiceImpl implements LifeUserTargetService
         return UserResponse.succeed() ;
     }
 
-
+    /**
+     * 过期目标
+     * @return
+     */
     @Override
     public int pastTarget() {
         List<LifeUserTarget> list = lifeUserTargetMapper.getPastTarget();
@@ -163,6 +167,33 @@ public class LifeUserTargetServiceImpl implements LifeUserTargetService
             userTargetDetailService.pastTargetDetail(list.get(i).getTargetId());
             targetIds[i] = list.get(i).getTargetId()+"";
         }
-        return lifeUserTargetMapper.deleteLifeUserTargetByIds(targetIds);
+        if (list.size() != 0){
+            return lifeUserTargetMapper.deleteLifeUserTargetByIds(targetIds);
+        }
+        return 0;
+    }
+
+    /**
+     * 获取所有目标
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public UserResponse getTargetAll(Long userId) {
+        LifeUserTarget selectTarget = new LifeUserTarget();
+        selectTarget.setUserId(userId);
+        List<LifeUserTarget> targetList = this.selectLifeUserTargetList(selectTarget);
+        List<LifeUserTargetVo> targetVoList = new ArrayList<>();
+        for (LifeUserTarget target : targetList) {
+            LifeUserTargetDetail userTargetDetail = new LifeUserTargetDetail();
+            userTargetDetail.setTargetId(target.getTargetId());
+            List<LifeUserTargetDetail> userTargetDetails = userTargetDetailService.selectLifeUserTargetDetailList(userTargetDetail);
+            LifeUserTargetVo userTargetVo = new LifeUserTargetVo();
+            userTargetVo.setParentTarget(target);
+            userTargetVo.setTargetRen(userTargetDetails);
+            targetVoList.add(userTargetVo);
+        }
+        return UserResponse.succeed(targetVoList);
     }
 }

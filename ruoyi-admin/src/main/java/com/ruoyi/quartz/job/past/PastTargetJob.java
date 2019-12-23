@@ -42,7 +42,7 @@ public class PastTargetJob implements Job {
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        logger.debug("--------"+LocalDateTime.now()+"-------开始删除过期优惠券");
+        logger.debug("--------"+LocalDateTime.now()+"-------开始删除过期目标");
         int result = userTargetService.pastTarget();
         logger.debug("--------"+LocalDateTime.now()+"-------删除成功!,数量："+result);
     }

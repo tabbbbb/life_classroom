@@ -13,7 +13,7 @@ import java.math.BigDecimal;
  * @author ruoyi
  * @date 2019-12-20
  */
-public class LifeCourse extends BaseEntity
+public class LifeCourse
 {
     private static final long serialVersionUID = 1L;
 

@@ -11,9 +11,14 @@
 package com.ruoyi.web.controller.user;
 
 import com.ruoyi.common.response.UserResponse;
+import com.ruoyi.framework.userlogin.LoginResponse;
 import com.ruoyi.framework.userlogin.annotation.LoginInfo;
 import com.ruoyi.framework.userlogin.info.UserLoginInfo;
+import com.ruoyi.life.domain.LifeUserTarget;
+import com.ruoyi.life.domain.vo.LifeDataVo;
 import com.ruoyi.life.service.LifeOrderService;
+import com.ruoyi.life.service.LifeUserTargetDetailService;
+import com.ruoyi.life.service.LifeUserTargetService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -42,6 +47,11 @@ public class LifeDataController {
     @Autowired
     private LifeOrderService orderService;
 
+    @Autowired
+    private LifeUserTargetService userTargetService;
+
+    @Autowired
+    private LifeUserTargetDetailService userTargetDetailService;
 
     @GetMapping("dataDetail")
     @ApiOperation(value = "历史数据")
@@ -50,6 +60,8 @@ public class LifeDataController {
             @ApiImplicitParam(paramType="query",name="endTime",value="结束时间",dataTypeClass = LocalDateTime.class)
     })
     public UserResponse getDataDetail(@ApiIgnore @LoginInfo UserLoginInfo loginInfo, LocalDateTime startTime,LocalDateTime endTime){
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null) return response;
         return orderService.getDataDetail(loginInfo.getId(),startTime,endTime);
     }
 
@@ -57,8 +69,15 @@ public class LifeDataController {
 
     @GetMapping("dataHome")
     @ApiOperation(value = "数据中心首页")
-    public UserResponse dataHome(){
-        return null;
+    public Object dataHome(@ApiIgnore @LoginInfo UserLoginInfo loginInfo){
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null) return response;
+        LifeDataVo dataVo = new LifeDataVo();
+        Long userId = loginInfo.getId();
+        dataVo.setSumNum(orderService.getSumOrderClassify(userId));
+        dataVo.setScaleDrawing(userTargetDetailService.getAccomplishTargetDetail(userId));
+        dataVo.setWeekData(userTargetDetailService.getAccomplishTarget(userId));
+        return dataVo;
     }
 
 }

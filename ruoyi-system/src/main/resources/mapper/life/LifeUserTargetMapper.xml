@@ -78,7 +78,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="getPastTarget" resultMap="LifeUserTargetResult">
         <include refid="selectLifeUserTargetVo"/>
-        where current_date   >= end_time,'%Y-%m-%d'
+        where current_date   >= end_time
     </select>
 
 </mapper>

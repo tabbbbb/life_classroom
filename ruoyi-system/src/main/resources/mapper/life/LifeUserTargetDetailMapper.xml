@@ -1,50 +1,55 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.life.mapper.LifeUserTargetDetailMapper">
-    
+
     <resultMap type="LifeUserTargetDetail" id="LifeUserTargetDetailResult">
         <result property="targetDetailId"    column="target_detail_id"    />
         <result property="targetDetailClassifyId"    column="target_detail_classify_id"    />
         <result property="targetDetailClassifyName"    column="target_detail_classify_name"    />
+        <result property="courseDuration"    column="course_duration"    />
         <result property="achieveTime"    column="achieve_time"    />
         <result property="targetId"    column="target_id"    />
     </resultMap>
 
     <sql id="selectLifeUserTargetDetailVo">
-        select target_detail_id, target_detail_classify_id, target_detail_classify_name, achieve_time, target_id from life_user_target_detail
+        select target_detail_id, target_detail_classify_id, target_detail_classify_name, course_duration, achieve_time, target_id from life_user_target_detail
     </sql>
 
     <select id="selectLifeUserTargetDetailList" parameterType="LifeUserTargetDetail" resultMap="LifeUserTargetDetailResult">
         <include refid="selectLifeUserTargetDetailVo"/>
-        <where>  
+        <where>
             <if test="targetDetailClassifyId != null "> and target_detail_classify_id = #{targetDetailClassifyId}</if>
             <if test="targetDetailClassifyName != null  and targetDetailClassifyName != ''"> and target_detail_classify_name like concat('%', #{targetDetailClassifyName}, '%')</if>
+            <if test="courseDuration != null "> and course_duration = #{courseDuration}</if>
             <if test="achieveTime != null "> and achieve_time = #{achieveTime}</if>
             <if test="targetId != null "> and target_id = #{targetId}</if>
         </where>
     </select>
-    
+
     <select id="selectLifeUserTargetDetailById" parameterType="Long" resultMap="LifeUserTargetDetailResult">
         <include refid="selectLifeUserTargetDetailVo"/>
         where target_detail_id = #{targetDetailId}
     </select>
-        
+
+
     <insert id="insertLifeUserTargetDetail" parameterType="LifeUserTargetDetail" useGeneratedKeys="true" keyProperty="targetDetailId">
         insert into life_user_target_detail
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="targetDetailClassifyId != null ">target_detail_classify_id,</if>
             <if test="targetDetailClassifyName != null  and targetDetailClassifyName != ''">target_detail_classify_name,</if>
+            <if test="courseDuration != null ">course_duration,</if>
             <if test="achieveTime != null ">achieve_time,</if>
             <if test="targetId != null ">target_id,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="targetDetailClassifyId != null ">#{targetDetailClassifyId},</if>
             <if test="targetDetailClassifyName != null  and targetDetailClassifyName != ''">#{targetDetailClassifyName},</if>
+            <if test="courseDuration != null ">#{courseDuration},</if>
             <if test="achieveTime != null ">#{achieveTime},</if>
             <if test="targetId != null ">#{targetId},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateLifeUserTargetDetail" parameterType="LifeUserTargetDetail">
@@ -52,6 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="targetDetailClassifyId != null ">target_detail_classify_id = #{targetDetailClassifyId},</if>
             <if test="targetDetailClassifyName != null  and targetDetailClassifyName != ''">target_detail_classify_name = #{targetDetailClassifyName},</if>
+            <if test="courseDuration != null ">course_duration = #{courseDuration},</if>
             <if test="achieveTime != null ">achieve_time = #{achieveTime},</if>
             <if test="targetId != null ">target_id = #{targetId},</if>
         </trim>
@@ -63,13 +69,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteLifeUserTargetDetailByIds" parameterType="String">
-        delete from life_user_target_detail where target_detail_id in 
+        delete from life_user_target_detail where target_detail_id in
         <foreach item="targetDetailId" collection="array" open="(" separator="," close=")">
             #{targetDetailId}
         </foreach>
     </delete>
+
     <delete id="pastTargetDetail">
-        delete from life_user_target_detail where targetId = #{targetId}
+        delete from life_user_target_detail
+        where target_id = #{targetId}
     </delete>
+
+
+    <select id="getAccomplishTarget" resultType="com.ruoyi.life.domain.vo.LifeDataVo$WeekData">
+        select date_format(detail.achieve_time,'%w') as `week`,count(detail.achieve_time) as `num` from life_user_target_detail as detail
+        inner join life_user_target as target on target.target_id = detail.target_id
+        where target.user_id = #{userId} and detail.achieve_time is not null
+        group by `week`
+
+    </select>
+
+
+    <select id="getAccomplishTargetDetail" resultType="com.ruoyi.life.domain.vo.LifeDataVo$ScaleDrawing">
+        select target.target_classify_name  as `name`,sum(detail.course_duration) as `min` from life_user_target_detail as detail
+        inner join life_user_target as target on target.target_id = detail.target_id
+        where target.user_id = #{userId} and detail.achieve_time is not null
+        group by detail.target_id
+    </select>
+
 
 </mapper>

@@ -85,4 +85,25 @@ public interface LifeOrderService
      */
     UserResponse getDataDetail(Long userId,LocalDateTime startTime,LocalDateTime endTime);
 
+
+    /**
+     * 捐赠时间
+     * @return
+     */
+    UserResponse donateOrder(Long userId);
+
+
+    /**
+     * 获取最近一周的捐赠时间
+     * @return
+     */
+    UserResponse getDonate(Long userId);
+
+
+    /**
+     * 获取总体验数量
+     * @param userId
+     * @return
+     */
+    Integer getSumOrderClassify(Long userId);
 }

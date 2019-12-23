@@ -202,4 +202,10 @@ public class UserResponseCode {
      * 添加目标错误
      */
     public static final Integer ADD_TARGET_ERROR = 100027;
+
+
+    /**
+     * 捐赠时间错误
+     */
+    public static final Integer DONATE_ORDER_ERROR = 100028;
 }

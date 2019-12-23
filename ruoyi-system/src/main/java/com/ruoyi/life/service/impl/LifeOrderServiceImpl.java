@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -172,12 +173,16 @@ public class LifeOrderServiceImpl implements LifeOrderService
             throw new OrderException(UserResponseCode.PAY_COURSE_ERROR,"课程已下架");
         }
         List<Long> userChildIds = payOrderVo.getUserChildIds();
-        if (userChildIds == null || userChildIds.size() == 0){
-            throw new OrderException(UserResponseCode.PAY_COURSE_ERROR,"没有选择用户");
+        if (!(payOrderVo.isUserPay() || payOrderVo.isBindUserPay() || userChildIds != null && userChildIds.size() != 0)){
+            throw new OrderException(UserResponseCode.PAY_COURSE_ERROR,"没有选择绑定用户");
         }
-        int peopleNum = pointChildService.getLifePointChildByListNum(userChildIds);
-        if (peopleNum!= userChildIds.size()){
-            throw new OrderException(UserResponseCode.PAY_COURSE_ERROR,"非法选择小孩");
+        if (userChildIds != null && userChildIds.size() != 0){
+            int peopleNum = pointChildService.getLifePointChildByListNum(userChildIds);
+            if (peopleNum!= userChildIds.size()){
+                throw new OrderException(UserResponseCode.PAY_COURSE_ERROR,"非法选择绑定用户");
+            }
+        }else{
+            userChildIds = new ArrayList<>();
         }
         Long couponReserveId = payOrderVo.getCouponReserveId();
         LifeCouponReserve couponReserve = null;
@@ -276,6 +281,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
                 order.setValidRefundTime(refundTime);
                 order.setUseTime(time);
                 order.setDonate(1);
+                order.setCourseDuration(courseDetail.getCourseDuration());
                 order.setPhone(payOrderVo.getPhone());
                 order.setCouponId(couponReserveId);
                 if (j == userChildIds.size() && payOrderVo.isBindUserPay()){
@@ -410,7 +416,6 @@ public class LifeOrderServiceImpl implements LifeOrderService
     @Override
     public UserResponse getDataDetail(Long userId,LocalDateTime startTime,LocalDateTime endTime) {
         LifeUser user = userService.selectLifeUserById(userId);
-        endTime = endTime.plusDays(1);
         List<LifeDataDetailDto> list = lifeOrderMapper.getDataDetail(user.getShareId(),startTime,endTime);
         List<LifeDataDetailVo> listVo = new ArrayList<>();
         LocalDateTime time = startTime.plusWeeks(1);
@@ -438,5 +443,50 @@ public class LifeOrderServiceImpl implements LifeOrderService
         }
         dataDetailVo.setEndTime(endTime);
         return UserResponse.succeed(listVo);
+    }
+
+
+    /**
+     * 捐赠时间
+     * @return
+     */
+    @Override
+    public UserResponse donateOrder(Long userId) {
+        Integer min = lifeOrderMapper.getNowCourseDuration(userId);
+        if (min == null){
+            UserResponse.fail(UserResponseCode.DONATE_ORDER_ERROR,"剩余捐赠时间为0");
+        }
+        if (lifeOrderMapper.donateOrder(userId) == 0){
+            UserResponse.fail(UserResponseCode.DONATE_ORDER_ERROR,"捐赠失败");
+        }
+
+        return UserResponse.succeed(min);
+    }
+
+
+    /**
+     * 获取最近一周的捐赠时间
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public UserResponse getDonate(Long userId) {
+        LocalDate now = LocalDate.now();
+        LocalDate start = now.minusDays(now.getDayOfWeek().getValue()-1);
+        LocalDate end = now.plusDays(7-now.getDayOfWeek().getValue());
+        return UserResponse.succeed(lifeOrderMapper.getDonate(userId,start,end));
+    }
+
+
+    /**
+     * 获取总体验数量
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public Integer getSumOrderClassify(Long userId) {
+        return lifeOrderMapper.getSumOrderClassify(userId);
     }
 }

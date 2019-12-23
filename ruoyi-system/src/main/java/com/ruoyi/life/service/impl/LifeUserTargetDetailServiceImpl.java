@@ -7,6 +7,7 @@ import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.common.response.UserResponseCode;
 import com.ruoyi.life.domain.LifeCourseClassify;
 import com.ruoyi.life.domain.LifeUserTargetDetail;
+import com.ruoyi.life.domain.vo.LifeDataVo;
 import com.ruoyi.life.mapper.LifeUserTargetDetailMapper;
 import com.ruoyi.life.service.LifeCourseClassifyService;
 import com.ruoyi.life.service.LifeUserTargetDetailService;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户目标详细Service业务层处理
@@ -129,5 +131,28 @@ public class LifeUserTargetDetailServiceImpl implements LifeUserTargetDetailServ
     @Override
     public int pastTargetDetail(Long targetId) {
         return lifeUserTargetDetailMapper.pastTargetDetail(targetId);
+    }
+
+
+    /**
+     * 获取完成的目标数量
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<LifeDataVo.WeekData> getAccomplishTarget(Long userId) {
+        return lifeUserTargetDetailMapper.getAccomplishTarget(userId);
+    }
+
+    /**
+     * 获取完成详细
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<LifeDataVo.ScaleDrawing> getAccomplishTargetDetail(Long userId) {
+        return lifeUserTargetDetailMapper.getAccomplishTargetDetail(userId);
     }
 }

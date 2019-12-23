@@ -11,7 +11,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * @author ruoyi
  * @date 2019-12-20
  */
-public class LifeCourseClassify extends BaseEntity
+public class LifeCourseClassify
 {
     private static final long serialVersionUID = 1L;
 

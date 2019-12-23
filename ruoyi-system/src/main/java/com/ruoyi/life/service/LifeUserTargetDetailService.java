@@ -3,8 +3,11 @@ package com.ruoyi.life.service;
 
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.life.domain.LifeUserTargetDetail;
+import com.ruoyi.life.domain.vo.LifeDataVo;
+import com.ruoyi.life.domain.vo.LifeUserTargetVo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户目标详细Service接口
@@ -69,7 +72,29 @@ public interface LifeUserTargetDetailService
     int addTargetDetail(Long targetId,Long classifyId);
 
 
-
+    /**
+     * 过期目标详细
+     * @param targetId
+     * @return
+     */
     int pastTargetDetail(Long targetId);
+
+
+
+    /**
+     * 获取完成的目标数量
+     * @return
+     */
+    List<LifeDataVo.WeekData> getAccomplishTarget(Long userId);
+
+
+    /**
+     * 获取完成详细
+     * @return
+     */
+    List<LifeDataVo.ScaleDrawing> getAccomplishTargetDetail(Long userId);
+
+
+
 
 }
