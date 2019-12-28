@@ -2,10 +2,10 @@ package com.ruoyi.framework.web.exception;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.ruoyi.common.exception.life.OrderException;
-import com.ruoyi.common.exception.life.RechargerException;
-import com.ruoyi.common.exception.life.SetChildException;
-import com.ruoyi.common.exception.life.TargetException;
+import com.ruoyi.common.exception.life.user.OrderException;
+import com.ruoyi.common.exception.life.user.RechargerException;
+import com.ruoyi.common.exception.life.user.SetChildException;
+import com.ruoyi.common.exception.life.user.TargetException;
 import com.ruoyi.common.response.UserResponse;
 import org.apache.shiro.authz.AuthorizationException;
 import org.slf4j.Logger;
@@ -160,7 +160,9 @@ public class GlobalExceptionHandler
         binder.registerCustomEditor(LocalDate.class, new PropertyEditorSupport() {
             @Override
             public void setAsText(String text) throws IllegalArgumentException {
-                setValue(LocalDate.parse(text, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                if (text != ""){
+                    setValue(LocalDate.parse(text, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                }
             }
         });
         binder.registerCustomEditor(LocalDateTime.class, new PropertyEditorSupport() {

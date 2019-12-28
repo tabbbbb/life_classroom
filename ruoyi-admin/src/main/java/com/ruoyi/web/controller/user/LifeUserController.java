@@ -1,8 +1,7 @@
 package com.ruoyi.web.controller.user;
 
-import com.ruoyi.framework.userlogin.WxLoginUserInfo;
 import com.ruoyi.life.domain.LifeUser;
-import com.ruoyi.life.service.LifeUserService;
+import com.ruoyi.life.service.user.LifeUserService;
 import com.ruoyi.common.config.Global;
 import com.ruoyi.common.config.ServerConfig;
 import com.ruoyi.common.exception.file.InvalidExtensionException;
@@ -100,14 +99,46 @@ public class LifeUserController extends BaseController
 
 
     @GetMapping ("userHome")
-    @ApiOperation(value = "用户页信息")
+    @ApiOperation(value = "用户信息")
     public UserResponse userHome(@ApiIgnore @LoginInfo UserLoginInfo loginInfo){
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null) return response;
         return userService.getUserHome(loginInfo.getId());
+    }
+
+
+    @PostMapping("updatepwdlogin")
+    @ApiOperation(value = "修改密码，输入旧密码，更改新密码")
+    public UserResponse updatePassword(@ApiIgnore @LoginInfo UserLoginInfo loginInfo,@RequestBody @ApiParam(name = "boyd",value = "oldPwd：旧密码，newPwd：新密码") String body){
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null) return response;
+        return userService.loginUpdatePassword(loginInfo.getId(),body);
+    }
+
+    @PostMapping("updatepwdcode")
+    @ApiOperation(value = "修改密码，获取短信验证码修改新密码")
+    public UserResponse updatePassword(@RequestBody @ApiParam(name = "boyd",value = "phone:手机号,code:验证码,newPwd:新密码") String body){
+        return userService.codeUpdatePassword(body);
     }
 
 
 
 
+    @PostMapping("setpaypwd")
+    @ApiOperation(value = "设置支付密码")
+    public UserResponse setPayPassword(@ApiIgnore @LoginInfo UserLoginInfo loginInfo,@RequestBody @ApiParam(name = "boyd",value = "payPwd:密码") String body){
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null) return response;
+        return userService.setPayPassword(loginInfo.getId(),body);
+    }
+
+    @PostMapping("updatepaypwd")
+    @ApiOperation(value = "修改支付密码",notes = "获取短信验证码修改支付密码")
+    public UserResponse updatePayPassword(@ApiIgnore @LoginInfo UserLoginInfo loginInfo,@RequestBody @ApiParam(name = "boyd",value = "code:验证码,payPwd:新密码") String body){
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null) return response;
+        return userService.updatePayPassword(loginInfo.getId(),body);
+    }
 
 
 

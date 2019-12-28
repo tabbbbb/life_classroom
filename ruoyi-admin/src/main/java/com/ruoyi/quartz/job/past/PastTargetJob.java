@@ -10,8 +10,7 @@
  */
 package com.ruoyi.quartz.job.past;
 
-import com.ruoyi.life.domain.LifeUserTarget;
-import com.ruoyi.life.service.LifeUserTargetService;
+import com.ruoyi.life.service.user.LifeUserTargetService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;

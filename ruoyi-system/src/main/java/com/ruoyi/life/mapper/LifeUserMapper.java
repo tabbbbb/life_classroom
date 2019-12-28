@@ -2,9 +2,14 @@ package com.ruoyi.life.mapper;
 
 
 import com.ruoyi.life.domain.LifeUser;
+import com.ruoyi.life.domain.dto.system.LifeUserNumDto;
+import com.ruoyi.life.domain.vo.system.LifeChartVo;
+import com.ruoyi.life.domain.vo.system.LifeUserSearchVo;
+import com.ruoyi.life.domain.vo.system.LifeUserVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -30,6 +35,15 @@ public interface LifeUserMapper
      * @return 用户集合
      */
     public List<LifeUser> selectLifeUserList(LifeUser lifeUser);
+
+
+    /**
+     * 用户列表
+     * @param userSearchVo
+     * @return
+     */
+    List<LifeUserVo> selectLifeUserVoList(LifeUserSearchVo userSearchVo);
+
 
 
     /**
@@ -94,4 +108,32 @@ public interface LifeUserMapper
      * @return
      */
     int rechargeBalance(@Param("lifeUser")LifeUser lifeUser, @Param("oldBalance") BigDecimal oldBalance);
+
+
+    /**
+     *  获取 用户数量
+     * @return
+     */
+    List<LifeUserNumDto> getUserNum(LifeChartVo chartVo);
+
+
+    /**
+     * 获取最早的用户注册时间
+     * @return
+     */
+    LocalDate getFirstUserCreateDate();
+
+
+    /**
+     * 获取用户增长量
+     * @return
+     */
+    long getNowAddUserNum();
+
+
+    /**
+     * 获取用户总量
+     * @return
+     */
+    long getUserCount();
 }

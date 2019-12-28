@@ -12,7 +12,7 @@ package com.ruoyi.web.controller.user;
 
 
 import com.ruoyi.common.utils.JacksonUtil;
-import com.ruoyi.life.service.LifeVipService;
+import com.ruoyi.life.service.user.LifeVipService;
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.framework.userlogin.LoginResponse;
 import com.ruoyi.framework.userlogin.annotation.LoginInfo;

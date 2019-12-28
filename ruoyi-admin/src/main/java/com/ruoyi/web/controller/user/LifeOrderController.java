@@ -14,8 +14,8 @@ import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.framework.userlogin.LoginResponse;
 import com.ruoyi.framework.userlogin.annotation.LoginInfo;
 import com.ruoyi.framework.userlogin.info.UserLoginInfo;
-import com.ruoyi.life.domain.vo.LifePayOrderVo;
-import com.ruoyi.life.service.LifeOrderService;
+import com.ruoyi.life.domain.vo.user.LifePayOrderVo;
+import com.ruoyi.life.service.user.LifeOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -25,8 +25,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
-
-import java.util.List;
 
 /**
  * 〈一句话功能简述〉<br> 

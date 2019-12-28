@@ -10,7 +10,7 @@
  */
 package com.ruoyi.quartz.job.past;
 
-import com.ruoyi.life.service.LifeCouponReserveService;
+import com.ruoyi.life.service.user.LifeCouponReserveService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;

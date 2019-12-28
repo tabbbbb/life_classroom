@@ -174,7 +174,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
-    <select id="selectLifeCourseBySearchVo" resultType="com.ruoyi.life.domain.vo.LifeCourseByConditionVo">
+    <select id="selectLifeCourseBySearchVo" resultType="com.ruoyi.life.domain.vo.user.LifeCourseByConditionVo">
         select
         course.course_id as course_id,
         course.img_url as url,course.name as `name`,
@@ -244,7 +244,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
 
-    <select id="getLifeCourseDetailByCourseId" resultType="com.ruoyi.life.domain.vo.LifeCourseDetailVo">
+    <select id="getLifeCourseDetailByCourseId" resultType="com.ruoyi.life.domain.vo.user.LifeCourseDetailVo">
         select
         course.course_id as course_id,
         course.name as `name`,
@@ -275,5 +275,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join life_reserve as reserve on reserve.course_detail_id = detail.course_detail_id
         where course.course_id = #{courseId}
     </select>
-    
+
+
 </mapper>

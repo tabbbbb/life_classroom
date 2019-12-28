@@ -11,12 +11,12 @@
 package com.ruoyi.quartz;
 
 import com.ruoyi.common.sms.NotifySms;
+import com.ruoyi.life.service.user.*;
 import com.ruoyi.quartz.job.order.SmsDayOrderJob;
 import com.ruoyi.quartz.job.order.SmsOrderJob;
 import com.ruoyi.quartz.job.past.PastCouponJob;
 import com.ruoyi.quartz.job.past.PastPointChildJob;
 import com.ruoyi.quartz.job.past.PastPointJob;
-import com.ruoyi.life.service.*;
 import com.ruoyi.quartz.job.past.PastTargetJob;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
@@ -103,6 +103,7 @@ public class LifeScheduler {
     public void smsOrder(){
         JobDataMap jobDataMap= new JobDataMap();
         jobDataMap.put("courseDetailService",courseDetailService);
+        jobDataMap.put("scheduler",this);
         this.groupStart(SmsOrderJob.class,"0 3 0 1/1 * ? *",jobDataMap);
     }
 
@@ -110,14 +111,14 @@ public class LifeScheduler {
 
 
 
-    public void smsDayOrder(String type, Long[] courseIds, LocalDateTime dateTime){
+    public void smsDayOrder(String type, Long[] courseDetailIds, LocalDateTime dateTime){
         JobDataMap jobDataMap= new JobDataMap();
-
         jobDataMap.put("time",type);
-        jobDataMap.put("courseIds",courseIds);
+        jobDataMap.put("courseDetailIds",courseDetailIds);
         jobDataMap.put("courseService",courseService);
         jobDataMap.put("orderService",orderService);
         jobDataMap.put("notifySms",notifySms);
+        jobDataMap.put("courseDetailService",courseDetailService);
         String cron = dateTime.getSecond()+" "+dateTime.getMinute()+" "+dateTime.getHour()+" "+dateTime.getDayOfMonth()+" "+dateTime.getMonth().getValue()+" ? "+dateTime.getYear();
         this.delayedStart(SmsDayOrderJob.class,cron,jobDataMap);
     }

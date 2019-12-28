@@ -46,15 +46,27 @@ public class SmsCache {
     }
 
     public static boolean compareSmsCache(String phone,String code){
+        boolean flag = false;
         if (smsCache.containsKey(phone)){
             if (smsCache.get(phone).equals(code) && codeTimeCache.get(phone).isAfter(LocalDateTime.now())){
                 smsCache.remove(phone);
-                return true;
+                flag = true;
             }
-            return false;
-        }else{
-            return false;
+
         }
+        return flag;
+    }
+
+
+    public static boolean compareSmsCache(String phone){
+        boolean flag = false;
+        if (smsCache.containsKey(phone)){
+            if (codeTimeCache.get(phone).isAfter(LocalDateTime.now())){
+                flag = true;
+            }
+            smsCache.remove(phone);
+        }
+        return flag;
     }
 
 

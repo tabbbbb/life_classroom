@@ -20,7 +20,7 @@ package com.ruoyi.web.controller.user;
  */
 
 import com.ruoyi.common.response.UserResponse;
-import com.ruoyi.life.service.LifeCourseClassifyService;
+import com.ruoyi.life.service.user.LifeCourseClassifyService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

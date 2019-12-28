@@ -10,8 +10,8 @@
  */
 package com.ruoyi.quartz.job.past;
 
-import com.ruoyi.life.service.LifePointLogService;
-import com.ruoyi.life.service.LifePointService;
+import com.ruoyi.life.service.user.LifePointLogService;
+import com.ruoyi.life.service.user.LifePointService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;

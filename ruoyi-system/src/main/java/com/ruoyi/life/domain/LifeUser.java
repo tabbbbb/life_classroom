@@ -64,7 +64,7 @@ public class LifeUser
 
     /** 支付密码 */
     @Excel(name = "支付密码")
-    private Integer paymentCode;
+    private String paymentCode;
 
     /** 会员密码 */
     @Excel(name = "会员密码")
@@ -209,16 +209,16 @@ public class LifeUser
     {
         return phone;
     }
-    public void setPaymentCode(Integer paymentCode) 
-    {
+
+    public String getPaymentCode() {
+        return paymentCode;
+    }
+
+    public void setPaymentCode(String paymentCode) {
         this.paymentCode = paymentCode;
     }
 
-    public Integer getPaymentCode() 
-    {
-        return paymentCode;
-    }
-    public void setPassword(String password) 
+    public void setPassword(String password)
     {
         this.password = password;
     }

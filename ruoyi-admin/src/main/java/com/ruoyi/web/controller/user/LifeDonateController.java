@@ -13,7 +13,7 @@ package com.ruoyi.web.controller.user;
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.framework.userlogin.annotation.LoginInfo;
 import com.ruoyi.framework.userlogin.info.UserLoginInfo;
-import com.ruoyi.life.service.LifeOrderService;
+import com.ruoyi.life.service.user.LifeOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

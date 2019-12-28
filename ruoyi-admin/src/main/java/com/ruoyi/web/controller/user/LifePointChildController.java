@@ -14,7 +14,7 @@ import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.framework.userlogin.LoginResponse;
 import com.ruoyi.framework.userlogin.annotation.LoginInfo;
 import com.ruoyi.framework.userlogin.info.UserLoginInfo;
-import com.ruoyi.life.service.LifePointChildService;
+import com.ruoyi.life.service.user.LifePointChildService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;

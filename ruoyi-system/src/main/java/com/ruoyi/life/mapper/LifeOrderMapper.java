@@ -1,10 +1,9 @@
 package com.ruoyi.life.mapper;
 
 
-import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.life.domain.LifeOrder;
-import com.ruoyi.life.domain.dto.LifeDataDetailDto;
-import com.ruoyi.life.domain.vo.LifeDonateVo;
+import com.ruoyi.life.domain.dto.user.LifeDataDetailDto;
+import com.ruoyi.life.domain.vo.user.LifeDonateVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.time.LocalDate;

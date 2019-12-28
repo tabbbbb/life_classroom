@@ -11,7 +11,7 @@
 package com.ruoyi.web.controller.user;
 
 import com.ruoyi.life.domain.LifeUser;
-import com.ruoyi.life.service.LifeAutoService;
+import com.ruoyi.life.service.user.LifeAutoService;
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.common.response.UserResponseCode;
 import com.ruoyi.common.sms.NotifySms;
@@ -23,7 +23,7 @@ import com.ruoyi.framework.userlogin.WxLoginUserInfo;
 import com.ruoyi.framework.userlogin.annotation.LoginInfo;
 import com.ruoyi.framework.userlogin.info.UserLoginInfo;
 import com.ruoyi.framework.userlogin.token.UserToken;
-import com.ruoyi.life.service.LifePointService;
+import com.ruoyi.life.service.user.LifePointService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -89,9 +89,12 @@ public class LifeAuthController {
 
         String phone = JacksonUtil.parseString(body,"phone");
         if (phone == null || phone.length() != 11){
-            return UserResponse.fail(UserResponseCode.PHONE_INPUT_ERROR,"手机号输入错误");
+            return UserResponse.fail(UserResponseCode.SEND_CODE_ERROR,"手机号输入错误");
         }
         Integer random = (int)(Math.floor(Math.random()*900000)) + 100000;
+        if (SmsCache.compareSmsCache(phone)){
+            return UserResponse.fail(UserResponseCode.SEND_CODE_ERROR,"手机号输入错误");
+        }
         notifySms.notifySend(phone,TemplatesType.code,new String[]{random+"","2"});
         SmsCache.putSmsCache(phone,random+"");
         return UserResponse.succeed();
@@ -116,7 +119,7 @@ public class LifeAuthController {
 
 
     @PostMapping("verifycode")
-    @ApiOperation(value = "验证验证码",response = UserResponse.class,notes = "")
+    @ApiOperation(value = "修改手机号验证验证码",response = UserResponse.class,notes = "")
     public UserResponse bindUpdateTime(@ApiIgnore @LoginInfo UserLoginInfo loginInfo,@RequestBody @ApiParam(name = "body",value = "code:短信验证码")  String body){
         UserResponse response = LoginResponse.toMessage(loginInfo);
         if (response != null) return response;

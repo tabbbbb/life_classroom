@@ -14,7 +14,7 @@ import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.framework.userlogin.LoginResponse;
 import com.ruoyi.framework.userlogin.annotation.LoginInfo;
 import com.ruoyi.framework.userlogin.info.UserLoginInfo;
-import com.ruoyi.life.service.LifeCollectService;
+import com.ruoyi.life.service.user.LifeCollectService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 /**

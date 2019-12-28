@@ -81,7 +81,7 @@
     </delete>
 
 
-    <select id="getAccomplishTarget" resultType="com.ruoyi.life.domain.vo.LifeDataVo$WeekData">
+    <select id="getAccomplishTarget" resultType="com.ruoyi.life.domain.vo.user.LifeDataVo$WeekData">
         select date_format(detail.achieve_time,'%w') as `week`,count(detail.achieve_time) as `num` from life_user_target_detail as detail
         inner join life_user_target as target on target.target_id = detail.target_id
         where target.user_id = #{userId} and detail.achieve_time is not null
@@ -90,7 +90,7 @@
     </select>
 
 
-    <select id="getAccomplishTargetDetail" resultType="com.ruoyi.life.domain.vo.LifeDataVo$ScaleDrawing">
+    <select id="getAccomplishTargetDetail" resultType="com.ruoyi.life.domain.vo.user.LifeDataVo$ScaleDrawing">
         select target.target_classify_name  as `name`,sum(detail.course_duration) as `min` from life_user_target_detail as detail
         inner join life_user_target as target on target.target_id = detail.target_id
         where target.user_id = #{userId} and detail.achieve_time is not null

@@ -11,7 +11,7 @@
 package com.ruoyi.framework.config;
 
 import com.ruoyi.life.domain.LifeConfig;
-import com.ruoyi.life.service.LifeConfigService;
+import com.ruoyi.life.service.user.LifeConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

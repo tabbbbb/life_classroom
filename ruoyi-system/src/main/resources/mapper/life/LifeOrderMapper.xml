@@ -217,7 +217,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
 
-    <select id="getDataDetail" resultType="com.ruoyi.life.domain.dto.LifeDataDetailDto">
+    <select id="getDataDetail" resultType="com.ruoyi.life.domain.dto.user.LifeDataDetailDto">
         select
         classify.course_classify_id as classifyId,
         classify.course_classify_name as classifyName ,
@@ -240,7 +240,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where user_id = #{userId} and date_format(consume_time,'%Y-%m-%d') = current_date and donate = 1
         group by user_id
     </select>
-    <select id="getDonate" resultType="com.ruoyi.life.domain.vo.LifeDonateVo">
+    <select id="getDonate" resultType="com.ruoyi.life.domain.vo.user.LifeDonateVo">
         select user.wx_img_url as wxImg , user.wx_nick_name ,sum(`order`.course_duration) as `min` from life_order as `order`
         inner join life_user as user on user.user_id = `order`.user_id
         where date_format(consume_time,'%Y-%m-%d') between #{start} and #{end} and `order`.user_id = #{userId} and donate = 0

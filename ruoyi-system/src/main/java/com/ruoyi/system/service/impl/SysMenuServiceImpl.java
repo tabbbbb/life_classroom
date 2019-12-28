@@ -21,6 +21,8 @@ import com.ruoyi.system.mapper.SysMenuMapper;
 import com.ruoyi.system.mapper.SysRoleMenuMapper;
 import com.ruoyi.system.service.ISysMenuService;
 
+import javax.annotation.Resource;
+
 /**
  * 菜单 业务层处理
  * 
@@ -31,10 +33,10 @@ public class SysMenuServiceImpl implements ISysMenuService
 {
     public static final String PREMISSION_STRING = "perms[\"{0}\"]";
 
-    @Autowired
+    @Resource
     private SysMenuMapper menuMapper;
 
-    @Autowired
+    @Resource
     private SysRoleMenuMapper roleMenuMapper;
 
     /**
@@ -341,6 +343,9 @@ public class SysMenuServiceImpl implements ISysMenuService
         return returnList;
     }
 
+
+
+
     /**
      * 递归列表
      * 
@@ -349,6 +354,7 @@ public class SysMenuServiceImpl implements ISysMenuService
      */
     private void recursionFn(List<SysMenu> list, SysMenu t)
     {
+
         // 得到子节点列表
         List<SysMenu> childList = getChildList(list, t);
         t.setChildren(childList);
@@ -356,13 +362,7 @@ public class SysMenuServiceImpl implements ISysMenuService
         {
             if (hasChild(list, tChild))
             {
-                // 判断是否有子节点
-                Iterator<SysMenu> it = childList.iterator();
-                while (it.hasNext())
-                {
-                    SysMenu n = (SysMenu) it.next();
-                    recursionFn(list, n);
-                }
+                recursionFn(list, tChild);
             }
         }
     }

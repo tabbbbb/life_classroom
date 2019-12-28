@@ -175,9 +175,9 @@ public class UserResponseCode {
 
 
     /**
-     * 手机号输入错误
+     * 发送验证码错误
      */
-    public static final Integer PHONE_INPUT_ERROR = 100023;
+    public static final Integer SEND_CODE_ERROR = 100023;
 
 
     /**
@@ -208,4 +208,35 @@ public class UserResponseCode {
      * 捐赠时间错误
      */
     public static final Integer DONATE_ORDER_ERROR = 100028;
+
+
+    /**
+     * 登录验证旧密码修改密码错误
+     */
+    public static final Integer LOGIN_UPDATE_PASSWORD_ERROR = 100029;
+
+
+    /**
+     * 手机验证码修改密码错误
+     */
+    public static final Integer CODE_UPDATE_PASSWORD_ERROR = 100030;
+
+
+
+
+    /**
+     * 设置支付密码错误
+     */
+    public static final Integer SET_PAY_PASSWORD_ERROR = 100031;
+
+
+    /**
+     * 修改支付密码错误
+     */
+    public static final Integer UPDATE_PAY_PASSWORD_ERROR = 100032;
+
+
+
+
+
 }

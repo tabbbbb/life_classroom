@@ -2,10 +2,9 @@ package com.ruoyi.life.mapper;
 
 
 import com.ruoyi.life.domain.LifeUserTargetDetail;
-import com.ruoyi.life.domain.vo.LifeDataVo;
+import com.ruoyi.life.domain.vo.user.LifeDataVo;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 用户目标详细Mapper接口

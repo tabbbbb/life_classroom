@@ -10,7 +10,7 @@ ruoyi:
   demoEnabled: true
   # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
   profile: D:/lanh/uploadPath
-  # 获取ip地址开关 
+  # 获取ip地址开关
   addressEnabled: true
 
 # 开发环境配置
@@ -147,3 +147,4 @@ life:
     mch-id: 1546464881
     mch-key: 33cbc407ecf54de38d41cc3660924911
     notify-url:  http://7p2zs4.natappfree.cc/wx/order/pay-notify
+

@@ -11,8 +11,8 @@
 package com.ruoyi.web.controller.user;
 
 import com.ruoyi.common.response.UserResponse;
-import com.ruoyi.life.domain.vo.LifeCourseConditionVo;
-import com.ruoyi.life.service.LifeCourseService;
+import com.ruoyi.life.domain.vo.user.LifeCourseConditionVo;
+import com.ruoyi.life.service.user.LifeCourseService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;

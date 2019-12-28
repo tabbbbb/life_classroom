@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <th:block th:include="include :: header('用户报表')" />
+    <!-- 引入 echarts.js -->
+
+</head>
+<body class="gray-bg">
+
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <p>基准：</p>
+                            <select name="typeFlag">
+                                <option value="false" selected>用户增长量</option>
+                                <option value="true">用户总量</option>
+                            </select>
+                        </li>
+
+                        <li>
+                            <p>表现形式：</p>
+                            <select name="seriesType" onchange="changeExpression(false)">
+                                <option value="bar" selected >柱形图</option>
+                                <option value="line" >线型图</option>
+                            </select>
+                        </li>
+                        <li>
+                            <p>是否摊平：</p>
+                            <select name="shakeout" >
+                                <option value="false" selected >不摊平</option>
+                                <option value="true" >摊平</option>
+                            </select>
+                        </li>
+                        <li>
+                            <p>时间单位：</p>
+                            <select name="type">
+                                <option value="%Y-%m-%d" selected>日</option>
+                                <option value="%Y-%m">月</option>
+                                <option value="%Y">年</option>
+                            </select>
+                        </li>
+
+
+                        <li class="select-time">
+                            <p>注册时间：</p>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="startDate"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="endDate"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="sub()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="life:chart:user:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <p style="margin-top: 10px;">今日用户增长量为: <span id="addnum" style="padding-right: 20px;font-size: 20px;color: red;"></span >     截至今日用户总量为:<span id="count" style=" padding-right: 20px;font-size: 20px;color: red;"></span></p>
+
+        <div id="main" style="width: 100%;height:600px ;"></div>
+
+    </div>
+</div>
+
+
+<th:block th:include="include :: echarts" />
+<th:block th:include="include :: footer" />
+<script type="text/javascript">
+    var myChart = echarts.init(document.getElementById('main'));
+    var seriesType = 'bar';
+
+    var options = {
+        modalName: "用户报表信息",
+        exportUrl: ctx + "life/chart/user/export"
+    }
+    $.table.init(options);
+
+
+
+    init()
+    function init() {
+        var date = new Date();
+        date.setDate(date.getDate()-5)
+        $("#startTime").val(date.getFullYear()+'-'+dateJoin0(date.getMonth()+1)+'-'+dateJoin0(date.getDate()))
+        date.setDate(date.getDate()+9)
+        $("#endTime").val(date.getFullYear()+'-'+dateJoin0(date.getMonth()+1)+'-'+dateJoin0(date.getDate()))
+        $("[name=shakeout]").val('true')
+        sub()
+    }
+    
+    function dateJoin0(value) {
+        if (value < 10){
+            return '0'+value
+        }
+        return value
+    }
+    
+    
+    function search(data) {
+        $.ajax({
+            cache : true,
+            type : "GET",
+            url : ctx + "life/chart/user/chart",
+            data:data,
+            async : false,
+            error : function(request) {
+                $.modal.alertError(request.error);
+            },
+            success : function(data) {
+                chart(data)
+                $("#addnum").text(data['nowAddNum'])
+                $('#count').text(data['count'])
+            }
+        });
+    }
+    
+    function reset() {
+        $("[name=typeFlag]").val('false')
+        $("[name=type]").val('%Y-%m-%d')
+        $("#startTime").val('')
+        $("#endTime").val('')
+        $("[name=shakeout]").val('false')
+        seriesType = 'bar';
+        $("[name=seriesType]").val('bar')
+        sub()
+    }
+    
+    function sub() {
+        var data = {
+            typeFlag:$("[name=typeFlag]").val(),
+            type:$("[name=type]").val(),
+            startDate: $("#startTime").val(),
+            endDate: $("#endTime").val(),
+            shakeout: $("[name=shakeout]").val()
+        }
+        console.log(data)
+        search(data)
+    }
+    
+    function tooltip(params) {
+
+        if (params != null && params.length == 6){
+            var ym = params*1
+            var y = Math.floor(ym/100)
+            var m = ym - y*100
+            return y+"-"+m
+        }
+    }
+
+    var option ;
+    var xAxis;
+    function chart(data) {
+        var timeLineDataList =   data['timeLineDataList']
+        timeLineDataList.forEach(function (item) {
+            item.tooltip = {
+                formatter:tooltip(item.value)
+            }
+        })
+        xAxis = data['xAxises']
+        var options = data['options']
+        option = {
+            baseOption: {
+                timeline: {
+                    // y: 0,
+                    axisType: 'category',
+                    // realtime: false,
+                    // loop: false,
+                    autoPlay: false,
+                    // currentIndex: 2,
+                    playInterval: 1000,
+                    // controlStyle: {
+                    //     position: 'left'
+                    // },
+                    data: timeLineDataList,
+                    label: {
+                        formatter : function(s) {
+                            return (new Date(s)).getFullYear();
+                        }
+                    }
+                },
+                title: {
+                    subtext: '数据来自生活课堂小程序'
+                },
+                tooltip: {},
+                calculable : true,
+                grid: {
+                    top: 80,
+                    bottom: 100
+                },
+                xAxis: [
+                    xAxis[0]
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '用户数量（个）',
+                    }
+                ],
+                series: [
+                    {
+                        name: '用户数量',
+                        type: seriesType,
+                        label:{
+                            show: true
+                        }
+                    },
+                ]
+            },
+            options: options
+        };
+        myChart.setOption(option)
+    }
+
+    myChart.on('timelinechanged', function (timeLineIndex) {
+        option.baseOption.xAxis[0] = xAxis[timeLineIndex.currentIndex]
+        myChart.setOption(option)
+    });
+    
+    function changeExpression() {
+        seriesType = $("[name=seriesType]").val()
+    }
+
+
+</script>
+</body>
+</html>

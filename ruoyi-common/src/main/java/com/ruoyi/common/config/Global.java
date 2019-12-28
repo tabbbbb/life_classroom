@@ -95,7 +95,7 @@ public class Global
      */
     public static String getAdminAvatarPath()
     {
-        return getProfile() + "/admin/avatar";
+        return getProfile() + "/system/avatar";
     }
 
     /**

@@ -12,7 +12,7 @@ package com.ruoyi.quartz.job.order;
 
 import com.ruoyi.quartz.LifeScheduler;
 import com.ruoyi.life.domain.LifeCourseDetail;
-import com.ruoyi.life.service.LifeCourseDetailService;
+import com.ruoyi.life.service.user.LifeCourseDetailService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -20,10 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -58,25 +55,33 @@ public class SmsOrderJob implements Job {
         for (LifeCourseDetail courseDetail : list) {
             LocalDateTime time = LocalDateTime.now();
             LocalDateTime startTime = LocalDateTime.of(time.getYear(),time.getMonth(),time.getDayOfMonth(),courseDetail.getStartHour(),courseDetail.getStartMinute(),0);
-            List<Long> courseIds15M = map15M.get(startTime.minusMinutes(15));
-            List<Long> courseIds2H = map2H.get(startTime.minusHours(2));
-            if (courseIds15M == null){
-                courseIds15M = new ArrayList<>();
+            LocalDateTime m15 = startTime.minusMinutes(15);
+            LocalDateTime h2 = startTime.minusHours(2);
+            LocalDateTime now = LocalDateTime.now();
+            if (m15.isAfter(now) || m15.equals(now)){
+                List<Long> courseIds15M = map15M.get(m15);
+                if (courseIds15M == null){
+                    courseIds15M = new ArrayList<>();
+                    map15M.put(m15,courseIds15M);
+                }
                 courseIds15M.add(courseDetail.getCourseDetailId());
-                map15M.put(startTime.minusMinutes(15),courseIds15M);
-                courseIds2H = new ArrayList<>();
-                courseIds2H.add(courseDetail.getCourseDetailId());
-                map2H.put(startTime.minusHours(2),courseIds2H);
             }
-            courseIds15M.add(courseDetail.getCourseDetailId());
-            courseIds2H.add(courseDetail.getCourseDetailId());
+            if (h2.isAfter(now) || h2.equals(now)){
+                List<Long> courseIds2H = map2H.get(h2);
+                if (courseIds2H == null){
+                    courseIds2H = new ArrayList<>();
+                    map2H.put(h2,courseIds2H);
+                }
+                courseIds2H.add(courseDetail.getCourseDetailId());
+            }
+
         }
         for (LocalDateTime time : map15M.keySet()) {
-            scheduler.smsDayOrder("15分钟", (Long[]) map15M.get(time).toArray(),time);
+            scheduler.smsDayOrder("15分钟", map15M.get(time).toArray(new Long[0]) , time);
         }
 
         for (LocalDateTime time : map2H.keySet()) {
-            scheduler.smsDayOrder("2小时", (Long[]) map2H.get(time).toArray(),time);
+            scheduler.smsDayOrder("2小时",  map2H.get(time).toArray(new Long[0]),time);
         }
     }
 }
