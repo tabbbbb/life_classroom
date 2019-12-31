@@ -7,12 +7,14 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.life.domain.LifeUser;
 import com.ruoyi.life.domain.vo.system.LifeUserSearchVo;
 import com.ruoyi.life.domain.vo.system.LifeUserVo;
 import com.ruoyi.life.service.system.SysLifeUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.w3.x2000.x09.xmldsig.ObjectType;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -64,6 +66,14 @@ public class SysLifeUserController extends BaseController
         List<LifeUserVo> list = userService.selectLifeUserList(searchVo);
         ExcelUtil<LifeUserVo> util = new ExcelUtil<LifeUserVo>(LifeUserVo.class);
         return util.exportExcel(list, "user");
+    }
+
+    @RequiresPermissions("life:user:setbalance")
+    @Log(title = "修改余额", businessType = BusinessType.UPDATE)
+    @PostMapping("setbalance")
+    @ResponseBody
+    public Object setBalance(LifeUser user){
+        return userService.setBalance(user);
     }
 
 

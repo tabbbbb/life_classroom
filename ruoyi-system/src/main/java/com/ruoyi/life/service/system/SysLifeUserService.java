@@ -11,6 +11,7 @@
 package com.ruoyi.life.service.system;
 
 import com.ruoyi.life.domain.LifeUser;
+import com.ruoyi.life.domain.dto.system.LifeUserDto;
 import com.ruoyi.life.domain.vo.system.LifeUserSearchVo;
 import com.ruoyi.life.domain.vo.system.LifeUserVo;
 
@@ -41,37 +42,12 @@ public interface SysLifeUserService {
      */
     public List<LifeUserVo> selectLifeUserList(LifeUserSearchVo userVo);
 
-    /**
-     * 新增用户
-     *
-     * @param lifeUser 用户
-     * @return 结果
-     */
-    public int insertLifeUser(LifeUser lifeUser);
 
     /**
-     * 修改用户
-     *
-     * @param lifeUser 用户
-     * @return 结果
+     * 添加余额
+     * @return
      */
-    public int updateLifeUser(LifeUser lifeUser);
-
-    /**
-     * 批量删除用户
-     *
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-    public int deleteLifeUserByIds(String ids);
-
-    /**
-     * 删除用户信息
-     *
-     * @param userId 用户ID
-     * @return 结果
-     */
-    public int deleteLifeUserById(Long userId);
+    int setBalance(LifeUser user);
 
 
 }

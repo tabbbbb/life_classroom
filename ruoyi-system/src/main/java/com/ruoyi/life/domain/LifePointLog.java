@@ -22,7 +22,7 @@ public class LifePointLog
     private Integer logId;
 
     /** 变动类型 0:- 1:+ */
-    @Excel(name = "变动类型 0:- 1:+")
+    @Excel(name = "变动类型 ", readConverterExp="1=充值余额,2=充值会员(积分增加),3=充值券,4=退款,5=返佣,6=系统赠送, -1=余额消费,-2=积分消费,-3=充值会员(余额减少)")
     private Integer logType;
 
     /** 积分 */

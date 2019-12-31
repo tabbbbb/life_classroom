@@ -10,6 +10,7 @@
  */
 package com.ruoyi.life.service.system.impl;
 
+import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.life.domain.LifeVip;
 import com.ruoyi.life.mapper.LifeVipMapper;
 import com.ruoyi.life.service.system.SysLifeVipService;
@@ -69,6 +70,8 @@ public class SysLifeVipServiceImpl implements SysLifeVipService {
     {
         return vipMapper.updateLifeVip(lifeVip);
     }
+
+
 
 
 }

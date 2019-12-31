@@ -227,6 +227,9 @@ public class LifeVipServiceImpl implements LifeVipService
         if (vip == null){
             throw new RechargerException(UserResponseCode.PRICE_RECHARGE_VIP_ERROR,"没有此vip类型",userId);
         }
+        if (vip.getEnable().equals(0)){
+            throw new RechargerException(UserResponseCode.PRICE_RECHARGE_VIP_ERROR,"vip不能充值",userId);
+        }
         int flag = userService.deductBalance(userId,vip.getPrint());
         if (flag == -1){
             throw new RechargerException(UserResponseCode.PRICE_RECHARGE_VIP_ERROR,"余额不足",userId);
@@ -295,7 +298,7 @@ public class LifeVipServiceImpl implements LifeVipService
         //余额减少日志
         LifePointLog pointLogPrice = new LifePointLog();
         pointLogPrice.setLogType(-3);
-        pointLogPrice.setExplain("充值"+vip.getPrint()+"元会员");
+        pointLogPrice.setExplain("充值"+vip.getVipName()+"会员");
         pointLogPrice.setUserId(user.getShareId());
         pointLogPrice.setPrice(vip.getPrint());
         pointLogPrice.setLogUserId(userId);

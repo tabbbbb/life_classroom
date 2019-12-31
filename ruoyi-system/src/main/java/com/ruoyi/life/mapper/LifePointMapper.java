@@ -2,6 +2,8 @@ package com.ruoyi.life.mapper;
 
 
 import com.ruoyi.life.domain.LifePoint;
+import com.ruoyi.life.domain.vo.system.LifePointVo;
+import com.ruoyi.life.service.system.SysLifePointService;
 
 import java.awt.*;
 import java.util.List;
@@ -100,4 +102,20 @@ public interface LifePointMapper
      * @return
      */
     LifePoint getRecentlyPoint(Long shareId);
+
+
+    /**
+     * 获取用户积分详细
+     *
+     * @param shareId
+     * @return
+     */
+    List<LifePointVo> getUserPointDetail(Long shareId);
+
+
+    /**
+     *  赠送积分
+     * @return
+     */
+    int insertList(List<LifePoint> list);
 }

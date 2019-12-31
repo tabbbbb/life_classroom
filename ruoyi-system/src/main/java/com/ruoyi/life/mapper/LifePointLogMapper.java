@@ -2,6 +2,9 @@ package com.ruoyi.life.mapper;
 
 
 import com.ruoyi.life.domain.LifePointLog;
+import com.ruoyi.life.domain.vo.system.LifePointLogSearchVo;
+import com.ruoyi.life.domain.vo.system.LifePointLogVo;
+import com.ruoyi.life.domain.vo.system.LifePointVo;
 
 import java.util.List;
 
@@ -62,7 +65,25 @@ public interface LifePointLogMapper
     public int deleteLifePointLogByIds(String[] logIds);
 
 
-
-
+    /**
+     * 积分过期日志
+     * @return
+     */
     int pastPointLog();
+
+
+    /**
+     * 添加积分日志集合
+     * @return
+     */
+    int insertLogList(List<LifePointLog> list);
+
+
+    /**
+     * 查询后台展现消费记录
+     * @param logVo
+     * @return
+     */
+    List<LifePointLogVo> selectLifePointLogVoList(LifePointLogSearchVo logVo);
+
 }

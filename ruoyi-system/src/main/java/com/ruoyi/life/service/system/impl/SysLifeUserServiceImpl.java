@@ -12,6 +12,7 @@ package com.ruoyi.life.service.system.impl;
 
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.life.domain.LifeUser;
+import com.ruoyi.life.domain.dto.system.LifeUserDto;
 import com.ruoyi.life.domain.vo.system.LifeUserSearchVo;
 import com.ruoyi.life.domain.vo.system.LifeUserVo;
 import com.ruoyi.life.mapper.LifeUserMapper;
@@ -19,6 +20,7 @@ import com.ruoyi.life.service.system.SysLifeUserService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -56,56 +58,47 @@ public class SysLifeUserServiceImpl implements SysLifeUserService {
      * @return 用户
      */
     @Override
-    public List<LifeUserVo> selectLifeUserList(LifeUserSearchVo userVo)
-    {
-        return userMapper.selectLifeUserVoList(userVo);
+    public List<LifeUserVo> selectLifeUserList(LifeUserSearchVo userVo) {
+        List<LifeUserDto> list = userMapper.selectLifeUserVoList(userVo);
+        List<LifeUserVo> voList = new ArrayList<>();
+        for (LifeUserDto userDto : list) {
+            String phone = "";
+            Long shareId = userDto.getBindShare();
+            Long userId = userDto.getUserId();
+            if(shareId == null){
+                phone = "未绑定";
+            }else if (shareId.equals(userId)){
+                LifeUser selectUser = new LifeUser();
+                selectUser.setShareId(shareId);
+                List<LifeUser> users = userMapper.selectLifeUserList(selectUser);
+                for (LifeUser user : users) {
+                    if (!user.getUserId().equals(userId)){
+                        phone = user.getPhone();
+                        break;
+                    }
+                }
+            }else{
+                LifeUser user = selectLifeUserById(shareId);
+                phone = user.getPhone();
+            }
+            voList.add(userDto.toVo(phone));
+        }
+        return voList;
     }
 
-    /**
-     * 新增用户
-     *
-     * @param lifeUser 用户
-     * @return 结果
-     */
-    @Override
-    public int insertLifeUser(LifeUser lifeUser)
-    {
-        return userMapper.insertLifeUser(lifeUser);
-    }
+
 
     /**
-     * 修改用户
+     * set余额
      *
-     * @param lifeUser 用户
-     * @return 结果
+     * @param user
+     * @return
      */
     @Override
-    public int updateLifeUser(LifeUser lifeUser)
-    {
-        return userMapper.updateLifeUser(lifeUser);
-    }
-
-    /**
-     * 删除用户对象
-     *
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-    @Override
-    public int deleteLifeUserByIds(String ids)
-    {
-        return userMapper.deleteLifeUserByIds(Convert.toStrArray(ids));
-    }
-
-    /**
-     * 删除用户信息
-     *
-     * @param userId 用户ID
-     * @return 结果
-     */
-    @Override
-    public int deleteLifeUserById(Long userId)
-    {
-        return userMapper.deleteLifeUserById(userId);
+    public int setBalance(LifeUser user) {
+        LifeUser updateUser = new LifeUser();
+        updateUser.setUserId(user.getUserId());
+        updateUser.setBalance(user.getBalance());
+        return userMapper.updateLifeUser(updateUser);
     }
 }

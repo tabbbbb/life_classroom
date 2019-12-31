@@ -2,6 +2,7 @@ package com.ruoyi.life.mapper;
 
 
 import com.ruoyi.life.domain.LifeUser;
+import com.ruoyi.life.domain.dto.system.LifeUserDto;
 import com.ruoyi.life.domain.dto.system.LifeUserNumDto;
 import com.ruoyi.life.domain.vo.system.LifeChartVo;
 import com.ruoyi.life.domain.vo.system.LifeUserSearchVo;
@@ -42,7 +43,7 @@ public interface LifeUserMapper
      * @param userSearchVo
      * @return
      */
-    List<LifeUserVo> selectLifeUserVoList(LifeUserSearchVo userSearchVo);
+    List<LifeUserDto> selectLifeUserVoList(LifeUserSearchVo userSearchVo);
 
 
 

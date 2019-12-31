@@ -185,7 +185,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectLifeUserVo"/>
         where open_id = #{openId}
     </select>
-    <select id="selectLifeUserVoList" resultType="com.ruoyi.life.domain.vo.system.LifeUserVo">
+    <select id="selectLifeUserVoList" resultType="com.ruoyi.life.domain.dto.system.LifeUserDto">
       select
         `user`.user_id as `userId`,
         `user`.card_number as cardNumber,
@@ -196,7 +196,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         `user`.phone as phone,
         max(`point`.vip_id) as vipId,
         sum(`point`.use_point) as point,
-        if(`user`.share_id is null,'未绑定','绑定') as bindShare,
+        `user`.share_id as bindShare,
         `user`.nick_name as nickName,
         `user`.sex as sex,
         `user`.balance as balance,

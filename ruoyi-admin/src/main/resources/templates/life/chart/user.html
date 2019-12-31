@@ -116,13 +116,15 @@
             url : ctx + "life/chart/user/chart",
             data:data,
             async : false,
-            error : function(request) {
-                $.modal.alertError(request.error);
-            },
             success : function(data) {
-                chart(data)
-                $("#addnum").text(data['nowAddNum'])
-                $('#count').text(data['count'])
+                if (data.code == 500){
+                    $.modal.alert(data.msg,"error")
+                }else{
+                    chart(data)
+                    $("#addnum").text(data['nowAddNum'])
+                    $('#count').text(data['count'])
+                }
+
             }
         });
     }
@@ -146,7 +148,6 @@
             endDate: $("#endTime").val(),
             shakeout: $("[name=shakeout]").val()
         }
-        console.log(data)
         search(data)
     }
     

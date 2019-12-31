@@ -54,7 +54,7 @@ public class LifeReserveServiceImpl implements LifeReserveService
      * @return 结果
      */
     @Override
-    public int insertLifeReserve(LifeReserve lifeReserve)
+    public synchronized int insertLifeReserve(LifeReserve lifeReserve)
     {
         return lifeReserveMapper.insertLifeReserve(lifeReserve);
     }

@@ -71,6 +71,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="isAddChild != null ">#{isAddChild},</if>
          </trim>
     </insert>
+    <insert id="insertList">
+        insert into life_point(vip_id,point_type,start_date,end_date,share_id,point,use_point,user_id)
+        values
+        <foreach collection="list" item="item"  separator=",">
+            (#{item.vipId},#{item.pointType},#{item.startDate},#{item.endDate},#{item.shareId},#{item.point},#{item.usePoint},#{item.userId})
+        </foreach>
+    </insert>
 
     <update id="updateLifePoint" parameterType="LifePoint">
         update life_point
@@ -125,6 +132,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where share_id = #{shareId}
         order by end_date asc
         limit 1
+    </select>
+    <select id="getUserPointDetail" resultType="com.ruoyi.life.domain.vo.system.LifePointVo">
+        select point.use_point as `point`,point.point_type as `source`,vip.vip_name as vipName,user.phone as phone,point.start_date as startDate,point.end_date as endDate from life_point as point
+        inner join life_user as user on user.user_id = point.user_id
+        left join life_vip as vip on vip.vip_id = point.vip_id
+        where point.share_id = #{shareId}
     </select>
 
 </mapper>

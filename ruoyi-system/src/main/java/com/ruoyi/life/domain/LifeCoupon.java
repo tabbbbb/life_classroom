@@ -21,7 +21,7 @@ public class LifeCoupon
     private Long couponId;
 
     /** 优惠券类型 0产品抵扣券，1实物抵用券，2充值券，3余额抵用券，4积分折扣券 */
-    @Excel(name = "优惠券类型 0产品抵扣券，1实物抵用券，2充值券，3余额抵用券，4积分折扣券")
+    @Excel(name = "优惠券类型 ",readConverterExp = "0 = 产品抵扣券,1 =实物抵用券,2=充值券,3=余额抵用券,4=积分折扣券")
     private Long type;
 
     /** 名称 */
@@ -33,7 +33,6 @@ public class LifeCoupon
     private String img;
 
     /** 积分满足要求 */
-    @Excel(name = "积分满足要求")
     private Integer fullPoint;
 
     /** 折扣 */
@@ -41,7 +40,7 @@ public class LifeCoupon
     private Integer discount;
 
     /** 抵用或是充值 */
-    @Excel(name = "抵用或是充值")
+    @Excel(name = "抵用积分或充值积分")
     private Integer point;
 
     /** 间隔天数 */
@@ -53,7 +52,7 @@ public class LifeCoupon
     private Integer enableDay;
 
     /** -1外联课程 -2自有课程 <0限定课程 0所有课程 */
-    @Excel(name = "-1外联课程 -2自有课程 <0限定课程 0所有课程")
+    @Excel(name = "使用规则",readConverterExp = "-1=外联课程 ,-2=自有课程 , 0=所有课程")
     private Long astrict;
 
     /** 优惠券说明 */
@@ -68,7 +67,6 @@ public class LifeCoupon
 
 
     /** 1删除 */
-    @Excel(name = "1删除")
     private Integer deleteFlag;
 
     public void setCouponId(Long couponId) 

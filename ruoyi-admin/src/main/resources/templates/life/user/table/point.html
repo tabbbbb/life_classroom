@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('用户列表')" />
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+
+    var sourceData = ['充值会员','退款','充值券','返佣','系统赠送']
+    var userId = getUrlParam('userid');
+
+    $(function() {
+        var options = {
+            url: "/life/point/list?userId="+userId,
+            modalName: "用户积分",
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            columns: [
+                {
+                    field : 'point',
+                    title : '积分数'
+                },
+                {
+                    field : 'source',
+                    title : '获取途径',
+                    formatter: function(value, row, index) {
+
+                        return sourceData[value*1-1];
+                    }
+                },
+                {
+                    field : 'vipName',
+                    title : '开通会员'
+                },
+                {
+                    field : 'phone',
+                    title : '所属用户手机号'
+                },
+                {
+                    field : 'startDate',
+                    title : '获得时间'
+                },
+                {
+                    field : 'endDate',
+                    title : '到期时间'
+                }
+            ]
+        };
+        $.table.init(options);
+    });
+
+
+
+
+
+
+    function submitHandler(index, layero) {
+        $.modal.close();
+    }
+
+</script>
+</body>
+</html>

@@ -175,7 +175,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
             throw new OrderException(UserResponseCode.PAY_COURSE_ERROR,"预约课程不唯一");
         }
         LifeCourse course = courseService.selectLifeCourseById(courseId);
-        if (course.getStatus() == 1){
+        if (course == null || course.getStatus() == 1){
             throw new OrderException(UserResponseCode.PAY_COURSE_ERROR,"课程已下架");
         }
         List<Long> userChildIds = payOrderVo.getUserChildIds();

@@ -38,7 +38,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectLifePointLogVo"/>
         where log_id = #{logId}
     </select>
-        
+
+
     <insert id="insertLifePointLog" parameterType="LifePointLog" useGeneratedKeys="true" keyProperty="logId">
         insert into life_point_log
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -96,5 +97,58 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select -2 as log_type,use_point,0 as price,user_id,user_id as log_user_id,'积分过期' as `explain`,null as order_id,end_date from life_point
         where NOW() >= end_date
     </insert>
-    
+    <insert id="insertLogList">
+        insert into life_point_log(log_type, point, price, user_id, log_user_id, `explain`, order_id, add_time)
+        values 
+        <foreach collection="list" item="item" separator="," >
+            (#{item.logType},#{item.point},#{item.price},#{item.userId},#{item.logUserId},#{item.explain},#{item.orderId},#{item.addTime})
+        </foreach>
+    </insert>
+
+    <select id="selectLifePointLogVoList" resultType="com.ruoyi.life.domain.vo.system.LifePointLogVo" parameterType="com.ruoyi.life.domain.vo.system.LifePointLogSearchVo">
+        select
+            log.log_id as logId,
+            log.log_type as logType ,
+            if(log_type > 0,'+','-') as countType,
+            log.point as point,
+            log.price as price,
+            user.phone as phone,
+            log.explain as `explain` ,
+            log.add_time as addTime
+        from life_point_log as log
+        inner join life_user as `user` on user.user_id = log.log_user_id
+        <trim prefix="where" suffixOverrides="and|or">
+          <if test="logType != null">
+              log_type = #{logType} and
+          </if>
+          <if test="explain != null and explain != '' ">
+              `explain` like concat('%',#{explain},'%')
+          </if>
+          <if test="phone != null and phone != '' ">
+              phone = #{phone} and
+          </if>
+          <choose>
+              <when test="startTime != null and endTime != null">
+                  date_format(log.add_time,'%Y-%m-%d') >= #{startTime} and #{endTime} >= date_format(log.add_time,'%Y-%m-%d') and
+              </when>
+              <when test="startTime != null">
+                  date_format(log.add_time,'%Y-%m-%d') >= #{startTime} and
+              </when>
+              <when test="endTime != null">
+                  #{endTime} >= date_format(log.add_time,'%Y-%m-%d') and
+              </when>
+          </choose>
+          <if test="countType != null">
+              <choose>
+                  <when test="countType == -1">
+                    0 > log.log_type and
+                  </when>
+                  <when test="countType == 1">
+                    log.log_type > 0 and
+                  </when>
+              </choose>
+          </if>
+        </trim>
+    </select>
+
 </mapper>

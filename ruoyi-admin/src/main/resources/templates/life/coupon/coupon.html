@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('优惠卷列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>优惠券类型：</p>
+                                <select name="type" >
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>名称：</p>
+                                <input type="text" name="name"/>
+                            </li>
+
+                            <li>
+                                <p>使用限制：</p>
+                                <input type="text" name="astrict"/>
+                            </li>
+                            <li>
+                                <p>优惠券说明：</p>
+                                <input type="text" name="remarks"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="life:coupon:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="life:coupon:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="life:coupon:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="life:coupon:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('life:coupon:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('life:coupon:remove')}]];
+        var prefix = ctx + "life/coupon";
+        var type =  [ '产品抵扣券','实物抵用券','充值券','余额抵用券','积分折扣券']
+        var astrict = [ '自有课程','外联课程'  ,'所有课程']
+        $(function() {
+
+            var $type = $('[name=type]')
+            type.forEach(function (value,index) {
+                $type.append("<option value=\""+(index)+"\">"+value+"</option>")
+            })
+
+
+
+
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "优惠卷",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'couponId', 
+                    title : 'couponId',
+                    visible: false
+                },
+                {
+                    field : 'type', 
+                    title : '优惠券类型',
+                    formatter: function(value, row, index) {
+                        return type[value*1];
+                    }
+                },
+                {
+                    field : 'name', 
+                    title : '名称'
+                },
+                {
+                    field : 'img', 
+                    title : '优惠券图片',
+                    formatter: function(value, row, index) {
+                        return $.table.imageView(value);
+                    }
+                },
+                {
+                    field : 'fullPoint', 
+                    title : '积分满足要求'
+                },
+                {
+                    field : 'discount', 
+                    title : '折扣',
+                    formatter: function(value, row, index) {
+                        if (value == null){
+                            return
+                        }
+                        return value+"%";
+                    }
+                },
+                {
+                    field : 'point', 
+                    title : '充值积分或抵用金额'
+                },
+                {
+                    field : 'intervalDay', 
+                    title : '间隔天数'
+                },
+                {
+                    field : 'enableDay', 
+                    title : '有效天数'
+                },
+                {
+                    field : 'astrict', 
+                    title : '使用规则',
+                    formatter: function(value, row, index) {
+                        if (value <= 0){
+                            return astrict[value*1+2]
+                        }
+                        return "<button class=\"btn btn-info btn-sm \" type=\"button\" ><i class=\"fa fa-paste\"></i>查看</button>";
+                    }
+                },
+                {
+                    field : 'remarks', 
+                    title : '优惠券说明'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.couponId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.couponId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('vip规则')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>会员等级：</p>
+                                <select name="vipLevel">
+                                    <option value="">所有</option>
+                                    <option value="0">普通会员</option>
+                                    <option value="1">卓越会员</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>会员名称：</p>
+                                <input type="text" name="vipName"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="life:vip:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+     <th:block th:include="include :: bootstrap-table-editable-js" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('life:vip:edit')}]];
+        var prefix = ctx + "life/vip";
+        var vipLevelString = ['普通','卓越']
+        var enableString = ['禁用','启用']
+        var bindString = ['否','是']
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                updateUrl: prefix + "/edit/{id}",
+                modalName: "vip规则",
+                onEditableSave: onEditableSave,
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'vipId', 
+                    title : 'vipId',
+                    visible: false
+                },
+                {
+                    field : 'vipLevel', 
+                    title : 'vip等级',
+                    formatter: function(value, row, index) {
+                        return vipLevelString[value*1];
+                    }
+                },
+                {
+                    field : 'vipName', 
+                    title : '会员名称'
+                },
+                {
+                    field : 'point', 
+                    title : '积分'
+                },
+                {
+                    field : 'validity', 
+                    title : '有效月份'
+                },
+                {
+                    field : 'print', 
+                    title : '价格'
+                },
+                {
+                    field : 'child', 
+                    title : '绑定成员数量'
+                },
+                {
+                    field : 'bindRelative', 
+                    title : '是否能绑定家属',
+                    formatter: function(value, row, index) {
+                        return bindString[value*1];
+                    }
+                },
+                {
+                    field : 'enable', 
+                    title : '状态',
+                    align: 'center',
+                    editable : {
+                        type : 'select',
+                        title : '状态',
+                        align: 'center',
+                        source : [
+                            {
+                                value : 1,
+                                text : "启用"
+                            },
+                            {
+                            value : 0,
+                            text : "禁用"
+                            }
+                        ]
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.vipId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+        function onEditableSave (field, row, oldValue, $el) {
+            $.ajax({
+                cache : false,
+                type : "POST",
+                url : ctx + "life/vip/edit",
+                data:row,
+                async : false,
+                success : function(data) {
+                    if (data.code == 500){
+                        $.modal.msgError(data.msg)
+                    }else{
+                        $.modal.msgSuccess(data.msg)
+                    }
+
+                }
+            });
+        }
+
+    </script>
+</body>
+</html>

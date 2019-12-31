@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改vip规则')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-vip-edit" th:object="${lifeVip}">
+            <input name="vipId" th:field="*{vipId}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">vip等级：</label>
+                <div class="col-sm-8">
+                    <select id="vipLevel" name="vipLevel" class="form-control m-b">
+                        <option value="0" th:field="*{vipLevel}">普通</option>
+                        <option value="1" th:selected="*{vipLevel == 1}">卓越</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">会员名称：</label>
+                <div class="col-sm-8">
+                    <input name="vipName" th:field="*{vipName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">充值积分：</label>
+                <div class="col-sm-8">
+                    <input name="point" th:field="*{point}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">有效月份，最大为99：</label>
+                <div class="col-sm-8">
+                    <input name="validity" th:field="*{validity}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">价格 —— 判断普通会员的等级以价格为准：</label>
+                <div class="col-sm-8">
+                    <input name="print" th:field="*{print}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">能绑定多少孩子：</label>
+                <div class="col-sm-8">
+                    <input name="child" th:field="*{child}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否能绑定家属：</label>
+                <div class="col-sm-8">
+                    <select id="bindRelative" name="bindRelative" class="form-control m-b">
+                        <option value="1" th:selected="*{bindRelative == 1}">是</option>
+                        <option value="0" th:field="*{bindRelative}">否</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">状态</label>
+                <div class="col-sm-8">
+                    <select id="enable" name="enable" class="form-control m-b">
+                        <option value="1" th:selected="*{enable == 1}">启用</option>
+                        <option value="0" th:field="*{enable}">禁用</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "life/vip";
+        $("#form-vip-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-vip-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>
