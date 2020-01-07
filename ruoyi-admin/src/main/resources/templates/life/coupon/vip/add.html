@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增充值会员赠送优惠卷')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-coupon-add" >
+            <input name="id"  type="hidden">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">赠送要求：</label>
+                <div class="col-sm-8">
+                    <select name="vipId" th:with="type=${@vip.selectLifeVipList(null)}" class="form-control m-b">
+                        <option value="-1" >注册新用户</option>
+                        <option value="-2" >邀请用户满足要求赠送</option>
+                        <option th:each="dict : ${type}" th:text="${dict.vipName}" th:value="${dict.vipId}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">选择优惠券：</label>
+                <div class="col-sm-8">
+                    <input name="couponId" class="form-control" type="hidden">
+                    <span name="name"></span>
+                    <button class="btn btn-info btn-xs " type="button" onclick='showCoupon()'><i class="fa fa-paste"></i>选择优惠券</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">数量：</label>
+                <div class="col-sm-8">
+                    <input name="number"  class="form-control" type="number">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:src="@{/ruoyi/js/vipcouponaddorupdate.js}"></script>
+    <script type="text/javascript">
+        $("#form-coupon-add").validate({
+            focusCleanup: true
+        });
+        function submitHandler() {
+            if ($.validate.form()) {
+
+                $.operate.save(prefix + "/add", $('#form-coupon-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

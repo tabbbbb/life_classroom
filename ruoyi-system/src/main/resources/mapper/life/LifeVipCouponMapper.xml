@@ -68,5 +68,39 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          <include refid="selectLifeVipCouponVo"/>
          where vip_id = #{vipId}
     </select>
-    
+    <select id="selectVipCouponVoBySearchVo" resultType="com.ruoyi.life.domain.vo.system.LifeVipCouponVo">
+        select
+            vipcoupon.id as id,
+            if(vip.vip_id is null,if(vipcoupon.vip_id = -1,'注册新用户','邀请用户满足要求赠送'),vip.vip_name) as `require`,
+            coupon.name as couponName,
+            coupon.type as couponType,
+            vipcoupon.number as num
+        from life_vip_coupon as vipcoupon
+        inner join life_coupon as coupon on coupon.coupon_id = vipcoupon.coupon_id
+        left join life_vip as vip on vip.vip_id = vipcoupon.vip_id
+        <trim prefix="where " suffixOverrides="and|or">
+            <if test="require != null">
+                vipcoupon.vip_id = #{require} and
+            </if>
+            <if test="couponName != null and couponName != ''">
+                coupon.name like concat('%',#{couponName},'%') and
+            </if>
+            <if test="couponType != null ">
+                coupon.type = #{couponType} and
+            </if>
+        </trim>
+    </select>
+    <select id="selectVipCouponVoById" resultType="com.ruoyi.life.domain.vo.system.LifeVipCouponVo">
+        select
+            vipcoupon.id as id,
+            if(vip.vip_id is null,if(vipcoupon.vip_id = -1,'注册新用户','邀请用户满足要求赠送'),vip.vip_name) as `require`,
+            coupon.name as couponName,
+            coupon.type as couponType,
+            vipcoupon.number as num
+        from life_vip_coupon as vipcoupon
+        inner join life_coupon as coupon on coupon.coupon_id = vipcoupon.coupon_id
+        left join life_vip as vip on vip.vip_id = vipcoupon.vip_id
+        where vipcoupon.id = #{id}
+    </select>
+
 </mapper>

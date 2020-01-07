@@ -33,7 +33,7 @@ import java.util.List;
 @RequestMapping("/life/coupon")
 public class SysLifeCouponController extends BaseController
 {
-    private String prefix = "life/coupon";
+    private String prefix = "life/coupon/coupon";
 
     @Autowired
     private SysLifeCouponService lifeCouponService;
