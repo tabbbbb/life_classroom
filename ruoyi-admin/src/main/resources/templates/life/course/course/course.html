@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('课程列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li style="display: none">
+                                <input type="text" name="courseId"/>
+                            </li>
+
+                            <li>
+                                <p>名称：</p>
+                                <input type="text" name="name"/>
+                            </li>
+                            <li>
+                                <p>商户名称：</p>
+                                <input type="text" name="businessId"/>
+                            </li>
+                            <li>
+                                <p>课程类型：</p>
+                                <select name="courseType">
+                                    <option value="">所有</option>
+                                    <option value="1">普通</option>
+                                    <option value="2">团课</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>课程标签：</p>
+                                <select name="courseLabel" th:with="type=${@label.selectLifeCourseLabelList(null)}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.courseLabelName}" th:value="${dict.courseLabelId}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>课程种类：</p>
+                                <select name="courseKind" >
+                                    <option value="">所有</option>
+                                    <option value="0">自有课程</option>
+                                    <option value="1">外联课程</option>
+                                </select>
+                            </li>
+
+                            <li>
+                                <p>状态：</p>
+                                <select name="status">
+                                    <option value="">所有</option>
+                                    <option value="0">上架中</option>
+                                    <option value="1">已下架</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>目标一级标签：</p>
+                                <select name="courseClassifyPid" th:with="type=${@classify.getSingleClassify(0)}" onchange="changeType(false)">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.courseClassifyName}" th:value="${dict.courseClassifyId}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>目标二级标签：</p>
+                                <select name="courseClassify2" onchange="changeType(true)">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>目标三级标签：</p>
+                                <select name="courseClassifyId" >
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="life:course:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="life:course:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="life:course:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="life:course:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+     <script th:src="@{/ruoyi/js/course.js}"></script>
+     <script th:src="@{/ruoyi/js/date.js}"></script>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('life:course:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('life:course:remove')}]];
+        var prefix = ctx + "life/course";
+
+        $(function() {
+            $('[name=courseId]').val(getUrlParam('id'))
+            var select = "/list"
+            var flag = true
+
+            if ( $('[name=courseId]').val() != null && $('[name=courseId]').val() != '' && $('[name=courseId]').val() != undefined   ){
+                select = "/course"
+                flag = false
+                $('.search-collapse').hide()
+            }
+            var options = {
+                url: prefix + select,
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                showSearch: flag,
+                showRefresh: flag,
+                showToggle: flag,
+                showColumns: flag,
+                modalName: "课程",
+                columns: [{
+                    checkbox: flag
+                },
+                {
+                    field : 'courseId', 
+                    title : '课程id',
+                    visible: false
+                },
+                {
+                    field : 'courseName',
+                    title : '名称'
+                },
+                {
+                    field : 'imgUrl', 
+                    title : '图片',
+                    formatter: function(value, row, index) {
+                        return $.table.imageView(value);
+                    }
+                },
+                {
+                    field : 'courseType', 
+                    title : '课程类型'
+                },
+                {
+                    field : 'courseLabel',
+                    title : '课程标签',
+                    formatter: function (value, row, index) {
+                        return "<span class=\"label label-success\">"+value+"</span>"
+                    }
+                },
+                {
+                    field : 'courseClassify',
+                    title : '目标类型',
+                    formatter: function (value, row, index) {
+                        return "<span class=\"label label-warning\">"+value+"</span>"
+                    }
+                },
+                {
+                    field : 'courseKind', 
+                    title : '课程种类'
+                },
+                {
+                    field : 'number', 
+                    title : '数量',
+                    sortable: true
+                },
+                {
+                    field : 'businessName',
+                    title : '商户名称'
+                },
+                {
+                    field : 'ruleUrl', 
+                    title : '规则图片',
+                    formatter: function(value, row, index) {
+                        return $.table.imageView(value);
+                    }
+                },
+                {
+                    field : 'information', 
+                    title : '详细信息',
+                    formatter: function(value, row, index) {
+                        return $.table.imageView(value);
+                    }
+                },
+                {
+                    field : 'status', 
+                    title : '状态',
+                    formatter: function (value, row, index) {
+                        var className = 'default'
+                        if (value == "上架") {
+                            className = 'primary'
+                        }
+                        return "<span class=\"label label-"+className+"\">"+value+"</span>"
+                    }
+                },
+                {
+                    field : 'price', 
+                    title : '价格',
+                    sortable: true
+                },
+                {
+                    field : 'point', 
+                    title : '积分',
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        return value*1/2
+                    }
+                },
+
+                {
+                    field : 'sales', 
+                    title : '销量',
+                    sortable: true
+                },
+                {
+                    field : 'orderBy',
+                    title : '排序字段',
+                    sortable: true
+                },
+                {
+                    field : 'recommend', 
+                    title : '是否推荐',
+                    sortable: true
+                },
+                {
+                    field : 'putawayDate',
+                    title : '上架时间',
+                    sortable: true
+                },
+                {
+                    field : 'soldOutDate',
+                    title : '下架时间',
+                    sortable: true
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        var upOrDown = '上架'
+                        var upOrDownStyle = 'primary'
+                        if (row.status == "上架"){
+                            upOrDown = '下架'
+                            upOrDownStyle = 'default'
+                        }
+                        actions.push('<a class="btn btn-'+upOrDownStyle+' btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="upAndDown(\'' + JSON.stringify(row).replace(new RegExp("\"","g"), "AAABBBCCCDDD") + '\',\''+upOrDown+'\','+index+')"><i class="fa fa-edit"></i>'+upOrDown+'</a> ');
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.courseId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.courseId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+
+
+        function resetType(name){
+            $("[name = "+name+"]").html("<option value=\"\">所有</option>")
+        }
+        
+        function upAndDown(row,operation,index) {
+            row = toObject(row)
+            $.ajax({
+                cache : false,
+                type : "PUT",
+                url : ctx + "life/course/upanddown",
+                data:{
+                    'courseId':row.courseId
+                },
+                success : function(data) {
+                    if (data.code == 500){
+                        $.modal.alert(operation+'异常','error')
+                    }else{
+                        console.log(1)
+                        row.status = operation
+                        $("#" + table.options.id).bootstrapTable('updateRow', {
+                            index: index,
+                            row: getCourseData(row.courseId)
+                        })
+                    }
+                }
+            });
+        }
+
+
+        function getCourseData(courseId) {
+            var course = null
+            $.ajax({
+                cache : false,
+                async:false,
+                type : "GET",
+                url : ctx + "life/course/course",
+                data:{
+                    'courseId':courseId
+                },
+                success : function(data) {
+                    course = data
+                }
+            });
+            return course
+        }
+
+
+        function update(courseId) {
+            var course = $("#" + table.options.id).bootstrapTable('getData');
+            course.forEach(function (item,index) {
+                if (item.courseId == courseId){
+                    $("#" + table.options.id).bootstrapTable('updateRow', {
+                        index:index,
+                        row:getCourseData(courseId)
+                    })
+                    return
+                }
+            })
+
+        }
+
+
+
+        
+        function add(courseId) {
+            $("#" + table.options.id).bootstrapTable('insertRow', {
+                index: 0, // 你想插入到哪，0表示第一行
+                row: getCourseData(courseId)
+            })
+        }
+
+
+        function toObject(doc) {
+            var objectString = doc.replace(new RegExp("AAABBBCCCDDD","g"), "\"").toString();
+            var object = JSON.parse(objectString);
+            return object
+        }
+
+
+        /* 添加用户-选择用户-提交 */
+        function submitHandler(index, layero) {
+            if (parent.$('#couponadd') == null || parent.$('#couponadd') .length == 0)  $.modal.close();
+            var rows = $("#" + table.options.id).bootstrapTable('getSelections');
+            if (rows.length == 0) {
+                $.modal.alertWarning("请至少选择一个课程");
+                return;
+            }else if (rows.length > 1) {
+                $.modal.alertWarning("只能选择一个课程");
+                return;
+            }
+
+            // 父页面的方法
+            // parent.selectUsers();
+            // 父页面的变量
+            parent.chooseCourse(rows[0].courseId,rows[0].courseName)
+            $.modal.close();
+        }
+
+        
+    </script>
+</body>
+</html>

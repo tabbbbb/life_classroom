@@ -1,0 +1,12 @@
+.inputwidth {
+    display: inline-block;
+    width:80%;
+}
+
+.filenone{
+    display: none;
+}
+
+.ib {
+    display: inline-block;
+}

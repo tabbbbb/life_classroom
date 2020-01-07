@@ -106,6 +106,37 @@ public class Global
         return getProfile() + "/user/avatar";
     }
 
+
+
+    public static String getSystemCourseImgUrl(){
+        return getProfile() + "/course/img";
+    }
+
+    public static String getSystemCourseCarouselUrl(){
+        return getProfile() + "/course/carouse";
+    }
+
+    public static String getSystemCourseTeacherExplain(){
+        return getProfile() + "/course/teacher";
+    }
+
+    public static String getSystemCourseRuleUrl(){
+        return getProfile() + "/course/rule";
+    }
+
+    public static String getSystemCourseInformation(){
+        return getProfile() + "/course/information";
+    }
+
+
+    public static String getSystemCourseClassify(){
+        return getProfile() + "/classify";
+    }
+
+    public static String getSystemCoupon(){
+        return getProfile() + "/coupon";
+    }
+
     /**
      * 获取下载路径
      */

@@ -1,21 +1,30 @@
-package com.ruoyi.life.mapper;
-
+/**
+ * Copyright (C), 2020, 蓝煌信息科技公司
+ * FileName: SysLifeCourseClassifyService
+ * Author:   Administrator
+ * Date:     2020/1/2 0002 10:35
+ * Description:
+ * History:
+ * <author>          <time>          <version>          <desc>
+ * 作者姓名           修改时间           版本号              描述
+ */
+package com.ruoyi.life.service.system;
 
 import com.ruoyi.life.domain.LifeCourseClassify;
+import com.ruoyi.life.domain.vo.system.LifeCourseClassifyVo;
+import com.ruoyi.life.mapper.LifeCourseDetailMapper;
 
 import java.util.List;
 
 /**
- * 目标标签Mapper接口
- * 
- * @author ruoyi
- * @date 2019-12-20
+ * 课程标签接口
  */
-public interface LifeCourseClassifyMapper 
-{
+public interface SysLifeCourseClassifyService {
+
+
     /**
      * 查询目标标签
-     * 
+     *
      * @param courseClassifyId 目标标签ID
      * @return 目标标签
      */
@@ -23,7 +32,7 @@ public interface LifeCourseClassifyMapper
 
     /**
      * 查询目标标签列表
-     * 
+     *
      * @param lifeCourseClassify 目标标签
      * @return 目标标签集合
      */
@@ -31,7 +40,7 @@ public interface LifeCourseClassifyMapper
 
     /**
      * 新增目标标签
-     * 
+     *
      * @param lifeCourseClassify 目标标签
      * @return 结果
      */
@@ -39,42 +48,39 @@ public interface LifeCourseClassifyMapper
 
     /**
      * 修改目标标签
-     * 
+     *
      * @param lifeCourseClassify 目标标签
      * @return 结果
      */
     public int updateLifeCourseClassify(LifeCourseClassify lifeCourseClassify);
 
     /**
-     * 删除目标标签
-     * 
+     * 批量删除目标标签
+     *
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+    public int deleteLifeCourseClassifyByIds(String ids);
+
+    /**
+     * 删除目标标签信息
+     *
      * @param courseClassifyId 目标标签ID
      * @return 结果
      */
-    public int deleteLifeCourseClassifyById(int level,Long courseClassifyId);
-
-    /**
-     * 批量删除目标标签
-     * 
-     * @param courseClassifyIds 需要删除的数据ID
-     * @return 结果
-     */
-    public int deleteLifeCourseClassifyByIds(String[] courseClassifyIds);
-
+    public int deleteLifeCourseClassifyById(Long courseClassifyId);
 
 
     /**
-     * 根据2级目标获取1级
+     * 获取目标标签的下级的标签
+     *
+     * @param pid
      * @return
      */
-    LifeCourseClassify get1LevelBy2Level(Long classifyId);
+    List<LifeCourseClassify> getSingleClassify(Long pid);
 
 
-    /**
-     * 根据 1级 2级 3级 获取id集合
-     * @param level
-     * @param id
-     * @return
-     */
-    Long[] get3LevelBy1LevelOr2LevelOr3Level(int level,Long id);
+
+
+
 }

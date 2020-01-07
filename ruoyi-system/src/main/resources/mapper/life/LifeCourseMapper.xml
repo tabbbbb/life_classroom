@@ -28,13 +28,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="deleteFlage"    column="delete_flage"    />
         <result property="price"    column="price"    />
         <result property="point"    column="point"    />
-        <result property="orderby"    column="orderBy"    />
+        <result property="orderBy"    column="order_by"    />
         <result property="sales"    column="sales"    />
         <result property="recommend"    column="recommend"    />
+        <result property="putawayDate"    column="putaway_date"    />
+        <result property="soldOutDate"    column="sold_out_date"    />
     </resultMap>
 
     <sql id="selectLifeCourseVo">
-        select course_id, name, img_url, carousel_url, course_type, course_label_id, course_classify_pid, course_classify_id, course_kind, age_onset, age_end, teacher_name, teacher_explain, number, `describe`, business_id, rule_url, information, rule_price, status, delete_flage, price, point, orderBy, sales, recommend from life_course
+        select course_id, name, img_url, carousel_url, course_type, course_label_id, course_classify_pid, course_classify_id, course_kind, age_onset, age_end, teacher_name, teacher_explain, `number`, `describe`, business_id, rule_url, information, rule_price, status, delete_flage, price, point, order_by, sales, recommend, putaway_date, sold_out_date from life_course
     </sql>
 
     <select id="selectLifeCourseList" parameterType="LifeCourse" resultMap="LifeCourseResult">
@@ -62,9 +64,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="deleteFlage != null "> and delete_flage = #{deleteFlage}</if>
             <if test="price != null "> and price = #{price}</if>
             <if test="point != null "> and point = #{point}</if>
-            <if test="orderby != null "> and orderBy = #{orderby}</if>
+            <if test="orderBy != null "> and order_by = #{orderBy}</if>
             <if test="sales != null "> and sales = #{sales}</if>
             <if test="recommend != null "> and recommend = #{recommend}</if>
+            <if test="putawayDate != null "> and putaway_date = #{putawayDate}</if>
+            <if test="soldOutDate != null "> and sold_out_date = #{soldOutDate}</if>
         </where>
     </select>
     
@@ -98,9 +102,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="deleteFlage != null ">delete_flage,</if>
             <if test="price != null ">price,</if>
             <if test="point != null ">point,</if>
-            <if test="orderby != null ">orderBy,</if>
+            <if test="orderBy != null ">order_by,</if>
             <if test="sales != null ">sales,</if>
             <if test="recommend != null ">recommend,</if>
+            <if test="putawayDate != null ">putaway_date,</if>
+            <if test="soldOutDate != null ">sold_out_date,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="name != null  and name != ''">#{name},</if>
@@ -125,9 +131,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="deleteFlage != null ">#{deleteFlage},</if>
             <if test="price != null ">#{price},</if>
             <if test="point != null ">#{point},</if>
-            <if test="orderby != null ">#{orderby},</if>
+            <if test="orderBy != null ">#{orderBy},</if>
             <if test="sales != null ">#{sales},</if>
             <if test="recommend != null ">#{recommend},</if>
+            <if test="putawayDate != null ">#{putawayDate},</if>
+            <if test="soldOutDate != null ">#{soldOutDate},</if>
          </trim>
     </insert>
 
@@ -156,9 +164,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="deleteFlage != null ">delete_flage = #{deleteFlage},</if>
             <if test="price != null ">price = #{price},</if>
             <if test="point != null ">point = #{point},</if>
-            <if test="orderby != null ">orderBy = #{orderby},</if>
+            <if test="orderBy != null ">order_by = #{orderBy},</if>
             <if test="sales != null ">sales = #{sales},</if>
             <if test="recommend != null ">recommend = #{recommend},</if>
+            <if test="putawayDate != null ">putaway_date = #{putawayDate},</if>
+            <if test="soldOutDate != null ">sold_out_date = #{soldOutDate},</if>
         </trim>
         where course_id = #{courseId}
     </update>
@@ -167,12 +177,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         delete from life_course where course_id = #{courseId}
     </delete>
 
-    <delete id="deleteLifeCourseByIds" parameterType="String">
-        delete from life_course where course_id in 
+
+    <update id="deleteLifeCourseByIds" parameterType="String">
+        update life_course set delete_flage = 1 where course_id in
         <foreach item="courseId" collection="array" open="(" separator="," close=")">
             #{courseId}
         </foreach>
-    </delete>
+    </update>
 
     <select id="selectLifeCourseBySearchVo" resultType="com.ruoyi.life.domain.vo.user.LifeCourseByConditionVo">
         select
@@ -225,7 +236,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 order by round(st_distance_sphere (point (#{conditionVo.lon},#{conditionVo.lat}),point (address.lon,address.lat))) asc
             </when>
             <when test="conditionVo.synthesize">
-                order by (course.recommend + course.sales + course.orderBy) desc
+                order by (course.recommend + course.sales + course.order_by) desc
             </when>
             <when test="conditionVo.price != null">
                 <choose>
@@ -275,6 +286,114 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join life_reserve as reserve on reserve.course_detail_id = detail.course_detail_id
         where course.course_id = #{courseId}
     </select>
+    <select id="getSysLifeCourseVoBySearch" resultType="com.ruoyi.life.domain.vo.system.LifeCourseVo">
+         select
+            course.course_id as courseId,
+            course.name as courseName,
+            course.img_url as imgUrl,
+            if(course.course_type = 1,'普通','团课') as courseType,
+            label.course_label_name as courseLabel,
+            classify.course_classify_name as courseClassify,
+            if(course.course_kind = 0,'自有课程','外联课程') as courseKind,
+            course.number as number,
+            business.name as businessName,
+            course.rule_url as ruleUrl,
+            course.information as information,
+            if(course.status = 0,'上架','下架') as status,
+            course.price as price,
+            course.point as point,
+            course.order_by as orderBy,
+            course.recommend as recommend,
+            course.sales as sales,
+            course.putaway_date as putawayDate,
+            course.sold_out_date as soldOutDate
+        from life_course as course
+        inner join life_course_classify as classify on classify.course_classify_id = course.course_classify_id
+        inner join life_course_label as label on label.course_label_id = course.course_label_id
+        left join life_business as business on business.business_id = course.business_id
+        <trim prefix="where" suffixOverrides="and|or">
+            <if test="name != null and name != ''">
+                course.name like concat('%',#{name},'%') and
+            </if>
+            <if test="courseType != null">
+                course.course_type = #{courseType} and
+            </if>
+            <if test="courseLabel != null">
+                course.course_label_id = #{courseLabel} and
+            </if>
+            <choose>
+                <when test="courseClassify3">
+                    course.course_classify_id = #{courseClassify3} and
+                </when>
+                <when test="courseClassify2">
+                    classify.pid = #{courseClassify2} and
+                </when>
+                <when test="courseClassify1">
+                    course.course_classify_pid = #{courseClassify1} and
+                </when>
+            </choose>
+            <if test="courseKind != null">
+                course.course_kind = #{courseKind} and
+            </if>
+            <if test="businessName != null and businessName != ''">
+                business.name like concat('%',#{businessName},'%') and
+            </if>
+            <if test="status != null">
+                course.status = #{status} and
+            </if>
+            course.delete_flage = 0
+        </trim>
+    </select>
+    <select id="selectLifeCourseVoByCourseId" resultType="com.ruoyi.life.domain.vo.system.LifeCourseVo">
+         select
+            course.course_id as courseId,
+            course.name as courseName,
+            course.img_url as imgUrl,
+            if(course.course_type = 1,'普通','团课') as courseType,
+            label.course_label_name as courseLabel,
+            classify.course_classify_name as courseClassify,
+            if(course.course_kind = 0,'自有课程','外联课程') as courseKind,
+            course.number as number,
+            business.name as businessName,
+            course.rule_url as ruleUrl,
+            course.information as information,
+            if(course.status = 0,'上架','下架') as status,
+            course.price as price,
+            course.point as point,
+            course.order_by as orderBy,
+            course.recommend as recommend,
+            course.sales as sales,
+            course.putaway_date as putawayDate,
+            course.sold_out_date as soldOutDate
+        from life_course as course
+        inner join life_course_classify as classify on classify.course_classify_id = course.course_classify_id
+        inner join life_course_label as label on label.course_label_id = course.course_label_id
+        left join life_business as business on business.business_id = course.business_id
+        where course.course_id = #{courseId} and course.delete_flage = 0
+    </select>
+    <select id="selectLifeCourseByClassifyIds" resultType="java.lang.Integer">
+        select count(0) from life_course
+        where delete_flage = 0 and course_classify_id in
+        <foreach collection="courseClassifyIds" separator="," item="item" open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
 
 
+    <update id="deleteLifeCourseByClassifyIds">
+        update life_course set delete_flage = 1
+        where course_classify_id in
+        <foreach item="item" collection="courseClassifyIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+
+    <select id="selectLifeCourseByLabelIds" resultType="java.lang.Integer">
+        select count(0) from life_course
+        where delete_flage = 0 and course_label_id in
+        <foreach collection="ids" separator="," item="item" open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
 </mapper>

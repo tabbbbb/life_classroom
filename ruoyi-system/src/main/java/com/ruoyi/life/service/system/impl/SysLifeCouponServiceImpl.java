@@ -4,12 +4,15 @@ package com.ruoyi.life.service.system.impl;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.life.domain.LifeCoupon;
+import com.ruoyi.life.domain.LifeCourse;
 import com.ruoyi.life.mapper.LifeCouponMapper;
 import com.ruoyi.life.service.system.SysLifeCouponService;
+import jodd.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -57,20 +60,83 @@ public class SysLifeCouponServiceImpl implements SysLifeCouponService
     @Override
     public int insertLifeCoupon(LifeCoupon lifeCoupon)
     {
-        return lifeCouponMapper.insertLifeCoupon(lifeCoupon);
+        return lifeCouponMapper.insertLifeCoupon(verifyCoupon(lifeCoupon));
     }
 
-    /**
-     * 修改优惠卷
-     * 
-     * @param lifeCoupon 优惠卷
-     * @return 结果
-     */
-    @Override
-    public int updateLifeCoupon(LifeCoupon lifeCoupon)
-    {
-        return lifeCouponMapper.updateLifeCoupon(lifeCoupon);
+
+    private LifeCoupon verifyCoupon(LifeCoupon coupon){
+        LifeCoupon insertCoupon = new LifeCoupon();
+        if (StringUtil.isEmpty(coupon.getName())){
+            throw new RuntimeException("输入优惠券名称");
+        }
+        insertCoupon.setName(coupon.getName());
+        if (coupon.getType() == null || coupon.getType() < 0){
+            throw new RuntimeException("选择优惠券类型");
+        }
+        insertCoupon.setType(coupon.getType());
+        if (coupon.getEnableDay() == null || coupon.getEnableDay() < 0){
+            throw new RuntimeException("请输入有效时间或有效时间输入值小于0");
+        }
+        insertCoupon.setEnableDay(coupon.getEnableDay());
+        insertCoupon.setRemarks(coupon.getRemarks());
+        if (coupon.getType() == 0){
+            if (StringUtil.isEmpty(coupon.getImg())){
+                throw new RuntimeException("选择优惠券图片");
+            }
+            if (coupon.getDiscount() == null || coupon.getDiscount() < 0){
+                throw new RuntimeException("折扣未输入或输入值小于0");
+            }
+            insertCoupon.setImg(coupon.getImg());
+            insertCoupon.setDiscount(coupon.getDiscount());
+        }else if (coupon.getType() == 1){
+            if (StringUtil.isEmpty(coupon.getImg())){
+                throw new RuntimeException("选择优惠券图片");
+            }
+            if (coupon.getType() <= 0){
+                throw new RuntimeException("实物券必须指定课程");
+            }
+            insertCoupon.setImg(coupon.getImg());
+        }else if (coupon.getType() == 2){
+            if (coupon.getPoint() == null || coupon.getPoint() < 0){
+                throw new RuntimeException("充值券的积分不能为空或值小于0");
+            }
+            if (coupon.getIntervalDay() < 0){
+                throw new RuntimeException("充值券间隔天数不能为负数");
+            }
+            insertCoupon.setPoint(coupon.getPoint());
+            insertCoupon.setIntervalDay(coupon.getIntervalDay());
+        }else if (coupon.getType() == 3){
+            if (coupon.getPoint() == null || coupon.getPoint() < 0){
+                throw new RuntimeException("余额抵用券抵用金额不能为空或值小于0");
+            }
+            if (coupon.getIntervalDay() < 0){
+                throw new RuntimeException("余额抵用券间隔天数不能为负数");
+            }
+            if (coupon.getAstrict() < -2){
+                throw new RuntimeException("选择规则错误");
+            }
+            insertCoupon.setPoint(coupon.getPoint());
+            insertCoupon.setIntervalDay(coupon.getIntervalDay());
+            insertCoupon.setAstrict(coupon.getAstrict());
+        }else if (coupon.getType() == 4){
+            if (coupon.getDiscount() == null || coupon.getDiscount() < 0){
+                throw new RuntimeException("积分折扣券折扣不能为空或值小于0");
+            }
+            if (coupon.getIntervalDay() < 0){
+                throw new RuntimeException("余额抵用券间隔天数不能为负数");
+            }
+            if (coupon.getAstrict() < -2){
+                throw new RuntimeException("选择规则错误");
+            }
+            insertCoupon.setDiscount(coupon.getDiscount());
+            insertCoupon.setIntervalDay(coupon.getIntervalDay());
+            insertCoupon.setAstrict(coupon.getAstrict());
+        }
+        insertCoupon.setCreateTime(LocalDateTime.now());
+        return insertCoupon;
     }
+
+
 
     /**
      * 删除优惠卷对象
@@ -84,15 +150,5 @@ public class SysLifeCouponServiceImpl implements SysLifeCouponService
         return lifeCouponMapper.deleteLifeCouponByIds(Convert.toStrArray(ids));
     }
 
-    /**
-     * 删除优惠卷信息
-     * 
-     * @param couponId 优惠卷ID
-     * @return 结果
-     */
-    @Override
-    public int deleteLifeCouponById(Long couponId)
-    {
-        return lifeCouponMapper.deleteLifeCouponById(couponId);
-    }
+
 }

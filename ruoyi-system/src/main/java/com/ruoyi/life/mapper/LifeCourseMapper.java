@@ -2,6 +2,8 @@ package com.ruoyi.life.mapper;
 
 
 import com.ruoyi.life.domain.LifeCourse;
+import com.ruoyi.life.domain.vo.system.LifeCourseSearchVo;
+import com.ruoyi.life.domain.vo.system.LifeCourseVo;
 import com.ruoyi.life.domain.vo.user.LifeCourseConditionVo;
 import com.ruoyi.life.domain.vo.user.LifeCourseByConditionVo;
 import com.ruoyi.life.domain.vo.user.LifeCourseDetailVo;
@@ -82,7 +84,42 @@ public interface LifeCourseMapper
     LifeCourseDetailVo getLifeCourseDetailByCourseId(Long courseId);
 
 
+    /**
+     * 根据后台搜索数据返回lifeCourseVo
+     * @return
+     */
+    List<LifeCourseVo> getSysLifeCourseVoBySearch(LifeCourseSearchVo searchVo);
+
+    /**
+     * 查询课程
+     *
+     * @param courseId 课程id
+     * @return 课程集合
+     */
+    public LifeCourseVo selectLifeCourseVoByCourseId(Long courseId);
+
+
+    /**
+     * 根据目标类别ids获取课程数量
+     * @param courseClassifyIds
+     * @return
+     */
+    int selectLifeCourseByClassifyIds(@Param("courseClassifyIds") Long []courseClassifyIds);
+
+
+    /**
+     * 根据目标类别id删除课程
+     * @param courseClassifyIds
+     * @return
+     */
+    int deleteLifeCourseByClassifyIds(Long []courseClassifyIds);
 
 
 
+    /**
+     * 根据课程类别ids获取此课程数量
+     * @param ids
+     * @return
+     */
+    int selectLifeCourseByLabelIds(@Param("ids") String []ids);
 }

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增目标标签')" />
+    <th:block th:include="include :: jasny-bootstrap-css" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-classify-edit" >
+        <input name="courseClassifyId"type="hidden">
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">等级：</label>
+            <div class="col-sm-8" onchange="changeLevel()">
+                <select name="level" class="form-control m-b">
+                    <option value="1" >一级</option>
+                    <option value="2" >二级</option>
+                    <option value="3">三级</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">一级标签：</label>
+            <div class="col-sm-8">
+                <select name="pid" class="form-control m-b" th:with="type=${@classify.getSingleClassify(0)}" onchange="changeType()">
+                    <option th:each="dict : ${type}" th:text="${dict.courseClassifyName}" th:value="${dict.courseClassifyId}"></option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">二级标签：</label>
+            <div class="col-sm-8">
+                <select name="pid2" class="form-control m-b">
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">标签名称：</label>
+            <div class="col-sm-8">
+                <input name="courseClassifyName"  class="form-control" type="text">
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">图片：</label>
+            <div class="fileinput fileinput-new col-sm-8" data-provides="fileinput">
+                <div class="fileinput-preview thumbnail" style="width: 200px; height: 150px;" onclick="clickImg(this)">
+                    <img name="img" />
+                    <span class="filenone" style="display: none"><input type="file" onchange="changeFile(this,'/life/classify/upload')"></span>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+    <th:block th:include="include :: footer" />
+<script th:src="@{/ruoyi/js/classifyaddorupdate.js}"></script>
+<script th:src="@{/ruoyi/js/upload.js}"></script>
+    <script type="text/javascript">
+        var prefix = ctx + "life/classify"
+        $("#form-classify-add").validate({
+            focusCleanup: true
+        });
+        changeLevel()
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", getFromData());
+            }
+        }
+    </script>
+</body>
+</html>

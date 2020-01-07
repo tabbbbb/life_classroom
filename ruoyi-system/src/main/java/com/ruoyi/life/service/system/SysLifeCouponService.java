@@ -37,13 +37,6 @@ public interface SysLifeCouponService
      */
     public int insertLifeCoupon(LifeCoupon lifeCoupon);
 
-    /**
-     * 修改优惠卷
-     * 
-     * @param lifeCoupon 优惠卷
-     * @return 结果
-     */
-    public int updateLifeCoupon(LifeCoupon lifeCoupon);
 
     /**
      * 批量删除优惠卷
@@ -53,11 +46,5 @@ public interface SysLifeCouponService
      */
     public int deleteLifeCouponByIds(String ids);
 
-    /**
-     * 删除优惠卷信息
-     * 
-     * @param couponId 优惠卷ID
-     * @return 结果
-     */
-    public int deleteLifeCouponById(Long couponId);
+
 }

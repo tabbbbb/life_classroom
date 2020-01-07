@@ -1,5 +1,6 @@
 package com.ruoyi.life.domain;
 
+import com.ruoyi.life.domain.vo.system.LifeCourseClassifyVo;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -89,5 +90,15 @@ public class LifeCourseClassify
             .append("level", getLevel())
             .append("img", getImg())
             .toString();
+    }
+
+    public LifeCourseClassifyVo toVo(){
+        LifeCourseClassifyVo vo = new LifeCourseClassifyVo();
+        vo.setCourseClassifyId(this.courseClassifyId);
+        vo.setCourseClassifyName(this.courseClassifyName);
+        vo.setImg(this.img);
+        vo.setLevel(this.level);
+        vo.setPid(this.pid);
+        return vo;
     }
 }

@@ -59,9 +59,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where course_classify_id = #{courseClassifyId}
     </update>
 
-    <delete id="deleteLifeCourseClassifyById" parameterType="Long">
-        delete from life_course_classify where course_classify_id = #{courseClassifyId}
-    </delete>
+    <update id="deleteLifeCourseClassifyById" parameterType="Long">
+        delete from life_course_classify
+        where
+        <choose>
+            <when test="param1 == 1">
+                course_classify_id = #{param2} or
+                pid = #{param2} or
+                pid in (
+                  select a.course_classify_id from (select course_classify_id from life_course_classify where pid = #{param2}) as a
+                )
+            </when>
+            <when test="param1 == 2">
+                pid = #{param2}
+            </when>
+            <when test="param1 == 3">
+                course_classify_id = #{param2}
+           </when>
+        </choose>
+    </update>
 
     <delete id="deleteLifeCourseClassifyByIds" parameterType="String">
         delete from life_course_classify where course_classify_id in 
@@ -70,12 +86,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
-    <select id="get1LevelBy3Level" resultMap="LifeCourseClassifyResult">
+    <select id="get1LevelBy2Level" resultMap="LifeCourseClassifyResult">
         <include refid="selectLifeCourseClassifyVo"/>
         where course_classify_id = (
           select pid from life_course_classify
           where course_classify_id = #{classifyId}
         )
     </select>
-    
+    <select id="get3LevelBy1LevelOr2LevelOr3Level" resultType="long">
+        select course_classify_id from life_course_classify
+        <trim prefix="where " suffixOverrides="and|or">
+            <choose>
+                <when test="param1 == 1">
+                  pid in (
+                    select course_classify_id from life_course_classify
+                    where pid = #{param2}
+                    )
+                </when>
+                <when test="param1 == 2">
+                  pid = #{param2}
+                </when>
+                <when test="param1 == 3">
+                  course_classify_id = #{param2}
+                </when>
+            </choose>
+        </trim>
+    </select>
+
 </mapper>

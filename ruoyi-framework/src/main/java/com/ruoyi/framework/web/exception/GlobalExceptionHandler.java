@@ -2,6 +2,7 @@ package com.ruoyi.framework.web.exception;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.ruoyi.common.exception.file.FileException;
 import com.ruoyi.common.exception.life.user.OrderException;
 import com.ruoyi.common.exception.life.user.RechargerException;
 import com.ruoyi.common.exception.life.user.SetChildException;
@@ -86,6 +87,17 @@ public class GlobalExceptionHandler
     {
         log.error(e.getMessage(), e);
         return AjaxResult.error("服务器错误，请联系管理员");
+    }
+
+
+    /**
+     * 系统异常
+     */
+    @ExceptionHandler(FileException.class)
+    public AjaxResult handleFileException(FileException e)
+    {
+        log.error(e.getMessage(), e);
+        return AjaxResult.error(e.getMessage());
     }
 
     /**

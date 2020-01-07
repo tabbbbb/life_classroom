@@ -106,6 +106,20 @@ public class LifeCourseDetail
         return courseRefundHour;
     }
 
+
+
+    public LifeCourseDetail clone(){
+        LifeCourseDetail detail = new LifeCourseDetail();
+        detail.setCourseId(this.courseId);
+        detail.setWeek(this.week);
+        detail.setCourseRefundHour(this.courseRefundHour);
+        detail.setCourseDuration(this.courseDuration);
+        detail.setCourseDetailId(this.courseDetailId);
+        detail.setStartHour(this.startHour);
+        detail.setStartMinute(this.startMinute);
+        return detail;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)

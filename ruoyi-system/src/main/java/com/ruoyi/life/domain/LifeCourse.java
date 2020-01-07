@@ -6,14 +6,15 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 课程对象 life_course
  * 
  * @author ruoyi
- * @date 2019-12-20
+ * @date 2020-01-02
  */
-public class LifeCourse
+public class LifeCourse extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
@@ -110,7 +111,7 @@ public class LifeCourse
 
     /** 排序字段，最大不超过9223372036854775807 */
     @Excel(name = "排序字段，最大不超过9223372036854775807")
-    private Long orderby;
+    private Long orderBy;
 
     /** 销量 */
     @Excel(name = "销量")
@@ -119,6 +120,14 @@ public class LifeCourse
     /** 用户点击是否推荐时排序，最大为2147483647 */
     @Excel(name = "用户点击是否推荐时排序，最大为2147483647")
     private Integer recommend;
+
+    /** 上架时间 */
+    @Excel(name = "上架时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date putawayDate;
+
+    /** 下架时间 */
+    @Excel(name = "下架时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date soldOutDate;
 
     public void setCourseId(Long courseId) 
     {
@@ -318,7 +327,7 @@ public class LifeCourse
     {
         return price;
     }
-    public void setPoint(Long point) 
+    public void setPoint(Long point)
     {
         this.point = point;
     }
@@ -327,16 +336,16 @@ public class LifeCourse
     {
         return point;
     }
-    public void setOrderby(Long orderby) 
-    {
-        this.orderby = orderby;
+
+    public Long getOrderBy() {
+        return orderBy;
     }
 
-    public Long getOrderby() 
-    {
-        return orderby;
+    public void setOrderBy(Long orderBy) {
+        this.orderBy = orderBy;
     }
-    public void setSales(Long sales) 
+
+    public void setSales(Long sales)
     {
         this.sales = sales;
     }
@@ -353,6 +362,24 @@ public class LifeCourse
     public Integer getRecommend() 
     {
         return recommend;
+    }
+    public void setPutawayDate(Date putawayDate) 
+    {
+        this.putawayDate = putawayDate;
+    }
+
+    public Date getPutawayDate() 
+    {
+        return putawayDate;
+    }
+    public void setSoldOutDate(Date soldOutDate) 
+    {
+        this.soldOutDate = soldOutDate;
+    }
+
+    public Date getSoldOutDate() 
+    {
+        return soldOutDate;
     }
 
     @Override
@@ -381,9 +408,11 @@ public class LifeCourse
             .append("deleteFlage", getDeleteFlage())
             .append("price", getPrice())
             .append("point", getPoint())
-            .append("orderby", getOrderby())
+            .append("orderby", getOrderBy())
             .append("sales", getSales())
             .append("recommend", getRecommend())
+            .append("putawayDate", getPutawayDate())
+            .append("soldOutDate", getSoldOutDate())
             .toString();
     }
 }

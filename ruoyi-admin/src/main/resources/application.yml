@@ -8,7 +8,7 @@ ruoyi:
   copyrightYear: 2019
   # 实例演示开关
   demoEnabled: true
-  # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
+  # 文件路径 示例（ Windows配置D:/lanh/uploadPath，Linux配置 /home/lanh/uploadPath）
   profile: D:/lanh/uploadPath
   # 获取ip地址开关
   addressEnabled: true
@@ -69,6 +69,8 @@ spring:
     restart:
       # 热部署开关
       enabled: true
+
+
 
 # MyBatis
 mybatis:

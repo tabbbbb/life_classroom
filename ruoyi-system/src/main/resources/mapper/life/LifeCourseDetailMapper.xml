@@ -55,6 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
+
     <update id="updateLifeCourseDetail" parameterType="LifeCourseDetail">
         update life_course_detail
         <trim prefix="SET" suffixOverrides=",">
@@ -68,6 +69,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where course_detail_id = #{courseDetailId}
     </update>
 
+
     <delete id="deleteLifeCourseDetailById" parameterType="Long">
         delete from life_course_detail where course_detail_id = #{courseDetailId}
     </delete>
@@ -78,6 +80,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{courseDetailId}
         </foreach>
     </delete>
+
 
 
     <select id="selectNowCourse" resultMap="LifeCourseDetailResult">
@@ -103,6 +106,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectLifeCourseDetailVo"/>
         where course_id = #{courseId}
     </select>
+    <insert id="deleteNotInList">
+        delete from life_course_detail
+        course_detail_id not in
+        <foreach collection="list" separator="," open="(" item="item" close=")">
+            #{item}
+        </foreach>
+    </insert>
+
+    <insert id="insertCourseDetailList">
+        insert into life_course_detail(course_id, week, start_hour, start_minute, course_duration, course_refund_hour)
+        values
+        <foreach collection="list" item="item" separator="," >
+            (#{item.courseId},#{item.week},#{item.startHour},#{item.startMinute},#{item.courseDuration},#{item.courseRefundHour})
+        </foreach>
+    </insert>
 
 
+    <delete id="deleteCourseDetailByCourseId">
+        delete from life_course_detail
+        where course_id = #{courseId}
+    </delete>
 </mapper>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增课程')" />
+    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: jasny-bootstrap-css" />
+    <link th:href="@{/ruoyi/css/course.css}" rel="stylesheet"/>
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-course-edit" >
+        <input name="courseId"  type="hidden">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">名称：</label>
+            <div class="col-sm-8">
+                <input name="name"  class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">课程类型：</label>
+            <div class="col-sm-8">
+                <select name="courseType" class="form-control m-b">
+                    <option value="1">普通</option>
+                    <option value="2">团课</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">课程标签：</label>
+            <div class="col-sm-8">
+                <select name="courseLabelId" class="form-control m-b" th:with="type=${@label.selectLifeCourseLabelList(null)}">
+                    <option th:each="dict : ${type}" th:text="${dict.courseLabelName}" th:value="${dict.courseLabelId}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">目标一级标签：</label>
+            <div class="col-sm-8">
+                <select name="courseClassifyPid" class="form-control m-b" th:with="type=${@classify.getSingleClassify(0)}" onchange="changeType(false)">
+                    <option th:each="dict : ${type}" th:text="${dict.courseClassifyName}" th:value="${dict.courseClassifyId}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">目标二级标签：</label>
+            <div class="col-sm-8">
+                <select name="courseClassify2" class="form-control m-b" onchange="changeType(true)">
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">目标三级标签：</label>
+            <div class="col-sm-8" >
+                <select name="courseClassifyId"class="form-control m-b" >
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">课程种类：</label>
+            <div class="col-sm-8">
+                <select name="courseKind" class="form-control m-b" disabled>
+                    <option value="0" selected >自有课程</option>
+                    <option value="1">外联课程</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">年龄区间 ：</label>
+            <div class="col-sm-8">
+                <div class="col-sm-3">
+                    <input name="ageOnset"  class="form-control" type="number">
+                </div>
+                <div class="col-sm-1">—</div>
+                <div class="col-sm-3">
+                    <input name="ageEnd"  class="form-control col-md-1" type="number">
+                </div>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> -1 为不限年龄</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">老师名称：</label>
+            <div class="col-sm-8">
+                <input name="teacherName"  class="form-control" type="text">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">数量：</label>
+            <div class="col-sm-8">
+                <input name="number"  class="form-control" type="number">
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">价格：</label>
+            <div class="col-sm-8">
+                <input name="price"  class="form-control" type="number">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">积分：</label>
+            <div class="col-sm-8">
+                <input name="point"  class="form-control" type="number">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">排序字段：</label>
+            <div class="col-sm-8">
+                <input name="orderBy"  class="form-control" type="number">
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 小程序首页展示课程的排序，数值越大越靠前，最大不超过9223372036854775807</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">是否推荐：</label>
+            <div class="col-sm-8">
+                <input name="recommend"  class="form-control" type="number">
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 用户点击是否推荐时排序，最大为2147483647</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">课程时长(分钟)：</label>
+            <div class="col-sm-8">
+                <input name="courseDuration"  class="form-control" type="number">
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 最大9999</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">课程开始前多久不能退款(小时)：</label>
+            <div class="col-sm-8">
+                <input name="courseRefundHour" class="form-control" type="number">
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 最大72</span>
+            </div>
+        </div>
+
+        <div class="form-group" name="courseDetail" >
+            <label class="col-sm-3 control-label">上课时间：</label>
+            <div class="col-sm-2" style="display: inline-block;" >
+                <select class="form-control m-b" name="week" >
+                    <option value="0" >所有</option>
+                    <option value="1" >周一</option>
+                    <option value="2" >周二</option>
+                    <option value="3" >周三</option>
+                    <option value="4" >周四</option>
+                    <option value="5" >周五</option>
+                    <option value="6" >周六</option>
+                    <option value="7" >周日</option>
+                </select>
+            </div>
+            <div class="col-sm-2" style="display: inline-block;">
+                <input type="number" class="form-control inputwidth" name="startHour" > <span>时</span>
+            </div>
+            <div class="col-sm-2" style="display: inline-block;">
+                <input type="number" class="form-control inputwidth" name="startMinute"> <span>分</span>
+            </div>
+            <a href="javascript:void(0)"  style="font-size: 30px" onclick="reduceCourseDetail(this)">-</a>
+            <a href="javascript:void(0)"  style="font-size: 30px" onclick="addCourseDetail(this)">+</a>
+        </div>
+
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">图片：</label>
+            <div class="fileinput fileinput-new col-sm-8" data-provides="fileinput">
+                <div class="fileinput-preview thumbnail" style="width: 200px; height: 150px;" onclick="clickImg(this)">
+                    <img name="imgUrl"  />
+                    <span class="filenone"><input type="file" onchange="changeFile(this,0)"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">轮播图：</label>
+            <div class="fileinput fileinput-new col-sm-5" >
+                <div class="ib" >
+                    <a href="javascript:void(0)"  style="font-size: 30px" onclick="reduceUpload(this)">-</a>
+                    <div class="fileinput-preview thumbnail" style="width: 200px; height: 150px;" onclick="clickImg(this)">
+                        <img name="carousel"  />
+                        <span class="filenone"><input type="file" onchange="changeFile(this,1)"></span>
+                    </div>
+                    <a href="javascript:void(0)"  style="font-size: 30px" onclick="addUpload(this)">+</a>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">师资介绍：</label>
+            <div class="fileinput fileinput-new col-sm-8" data-provides="fileinput">
+                <div class="fileinput-preview thumbnail" style="width: 200px; height: 150px;" onclick="clickImg(this)">
+                    <img name="teacher"  />
+                    <span class="filenone"><input type="file" onchange="changeFile(this,2)"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">规则图片：</label>
+            <div class="fileinput fileinput-new col-sm-8" data-provides="fileinput">
+                <div class="fileinput-preview thumbnail" style="width: 200px; height: 150px;" onclick="clickImg(this)">
+                    <img name="rule"  />
+                    <span class="filenone"><input type="file" onchange="changeFile(this,3)"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">详细信息：</label>
+            <div class="fileinput fileinput-new col-sm-8" data-provides="fileinput">
+                <div class="fileinput-preview thumbnail" style="width: 200px; height: 150px;" onclick="clickImg(this)">
+                    <img name="information"  />
+                    <span class="filenone"><input type="file" onchange="changeFile(this,4)"></span>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script th:src="@{/ruoyi/js/course.js}"></script>
+    <script th:src="@{/ruoyi/js/courseaddorupdate.js}"></script>
+    <script type="text/javascript">
+        var prefix = ctx + "life/course"
+        $("#form-course-add").validate({
+            focusCleanup: true
+        });
+        changeType(false)
+        changeType(true)
+        function submitHandler() {
+            var fromData = getFromData()
+            console.log('add',fromData)
+            if ($.validate.form()) {
+                $.ajax({
+                    cache : false,
+                    type : "POST",
+                    url : ctx + "life/course/add",
+                    data:JSON.stringify(fromData),
+                    headers:{
+                        'Content-Type':'application/json;charset=utf-8'
+                    },
+                    success : function(data) {
+                        if (data.code == 500) {
+                            $.modal.alert(data.msg, 'error')
+                        } else {
+                            parent.add(data)
+                            $.modal.close()
+                        }
+                    }
+                })
+
+            }
+        }
+
+        function resetType(name){
+            $("[name = "+name+"]").html('')
+        }
+    </script>
+</body>
+</html>

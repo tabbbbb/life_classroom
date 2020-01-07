@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.life.mapper.LifeCourseLabelMapper">
+    
+    <resultMap type="LifeCourseLabel" id="LifeCourseLabelResult">
+        <result property="courseLabelId"    column="course_label_id"    />
+        <result property="courseLabelName"    column="course_label_name"    />
+    </resultMap>
+
+    <sql id="selectLifeCourseLabelVo">
+        select course_label_id, course_label_name from life_course_label
+    </sql>
+
+    <select id="selectLifeCourseLabelList" parameterType="LifeCourseLabel" resultMap="LifeCourseLabelResult">
+        <include refid="selectLifeCourseLabelVo"/>
+        <where>  
+            <if test="courseLabelName != null  and courseLabelName != ''"> and course_label_name like concat('%', #{courseLabelName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectLifeCourseLabelById" parameterType="Long" resultMap="LifeCourseLabelResult">
+        <include refid="selectLifeCourseLabelVo"/>
+        where course_label_id = #{courseLabelId}
+    </select>
+        
+    <insert id="insertLifeCourseLabel" parameterType="LifeCourseLabel" useGeneratedKeys="true" keyProperty="courseLabelId">
+        insert into life_course_label
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="courseLabelName != null  and courseLabelName != ''">course_label_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="courseLabelName != null  and courseLabelName != ''">#{courseLabelName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLifeCourseLabel" parameterType="LifeCourseLabel">
+        update life_course_label
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="courseLabelName != null  and courseLabelName != ''">course_label_name = #{courseLabelName},</if>
+        </trim>
+        where course_label_id = #{courseLabelId}
+    </update>
+
+    <delete id="deleteLifeCourseLabelById" parameterType="Long">
+        delete from life_course_label where course_label_id = #{courseLabelId}
+    </delete>
+
+    <delete id="deleteLifeCourseLabelByIds" parameterType="String">
+        delete from life_course_label where course_label_id in 
+        <foreach item="courseLabelId" collection="array" open="(" separator="," close=")">
+            #{courseLabelId}
+        </foreach>
+    </delete>
+    
+</mapper>

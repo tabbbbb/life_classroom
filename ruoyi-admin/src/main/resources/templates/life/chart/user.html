@@ -78,6 +78,7 @@
 
 <th:block th:include="include :: echarts" />
 <th:block th:include="include :: footer" />
+<script th:src="@{/ruoyi/js/date.js}"></script>
 <script type="text/javascript">
     var myChart = echarts.init(document.getElementById('main'));
     var seriesType = 'bar';
@@ -94,19 +95,14 @@
     function init() {
         var date = new Date();
         date.setDate(date.getDate()-5)
-        $("#startTime").val(date.getFullYear()+'-'+dateJoin0(date.getMonth()+1)+'-'+dateJoin0(date.getDate()))
+        $("#startTime").val(date.getFullYear()+'-'+conver(date.getMonth()+1)+'-'+conver(date.getDate()))
         date.setDate(date.getDate()+9)
-        $("#endTime").val(date.getFullYear()+'-'+dateJoin0(date.getMonth()+1)+'-'+dateJoin0(date.getDate()))
+        $("#endTime").val(date.getFullYear()+'-'+conver(date.getMonth()+1)+'-'+conver(date.getDate()))
         $("[name=shakeout]").val('true')
         sub()
     }
     
-    function dateJoin0(value) {
-        if (value < 10){
-            return '0'+value
-        }
-        return value
-    }
+
     
     
     function search(data) {

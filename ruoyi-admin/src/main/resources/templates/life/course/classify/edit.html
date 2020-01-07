@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改目标标签')" />
+    <th:block th:include="include :: jasny-bootstrap-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-classify-edit" th:object="${lifeCourseClassify}">
+            <input name="courseClassifyId" th:field="*{courseClassifyId}" type="hidden">
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">等级：</label>
+                <div class="col-sm-8" onchange="changeLevel()">
+                    <select name="level" class="form-control m-b">
+                        <option value="1" th:selected="*{level == 1}">一级</option>
+                        <option value="2" th:selected="*{level == 2}">二级</option>
+                        <option value="3" th:selected="*{level == 3}">三级</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">一级标签：</label>
+                <div class="col-sm-8">
+                    <select name="pid" class="form-control m-b" th:with="type=${@classify.getSingleClassify(0)}" onchange="changeType()">
+                        <option th:each="dict : ${type}" th:text="${dict.courseClassifyName}" th:value="${dict.courseClassifyId}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">二级标签：</label>
+                <div class="col-sm-8">
+                    <select name="pid2" class="form-control m-b">
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">标签名称：</label>
+                <div class="col-sm-8">
+                    <input name="courseClassifyName" th:field="*{courseClassifyName}" class="form-control" type="text">
+                </div>
+            </div>
+
+
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">图片：</label>
+                <div class="fileinput fileinput-new col-sm-8" data-provides="fileinput">
+                    <div class="fileinput-preview thumbnail" style="width: 200px; height: 150px;" onclick="clickImg(this)">
+                        <img name="img" th:src="*{img}" />
+                        <span class="filenone" style="display: none"><input type="file" onchange="changeFile(this,'/life/classify/upload')"></span>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:src="@{/ruoyi/js/classifyaddorupdate.js}"></script>
+    <script th:src="@{/ruoyi/js/upload.js}"></script>
+    <script type="text/javascript">
+        var prefix = ctx + "life/classify";
+        $("#form-classify-edit").validate({
+            focusCleanup: true
+        });
+
+
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", getFromData());
+            }
+        }
+
+
+
+        choose()
+        function choose() {
+            var level = "[[${lifeCourseClassify.level}]]"
+            var pid = "[[${lifeCourseClassify.pid}]]"
+            var level3Pid = "[[${level3Pid}]]"
+            $("[name=level]").val(level)
+            changeLevel()
+            if (level == 2){
+                $("[name=pid]").val(pid)
+            }else if (level == 3) {
+                $("[name=pid]").val(level3Pid)
+                $("[name=pid2]").val(pid)
+            }
+        }
+    </script>
+</body>
+</html>

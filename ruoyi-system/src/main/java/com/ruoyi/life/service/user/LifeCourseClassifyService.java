@@ -21,45 +21,6 @@ public interface LifeCourseClassifyService
      */
     public LifeCourseClassify selectLifeCourseClassifyById(Long courseClassifyId);
 
-    /**
-     * 查询目标标签列表
-     * 
-     * @param lifeCourseClassify 目标标签
-     * @return 目标标签集合
-     */
-    public List<LifeCourseClassify> selectLifeCourseClassifyList(LifeCourseClassify lifeCourseClassify);
-
-    /**
-     * 新增目标标签
-     * 
-     * @param lifeCourseClassify 目标标签
-     * @return 结果
-     */
-    public int insertLifeCourseClassify(LifeCourseClassify lifeCourseClassify);
-
-    /**
-     * 修改目标标签
-     * 
-     * @param lifeCourseClassify 目标标签
-     * @return 结果
-     */
-    public int updateLifeCourseClassify(LifeCourseClassify lifeCourseClassify);
-
-    /**
-     * 批量删除目标标签
-     * 
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-    public int deleteLifeCourseClassifyByIds(String ids);
-
-    /**
-     * 删除目标标签信息
-     * 
-     * @param courseClassifyId 目标标签ID
-     * @return 结果
-     */
-    public int deleteLifeCourseClassifyById(Long courseClassifyId);
 
 
     /**

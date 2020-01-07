@@ -2,10 +2,13 @@ package com.ruoyi.web.controller.system;
 
 
 import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.config.Global;
+import com.ruoyi.common.config.ServerConfig;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.life.domain.LifeCoupon;
 import com.ruoyi.life.service.system.SysLifeCouponService;
@@ -14,7 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -25,12 +31,16 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/life/coupon")
-public class LifeCouponController extends BaseController
+public class SysLifeCouponController extends BaseController
 {
     private String prefix = "life/coupon";
 
     @Autowired
     private SysLifeCouponService lifeCouponService;
+
+
+    @Autowired
+    private ServerConfig serverConfig;
 
     @RequiresPermissions("life:coupon:view")
     @GetMapping()
@@ -87,28 +97,7 @@ public class LifeCouponController extends BaseController
         return toAjax(lifeCouponService.insertLifeCoupon(lifeCoupon));
     }
 
-    /**
-     * 修改优惠卷
-     */
-    @GetMapping("/edit/{couponId}")
-    public String edit(@PathVariable("couponId") Long couponId, ModelMap mmap)
-    {
-        LifeCoupon lifeCoupon = lifeCouponService.selectLifeCouponById(couponId);
-        mmap.put("lifeCoupon", lifeCoupon);
-        return prefix + "/edit";
-    }
 
-    /**
-     * 修改保存优惠卷
-     */
-    @RequiresPermissions("life:coupon:edit")
-    @Log(title = "优惠卷", businessType = BusinessType.UPDATE)
-    @PostMapping("/edit")
-    @ResponseBody
-    public AjaxResult editSave(LifeCoupon lifeCoupon)
-    {
-        return toAjax(lifeCouponService.updateLifeCoupon(lifeCoupon));
-    }
 
     /**
      * 删除优惠卷
@@ -120,5 +109,23 @@ public class LifeCouponController extends BaseController
     public AjaxResult remove(String ids)
     {
         return toAjax(lifeCouponService.deleteLifeCouponByIds(ids));
+    }
+
+
+
+    @PutMapping("/upload")
+    @ResponseBody
+    public Object upCourseImg( MultipartFile file){
+        String url = serverConfig.getUrl();
+        try {
+            if (file == null ){
+                return null;
+            }
+            url+=FileUploadUtils.upload(Global.getSystemCoupon(),file);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return AjaxResult.error(e.getMessage());
+        }
+        return url;
     }
 }

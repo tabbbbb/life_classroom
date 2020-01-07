@@ -29,8 +29,8 @@ import java.math.BigDecimal;
  * @date 2019-11-29
  */
 @RestController
-@RequestMapping("/user/user")
-@Api(value = "/life/life",description = "用户服务")
+@RequestMapping("/life/user")
+@Api(value = "/life/user",description = "用户服务")
 public class LifeUserController extends BaseController
 {
 
