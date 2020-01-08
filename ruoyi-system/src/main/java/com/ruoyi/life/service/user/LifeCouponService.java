@@ -30,12 +30,7 @@ public interface LifeCouponService
     public List<LifeCoupon> selectLifeCouponList(LifeCoupon lifeCoupon);
 
 
-    /**
-     * 根据id数组查询优惠卷集合
-     * @param ids
-     * @return
-     */
-    List<LifeCoupon> selectLifeCouponListByIds(Long [] ids);
+
 
 
     /**

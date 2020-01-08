@@ -10,7 +10,7 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">vip等级：</label>
                 <div class="col-sm-8">
-                    <select id="vipLevel" name="vipLevel" class="form-control m-b">
+                    <select id="vipLevel" name="vipLevel" class="form-control m-b" onchange="chooseVipLevel()">
                         <option value="0" th:field="*{vipLevel}">普通</option>
                         <option value="1" th:selected="*{vipLevel == 1}">卓越</option>
                     </select>
@@ -25,7 +25,7 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">充值积分：</label>
                 <div class="col-sm-8">
-                    <input name="point" th:field="*{point}" class="form-control" type="text">
+                    <input name="point" th:value="${lifeVip.point/2}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">    
@@ -35,7 +35,7 @@
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label">价格 —— 判断普通会员的等级以价格为准：</label>
+                <label class="col-sm-3 control-label">价格：</label>
                 <div class="col-sm-8">
                     <input name="print" th:field="*{print}" class="form-control" type="text">
                 </div>
@@ -59,8 +59,8 @@
                 <label class="col-sm-3 control-label">状态</label>
                 <div class="col-sm-8">
                     <select id="enable" name="enable" class="form-control m-b">
-                        <option value="1" th:selected="*{enable == 1}">启用</option>
-                        <option value="0" th:field="*{enable}">禁用</option>
+                        <option value="0" th:selected="*{enable == 0}">启用</option>
+                        <option value="1" th:selected="*{enable}">禁用</option>
                     </select>
                 </div>
             </div>
@@ -75,7 +75,19 @@
 
         function submitHandler() {
             if ($.validate.form()) {
+                $('[name=point]').val($('[name=point]').val()*1*2)
                 $.operate.save(prefix + "/edit", $('#form-vip-edit').serialize());
+            }
+        }
+        chooseVipLevel()
+        
+        function chooseVipLevel() {
+            var vipLevel = $('[name=vipLevel]').val()
+
+            if (vipLevel == 1){
+                $('[name=validity]').parent().parent().hide()
+            }else{
+                $('[name=validity]').parent().parent().show()
             }
         }
     </script>

@@ -90,9 +90,6 @@ public class LifeUser
     @Excel(name = "二维码")
     private String qrcode;
 
-    /** 公司名称 */
-    @Excel(name = "公司名称")
-    private String companyName;
 
     /** 公司id */
     @Excel(name = "公司id")
@@ -272,15 +269,7 @@ public class LifeUser
     {
         return qrcode;
     }
-    public void setCompanyName(String companyName) 
-    {
-        this.companyName = companyName;
-    }
 
-    public String getCompanyName() 
-    {
-        return companyName;
-    }
     public void setCompanyId(Long companyId) 
     {
         this.companyId = companyId;
@@ -337,7 +326,6 @@ public class LifeUser
             .append("leadId", getLeadId())
             .append("shareId", getShareId())
             .append("qrcode", getQrcode())
-            .append("companyName", getCompanyName())
             .append("companyId", getCompanyId())
             .append("birthday", getBirthday())
             .append("createDate", getCreateDate())

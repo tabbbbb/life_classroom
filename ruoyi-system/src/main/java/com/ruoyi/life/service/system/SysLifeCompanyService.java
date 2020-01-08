@@ -53,11 +53,5 @@ public interface SysLifeCompanyService
      */
     public int deleteLifeCompanyByIds(String ids);
 
-    /**
-     * 删除公司信息
-     * 
-     * @param companyId 公司ID
-     * @return 结果
-     */
-    public int deleteLifeCompanyById(Long companyId);
+
 }

@@ -15,7 +15,7 @@
                                 <input type="text" name="invitationCode"/>
                             </li>
                             <li>
-                                <p>公司名称、：</p>
+                                <p>公司名称：</p>
                                 <input type="text" name="companyName"/>
                             </li>
                             <li>
@@ -28,16 +28,16 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:company:add">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="life:company:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:company:edit">
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="life:company:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:company:remove">
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="life:company:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:company:export">
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="life:company:export">
                     <i class="fa fa-download"></i> 导出
                  </a>
             </div>
@@ -48,9 +48,9 @@
     </div>
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:company:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:company:remove')}]];
-        var prefix = ctx + "system/company";
+        var editFlag = [[${@permission.hasPermi('life:company:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('life:company:remove')}]];
+        var prefix = ctx + "life/company";
 
         $(function() {
             var options = {
@@ -59,6 +59,7 @@
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
+                clickToSelect: true,
                 modalName: "公司",
                 columns: [{
                     checkbox: true
@@ -74,7 +75,15 @@
                 },
                 {
                     field : 'companyName', 
-                    title : '公司名称、'
+                    title : '公司名称'
+                },
+                {
+                    field : 'invitationUrl',
+                    title : '二维码',
+                    formatter: function(value, row, index) {
+                        return $.table.imageView(value);
+                    }
+
                 },
                 {
                     title: '操作',
@@ -82,13 +91,40 @@
                     formatter: function(value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.companyId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.companyId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="removeCompany(\'' + row.companyId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
                 }]
             };
             $.table.init(options);
         });
+        
+        
+        
+        function removeCompany(companyId) {
+            $.modal.confirm("删除公司及所对应的优惠券信息吗？",function () {
+                $.operate.remove(companyId)
+            })
+        }
+
+        /* 添加用户-选择用户-提交 */
+        function submitHandler(index, layero) {
+            var rows = $("#" + table.options.id).bootstrapTable('getSelections');
+            if (rows.length == 0) {
+                $.modal.alertWarning("请至少选择一个公司");
+                return;
+            }else if (rows.length > 1) {
+                $.modal.alertWarning("只能选择一个公司");
+                return;
+            }
+
+            // 父页面的方法
+            // parent.selectUsers();
+            // 父页面的变量
+            parent.chooseCompany(rows[0].companyId,rows[0].companyName)
+            $.modal.close();
+        }
+
     </script>
 </body>
 </html>

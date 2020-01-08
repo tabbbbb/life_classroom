@@ -75,7 +75,7 @@ public class WxConfig {
 
     @Bean
     public WxOperation wxOperation(){
-        WxOperation wxOperation = new WxOperation(wxMaService(),wxPayService());
+        WxOperation wxOperation = new WxOperation(wxMaService(),wxPayService(),properties);
         return wxOperation;
     }
 }

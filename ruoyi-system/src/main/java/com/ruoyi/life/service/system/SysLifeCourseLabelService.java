@@ -53,11 +53,5 @@ public interface SysLifeCourseLabelService
      */
     public int deleteLifeCourseLabelByIds(String ids);
 
-    /**
-     * 删除课程标签信息
-     *
-     * @param courseLabelId 课程标签ID
-     * @return 结果
-     */
-    public int deleteLifeCourseLabelById(Long courseLabelId);
+
 }

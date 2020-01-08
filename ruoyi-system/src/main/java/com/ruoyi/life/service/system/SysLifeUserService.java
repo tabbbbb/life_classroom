@@ -50,4 +50,8 @@ public interface SysLifeUserService {
     int setBalance(LifeUser user);
 
 
+    /**
+     * 根据公司Id获取用户数量
+     */
+    int getUserCountByCompanyIds(String[] companyIds);
 }

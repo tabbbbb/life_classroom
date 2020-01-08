@@ -25,13 +25,13 @@ public class LifeCompanyCouponServiceImpl implements LifeCompanyCouponService
     /**
      * 查询公司员工所送优惠券
      * 
-     * @param comparyCouponId 公司员工所送优惠券ID
+     * @param companyCouponId 公司员工所送优惠券ID
      * @return 公司员工所送优惠券
      */
     @Override
-    public LifeCompanyCoupon selectLifeCompanyCouponById(Long comparyCouponId)
+    public LifeCompanyCoupon selectLifeCompanyCouponById(Long companyCouponId)
     {
-        return lifeCompanyCouponMapper.selectLifeCompanyCouponById(comparyCouponId);
+        return lifeCompanyCouponMapper.selectLifeCompanyCouponById(companyCouponId);
     }
 
     /**
@@ -85,13 +85,13 @@ public class LifeCompanyCouponServiceImpl implements LifeCompanyCouponService
     /**
      * 删除公司员工所送优惠券信息
      * 
-     * @param comparyCouponId 公司员工所送优惠券ID
+     * @param companyCouponId 公司员工所送优惠券ID
      * @return 结果
      */
     @Override
-    public int deleteLifeCompanyCouponById(Long comparyCouponId)
+    public int deleteLifeCompanyCouponById(Long companyCouponId)
     {
-        return lifeCompanyCouponMapper.deleteLifeCompanyCouponById(comparyCouponId);
+        return lifeCompanyCouponMapper.deleteLifeCompanyCouponById(companyCouponId);
     }
 
 

@@ -9,9 +9,9 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 公司对象 life_company
  * 
  * @author ruoyi
- * @date 2019-12-10
+ * @date 2020-01-07
  */
-public class LifeCompany
+public class LifeCompany extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
@@ -22,9 +22,13 @@ public class LifeCompany
     @Excel(name = "邀请码")
     private String invitationCode;
 
-    /** 公司名称、 */
-    @Excel(name = "公司名称、")
+    /** 公司名称 */
+    @Excel(name = "公司名称")
     private String companyName;
+
+    /** 邀请二维码 */
+    @Excel(name = "邀请二维码")
+    private String invitationUrl;
 
     public void setCompanyId(Long companyId) 
     {
@@ -53,6 +57,15 @@ public class LifeCompany
     {
         return companyName;
     }
+    public void setInvitationUrl(String invitationUrl) 
+    {
+        this.invitationUrl = invitationUrl;
+    }
+
+    public String getInvitationUrl() 
+    {
+        return invitationUrl;
+    }
 
     @Override
     public String toString() {
@@ -60,6 +73,7 @@ public class LifeCompany
             .append("companyId", getCompanyId())
             .append("invitationCode", getInvitationCode())
             .append("companyName", getCompanyName())
+            .append("invitationUrl", getInvitationUrl())
             .toString();
     }
 }

@@ -33,12 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 〈一句话功能简述〉<br> 
- * 〈〉
- *
- * @author Administrator
- * @create 2019/11/30 0030
- * @since 1.0.0
+ * 用户认证
  */
 @RestController
 @RequestMapping("/user/auth")

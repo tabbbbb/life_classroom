@@ -47,4 +47,14 @@ public interface SysLifeCouponService
     public int deleteLifeCouponByIds(String ids);
 
 
+
+
+    /**
+     * 批量删除优惠卷根据课程ids
+     *
+     * @param courseIds 需要删除的数据ID
+     * @return 结果
+     */
+    public int deleteLifeCouponByCourseIds(String[] courseIds);
+
 }

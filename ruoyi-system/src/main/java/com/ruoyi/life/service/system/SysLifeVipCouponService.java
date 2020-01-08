@@ -65,4 +65,12 @@ public interface SysLifeVipCouponService
      * @return 充值会员赠送优惠卷
      */
     LifeVipCouponVo selectVipCouponVoById(Long id);
+
+
+    /**
+     * 根据优惠券id删除
+     * @param couponIds
+     * @return
+     */
+    int deleteLifeCouponByCouponIds(String[]couponIds);
 }

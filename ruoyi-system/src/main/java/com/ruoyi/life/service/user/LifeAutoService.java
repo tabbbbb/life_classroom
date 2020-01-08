@@ -15,12 +15,7 @@ import com.ruoyi.common.response.UserResponse;
 import java.util.Map;
 
 /**
- * 〈一句话功能简述〉<br> 
- * 〈〉
- *
- * @author Administrator
- * @create 2019/12/2 0002
- * @since 1.0.0
+ * 用户认证
  */
 public interface LifeAutoService {
 

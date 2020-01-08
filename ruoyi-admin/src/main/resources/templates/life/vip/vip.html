@@ -47,12 +47,12 @@
         var editFlag = [[${@permission.hasPermi('life:vip:edit')}]];
         var prefix = ctx + "life/vip";
         var vipLevelString = ['普通','卓越']
-        var enableString = ['禁用','启用']
         var bindString = ['否','是']
         $(function() {
             var options = {
                 url: prefix + "/list",
                 updateUrl: prefix + "/edit/{id}",
+                clickToSelect: true,
                 modalName: "vip规则",
                 onEditableSave: onEditableSave,
                 columns: [{
@@ -76,7 +76,10 @@
                 },
                 {
                     field : 'point', 
-                    title : '积分'
+                    title : '积分',
+                    formatter: function(value, row, index) {
+                        return value*1/2;
+                    }
                 },
                 {
                     field : 'validity', 
@@ -107,12 +110,12 @@
                         align: 'center',
                         source : [
                             {
-                                value : 1,
+                                value : 0,
                                 text : "启用"
                             },
                             {
-                            value : 0,
-                            text : "禁用"
+                                value : 1,
+                                text : "禁用"
                             }
                         ]
                     }

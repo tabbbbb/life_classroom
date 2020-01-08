@@ -16,10 +16,10 @@ public interface LifeCompanyCouponService
     /**
      * 查询公司员工所送优惠券
      * 
-     * @param comparyCouponId 公司员工所送优惠券ID
+     * @param companyCouponId 公司员工所送优惠券ID
      * @return 公司员工所送优惠券
      */
-    public LifeCompanyCoupon selectLifeCompanyCouponById(Long comparyCouponId);
+    public LifeCompanyCoupon selectLifeCompanyCouponById(Long companyCouponId);
 
     /**
      * 查询公司员工所送优惠券列表
@@ -56,10 +56,10 @@ public interface LifeCompanyCouponService
     /**
      * 删除公司员工所送优惠券信息
      * 
-     * @param comparyCouponId 公司员工所送优惠券ID
+     * @param companyCouponId 公司员工所送优惠券ID
      * @return 结果
      */
-    public int deleteLifeCompanyCouponById(Long comparyCouponId);
+    public int deleteLifeCompanyCouponById(Long companyCouponId);
 
 
 

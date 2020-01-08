@@ -4,6 +4,7 @@ package com.ruoyi.life.mapper;
 import com.ruoyi.life.domain.LifeVipCoupon;
 import com.ruoyi.life.domain.vo.system.LifeVipCouponSearchVo;
 import com.ruoyi.life.domain.vo.system.LifeVipCouponVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -79,4 +80,13 @@ public interface LifeVipCouponMapper {
      * @return
      */
     LifeVipCouponVo selectVipCouponVoById(Long id);
+
+
+
+    /**
+     * 根据优惠券id删除
+     * @param couponIds
+     * @return
+     */
+    int deleteLifeCouponByCouponIds( @Param("couponIds") String[]couponIds);
 }

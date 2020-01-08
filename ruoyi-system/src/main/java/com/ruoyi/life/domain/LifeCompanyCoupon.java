@@ -16,7 +16,7 @@ public class LifeCompanyCoupon
     private static final long serialVersionUID = 1L;
 
     /** $column.columnComment */
-    private Long comparyCouponId;
+    private Long companyCouponId;
 
     /** 优惠卷id、 */
     @Excel(name = "优惠卷id、")
@@ -24,7 +24,7 @@ public class LifeCompanyCoupon
 
     /** 公司id */
     @Excel(name = "公司id")
-    private Long comparyId;
+    private Long companyId;
 
     /** 数量 */
     @Excel(name = "数量")
@@ -34,16 +34,15 @@ public class LifeCompanyCoupon
     @Excel(name = "满足价格条件")
     private Long conditionPrice;
 
-    public void setComparyCouponId(Long comparyCouponId) 
-    {
-        this.comparyCouponId = comparyCouponId;
+    public Long getCompanyCouponId() {
+        return companyCouponId;
     }
 
-    public Long getComparyCouponId() 
-    {
-        return comparyCouponId;
+    public void setCompanyCouponId(Long companyCouponId) {
+        this.companyCouponId = companyCouponId;
     }
-    public void setCouponId(Long couponId) 
+
+    public void setCouponId(Long couponId)
     {
         this.couponId = couponId;
     }
@@ -52,16 +51,16 @@ public class LifeCompanyCoupon
     {
         return couponId;
     }
-    public void setComparyId(Long comparyId) 
-    {
-        this.comparyId = comparyId;
+
+    public Long getCompanyId() {
+        return companyId;
     }
 
-    public Long getComparyId() 
-    {
-        return comparyId;
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
-    public void setNumber(Integer number) 
+
+    public void setNumber(Integer number)
     {
         this.number = number;
     }
@@ -83,9 +82,9 @@ public class LifeCompanyCoupon
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("comparyCouponId", getComparyCouponId())
+            .append("companyCouponId", getCompanyCouponId())
             .append("couponId", getCouponId())
-            .append("comparyId", getComparyId())
+            .append("companyId", getCompanyId())
             .append("number", getNumber())
             .append("conditionPrice", getConditionPrice())
             .toString();

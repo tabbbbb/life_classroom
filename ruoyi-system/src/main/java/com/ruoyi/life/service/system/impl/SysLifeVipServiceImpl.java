@@ -68,9 +68,50 @@ public class SysLifeVipServiceImpl implements SysLifeVipService {
     @Override
     public int updateLifeVip(LifeVip lifeVip)
     {
+        verilyVip(lifeVip);
         return vipMapper.updateLifeVip(lifeVip);
     }
 
+
+    /**
+     * 检查vip
+     */
+    private void verilyVip(LifeVip vip){
+        if (vip.getVipLevel() == null || (vip.getVipLevel() != 0 && vip.getVipLevel() != 1)){
+            throw new RuntimeException("vip等级选择错误");
+        }
+
+        if (vip.getVipName() == null || vip.getVipName().trim() == ""){
+            throw new RuntimeException("vip名称不能为空");
+        }
+
+        if (vip.getPoint() == null || vip.getPoint() < 0){
+            throw new RuntimeException("会员积分不能为空或值小于0");
+        }
+
+        if (vip.getChild() == null || vip.getChild() < 0){
+            throw new RuntimeException("绑定孩子不能为空或值小于0");
+        }
+
+        if (vip.getValidity() == null || vip.getValidity() < 0){
+            throw new RuntimeException("有效月份不能为空或值小于0");
+        }
+
+        if (vip.getPrint() == null || vip.getPrint().intValue() < 0){
+            throw new RuntimeException("价格不能为空或值小于0");
+        }
+        if (vip.getBindRelative() == null || (vip.getBindRelative() != 0 && vip.getBindRelative() != 1)){
+            throw new RuntimeException("绑定家属选择异常");
+        }
+        if (vip.getEnable() == null || (vip.getEnable() != 0 && vip.getEnable() != 1)){
+            throw new RuntimeException("设置启用禁用异常");
+        }
+
+        if (vip.getVipLevel() == 1){
+            vip.setValidity(null);
+        }
+
+    }
 
 
 

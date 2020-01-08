@@ -64,6 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
+
     <select id="selectLifeCouponIds"  resultMap="LifeVipCouponResult">
          <include refid="selectLifeVipCouponVo"/>
          where vip_id = #{vipId}
@@ -102,5 +103,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join life_vip as vip on vip.vip_id = vipcoupon.vip_id
         where vipcoupon.id = #{id}
     </select>
-
+    <delete id="deleteLifeCouponByCouponIds">
+         delete from life_vip_coupon
+         where coupon_id in 
+         <foreach collection="couponIds" item="item" separator="," close=")" open="(">
+             #{item}
+         </foreach>
+    </delete>
 </mapper>

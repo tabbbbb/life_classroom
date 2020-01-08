@@ -137,4 +137,11 @@ public interface LifeUserMapper
      * @return
      */
     long getUserCount();
+
+
+
+    /**
+     * 根据公司Id获取用户数量
+     */
+    int getUserCountByCompanyIds(@Param("companyIds") String[]companyIds);
 }

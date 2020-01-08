@@ -31,12 +31,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
- * 〈一句话功能简述〉<br> 
- * 〈〉
- *
- * @author Administrator
- * @create 2019/12/2 0002
- * @since 1.0.0
+ * 用户认证
  */
 @Service
 public class LifeAutoServiceImpl implements LifeAutoService {
@@ -92,7 +87,6 @@ public class LifeAutoServiceImpl implements LifeAutoService {
         LifeCompany company = companyService.selectLifeCompanyByCode(companyInvitationCard);
         if (company != null) {
             user.setCompanyId(company.getCompanyId());
-            user.setCompanyName(company.getCompanyName());
         }
     }
 

@@ -37,8 +37,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="enableDay != null "> and enable_day = #{enableDay}</if>
             <if test="astrict != null "> and astrict = #{astrict}</if>
             <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
-            <if test="deleteFlag != null "> and delete_flag = #{deleteFlag}</if>
+            and delete_flag = 0
         </where>
+
     </select>
     
     <select id="selectLifeCouponById" parameterType="Long" resultMap="LifeCouponResult">
@@ -102,11 +103,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         delete from life_coupon where coupon_id = #{couponId}
     </delete>
 
-    <delete id="deleteLifeCouponByIds" parameterType="String">
-        delete from life_coupon where coupon_id in 
+    <update id="deleteLifeCouponByIds" parameterType="String">
+        update  life_coupon set detele_flag = 1
+        where coupon_id in
         <foreach item="couponId" collection="array" open="(" separator="," close=")">
             #{couponId}
         </foreach>
-    </delete>
-    
+    </update>
+    <update id="deleteLifeCouponByCouponIds">
+        update  life_coupon set delete_flag = 1
+        where astrict in 
+        <foreach collection="couponIds" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </update>
+
 </mapper>

@@ -8,6 +8,7 @@ import com.ruoyi.life.domain.vo.system.LifeVipCouponVo;
 import com.ruoyi.life.mapper.LifeVipCouponMapper;
 import com.ruoyi.life.service.system.SysLifeCouponService;
 import com.ruoyi.life.service.system.SysLifeVipCouponService;
+import com.ruoyi.life.service.system.SysLifeVipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,9 @@ public class SysLifeVipCouponServiceImpl implements SysLifeVipCouponService
 
     @Resource
     private SysLifeCouponService couponService;
+
+    @Resource
+    private SysLifeVipService vipService;
 
     /**
      * 查询充值会员赠送优惠卷
@@ -70,7 +74,28 @@ public class SysLifeVipCouponServiceImpl implements SysLifeVipCouponService
     @Override
     public int insertLifeVipCoupon(LifeVipCoupon lifeVipCoupon)
     {
+        verilyVipCoupon(lifeVipCoupon);
         return lifeVipCouponMapper.insertLifeVipCoupon(lifeVipCoupon);
+    }
+
+
+    /**
+     * 验证优惠券
+     */
+    private void verilyVipCoupon(LifeVipCoupon vipCoupon){
+        if (vipCoupon.getCouponId() == null){
+            throw new RuntimeException("请选择优惠券");
+        }
+        if (couponService.selectLifeCouponById(vipCoupon.getCouponId()) == null ){
+            throw new RuntimeException("所选优惠券不存在");
+        }
+        if(vipCoupon.getNumber() == null || vipCoupon.getNumber() < 1){
+            throw new RuntimeException("请输入数量或数量小于1");
+        }
+        if (vipCoupon.getVipId() == null || vipCoupon.getVipId()< -2 || vipCoupon.getVipId() > 4){
+            throw new RuntimeException("请选择赠送规则");
+        }
+
     }
 
     /**
@@ -82,8 +107,14 @@ public class SysLifeVipCouponServiceImpl implements SysLifeVipCouponService
     @Override
     public int updateLifeVipCoupon(LifeVipCoupon lifeVipCoupon)
     {
+        verilyVipCoupon(lifeVipCoupon);
         return lifeVipCouponMapper.updateLifeVipCoupon(lifeVipCoupon);
     }
+
+
+
+
+
 
     /**
      * 删除充值会员赠送优惠卷对象
@@ -106,5 +137,17 @@ public class SysLifeVipCouponServiceImpl implements SysLifeVipCouponService
     @Override
     public LifeVipCouponVo selectVipCouponVoById(Long id) {
         return lifeVipCouponMapper.selectVipCouponVoById(id) ;
+    }
+
+
+    /**
+     * 根据优惠券id删除
+     *
+     * @param couponIds
+     * @return
+     */
+    @Override
+    public int deleteLifeCouponByCouponIds(String[] couponIds) {
+        return lifeVipCouponMapper.deleteLifeCouponByCouponIds(couponIds);
     }
 }

@@ -122,4 +122,12 @@ public interface LifeCourseMapper
      * @return
      */
     int selectLifeCourseByLabelIds(@Param("ids") String []ids);
+
+
+    /**
+     * 根据name获取课程
+     * @param name
+     * @return
+     */
+    int selectLifeCourseByName(String name);
 }

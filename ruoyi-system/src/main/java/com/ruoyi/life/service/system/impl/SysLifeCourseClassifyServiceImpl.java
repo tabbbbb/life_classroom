@@ -139,7 +139,7 @@ public class SysLifeCourseClassifyServiceImpl implements SysLifeCourseClassifySe
         if (courseClassifyIds != null && courseClassifyIds.length != 0){
             int courseCount = courseService.selectLifeCourseByClassifyIds(courseClassifyIds);
             if (courseCount != 0){
-                throw new RuntimeException("此目标标签对应课程为"+courseCount+",不能删除");
+                throw new RuntimeException("此目标标签对应课程数量为"+courseCount+",不能删除");
             }
         }
 

@@ -31,13 +31,6 @@ public interface LifeCouponMapper
     public List<LifeCoupon> selectLifeCouponList(LifeCoupon lifeCoupon);
 
 
-    /**
-     * 根据id集合查询优惠卷
-     * @param ids
-     * @return
-     */
-    List<LifeCoupon> selectLifeCouponListByIds(@Param("ids") Long [] ids);
-
 
     /**
      * 新增优惠卷
@@ -70,4 +63,13 @@ public interface LifeCouponMapper
      * @return 结果
      */
     public int deleteLifeCouponByIds(String[] couponIds);
+
+
+    /**
+     * 批量删除优惠卷
+     *
+     * @param couponIds 需要删除的数据ID
+     * @return 结果
+     */
+    public int deleteLifeCouponByCouponIds(@Param("couponIds") String[] couponIds);
 }

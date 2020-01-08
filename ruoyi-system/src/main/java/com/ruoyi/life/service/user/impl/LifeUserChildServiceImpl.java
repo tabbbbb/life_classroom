@@ -100,7 +100,7 @@ public class LifeUserChildServiceImpl implements LifeUserChildService
             return UserResponse.fail(UserResponseCode.USER_ADD_CHILD_ERROR,"添加次数为0");
         }
         if (!point.getUserId().equals(userId)){
-            return UserResponse.fail(UserResponseCode.USER_ADD_CHILD_ERROR,"警告！你越界了");
+            return UserResponse.fail(UserResponseCode.USER_ADD_CHILD_ERROR,"警告！");
         }
         point.setIsAddChild(point.getIsAddChild()-1);
         userChild.setShareId(shareId);

@@ -97,13 +97,5 @@ public class LifeCouponServiceImpl implements LifeCouponService
 
 
 
-    /**
-     * 根据id数组查询优惠卷集合
-     * @param ids
-     * @return
-     */
-    @Override
-    public List<LifeCoupon> selectLifeCouponListByIds(Long[] ids) {
-        return couponMapper.selectLifeCouponListByIds(ids) ;
-    }
+
 }

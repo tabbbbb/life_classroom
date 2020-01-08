@@ -24,12 +24,22 @@ import java.util.Map;
 public interface SysLifeCourseService {
 
     /**
+     * 获取修改页面数据
+     *
+     * @param courseId 课程ID
+     * @return 课程
+     */
+    public Map<String,Object> getEditData(Long courseId);
+
+
+
+    /**
      * 查询课程
      *
      * @param courseId 课程ID
      * @return 课程
      */
-    public Map<String,Object> selectLifeCourseById(Long courseId);
+    public LifeCourse selectLifeCourseById(Long courseId);
 
     /**
      * 查询课程列表
@@ -74,13 +84,7 @@ public interface SysLifeCourseService {
      */
     public int deleteLifeCourseByIds(String ids);
 
-    /**
-     * 删除课程信息
-     *
-     * @param courseId 课程ID
-     * @return 结果
-     */
-    public int deleteLifeCourseById(Long courseId);
+
 
 
     /**
@@ -100,13 +104,6 @@ public interface SysLifeCourseService {
     int selectLifeCourseByClassifyIds(Long []courseClassifyIds);
 
 
-    /**
-     * 根据目标类别id删除课程数量
-     * @param courseClassifyIds
-     * @return
-     */
-    int deleteLifeCourseByClassifyIds(Long []courseClassifyIds);
-
 
     /**
      * 根据课程类别ids获取此课程数量
@@ -114,5 +111,10 @@ public interface SysLifeCourseService {
      * @return
      */
     int selectLifeCourseByLabelIds(String []ids);
+
+
+
+
+
 
 }

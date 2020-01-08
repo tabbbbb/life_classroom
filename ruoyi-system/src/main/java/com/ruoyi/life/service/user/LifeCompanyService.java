@@ -67,4 +67,7 @@ public interface LifeCompanyService
      * @return
      */
     LifeCompany selectLifeCompanyByCode(String code);
+
+
+
 }

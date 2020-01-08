@@ -101,4 +101,15 @@ public class SysLifeUserServiceImpl implements SysLifeUserService {
         updateUser.setBalance(user.getBalance());
         return userMapper.updateLifeUser(updateUser);
     }
+
+
+    /**
+     * 根据公司Id获取用户数量
+     *
+     * @param companyIds
+     */
+    @Override
+    public int getUserCountByCompanyIds(String[]companyIds) {
+        return userMapper.getUserCountByCompanyIds(companyIds);
+    }
 }

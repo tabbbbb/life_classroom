@@ -45,8 +45,6 @@ public class SysLifeCourseController extends BaseController
     private SysLifeCourseService courseService;
 
 
-    @Resource
-    private SysLifeCourseDetailService courseDetailService;
 
 
     @Autowired
@@ -132,7 +130,7 @@ public class SysLifeCourseController extends BaseController
     @GetMapping("/edit/{courseId}")
     public String edit(@PathVariable("courseId") Long courseId, ModelMap mmap)
     {
-        mmap.putAll(courseService.selectLifeCourseById(courseId));
+        mmap.putAll(courseService.getEditData(courseId));
         return prefix + "/edit";
     }
 

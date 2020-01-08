@@ -23,7 +23,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="leadId"    column="lead_id"    />
         <result property="shareId"    column="share_id"    />
         <result property="qrcode"    column="qrcode"    />
-        <result property="companyName"    column="company_name"    />
         <result property="companyId"    column="company_id"    />
         <result property="birthday"    column="birthday"    />
         <result property="createDate"    column="create_date"    />
@@ -31,7 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectLifeUserVo">
-        select user_id, card_number, invitation_card, wx_nick_name, wx_img_url, sex, nick_name, address, open_id, balance, phone, payment_code, password, img_url, parent_id, lead_id, share_id, qrcode, company_name, company_id, birthday, create_date, bind_date from life_user
+        select user_id, card_number, invitation_card, wx_nick_name, wx_img_url, sex, nick_name, address, open_id, balance, phone, payment_code, password, img_url, parent_id, lead_id, share_id, qrcode,  company_id, birthday, create_date, bind_date from life_user
     </sql>
 
     <select id="selectLifeUserList" parameterType="LifeUser" resultMap="LifeUserResult">
@@ -54,7 +53,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="leadId != null "> and lead_id = #{leadId}</if>
             <if test="shareId != null "> and share_id = #{shareId}</if>
             <if test="qrcode != null  and qrcode != ''"> and qrcode = #{qrcode}</if>
-            <if test="companyName != null  and companyName != ''"> and company_name like concat('%', #{companyName}, '%')</if>
             <if test="companyId != null "> and company_id = #{companyId}</if>
             <if test="birthday != null "> and birthday = #{birthday}</if>
             <if test="createDate != null "> and create_date = #{createDate}</if>
@@ -87,7 +85,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="leadId != null ">lead_id,</if>
             <if test="shareId != null ">share_id,</if>
             <if test="qrcode != null  and qrcode != ''">qrcode,</if>
-            <if test="companyName != null  and companyName != ''">company_name,</if>
             <if test="companyId != null ">company_id,</if>
             <if test="birthday != null ">birthday,</if>
             <if test="createDate != null ">create_date,</if>
@@ -111,7 +108,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="leadId != null ">#{leadId},</if>
             <if test="shareId != null ">#{shareId},</if>
             <if test="qrcode != null  and qrcode != ''">#{qrcode},</if>
-            <if test="companyName != null  and companyName != ''">#{companyName},</if>
             <if test="companyId != null ">#{companyId},</if>
             <if test="birthday != null ">#{birthday},</if>
             <if test="createDate != null ">#{createDate},</if>
@@ -139,7 +135,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="leadId != null ">lead_id = #{leadId},</if>
             <if test="shareId != null ">share_id = #{shareId},</if>
             <if test="qrcode != null  and qrcode != ''">qrcode = #{qrcode},</if>
-            <if test="companyName != null  and companyName != ''">company_name = #{companyName},</if>
             <if test="companyId != null ">company_id = #{companyId},</if>
             <if test="birthday != null ">birthday = #{birthday},</if>
             <if test="createDate != null ">create_date = #{createDate},</if>
@@ -201,11 +196,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         `user`.sex as sex,
         `user`.balance as balance,
         ifnull(`vip`.vip_name,'普通') as vipName,
-        `user`.company_name as companyName,
+        `company`.company_name as companyName,
         `user`.create_date as createDate
       from life_user as `user`
       left  join life_point as `point` on `point`.share_id = `user`.share_id or (`user`.share_id is null and `point`.user_id = `user`.user_id)
       left join life_vip as `vip` on `point`.vip_id = `vip`.vip_id
+      left join life_company as company on company.company_id = user.company_id
       <trim prefix="where " prefixOverrides="and|or" suffixOverrides="and|or">
         <if test="cardNumber != null and cardNumber != ''">
             `user`.card_number = #{cardNumber} and
@@ -223,7 +219,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             `user`.phone = #{phone} and
         </if>
         <if test="companyName != null and companyName != ''">
-            `user`.company_name like concat('%',#{companyName},'%') and
+            `company`.company_name like concat('%',#{companyName},'%') and
         </if>
         <choose>
             <when test="startDate != null and endDate != null">
@@ -264,6 +260,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     <select id="getUserCount" resultType="java.lang.Long">
         select count(user_id) from life_user
+    </select>
+    <select id="getUserCountByCompanyIds" resultType="java.lang.Integer">
+        select count(0) from life_user
+        where company_id in 
+        <foreach collection="companyIds" item="item" close=")" open="(" separator=",">
+            #{item}
+        </foreach>
     </select>
 
 

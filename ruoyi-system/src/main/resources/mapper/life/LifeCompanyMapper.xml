@@ -4,14 +4,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.life.mapper.LifeCompanyMapper">
     
-    <resultMap type="com.ruoyi.life.domain.LifeCompany" id="LifeCompanyResult">
+    <resultMap type="LifeCompany" id="LifeCompanyResult">
         <result property="companyId"    column="company_id"    />
         <result property="invitationCode"    column="invitation_code"    />
         <result property="companyName"    column="company_name"    />
+        <result property="invitationUrl"    column="invitation_url"    />
     </resultMap>
 
     <sql id="selectLifeCompanyVo">
-        select company_id, invitation_code, company_name from life_company
+        select company_id, invitation_code, company_name, invitation_url from life_company
     </sql>
 
     <select id="selectLifeCompanyList" parameterType="LifeCompany" resultMap="LifeCompanyResult">
@@ -19,6 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="invitationCode != null  and invitationCode != ''"> and invitation_code = #{invitationCode}</if>
             <if test="companyName != null  and companyName != ''"> and company_name like concat('%', #{companyName}, '%')</if>
+            <if test="invitationUrl != null  and invitationUrl != ''"> and invitation_url = #{invitationUrl}</if>
         </where>
     </select>
     
@@ -26,17 +28,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectLifeCompanyVo"/>
         where company_id = #{companyId}
     </select>
-
-
+        
     <insert id="insertLifeCompany" parameterType="LifeCompany" useGeneratedKeys="true" keyProperty="companyId">
         insert into life_company
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="invitationCode != null  and invitationCode != ''">invitation_code,</if>
             <if test="companyName != null  and companyName != ''">company_name,</if>
+            <if test="invitationUrl != null  and invitationUrl != ''">invitation_url,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="invitationCode != null  and invitationCode != ''">#{invitationCode},</if>
             <if test="companyName != null  and companyName != ''">#{companyName},</if>
+            <if test="invitationUrl != null  and invitationUrl != ''">#{invitationUrl},</if>
          </trim>
     </insert>
 
@@ -45,6 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="invitationCode != null  and invitationCode != ''">invitation_code = #{invitationCode},</if>
             <if test="companyName != null  and companyName != ''">company_name = #{companyName},</if>
+            <if test="invitationUrl != null  and invitationUrl != ''">invitation_url = #{invitationUrl},</if>
         </trim>
         where company_id = #{companyId}
     </update>
@@ -59,11 +63,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{companyId}
         </foreach>
     </delete>
-
-    <select id="selectLifeCompanyByCode" resultMap="LifeCompanyResult">
-        <include refid="selectLifeCompanyVo"/>
-        where invitation_code = #{code}
-    </select>
-
     
 </mapper>

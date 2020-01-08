@@ -11,6 +11,7 @@ import com.ruoyi.life.service.system.SysLifeCourseService;
 import com.ruoyi.life.service.user.LifeCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -94,16 +95,5 @@ public class SysLifeCourseLabelServiceImpl implements SysLifeCourseLabelService
         }
         return courseLabelMapper.deleteLifeCourseLabelByIds(labelIds);
     }
-
-    /**
-     * 删除课程标签信息
-     * 
-     * @param courseLabelId 课程标签ID
-     * @return 结果
-     */
-    @Override
-    public int deleteLifeCourseLabelById(Long courseLabelId)
-    {
-        return courseLabelMapper.deleteLifeCourseLabelById(courseLabelId);
-    }
+    
 }

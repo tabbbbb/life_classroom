@@ -396,4 +396,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{item}
         </foreach>
     </select>
+    <select id="selectLifeCourseByName" resultType="java.lang.Integer">
+        select count(0) from life_course
+        where `name` = #{name}
+    </select>
 </mapper>

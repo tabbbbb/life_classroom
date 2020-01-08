@@ -35,7 +35,6 @@ function changeType() {
         $("[name=discount]").parents(".form-group").hide();
         $("[name=point]").parents(".form-group").hide();
         $("[name=intervalDay]").parents(".form-group").hide();
-        $("[name=astrict]").parents(".form-group").hide();
     }else if (type == 2){
         $("[name=img]").parents(".form-group").hide();
         $("[name=discount]").parents(".form-group").hide();
