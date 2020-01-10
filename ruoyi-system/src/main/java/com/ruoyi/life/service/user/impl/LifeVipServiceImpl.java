@@ -50,7 +50,7 @@ public class LifeVipServiceImpl implements LifeVipService
     private LifeVipCouponService vipCouponService;
 
     @Autowired
-    private LifeCouponReserveService couponReserveService;
+    private LifeCouponReceiveService couponReceiveService;
 
     @Autowired
     private NotifySms sms;
@@ -191,9 +191,9 @@ public class LifeVipServiceImpl implements LifeVipService
         LifePointLog pointLog = new LifePointLog();
         pointLog.setLogType(4);
         pointLog.setExplain("充值"+vip.getPrint()+"元会员");
-        pointLog.setUserId(user.getShareId());
+        pointLog.setUserId(userId);
         pointLog.setPoint(vip.getPoint());
-        pointLog.setLogUserId(userId);
+        pointLog.setShareId(user.getShareId());
         pointLog.setAddTime(start);
         if (pointLogService.insertLifePointLog(pointLog) == 0){
             throw new RechargerException(UserResponseCode.USER_RECHARGE_ERROR,"积分日志添加失败，请联系管理员",userId);
@@ -201,7 +201,7 @@ public class LifeVipServiceImpl implements LifeVipService
         LifeVipCoupon selectVipCoupon = new LifeVipCoupon();
         selectVipCoupon.setVipId(vipId);
         List<LifeVipCoupon> list = vipCouponService.selectLifeCouponIds(vipId);
-        if (couponReserveService.insertLifeCouponReserveVip(userId,list)!= couponReserveService.insertNumVip(list)){
+        if (couponReceiveService.insertLifeCouponReceiveVip(userId,list)!= couponReceiveService.insertNumVip(list)){
             throw new RechargerException(UserResponseCode.USER_RECHARGE_ERROR,"充值所送优惠券添加失败，请联系管理员",userId);
         }
         return UserResponse.succeed(point);
@@ -259,7 +259,7 @@ public class LifeVipServiceImpl implements LifeVipService
         if (user.getParentId() != null){
             LifePointLog pointLog = new LifePointLog();
             pointLog.setLogType(2);
-            pointLog.setLogUserId(user.getUserId());
+            pointLog.setUserId(user.getUserId());
             int num = pointLogService.selectLifePointLogList(pointLog).size();
             if (num == 0){
                 Long commission = Long.valueOf(LifeConfig.getStyMap("commission"));
@@ -284,9 +284,9 @@ public class LifeVipServiceImpl implements LifeVipService
                 LifePointLog pointLogCommission = new LifePointLog();
                 pointLogCommission.setLogType(5);
                 pointLogCommission.setExplain("返佣"+commission+"积分");
-                pointLogCommission.setUserId(parentUser.getShareId());
+                pointLogCommission.setShareId(parentUser.getShareId());
                 pointLogCommission.setPoint(commission);
-                pointLogCommission.setLogUserId(parentUser.getUserId());
+                pointLogCommission.setUserId(parentUser.getUserId());
                 pointLogCommission.setAddTime(start);
                 if (pointLogService.insertLifePointLog(pointLogCommission) == 0){
                     throw new RechargerException(UserResponseCode.USER_RECHARGE_ERROR,"返佣积分增加日志添加失败，请联系管理员",parentUser.getUserId());
@@ -299,9 +299,9 @@ public class LifeVipServiceImpl implements LifeVipService
         LifePointLog pointLogPrice = new LifePointLog();
         pointLogPrice.setLogType(-3);
         pointLogPrice.setExplain("充值"+vip.getVipName()+"会员");
-        pointLogPrice.setUserId(user.getShareId());
+        pointLogPrice.setShareId(user.getShareId());
         pointLogPrice.setPrice(vip.getPrint());
-        pointLogPrice.setLogUserId(userId);
+        pointLogPrice.setUserId(userId);
         pointLogPrice.setAddTime(start);
         if (pointLogService.insertLifePointLog(pointLogPrice) == 0){
             throw new RechargerException(UserResponseCode.USER_RECHARGE_ERROR,"余额减少日志添加失败，请联系管理员",userId);
@@ -310,9 +310,9 @@ public class LifeVipServiceImpl implements LifeVipService
         LifePointLog pointLogPoint = new LifePointLog();
         pointLogPoint.setLogType(2);
         pointLogPoint.setExplain("充值"+vip.getPrint()+"元会员");
-        pointLogPoint.setUserId(user.getShareId());
+        pointLogPoint.setShareId(user.getShareId());
         pointLogPoint.setPoint(vip.getPoint());
-        pointLogPoint.setLogUserId(userId);
+        pointLogPoint.setUserId(userId);
         pointLogPoint.setAddTime(start);
         if (pointLogService.insertLifePointLog(pointLogPoint) == 0){
             throw new RechargerException(UserResponseCode.USER_RECHARGE_ERROR,"积分增加日志添加失败，请联系管理员",userId);
@@ -320,7 +320,7 @@ public class LifeVipServiceImpl implements LifeVipService
         LifeVipCoupon selectVipCoupon = new LifeVipCoupon();
         selectVipCoupon.setVipId(vipId);
         List<LifeVipCoupon> list = vipCouponService.selectLifeCouponIds(vipId);
-        if (couponReserveService.insertLifeCouponReserveVip(userId,list)!= couponReserveService.insertNumVip(list)){
+        if (couponReceiveService.insertLifeCouponReceiveVip(userId,list)!= couponReceiveService.insertNumVip(list)){
             throw new RechargerException(UserResponseCode.USER_RECHARGE_ERROR,"充值所送优惠券添加失败，请联系管理员",userId);
         }
 

@@ -57,7 +57,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
     private LifeCourseDetailService courseDetailService;
 
     @Resource
-    private LifeCouponReserveService couponReserveService;
+    private LifeCouponReceiveService couponReceiveService;
 
     @Resource
     private LifeCouponService couponService;
@@ -68,19 +68,19 @@ public class LifeOrderServiceImpl implements LifeOrderService
 
     /**
      * 查询订单
-     * 
+     *
      * @param orderId 订单ID
      * @return 订单
      */
     @Override
-    public LifeOrder selectLifeOrderById(String orderId)
+    public LifeOrder selectLifeOrderById(Long orderId)
     {
         return lifeOrderMapper.selectLifeOrderById(orderId);
     }
 
     /**
      * 查询订单列表
-     * 
+     *
      * @param lifeOrder 订单
      * @return 订单
      */
@@ -92,7 +92,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
 
     /**
      * 新增订单
-     * 
+     *
      * @param lifeOrder 订单
      * @return 结果
      */
@@ -104,7 +104,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
 
     /**
      * 修改订单
-     * 
+     *
      * @param lifeOrder 订单
      * @return 结果
      */
@@ -116,7 +116,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
 
     /**
      * 删除订单对象
-     * 
+     *
      * @param ids 需要删除的数据ID
      * @return 结果
      */
@@ -128,7 +128,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
 
     /**
      * 删除订单信息
-     * 
+     *
      * @param orderId 订单ID
      * @return 结果
      */
@@ -190,16 +190,16 @@ public class LifeOrderServiceImpl implements LifeOrderService
         }else{
             userChildIds = new ArrayList<>();
         }
-        Long couponReserveId = payOrderVo.getCouponReserveId();
-        LifeCouponReserve couponReserve = null;
+        Long couponReceiveId = payOrderVo.getCouponReceiveId();
+        LifeCouponReceive couponReceive = null;
         LifeCoupon coupon = null;
         BigDecimal toUsePrice = new BigDecimal(0);
-        if (couponReserveId != null){
-            couponReserve = couponReserveService.selectLifeCouponReserveById(couponReserveId);
-            if (couponReserve == null || couponReserve.getStatus() != 0){
+        if (couponReceiveId != null){
+            couponReceive = couponReceiveService.selectLifeCouponReceiveById(couponReceiveId);
+            if (couponReceive == null || couponReceive.getStatus() != 0){
                 throw new OrderException(UserResponseCode.PAY_COURSE_ERROR,"优惠券不能使用");
             }
-            coupon = couponService.selectLifeCouponById(couponReserve.getCouponId());
+            coupon = couponService.selectLifeCouponById(couponReceive.getCouponId());
             if (coupon == null || coupon.getDeleteFlag() == 1){
                 throw new OrderException(UserResponseCode.PAY_COURSE_ERROR,"优惠券已被删除");
             }else if (coupon.getAstrict() != 0){
@@ -218,10 +218,10 @@ public class LifeOrderServiceImpl implements LifeOrderService
             }
             toUsePrice = toUsePrice.add(new BigDecimal(coupon.getPoint()));
             //修改优惠券状态
-            LifeCouponReserve reserve = new LifeCouponReserve();
-            reserve.setReceiveId(couponReserveId);
-            reserve.setStatus(1);
-            if (couponReserveService.updateLifeCouponReserve(reserve) == 0){
+            LifeCouponReceive Receive = new LifeCouponReceive();
+            Receive.setReceiveId(couponReceiveId);
+            Receive.setStatus(1);
+            if (couponReceiveService.updateLifeCouponReceive(Receive) == 0){
                 throw new OrderException(UserResponseCode.PAY_COURSE_ERROR,"修改优惠券状态失败");
             }
         }
@@ -273,8 +273,8 @@ public class LifeOrderServiceImpl implements LifeOrderService
                 LifeOrder order = new LifeOrder();
                 int random = ((int)(Math.random()*900000)+100000);
                 Long timeMillis = System.currentTimeMillis();
-                String orderId = Md5Utils.hash(timeMillis+"_"+random+"_"+i+"_"+j);
-                order.setOrderId(orderId);
+                String verificationCode = Md5Utils.hash(timeMillis+"_"+random+"_"+i+"_"+j);
+                order.setVerificationCode(verificationCode);
                 order.setPid(payOrderVo.getPayType());
                 order.setCourseType(0L);
                 order.setStatus(101L);
@@ -289,7 +289,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
                 order.setDonate(1);
                 order.setCourseDuration(courseDetail.getCourseDuration());
                 order.setPhone(payOrderVo.getPhone());
-                order.setCouponId(couponReserveId);
+                order.setCouponId(couponReceiveId);
                 if (j == userChildIds.size() && payOrderVo.isBindUserPay()){
                     order.setSaleUser(0L);
                 }else if (j == userChildIds.size() && payOrderVo.isUserPay()){
@@ -304,21 +304,25 @@ public class LifeOrderServiceImpl implements LifeOrderService
                     Long point = course.getPoint();
                     if (coupon != null){
                         point = (long)Math.ceil(point*coupon.getDiscount()/100.0);
-                        order.setCouponPoint((int) (course.getPoint()-point));
+                        order.setDiscounts(new BigDecimal((int) (course.getPoint()-point)));
                     }
-                    order.setTotalPoint(course.getPoint());
-                    order.setPayPoint(point);
+                    order.setTotal(new BigDecimal(course.getPoint()));
+                    order.setPay(new BigDecimal(point));
                 }else{
                     BigDecimal price = course.getPrice();
+
                     if (coupon != null){
-                        if (toUsePrice.intValue() != 0 && toUsePrice.compareTo(price) == 1){
+                        if (toUsePrice.doubleValue() != 0 && toUsePrice.compareTo(price) == 1){
+                            order.setDiscounts(price);
                             toUsePrice = toUsePrice.subtract(price);
                             price = new BigDecimal(0);
-                        }else if (toUsePrice.intValue() != 0){
+                        }else if (toUsePrice.doubleValue() != 0){
+                            order.setDiscounts(toUsePrice);
                             price = price.subtract(toUsePrice);
+                            toUsePrice = new BigDecimal(0);
                         }
                     }
-                    order.setPrice(price);
+                    order.setPay(price);
                 }
                 orderList.add(order);
             }
@@ -327,9 +331,9 @@ public class LifeOrderServiceImpl implements LifeOrderService
         BigDecimal price = new BigDecimal(0);
         for (LifeOrder order : orderList) {
            if (payOrderVo.getPayType() == 1){
-               price=price.add(order.getPrice());
+               price=price.add(order.getPay());
            }else{
-               point+=order.getPayPoint();
+               point+=order.getPay().longValue();
            }
         }
         LifePointLog log = new LifePointLog();
@@ -363,8 +367,8 @@ public class LifeOrderServiceImpl implements LifeOrderService
 
         log.setAddTime(LocalDateTime.now());
         log.setExplain("预定《"+course.getName()+"》");
-        log.setUserId(user.getShareId());
-        log.setLogUserId(userId);
+        log.setUserId(userId);
+        log.setShareId(user.getShareId());
         if (logService.insertLifePointLog(log) == 0){
             throw new OrderException(UserResponseCode.PAY_COURSE_ERROR,"日志添加失败");
         }

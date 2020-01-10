@@ -40,7 +40,7 @@ public class LifeScheduler {
     private SchedulerFactory schedulerFactory = new StdSchedulerFactory();
 
     @Autowired
-    private LifeCouponReserveService couponReserveService;
+    private LifeCouponReceiveService couponReceiveService;
 
     @Autowired
     private LifePointLogService pointLogService;
@@ -79,7 +79,7 @@ public class LifeScheduler {
 
     public void pastCoupon(){
         JobDataMap jobDataMap= new JobDataMap();
-        jobDataMap.put("couponReserveService",couponReserveService);
+        jobDataMap.put("couponReceiveService",couponReceiveService);
         this.groupStart(PastCouponJob.class,"0 1 0 1/1 * ? *",jobDataMap);
     }
 

@@ -1,10 +1,11 @@
 package com.ruoyi.life.mapper;
 
 
-import com.ruoyi.life.domain.LifeCouponReserve;
+import com.ruoyi.life.domain.LifeCouponReceive;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+
 
 /**
  * 用户优惠卷Mapper接口
@@ -12,7 +13,7 @@ import java.util.List;
  * @author ruoyi
  * @date 2019-12-04
  */
-public interface LifeCouponReserveMapper 
+public interface LifeCouponReceiveMapper
 {
     /**
      * 查询用户优惠卷
@@ -20,7 +21,7 @@ public interface LifeCouponReserveMapper
      * @param receiveId 用户优惠卷ID
      * @return 用户优惠卷
      */
-    public LifeCouponReserve selectLifeCouponReserveById(Long receiveId);
+    public LifeCouponReceive selectLifeCouponReceiveById(Long receiveId);
 
     /**
      * 查询用户优惠卷列表
@@ -28,7 +29,7 @@ public interface LifeCouponReserveMapper
      * @param lifeCouponReserve 用户优惠卷
      * @return 用户优惠卷集合
      */
-    public List<LifeCouponReserve> selectLifeCouponReserveList(LifeCouponReserve lifeCouponReserve);
+    public List<LifeCouponReceive> selectLifeCouponReceiveList(LifeCouponReceive lifeCouponReserve);
 
     /**
      * 新增用户优惠卷
@@ -36,7 +37,7 @@ public interface LifeCouponReserveMapper
      * @param lifeCouponReserve 用户优惠卷
      * @return 结果
      */
-    public int insertLifeCouponReserve(LifeCouponReserve lifeCouponReserve);
+    public int insertLifeCouponReceive(LifeCouponReceive lifeCouponReserve);
 
 
 
@@ -46,7 +47,7 @@ public interface LifeCouponReserveMapper
      * @param lifeCouponReserve 用户优惠卷
      * @return 结果
      */
-    public int updateLifeCouponReserve(LifeCouponReserve lifeCouponReserve);
+    public int updateLifeCouponReceive(LifeCouponReceive lifeCouponReserve);
 
     /**
      * 删除用户优惠卷
@@ -54,7 +55,7 @@ public interface LifeCouponReserveMapper
      * @param receiveId 用户优惠卷ID
      * @return 结果
      */
-    public int deleteLifeCouponReserveById(Long receiveId);
+    public int deleteLifeCouponReceiveById(Long receiveId);
 
     /**
      * 批量删除用户优惠卷
@@ -62,7 +63,7 @@ public interface LifeCouponReserveMapper
      * @param receiveIds 需要删除的数据ID
      * @return 结果
      */
-    public int deleteLifeCouponReserveByIds(String[] receiveIds);
+    public int deleteLifeCouponReceiveByIds(String[] receiveIds);
 
 
 
@@ -72,7 +73,7 @@ public interface LifeCouponReserveMapper
      * @param list 用户优惠卷
      * @return 结果
      */
-    public int insertLifeCouponReserves(@Param("couponReserveList") List<LifeCouponReserve> list);
+    public int insertLifeCouponReceives(@Param("couponReceiveList") List<LifeCouponReceive> list);
 
 
     /**

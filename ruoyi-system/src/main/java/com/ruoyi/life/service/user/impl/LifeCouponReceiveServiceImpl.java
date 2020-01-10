@@ -1,14 +1,14 @@
 package com.ruoyi.life.service.user.impl;
 
 
+import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.security.Md5Utils;
 import com.ruoyi.life.domain.LifeCompanyCoupon;
 import com.ruoyi.life.domain.LifeCoupon;
-import com.ruoyi.life.domain.LifeCouponReserve;
+import com.ruoyi.life.domain.LifeCouponReceive;
 import com.ruoyi.life.domain.LifeVipCoupon;
-import com.ruoyi.life.mapper.LifeCouponReserveMapper;
-import com.ruoyi.life.service.user.LifeCouponReserveService;
-import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.life.mapper.LifeCouponReceiveMapper;
+import com.ruoyi.life.service.user.LifeCouponReceiveService;
 import com.ruoyi.life.service.user.LifeCouponService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,10 +27,10 @@ import java.util.Map;
  * @date 2019-12-04
  */
 @Service
-public class LifeCouponReserveServiceImpl implements LifeCouponReserveService
+public class LifeCouponReceiveServiceImpl implements LifeCouponReceiveService
 {
     @Resource
-    private LifeCouponReserveMapper couponReserveMapper;
+    private LifeCouponReceiveMapper couponReceiveMapper;
 
 
     @Autowired
@@ -44,46 +44,46 @@ public class LifeCouponReserveServiceImpl implements LifeCouponReserveService
      * @return 用户优惠卷
      */
     @Override
-    public LifeCouponReserve selectLifeCouponReserveById(Long receiveId)
+    public LifeCouponReceive selectLifeCouponReceiveById(Long receiveId)
     {
-        return couponReserveMapper.selectLifeCouponReserveById(receiveId);
+        return couponReceiveMapper.selectLifeCouponReceiveById(receiveId);
     }
 
     /**
      * 查询用户优惠卷列表
      * 
-     * @param lifeCouponReserve 用户优惠卷
+     * @param lifeCouponReceive 用户优惠卷
      * @return 用户优惠卷
      */
     @Override
-    public List<LifeCouponReserve> selectLifeCouponReserveList(LifeCouponReserve lifeCouponReserve)
+    public List<LifeCouponReceive> selectLifeCouponReceiveList(LifeCouponReceive lifeCouponReceive)
     {
-        return couponReserveMapper.selectLifeCouponReserveList(lifeCouponReserve);
+        return couponReceiveMapper.selectLifeCouponReceiveList(lifeCouponReceive);
     }
 
     /**
      * 新增用户优惠卷
      * 
-     * @param lifeCouponReserve 用户优惠卷
+     * @param lifeCouponReceive 用户优惠卷
      * @return 结果
      */
     @Override
-    public int insertLifeCouponReserve(LifeCouponReserve lifeCouponReserve)
+    public int insertLifeCouponReceive(LifeCouponReceive lifeCouponReceive)
     {
 
-        return couponReserveMapper.insertLifeCouponReserve(lifeCouponReserve);
+        return couponReceiveMapper.insertLifeCouponReceive(lifeCouponReceive);
     }
 
     /**
      * 修改用户优惠卷
      * 
-     * @param lifeCouponReserve 用户优惠卷
+     * @param lifeCouponReceive 用户优惠卷
      * @return 结果
      */
     @Override
-    public int updateLifeCouponReserve(LifeCouponReserve lifeCouponReserve)
+    public int updateLifeCouponReceive(LifeCouponReceive lifeCouponReceive)
     {
-        return couponReserveMapper.updateLifeCouponReserve(lifeCouponReserve);
+        return couponReceiveMapper.updateLifeCouponReceive(lifeCouponReceive);
     }
 
     /**
@@ -93,9 +93,9 @@ public class LifeCouponReserveServiceImpl implements LifeCouponReserveService
      * @return 结果
      */
     @Override
-    public int deleteLifeCouponReserveByIds(String ids)
+    public int deleteLifeCouponReceiveByIds(String ids)
     {
-        return couponReserveMapper.deleteLifeCouponReserveByIds(Convert.toStrArray(ids));
+        return couponReceiveMapper.deleteLifeCouponReceiveByIds(Convert.toStrArray(ids));
     }
 
     /**
@@ -105,9 +105,9 @@ public class LifeCouponReserveServiceImpl implements LifeCouponReserveService
      * @return 结果
      */
     @Override
-    public int deleteLifeCouponReserveById(Long receiveId)
+    public int deleteLifeCouponReceiveById(Long receiveId)
     {
-        return couponReserveMapper.deleteLifeCouponReserveById(receiveId);
+        return couponReceiveMapper.deleteLifeCouponReceiveById(receiveId);
     }
 
     /**
@@ -116,37 +116,37 @@ public class LifeCouponReserveServiceImpl implements LifeCouponReserveService
      * @param list 优惠卷ids
      * @return 结果
      */
-    private int insertLifeCouponReserve(Long shareId, List<Map<String,Long>> list) {
-        List<LifeCouponReserve> couponReserveList = new ArrayList<>();
+    private int insertLifeCouponReceive(Long shareId, List<Map<String,Long>> list) {
+        List<LifeCouponReceive> couponReceiveList = new ArrayList<>();
         LocalDateTime start = LocalDateTime.now().plusDays(1);
         for (Map<String,Long> map : list) {
             LifeCoupon lifeCoupon = couponService.selectLifeCouponById(map.get("couponId"));
-            LifeCouponReserve couponReserve = new LifeCouponReserve();
+            LifeCouponReceive couponReceive = new LifeCouponReceive();
             LocalDateTime end = LocalDateTime.of(start.getYear(),start.getMonth(),start.getDayOfMonth(),0,0,0).plusDays(lifeCoupon.getEnableDay());
-            couponReserve.setCouponId(lifeCoupon.getCouponId());
-            couponReserve.setShareId(shareId);
-            couponReserve.setStatus(0);
-            couponReserve.setEndTime(end);
-            couponReserve.setStartTime(LocalDateTime.now());
+            couponReceive.setCouponId(lifeCoupon.getCouponId());
+            couponReceive.setShareId(shareId);
+            couponReceive.setStatus(0);
+            couponReceive.setEndTime(end);
+            couponReceive.setStartTime(LocalDateTime.now());
 
             for (int i = 0; i < map.get("number"); i++) {
                 if (lifeCoupon.getIntervalDay() != null && lifeCoupon.getIntervalDay() != 0){
-                    couponReserve.setStartTime(couponReserve.getEndTime().plusDays(lifeCoupon.getIntervalDay()));
+                    couponReceive.setStartTime(couponReceive.getEndTime().plusDays(lifeCoupon.getIntervalDay()));
                 }
                 int random = (int) (Math.random()*900000) + 100000;
                 String destroy =shareId+"_"+System.currentTimeMillis()+random;
-                couponReserve.setDestroy( Md5Utils.hash(destroy));
-                couponReserveList.add(couponReserve);
+                couponReceive.setDestroy( Md5Utils.hash(destroy));
+                couponReceiveList.add(couponReceive);
             }
 
         }
-        return couponReserveMapper.insertLifeCouponReserves(couponReserveList);
+        return couponReceiveMapper.insertLifeCouponReceives(couponReceiveList);
     }
 
 
     @Override
     public int pastCoupon() {
-        return couponReserveMapper.pastCoupon();
+        return couponReceiveMapper.pastCoupon();
     }
 
 
@@ -158,7 +158,7 @@ public class LifeCouponReserveServiceImpl implements LifeCouponReserveService
      * @return 结果
      */
     @Override
-    public int insertLifeCouponReserveBalance(Long shareId, List<LifeCompanyCoupon> list) {
+    public int insertLifeCouponReceiveBalance(Long shareId, List<LifeCompanyCoupon> list) {
         List<Map<String,Long>> longList = new ArrayList<>();
         for (LifeCompanyCoupon coupon : list) {
             Map<String,Long> map = new HashMap<>();
@@ -166,7 +166,7 @@ public class LifeCouponReserveServiceImpl implements LifeCouponReserveService
             map.put("number", Long.valueOf(coupon.getNumber()));
             longList.add(map);
         }
-        return this.insertLifeCouponReserve(shareId,longList);
+        return this.insertLifeCouponReceive(shareId,longList);
     }
 
     /**
@@ -177,7 +177,7 @@ public class LifeCouponReserveServiceImpl implements LifeCouponReserveService
      * @return 结果
      */
     @Override
-    public int insertLifeCouponReserveVip(Long shareId, List<LifeVipCoupon> list) {
+    public int insertLifeCouponReceiveVip(Long shareId, List<LifeVipCoupon> list) {
         List<Map<String,Long>> longList = new ArrayList<>();
         for (LifeVipCoupon coupon : list) {
             Map<String,Long> map = new HashMap<>();
@@ -185,7 +185,7 @@ public class LifeCouponReserveServiceImpl implements LifeCouponReserveService
             map.put("number", Long.valueOf(coupon.getNumber()));
             longList.add(map);
         }
-        return this.insertLifeCouponReserve(shareId,longList);
+        return this.insertLifeCouponReceive(shareId,longList);
     }
 
     /**

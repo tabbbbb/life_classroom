@@ -130,4 +130,12 @@ public interface LifeCourseMapper
      * @return
      */
     int selectLifeCourseByName(String name);
+
+
+    /**
+     * 增加销量
+     * @param courseId
+     * @return
+     */
+    int coursePlusSales(Long courseId);
 }

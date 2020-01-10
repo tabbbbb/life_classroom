@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('订单退款')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-label-add">
+        <div class="form-group">
+            <label class="col-sm-3 control-label" id="pay"></label>
+            <div class="col-sm-8">
+                <input name="pay" class="form-control" type="number">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label" id="endTime">到期时间：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input  id="endTimeData" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer" />
+
+<script type="text/javascript">
+    var orderId = getUrlParam('orderId')
+    var payType = getUrlParam('payType')
+    if (payType == 1){
+        $('#endTime').parent().hide()
+        $('#pay').text('退款余额')
+    }else{
+        $('#pay').text('退款积分')
+    }
+    var endTime = null;
+    /* 添加用户-选择用户-提交 */
+    function submitHandler(index, layero) {
+
+        if (payType == 0 && endTime== null){
+            $.modal.alert('请选择时间','error')
+            return
+        }else if (payType == 1) {
+            endTime = null
+        }else{
+            endTime+=' 00:01:01'
+        }
+        $.ajax({
+            cache : false,
+            async:false,
+            type : "POST",
+            url : ctx + "life/order/batchrefund",
+            headers:{
+                'Content-Type':'application/json;charset=utf-8'
+            },
+            data:JSON.stringify({
+                "orderIds":orderId,
+                'flag':false,
+                'pay':$('[name=pay]').val(),
+                'endTime':endTime
+            }),
+
+            dataType:'json',
+            success : function(data) {
+                if (data.code == 500){
+                    $.modal.alert(data.msg,'error')
+                }else{
+                    parent.reset()
+                    $.modal.close();
+                }
+
+            }
+        })
+
+    }
+
+
+
+
+
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        //日期时间选择器
+        laydate.render({
+            elem: '#endTimeData'
+            ,type: 'date'
+            ,done: function(value, date, endDate){
+              endTime = value;
+            }
+        });
+    });
+</script>
+</body>
+</html>

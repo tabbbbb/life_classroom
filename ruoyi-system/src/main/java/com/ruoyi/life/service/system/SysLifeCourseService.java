@@ -113,8 +113,12 @@ public interface SysLifeCourseService {
     int selectLifeCourseByLabelIds(String []ids);
 
 
-
-
+    /**
+     * 增加销量
+     * @param courseId
+     * @return
+     */
+    int coursePlusSales(Long courseId);
 
 
 }

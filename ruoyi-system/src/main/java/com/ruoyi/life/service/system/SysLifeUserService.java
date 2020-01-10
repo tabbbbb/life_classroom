@@ -15,6 +15,7 @@ import com.ruoyi.life.domain.dto.system.LifeUserDto;
 import com.ruoyi.life.domain.vo.system.LifeUserSearchVo;
 import com.ruoyi.life.domain.vo.system.LifeUserVo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -54,4 +55,11 @@ public interface SysLifeUserService {
      * 根据公司Id获取用户数量
      */
     int getUserCountByCompanyIds(String[] companyIds);
+
+
+    /**
+     * 退款
+     * @return
+     */
+    int refund(Long userId, BigDecimal pay);
 }

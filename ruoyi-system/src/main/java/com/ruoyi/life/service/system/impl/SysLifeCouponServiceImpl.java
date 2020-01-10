@@ -179,7 +179,7 @@ public class SysLifeCouponServiceImpl implements SysLifeCouponService
         String [] couponIds =Convert.toStrArray(ids);
         companyCouponService.deleteCompanyCouponByCouponIds(couponIds);
         vipCouponService.deleteLifeCouponByCouponIds(couponIds);
-        return lifeCouponMapper.deleteLifeCouponByIds(couponIds);
+        return lifeCouponMapper.deleteLifeCouponByCouponIds(couponIds);
     }
 
 
@@ -191,6 +191,6 @@ public class SysLifeCouponServiceImpl implements SysLifeCouponService
      */
     @Override
     public int deleteLifeCouponByCourseIds(String[] courseIds) {
-        return lifeCouponMapper.deleteLifeCouponByCouponIds(courseIds);
+        return lifeCouponMapper.deleteLifeCouponByCourseIds(courseIds);
     }
 }

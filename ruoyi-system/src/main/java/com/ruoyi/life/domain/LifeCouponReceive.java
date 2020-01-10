@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * @author ruoyi
  * @date 2019-12-09
  */
-public class LifeCouponReserve
+public class LifeCouponReceive
 {
     private static final long serialVersionUID = 1L;
 
@@ -44,16 +44,16 @@ public class LifeCouponReserve
     @Excel(name = "失效时间", width = 30, dateFormat = "yyyy-MM-dd")
     private LocalDateTime endTime;
 
-    public void setReceiveId(Long receiveId) 
+    public void setReceiveId(Long receiveId)
     {
         this.receiveId = receiveId;
     }
 
-    public Long getReceiveId() 
+    public Long getReceiveId()
     {
         return receiveId;
     }
-    public void setShareId(Long shareId) 
+    public void setShareId(Long shareId)
     {
         this.shareId = shareId;
     }

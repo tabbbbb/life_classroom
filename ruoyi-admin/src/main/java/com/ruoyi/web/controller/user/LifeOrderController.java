@@ -15,16 +15,18 @@ import com.ruoyi.framework.userlogin.LoginResponse;
 import com.ruoyi.framework.userlogin.annotation.LoginInfo;
 import com.ruoyi.framework.userlogin.info.UserLoginInfo;
 import com.ruoyi.life.domain.vo.user.LifePayOrderVo;
+import com.ruoyi.life.service.system.SysLifeOrderService;
 import com.ruoyi.life.service.user.LifeOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -51,5 +53,7 @@ public class LifeOrderController {
         if (response != null) return response;
         return orderService.payCourse(payOrderVo,loginInfo.getId());
     }
+
+
 
 }

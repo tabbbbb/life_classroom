@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.life.mapper.LifeCouponReserveMapper">
+<mapper namespace="com.ruoyi.life.mapper.LifeCouponReceiveMapper">
     
-    <resultMap type="LifeCouponReserve" id="LifeCouponReserveResult">
+    <resultMap type="LifeCouponReceive" id="LifeCouponReceiveResult">
         <result property="receiveId"    column="receive_id"    />
         <result property="shareId"    column="share_id"    />
         <result property="couponId"    column="coupon_id"    />
@@ -14,12 +14,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="endTime"    column="end_time"    />
     </resultMap>
 
-    <sql id="selectLifeCouponReserveVo">
-        select receive_id, share_id, coupon_id, destroy, status, start_time, end_time from life_coupon_reserve
+    <sql id="selectLifeCouponReceiveVo">
+        select receive_id, share_id, coupon_id, destroy, status, start_time, end_time from life_coupon_receive
     </sql>
 
-    <select id="selectLifeCouponReserveList" parameterType="LifeCouponReserve" resultMap="LifeCouponReserveResult">
-        <include refid="selectLifeCouponReserveVo"/>
+    <select id="selectLifeCouponReceiveList" parameterType="LifeCouponReceive" resultMap="LifeCouponReceiveResult">
+        <include refid="selectLifeCouponReceiveVo"/>
         <where>  
             <if test="shareId != null "> and share_id = #{shareId}</if>
             <if test="couponId != null "> and coupon_id = #{couponId}</if>
@@ -30,13 +30,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
     
-    <select id="selectLifeCouponReserveById" parameterType="Long" resultMap="LifeCouponReserveResult">
-        <include refid="selectLifeCouponReserveVo"/>
+    <select id="selectLifeCouponReceiveById" parameterType="Long" resultMap="LifeCouponReceiveResult">
+        <include refid="selectLifeCouponReceiveVo"/>
         where receive_id = #{receiveId}
     </select>
         
-    <insert id="insertLifeCouponReserve" parameterType="LifeCouponReserve" useGeneratedKeys="true" keyProperty="receiveId">
-        insert into life_coupon_reserve
+    <insert id="insertLifeCouponReceive" parameterType="LifeCouponReceive" useGeneratedKeys="true" keyProperty="receiveId">
+        insert into life_coupon_receive
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="shareId != null ">share_id,</if>
             <if test="couponId != null ">coupon_id,</if>
@@ -55,8 +55,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateLifeCouponReserve" parameterType="LifeCouponReserve">
-        update life_coupon_reserve
+    <update id="updateLifeCouponReceive" parameterType="LifeCouponReceive">
+        update life_coupon_receive
         <trim prefix="SET" suffixOverrides=",">
             <if test="shareId != null ">share_id = #{shareId},</if>
             <if test="couponId != null ">coupon_id = #{couponId},</if>
@@ -68,22 +68,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where receive_id = #{receiveId}
     </update>
 
-    <delete id="deleteLifeCouponReserveById" parameterType="Long">
-        delete from life_coupon_reserve where receive_id = #{receiveId}
+    <delete id="deleteLifeCouponReceiveById" parameterType="Long">
+        delete from life_coupon_receive where receive_id = #{receiveId}
     </delete>
 
-    <delete id="deleteLifeCouponReserveByIds" parameterType="String">
-        delete from life_coupon_reserve where receive_id in 
+    <delete id="deleteLifeCouponReceiveByIds" parameterType="String">
+        delete from life_coupon_receive where receive_id in
         <foreach item="receiveId" collection="array" open="(" separator="," close=")">
             #{receiveId}
         </foreach>
     </delete>
 
-    <insert id="insertLifeCouponReserves" parameterType="list" useGeneratedKeys="true" keyProperty="receiveId">
-        insert into life_coupon_reserve
+    <insert id="insertLifeCouponReceives" parameterType="list" useGeneratedKeys="true" keyProperty="receiveId">
+        insert into life_coupon_receive
         (share_id,coupon_id,destroy,status,start_time,end_time)
         VALUES
-        <foreach collection="couponReserveList" item="item" separator=",">
+        <foreach collection="couponReceiveList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 <if test="item.shareId != null ">#{item.shareId},</if>
                 <if test="item.couponId != null ">#{item.couponId},</if>
@@ -97,7 +97,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <update id="pastCoupon">
-        update life_coupon_reserve set status = -1
+        update life_coupon_receive set status = -1
         where now() >= end_time
     </update>
 

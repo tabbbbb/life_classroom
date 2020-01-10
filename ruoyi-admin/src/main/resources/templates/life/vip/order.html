@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('订单列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>支付方式：</p>
+                                <select name="payType">
+                                    <option value="">所有</option>
+                                    <option value="0">积分支付</option>
+                                    <option value="1">余额支付</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>服务类型：</p>
+                                <select name="courseType">
+                                    <option value="">所有</option>
+                                    <option value="0">普通服务</option>
+                                    <option value="1">拼团服务</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>状态：</p>
+                                <select name="status">
+                                    <option value="">所有</option>
+                                    <option value="101">未付款</option>
+                                    <option value="102">用户取消</option>
+                                    <option value="103">超时取消</option>
+                                    <option value="201">已支付</option>
+                                    <option value="301">申请退款</option>
+                                    <option value="302">退款成功</option>
+                                    <option value="401">已核销</option>
+                                    <option value="402">订单过期</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>用户手机号：</p>
+                                <input type="text" name="userPhone"/>
+                            </li>
+                            <li>
+                                <p>课程名称：</p>
+                                <input type="text" name="courseName"/>
+                            </li>
+                            <li>
+                                <p>核销码：</p>
+                                <input type="text" name="verificationCode"/>
+                            </li>
+                            <li class="select-time">
+                                <p>订单时间：</p>
+                                <input type="text" class="time-input" id="orderTimeStart" placeholder="开始时间" name="orderTimeStart"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="orderTimeEnd" placeholder="结束时间" name="orderTimeEnd"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="life:order:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+                <a class="btn btn-danger" onclick="batchRefund()" shiro:hasPermission="life:order:batchrefund">
+                    <i class="fa fa-exchange"></i> 批量退款
+                </a>
+            </div>
+
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+     <script th:src="@{/ruoyi/js/order.js}"></script>
+    <script th:inline="javascript">
+        var prefix = ctx + "life/order";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                exportUrl: prefix + "/export",
+                modalName: "订单",
+                clickToSelect: true,
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'orderId', 
+                    title : '订单id',
+                    visible: false
+                },
+                {
+                    field : 'verificationCode',
+                    title : '核销码'
+                },
+                {
+                    field : 'courseType', 
+                    title : '课程类型',
+                    formatter: function(value, row, index) {
+                        return courseTypeFormatter(value)
+                    }
+                },
+                {
+                    field : 'status', 
+                    title : '状态',
+                    formatter: function(value, row, index) {
+                        return statusFormatter(value)
+                    }
+                },
+                {
+                    field : 'userPhone',
+                    title : '用户手机号'
+                },
+
+                {
+                    field : 'courseName',
+                    title : '课程名称'
+                },
+                {
+                    field : 'couponName',
+                    title : '优惠券名称'
+                },
+                {
+                    field : 'payType',
+                    title : '支付方式',
+                    formatter: function(value, row, index) {
+                        return payTypeFormatter(value)
+                    }
+
+                },
+                {
+                    field : 'pay',
+                    title : '支付金额/积分'
+                },
+                {
+                    field : 'orderTime', 
+                    title : '订单时间'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-primary btn-xs" onclick="orderDetail('+row.orderId+')"><i class="fa fa-paste"></i>&nbsp;详细</a>')
+                        if (row.status == 301){
+                            actions.push('<a class="btn btn-danger btn-xs" onclick="refund('+row.orderId+','+row.payType+')"><i class="fa fa-paste"></i>&nbsp;退款</a>')
+                        }else if (row.status == 201) {
+                            actions.push('<a class="btn btn-success btn-xs" onclick="verification('+row.orderId+')"><i class="fa fa-paste"></i>&nbsp;核销</a>')
+                        }
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+        function orderDetail(orderId){
+            $.modal.open('订单详细','/life/order/detail?orderId='+orderId);
+        }
+        
+        function batchRefund() {
+            var rows = $("#" + table.options.id).bootstrapTable('getSelections');
+            if (rows.length == 0){
+                $.modal.alert('选择一个订单','error')
+            }else{
+                $.modal.confirm('积分退还用户账户，有效期为30天。确定退款吗？',function () {
+                    var orderIds = ""
+                    rows.forEach(function (item,index) {
+                        if (index == 0){
+                            orderIds +=item.orderId
+                        }else{
+                            orderIds += "&"+item.orderId
+                        }
+                    })
+
+                    $.ajax({
+                        cache : false,
+                        async:false,
+                        type : "POST",
+                        url : ctx + "life/order/batchrefund",
+                        headers:{
+                            'Content-Type':'application/json;charset=utf-8'
+                        },
+                        data:JSON.stringify({
+                            "orderIds":orderIds,
+                            'flag':true
+                        }),
+
+                        dataType:'json',
+                        success : function(data) {
+                            if (data.code == 500){
+                                $.modal.alert(data.msg,'error')
+                            }else{
+                                $.modal.alert('退款成功','success')
+                                reset()
+                            }
+
+                        }
+                    })
+                })
+            }
+        }
+
+        function refund(orderId,payType,index){
+            tableIndex = index
+            $.modal.open('退款参数','/life/order/refundview?orderId='+orderId+"&payType="+payType)
+        }
+
+
+        function reset() {
+            $.table.search();
+        }
+
+
+        function verification(orderId) {
+            $.ajax({
+                cache : false,
+                async:false,
+                type : "POST",
+                url : ctx + "life/order/verification",
+                data:{
+                    "orderId":orderId
+                },
+                success : function(data) {
+                    if (data.code == 500){
+                        $.modal.alert(data.msg,'error')
+                    }else{
+                        $.modal.msgSuccess('核销成功')
+                        reset()
+                    }
+                }
+            })
+        }
+    </script>
+</body>
+</html>

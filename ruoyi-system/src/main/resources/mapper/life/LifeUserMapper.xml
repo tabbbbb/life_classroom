@@ -168,6 +168,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     </update>
 
+
     <select id="selectLifeUserByInvitationCard" resultMap="LifeUserResult">
         <include refid="selectLifeUserVo"/>
         where invitation_card = #{InvitationCard}
@@ -269,5 +270,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </select>
 
-
+    <update id="refund">
+        update life_user set balance = balance + #{param2}
+        where user_id = #{param1}
+    </update>
 </mapper>

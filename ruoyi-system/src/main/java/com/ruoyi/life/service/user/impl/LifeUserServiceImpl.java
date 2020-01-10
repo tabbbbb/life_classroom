@@ -45,7 +45,7 @@ public class LifeUserServiceImpl implements LifeUserService
     private LifeCompanyCouponService companyCouponService;
 
     @Resource
-    private LifeCouponReserveService couponReserveService;
+    private LifeCouponReceiveService couponReceiveService;
 
     @Resource
     private LifePointLogService pointLogService;
@@ -237,7 +237,7 @@ public class LifeUserServiceImpl implements LifeUserService
         LifeUser user = this.selectLifeUserById(userId);
         if (user.getCompanyId() != null){
             List<LifeCompanyCoupon> list = companyCouponService.selectLifeCompanyCouponByPrice(price.intValue());
-            if (list != null && couponReserveService.insertLifeCouponReserveBalance(user.getUserId(),list) != couponReserveService.insertNumBalance(list)) {
+            if (list != null && couponReceiveService.insertLifeCouponReceiveBalance(user.getUserId(),list) != couponReceiveService.insertNumBalance(list)) {
                 throw new RechargerException(UserResponseCode.USER_RECHARGE_BALANCE_ERROR, "赠送优惠券失败，请联系管理员",userId);
             }
         }
@@ -250,7 +250,7 @@ public class LifeUserServiceImpl implements LifeUserService
         }
         LifePointLog pointLog = new LifePointLog();
         pointLog.setPrice(price);
-        pointLog.setLogUserId(user.getShareId());
+        pointLog.setShareId(user.getShareId());
         pointLog.setExplain("充值余额"+price);
         pointLog.setLogType(1);
         pointLog.setAddTime(LocalDateTime.now());

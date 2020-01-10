@@ -79,6 +79,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </insert>
 
+
     <update id="updateLifePoint" parameterType="LifePoint">
         update life_point
         <trim prefix="SET" suffixOverrides=",">
@@ -139,5 +140,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join life_vip as vip on vip.vip_id = point.vip_id
         where point.share_id = #{shareId}
     </select>
+
+
+
 
 </mapper>

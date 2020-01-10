@@ -76,7 +76,7 @@ public class NotifyController {
         }
         String outTradeNo = result.getOutTradeNo();
         BigDecimal price = new BigDecimal(result.getTotalFee()).divide(new BigDecimal(100));
-        LifeOrder order = orderService.selectLifeOrderById(outTradeNo);
+        LifeOrder order = null;
 
         if (order != null){
             return null;   //微信购买课程 --  已取消

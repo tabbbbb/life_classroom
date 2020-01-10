@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('订单详细')" />
+</head>
+<body class="white-bg">
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody id="tbody">
+        </tbody>
+    </table>
+</div>
+<th:block th:include="include :: footer" />
+<script th:src="@{/ruoyi/js/order.js}"></script>
+<script type="text/javascript">
+
+    $.ajax({
+        cache : false,
+        async:false,
+        type : "GET",
+        url : ctx + "life/order/detaildata",
+        data:{
+            'courseId':getUrlParam('orderId')
+        },
+        success : function(data) {
+            cloneTr('核销码',data.verificationCode)
+            cloneTr('课程类别',courseTypeFormatter(data.courseType))
+            cloneTr('状态',statusFormatter(data.status))
+            cloneTr('用户手机号',data.userPhone)
+            cloneTr('联系人',data.linkman)
+            cloneTr('联系人手机号',data.linkmanPhone)
+            cloneTr('课程名称',data.courseName)
+            cloneTr('所用优惠券名称',data.couponName)
+            var beneficiary = data.beneficiary
+            if (beneficiary == -1){
+                beneficiary = "绑定用户"
+            }else if (beneficiary == 0) {
+                beneficiary = "本人"
+            }
+            cloneTr('上课人', beneficiary)
+            cloneTr('支付方式',payTypeFormatter(data.payType))
+            cloneTr('总额',data.total)
+            cloneTr('优惠',data.discounts)
+            cloneTr('实付',data.pay)
+            cloneTr('上课时间(分钟)',data.courseDuration+"分钟")
+            cloneTr('创建时间',data.orderTime)
+            cloneTr('上课时间',data.useTime)
+            cloneTr('最晚退款时间',data.validRefundTime)
+            cloneTr('核销平台',data.terrace)
+            cloneTr('核销员名称',data.checkName)
+            cloneTr('核销时间',data.consumeTime)
+        }
+    });
+    
+    
+    function cloneTr(name,value) {
+        if (value == null || value == "" || value == undefined){
+            value = '-'
+        }
+        return $('#tbody').append(' <tr>\n' +
+            '                <th class="text-nowrap">'+name+'</th>\n' +
+            '                <td>'+value+'</td>\n' +
+            '            </tr>')
+    }
+
+
+    function submitHandler(index, layero) {
+        $.modal.close();
+    }
+
+
+
+</script>
+</body>
+</html>

@@ -4,7 +4,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -13,14 +12,19 @@ import java.util.Date;
  * 订单对象 life_order
  * 
  * @author ruoyi
- * @date 2019-12-21
+ * @date 2020-01-08
  */
-public class LifeOrder
+public class LifeOrder extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 订单id */
-    private String orderId;
+    private Long orderId;
+
+    /**
+     * 核销码
+     */
+    private String verificationCode;
 
     /** 支付方式0积分 1余额 */
     @Excel(name = "支付方式0积分 1余额")
@@ -58,38 +62,33 @@ public class LifeOrder
     @Excel(name = "用户优惠券id")
     private Long couponId;
 
-    /** 优惠积分 */
-    @Excel(name = "优惠积分")
-    private Integer couponPoint;
-
     /** -1用户去 0 绑定家属去，<0 绑定成员 */
     @Excel(name = "-1用户去 0 绑定家属去，<0 绑定成员")
     private Long saleUser;
 
-    /** 实际积分 */
-    @Excel(name = "实际积分")
-    private Long payPoint;
-
     /** 总积分 */
     @Excel(name = "总积分")
-    private Long totalPoint;
+    private BigDecimal total;
+
+    /** 优惠积分 */
+    @Excel(name = "优惠积分")
+    private BigDecimal discounts;
+
+    /** 实际积分 */
+    @Excel(name = "实际积分")
+    private BigDecimal pay;
+
+    /** 联系人 */
+    @Excel(name = "联系人")
+    private String linkman;
 
     /** 联系人手机号 */
     @Excel(name = "联系人手机号")
     private String phone;
 
-
-    /**备注*/
-    @Excel(name = "备注")
-    private String remark;
-
     /** 是否可捐赠 0false 1true */
     @Excel(name = "是否可捐赠 0false 1true")
     private Integer donate;
-
-    /** 金额 */
-    @Excel(name = "金额")
-    private BigDecimal price;
 
     /** 上课时长 */
     @Excel(name = "上课时长")
@@ -111,17 +110,29 @@ public class LifeOrder
     @Excel(name = "有效退款时间", width = 30, dateFormat = "yyyy-MM-dd")
     private LocalDateTime validRefundTime;
 
-    public void setOrderId(String orderId) 
+    /** null */
+    @Excel(name = "null")
+    private Integer deleteFlag;
+
+    public void setOrderId(Long orderId)
     {
         this.orderId = orderId;
     }
 
-
-    public String getOrderId() 
+    public Long getOrderId()
     {
         return orderId;
     }
-    public void setPid(Long pid) 
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
+    }
+
+    public void setPid(Long pid)
     {
         this.pid = pid;
     }
@@ -189,16 +200,7 @@ public class LifeOrder
         this.checkId = checkId;
     }
 
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    public Long getCheckId()
+    public Long getCheckId() 
     {
         return checkId;
     }
@@ -211,15 +213,6 @@ public class LifeOrder
     {
         return couponId;
     }
-    public void setCouponPoint(Integer couponPoint) 
-    {
-        this.couponPoint = couponPoint;
-    }
-
-    public Integer getCouponPoint() 
-    {
-        return couponPoint;
-    }
     public void setSaleUser(Long saleUser) 
     {
         this.saleUser = saleUser;
@@ -229,23 +222,41 @@ public class LifeOrder
     {
         return saleUser;
     }
-    public void setPayPoint(Long payPoint) 
+    public void setTotal(BigDecimal total) 
     {
-        this.payPoint = payPoint;
+        this.total = total;
     }
 
-    public Long getPayPoint() 
+    public BigDecimal getTotal() 
     {
-        return payPoint;
+        return total;
     }
-    public void setTotalPoint(Long totalPoint) 
+    public void setDiscounts(BigDecimal discounts) 
     {
-        this.totalPoint = totalPoint;
+        this.discounts = discounts;
     }
 
-    public Long getTotalPoint() 
+    public BigDecimal getDiscounts() 
     {
-        return totalPoint;
+        return discounts;
+    }
+    public void setPay(BigDecimal pay) 
+    {
+        this.pay = pay;
+    }
+
+    public BigDecimal getPay() 
+    {
+        return pay;
+    }
+    public void setLinkman(String linkman) 
+    {
+        this.linkman = linkman;
+    }
+
+    public String getLinkman() 
+    {
+        return linkman;
     }
     public void setPhone(String phone) 
     {
@@ -264,15 +275,6 @@ public class LifeOrder
     public Integer getDonate() 
     {
         return donate;
-    }
-    public void setPrice(BigDecimal price)
-    {
-        this.price = price;
-    }
-
-    public BigDecimal getPrice()
-    {
-        return price;
     }
     public void setCourseDuration(Integer courseDuration) 
     {
@@ -316,6 +318,16 @@ public class LifeOrder
         this.validRefundTime = validRefundTime;
     }
 
+    public void setDeleteFlag(Integer deleteFlag)
+    {
+        this.deleteFlag = deleteFlag;
+    }
+
+    public Integer getDeleteFlag() 
+    {
+        return deleteFlag;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -330,18 +342,19 @@ public class LifeOrder
             .append("remark", getRemark())
             .append("checkId", getCheckId())
             .append("couponId", getCouponId())
-            .append("couponPoint", getCouponPoint())
             .append("saleUser", getSaleUser())
-            .append("payPoint", getPayPoint())
-            .append("totalPoint", getTotalPoint())
+            .append("total", getTotal())
+            .append("discounts", getDiscounts())
+            .append("pay", getPay())
+            .append("linkman", getLinkman())
             .append("phone", getPhone())
             .append("donate", getDonate())
-            .append("price", getPrice())
             .append("courseDuration", getCourseDuration())
             .append("consumeTime", getConsumeTime())
             .append("orderTime", getOrderTime())
             .append("useTime", getUseTime())
             .append("validRefundTime", getValidRefundTime())
+            .append("deleteFlag", getDeleteFlag())
             .toString();
     }
 }

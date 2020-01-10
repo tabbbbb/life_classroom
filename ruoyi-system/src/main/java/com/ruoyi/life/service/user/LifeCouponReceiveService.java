@@ -2,7 +2,7 @@ package com.ruoyi.life.service.user;
 
 
 import com.ruoyi.life.domain.LifeCompanyCoupon;
-import com.ruoyi.life.domain.LifeCouponReserve;
+import com.ruoyi.life.domain.LifeCouponReceive;
 import com.ruoyi.life.domain.LifeVipCoupon;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
  * @author ruoyi
  * @date 2019-12-04
  */
-public interface LifeCouponReserveService
+public interface LifeCouponReceiveService
 {
     /**
      * 查询用户优惠卷
@@ -21,23 +21,23 @@ public interface LifeCouponReserveService
      * @param receiveId 用户优惠卷ID
      * @return 用户优惠卷
      */
-    public LifeCouponReserve selectLifeCouponReserveById(Long receiveId);
+    public LifeCouponReceive selectLifeCouponReceiveById(Long receiveId);
 
     /**
      * 查询用户优惠卷列表
      * 
-     * @param lifeCouponReserve 用户优惠卷
+     * @param lifeCouponReceive 用户优惠卷
      * @return 用户优惠卷集合
      */
-    public List<LifeCouponReserve> selectLifeCouponReserveList(LifeCouponReserve lifeCouponReserve);
+    public List<LifeCouponReceive> selectLifeCouponReceiveList(LifeCouponReceive lifeCouponReceive);
 
     /**
      * 新增用户优惠卷
      * 
-     * @param lifeCouponReserve 用户优惠卷
+     * @param lifeCouponReceive 用户优惠卷
      * @return 结果
      */
-    public int insertLifeCouponReserve(LifeCouponReserve lifeCouponReserve);
+    public int insertLifeCouponReceive(LifeCouponReceive lifeCouponReceive);
 
 
 
@@ -45,10 +45,10 @@ public interface LifeCouponReserveService
     /**
      * 修改用户优惠卷
      * 
-     * @param lifeCouponReserve 用户优惠卷
+     * @param lifeCouponReceive 用户优惠卷
      * @return 结果
      */
-    public int updateLifeCouponReserve(LifeCouponReserve lifeCouponReserve);
+    public int updateLifeCouponReceive(LifeCouponReceive lifeCouponReceive);
 
     /**
      * 批量删除用户优惠卷
@@ -56,7 +56,7 @@ public interface LifeCouponReserveService
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int deleteLifeCouponReserveByIds(String ids);
+    public int deleteLifeCouponReceiveByIds(String ids);
 
     /**
      * 删除用户优惠卷信息
@@ -64,7 +64,7 @@ public interface LifeCouponReserveService
      * @param receiveId 用户优惠卷ID
      * @return 结果
      */
-    public int deleteLifeCouponReserveById(Long receiveId);
+    public int deleteLifeCouponReceiveById(Long receiveId);
 
 
     /**
@@ -79,7 +79,7 @@ public interface LifeCouponReserveService
      * @param list 优惠卷ids
      * @return 结果
      */
-    int insertLifeCouponReserveBalance(Long shareId, List<LifeCompanyCoupon> list);
+    int insertLifeCouponReceiveBalance(Long shareId, List<LifeCompanyCoupon> list);
 
 
 
@@ -89,7 +89,7 @@ public interface LifeCouponReserveService
      * @param list 优惠卷ids
      * @return 结果
      */
-    int insertLifeCouponReserveVip(Long shareId, List<LifeVipCoupon> list);
+    int insertLifeCouponReceiveVip(Long shareId, List<LifeVipCoupon> list);
 
 
     /**

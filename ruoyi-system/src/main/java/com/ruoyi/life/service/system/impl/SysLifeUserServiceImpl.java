@@ -20,6 +20,7 @@ import com.ruoyi.life.service.system.SysLifeUserService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -111,5 +112,18 @@ public class SysLifeUserServiceImpl implements SysLifeUserService {
     @Override
     public int getUserCountByCompanyIds(String[]companyIds) {
         return userMapper.getUserCountByCompanyIds(companyIds);
+    }
+
+
+    /**
+     * 退款
+     *
+     * @param userId
+     * @param pay
+     * @return
+     */
+    @Override
+    public int refund(Long userId, BigDecimal pay) {
+        return userMapper.refund(userId,pay);
     }
 }

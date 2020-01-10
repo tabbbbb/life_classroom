@@ -103,17 +103,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         delete from life_coupon where coupon_id = #{couponId}
     </delete>
 
-    <update id="deleteLifeCouponByIds" parameterType="String">
-        update  life_coupon set detele_flag = 1
+    <update id="deleteLifeCouponByCouponIds" parameterType="String">
+        update  life_coupon set delete_flag = 1
         where coupon_id in
         <foreach item="couponId" collection="array" open="(" separator="," close=")">
             #{couponId}
         </foreach>
     </update>
-    <update id="deleteLifeCouponByCouponIds">
+    <update id="deleteLifeCouponByCourseIds">
         update  life_coupon set delete_flag = 1
-        where astrict in 
-        <foreach collection="couponIds" item="item" open="(" close=")" separator=",">
+        where astrict in
+        <foreach collection="courseIds" item="item" open="(" close=")" separator=",">
             #{item}
         </foreach>
     </update>

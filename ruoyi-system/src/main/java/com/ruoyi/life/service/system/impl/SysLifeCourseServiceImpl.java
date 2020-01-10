@@ -378,4 +378,16 @@ public class SysLifeCourseServiceImpl implements SysLifeCourseService {
     public int selectLifeCourseByLabelIds(String[] ids) {
         return courseMapper.selectLifeCourseByLabelIds(ids);
     }
+
+
+    /**
+     * 增加销量
+     *
+     * @param courseId
+     * @return
+     */
+    @Override
+    public int coursePlusSales(Long courseId) {
+        return courseMapper.coursePlusSales(courseId);
+    }
 }

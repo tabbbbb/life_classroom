@@ -3,6 +3,9 @@ package com.ruoyi.life.mapper;
 
 import com.ruoyi.life.domain.LifeOrder;
 import com.ruoyi.life.domain.dto.user.LifeDataDetailDto;
+import com.ruoyi.life.domain.vo.system.LifeOrderDetailVo;
+import com.ruoyi.life.domain.vo.system.LifeOrderSearchVo;
+import com.ruoyi.life.domain.vo.system.LifeOrderVo;
 import com.ruoyi.life.domain.vo.user.LifeDonateVo;
 import org.apache.ibatis.annotations.Param;
 
@@ -24,7 +27,7 @@ public interface LifeOrderMapper
      * @param orderId 订单ID
      * @return 订单
      */
-    public LifeOrder selectLifeOrderById(String orderId);
+    public LifeOrder selectLifeOrderById(Long orderId);
 
     /**
      * 查询订单列表
@@ -128,5 +131,44 @@ public interface LifeOrderMapper
      * @return
      */
     Integer getSumOrderClassify(Long userId);
+
+
+
+    /**
+     * 根据searchVo获取订单详细vo
+     * @param searchVo
+     * @return
+     */
+    List<LifeOrderDetailVo> selectLifeOrderDetailBySearchVo(LifeOrderSearchVo searchVo);
+
+
+    /**
+     * 根据searchVo获取订单vo
+     * @param searchVo
+     * @return
+     */
+    List<LifeOrderVo> selectLifeOrderVoBySearchVo(LifeOrderSearchVo searchVo);
+
+
+    /**
+     * 退款
+     * @param orderId
+     * @return
+     */
+    int refund(Long orderId);
+
+
+    /**
+     * 检查订单id数组中是否有不能退款的订单
+     * @return
+     */
+    int orderRefundFlag(@Param("orderIds") String [] orderIds);
+
+
+    /**
+     * 核销订单
+     * @return
+     */
+    int verificationOrder(Long orderId);
 
 }

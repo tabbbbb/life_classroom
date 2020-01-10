@@ -10,14 +10,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="point"    column="point"    />
         <result property="price"    column="price"    />
         <result property="userId"    column="user_id"    />
-        <result property="logUserId"    column="log_user_id"    />
+        <result property="shareId"    column="share_id"    />
         <result property="explain"    column="explain"    />
         <result property="orderId"    column="order_id"    />
         <result property="addTime"    column="add_time"    />
     </resultMap>
 
     <sql id="selectLifePointLogVo">
-        select log_id, log_type, point, price, user_id, log_user_id, `explain`, order_id, add_time from life_point_log
+        select log_id, log_type, point, price, user_id, share_id, `explain`, order_id, add_time from life_point_log
     </sql>
 
     <select id="selectLifePointLogList" parameterType="LifePointLog" resultMap="LifePointLogResult">
@@ -27,7 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="point != null "> and point = #{point}</if>
             <if test="price != null "> and price = #{price}</if>
             <if test="userId != null "> and user_id = #{userId}</if>
-            <if test="logUserId != null "> and log_user_id = #{logUserId}</if>
+            <if test="shareId != null "> and share_id = #{shareId}</if>
             <if test="explain != null  and explain != ''"> and explain = #{explain}</if>
             <if test="orderId != null "> and order_id = #{orderId}</if>
             <if test="addTime != null "> and add_time = #{addTime}</if>
@@ -47,7 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="point != null ">point,</if>
             <if test="price != null ">price,</if>
             <if test="userId != null ">user_id,</if>
-            <if test="logUserId != null ">log_user_id,</if>
+            <if test="shareId != null ">share_id,</if>
             <if test="explain != null  and explain != ''">`explain`,</if>
             <if test="orderId != null ">order_id,</if>
             <if test="addTime != null ">add_time,</if>
@@ -57,7 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="point != null ">#{point},</if>
             <if test="price != null ">#{price},</if>
             <if test="userId != null ">#{userId},</if>
-            <if test="logUserId != null ">#{logUserId},</if>
+            <if test="shareId != null ">#{shareId},</if>
             <if test="explain != null  and explain != ''">#{explain},</if>
             <if test="orderId != null ">#{orderId},</if>
             <if test="addTime != null ">#{addTime},</if>
@@ -72,7 +72,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="point != null ">point = #{point},</if>
             <if test="price != null ">price = #{price},</if>
             <if test="userId != null ">user_id = #{userId},</if>
-            <if test="logUserId != null ">log_user_id = #{logUserId},</if>
+            <if test="shareId != null ">share_id = #{shareId},</if>
             <if test="explain != null  and explain != ''">explain = #{explain},</if>
             <if test="orderId != null ">order_id = #{orderId},</if>
             <if test="addTime != null ">add_time = #{addTime},</if>
@@ -93,15 +93,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <insert id="pastPointLog">
-      insert into life_point_log(log_type, point, price, user_id, log_user_id, `explain`, order_id, add_time)
-        select -2 as log_type,use_point,0 as price,user_id,user_id as log_user_id,'积分过期' as `explain`,null as order_id,end_date from life_point
+      insert into life_point_log(log_type, point, price, user_id, share_id, `explain`, order_id, add_time)
+        select -2 as log_type,use_point,0 as price,user_id,user_id as share_id,'积分过期' as `explain`,null as order_id,end_date from life_point
         where NOW() >= end_date
     </insert>
     <insert id="insertLogList">
-        insert into life_point_log(log_type, point, price, user_id, log_user_id, `explain`, order_id, add_time)
+        insert into life_point_log(log_type, point, price, user_id, share_id, `explain`, order_id, add_time)
         values 
         <foreach collection="list" item="item" separator="," >
-            (#{item.logType},#{item.point},#{item.price},#{item.userId},#{item.logUserId},#{item.explain},#{item.orderId},#{item.addTime})
+            (#{item.logType},#{item.point},#{item.price},#{item.userId},#{item.shareId},#{item.explain},#{item.orderId},#{item.addTime})
         </foreach>
     </insert>
 
@@ -116,7 +116,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             log.explain as `explain` ,
             log.add_time as addTime
         from life_point_log as log
-        inner join life_user as `user` on user.user_id = log.log_user_id
+        inner join life_user as `user` on user.user_id = log.share_id
         <trim prefix="where" suffixOverrides="and|or">
           <if test="logType != null">
               log_type = #{logType} and

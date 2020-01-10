@@ -22,7 +22,7 @@ public interface LifeOrderService
      * @param orderId 订单ID
      * @return 订单
      */
-    public LifeOrder selectLifeOrderById(String orderId);
+    public LifeOrder selectLifeOrderById(Long orderId);
 
     /**
      * 查询订单列表

@@ -10,7 +10,7 @@
  */
 package com.ruoyi.quartz.job.past;
 
-import com.ruoyi.life.service.user.LifeCouponReserveService;
+import com.ruoyi.life.service.user.LifeCouponReceiveService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -32,16 +32,16 @@ public class PastCouponJob implements Job {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
-    private LifeCouponReserveService couponReserveService;
+    private LifeCouponReceiveService couponReceiveService;
 
-    public void setCouponReserveService(LifeCouponReserveService couponReserveService) {
-        this.couponReserveService = couponReserveService;
+    public void setCouponReceiveService(LifeCouponReceiveService couponReceiveService) {
+        this.couponReceiveService = couponReceiveService;
     }
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         logger.debug("--------"+LocalDateTime.now()+"-------开始删除过期优惠券");
-        int result = couponReserveService.pastCoupon();
+        int result = couponReceiveService.pastCoupon();
         logger.debug("--------"+LocalDateTime.now()+"-------删除成功!,数量："+result);
     }
 

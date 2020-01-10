@@ -14,6 +14,7 @@ import com.ruoyi.life.domain.LifePointLog;
 import com.ruoyi.life.domain.vo.system.LifePointLogSearchVo;
 import com.ruoyi.life.domain.vo.system.LifePointLogVo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -39,5 +40,7 @@ public interface SysLifePointLogService {
      * @return 积分日志集合
      */
     public List<LifePointLogVo> selectLifePointLogVoList(LifePointLogSearchVo lifePointLog);
+
+
 
 }

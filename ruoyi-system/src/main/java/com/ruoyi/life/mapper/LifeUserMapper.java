@@ -10,6 +10,7 @@ import com.ruoyi.life.domain.vo.system.LifeUserVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
+import java.text.Bidi;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -144,4 +145,13 @@ public interface LifeUserMapper
      * 根据公司Id获取用户数量
      */
     int getUserCountByCompanyIds(@Param("companyIds") String[]companyIds);
+
+
+    /**
+     * 退款
+     * @param userId
+     * @param pay
+     * @return
+     */
+    int refund(Long userId, BigDecimal pay);
 }

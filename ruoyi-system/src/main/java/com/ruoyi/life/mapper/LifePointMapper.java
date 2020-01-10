@@ -6,6 +6,7 @@ import com.ruoyi.life.domain.vo.system.LifePointVo;
 import com.ruoyi.life.service.system.SysLifePointService;
 
 import java.awt.*;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -118,4 +119,8 @@ public interface LifePointMapper
      * @return
      */
     int insertList(List<LifePoint> list);
+
+
+
+
 }

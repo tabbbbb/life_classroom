@@ -35,11 +35,11 @@ public class LifePointLog
 
     /** 用户id */
     @Excel(name = "用户id")
-    private Long userId;
+    private Long shareId;
 
     /** 获利人 */
     @Excel(name = "获利人")
-    private Long logUserId;
+    private Long userId;
 
     /** 详细说明 */
     @Excel(name = "详细说明")
@@ -98,15 +98,7 @@ public class LifePointLog
     {
         return userId;
     }
-    public void setLogUserId(Long logUserId) 
-    {
-        this.logUserId = logUserId;
-    }
 
-    public Long getLogUserId() 
-    {
-        return logUserId;
-    }
     public void setExplain(String explain) 
     {
         this.explain = explain;
@@ -135,6 +127,14 @@ public class LifePointLog
         return addTime;
     }
 
+    public Long getShareId() {
+        return shareId;
+    }
+
+    public void setShareId(Long shareId) {
+        this.shareId = shareId;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -143,7 +143,7 @@ public class LifePointLog
             .append("point", getPoint())
             .append("price", getPrice())
             .append("userId", getUserId())
-            .append("logUserId", getLogUserId())
+            .append("shareId", getShareId())
             .append("explain", getExplain())
             .append("orderId", getOrderId())
             .append("addTime", getAddTime())

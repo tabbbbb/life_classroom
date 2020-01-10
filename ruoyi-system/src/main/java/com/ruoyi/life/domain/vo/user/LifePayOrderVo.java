@@ -65,7 +65,7 @@ public class LifePayOrderVo {
     /**
      * 用户优惠券id
      */
-    private Long couponReserveId;
+    private Long couponReceiveId;
 
 
     /**
@@ -137,12 +137,13 @@ public class LifePayOrderVo {
     public void setChooseDetails(List<ChooseDetail> chooseDetails) {
         this.chooseDetails = chooseDetails;
     }
-    public Long getCouponReserveId() {
-        return couponReserveId;
+
+    public Long getCouponReceiveId() {
+        return couponReceiveId;
     }
 
-    public void setCouponReserveId(Long couponReserveId) {
-        this.couponReserveId = couponReserveId;
+    public void setCouponReceiveId(Long couponReceiveId) {
+        this.couponReceiveId = couponReceiveId;
     }
 
     /**
