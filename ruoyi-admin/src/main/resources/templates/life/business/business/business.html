@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('商户信息列表')" />
+</head>
+<body class="gray-bg">
+    <div class="ibox-content">
+        <div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content animated bounceInRight">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
+                        </button>
+                        <h4 class="modal-title">审核不通过</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <p><strong></strong>告诉商家用户审核为什么不通过</p>
+                        <div class="form-group">
+                            <input type="text" id="checkContent" placeholder="请输入原因" class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" onclick="checkFailure()" data-dismiss="modal">确认审核</button>
+                        <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>商户名称：</p>
+                                <input type="text" name="name"/>
+                            </li>
+                            <li>
+                                <p>申请人登录名：</p>
+                                <input type="text" name="adminUser"/>
+                            </li>
+                            <li>
+                                <p>申请人手机号：</p>
+                                <input type="text" name="adminUserPhone"/>
+                            </li>
+                            <li>
+                                <p>审核结果：</p>
+                                <select name="checkFlag">
+                                    <option value="">所有</option>
+                                    <option value="0">未审核</option>
+                                    <option value="1">审核通过</option>
+                                    <option value="2">审核不通过</option>
+                                </select>
+                            </li>
+                            <li class="select-time">
+                                <p>添加时间：</p>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="addTimeStart"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="addTimeEnd"/>
+                            </li>
+                            <li class="select-time">
+                                <p>审核时间：</p>
+                                <input type="text" class="time-input" id="start" placeholder="开始时间" name="checkTimeStart"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="end" placeholder="结束时间" name="checkTimeEnd"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="life:business:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "life/business";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                exportUrl: prefix + "/export",
+                modalName: "商户信息",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'businessId', 
+                    title : '审核内容',
+                    visible: false
+                },
+                {
+                    field : 'name', 
+                    title : '商户名称'
+                },
+                {
+                    field : 'manageCardb', 
+                    title : '身份证正面',
+                    formatter: function(value, row, index) {
+                        return $.table.imageView(value);
+                    }
+                },
+                {
+                    field : 'manageCardf', 
+                    title : '身份证反面',
+                    formatter: function(value, row, index) {
+                        return $.table.imageView(value);
+                    }
+                },
+                {
+                    field : 'shopUrl', 
+                    title : '店铺图片',
+                    formatter: function(value, row, index) {
+                        return $.table.imageView(value);
+                    }
+                },
+                {
+                    field : 'shopAround', 
+                    title : '店铺环境图片',
+                    formatter: function(value, row, index) {
+                        return $.table.imageView(value);
+                    }
+                },
+                {
+                    field : 'shopIntroduce', 
+                    title : '店铺介绍',
+                    formatter: function(value, row, index) {
+                        return show(value)
+                    }
+                },
+                {
+                    field : 'checkFlage', 
+                    title : '审核结果',
+                    formatter: function(value, row, index) {
+                        return checkFlagFormatter(value)
+                    }
+                },
+
+                {
+                    field : 'checkContent', 
+                    title : '审核内容',
+                    formatter: function(value, row, index) {
+                        return show(value)
+                    }
+                },
+                {
+                    field : 'adminUser',
+                    title : '申请人登录名'
+                },
+                {
+                    field : 'adminUserPhone',
+                    title : '申请人手机号'
+                },
+                {
+                    field : 'address',
+                    title : '地区名'
+                },
+                {
+                    field : 'addTime',
+                    title : '添加时间'
+                },
+                {
+                    field : 'checkTime',
+                    title : '审核时间'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs" onclick="businessDetail('+row.businessId+')"><i class="fa fa-paste"></i>&nbsp;详细</a>')
+                        if (row.checkFlage == 0){
+                            actions.push('<a class="btn btn-primary btn-xs" onclick="checkSuccess('+row.businessId+')"><i class="fa fa-paste"></i>&nbsp;通过</a>')
+                            actions.push('<a class="btn btn-danger btn-xs" onclick="assignmentFailure('+row.businessId+')" data-toggle="modal" data-target="#myModal"><i class="fa fa-paste"></i>&nbsp;不通过</a>')
+                        }
+                        return actions.join(' ');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+        function businessDetail(businessId) {
+            $.modal.open('退款参数','/life/business/detail?businessId='+businessId)
+        }
+        
+        
+        function show(value) {
+            if(value != null && value.length>10){
+                var show = value.substring(0,10)+"..."
+                return "<span id='span1'>"+show+"</span>"
+            }
+        }
+
+
+        function checkFlagFormatter(value) {
+            if (value == 0){
+                return "<span class=\"label label-default\">未审核</span>";
+            }else if (value == 1){
+                return "<span class=\"label label-primary\">审核通过</span>";
+            }else if (value == 2){
+                return "<span class=\"label label-danger\">审核不通过</span>";
+            }
+        }
+
+        function checkSuccess(businessId) {
+            check('/life/business/checksuccess',{'businessId':businessId});
+        }
+
+        var failureBusinessId = 0;
+        function assignmentFailure(businessId) {
+            failureBusinessId = businessId
+        }
+
+
+        function checkFailure(){
+            check('/life/business/checkfailure',{'checkContent':$('#checkContent').val(),'businessId':failureBusinessId})
+
+        }
+
+
+
+        function check(url,data){
+            $.ajax({
+                cache : false,
+                async : false,
+                type : "POST",
+                url : url,
+                data : data,
+                success : function(data) {
+                    if (data.code == 500){
+                      $.modal.alert(data.msg,'error')
+                    }else{
+                        $.modal.msgSuccess('成功')
+                        $.table.search()
+                    }
+
+                }
+            })
+        }
+        
+    </script>
+</body>
+</html>

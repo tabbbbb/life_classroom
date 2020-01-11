@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.life.mapper.LifeBusinessAddressMapper">
+    
+    <resultMap type="LifeBusinessAddress" id="LifeBusinessAddressResult">
+        <result property="businessAddressId"    column="business_address_id"    />
+        <result property="businessAddressName"    column="business_address_name"    />
+        <result property="businessAddress"    column="business_address"    />
+        <result property="businessId"    column="business_id"    />
+        <result property="lon"    column="lon"    />
+        <result property="lat"    column="lat"    />
+    </resultMap>
+
+    <sql id="selectLifeBusinessAddressVo">
+        select business_address_id, business_address_name, business_address, business_id, lon, lat from life_business_address
+    </sql>
+
+    <select id="selectLifeBusinessAddressList" parameterType="LifeBusinessAddress" resultMap="LifeBusinessAddressResult">
+        <include refid="selectLifeBusinessAddressVo"/>
+        <where>  
+            <if test="businessAddressName != null  and businessAddressName != ''"> and business_address_name like concat('%', #{businessAddressName}, '%')</if>
+            <if test="businessAddress != null  and businessAddress != ''"> and business_address = #{businessAddress}</if>
+            <if test="businessId != null "> and business_id = #{businessId}</if>
+            <if test="lon != null  and lon != ''"> and lon = #{lon}</if>
+            <if test="lat != null  and lat != ''"> and lat = #{lat}</if>
+        </where>
+    </select>
+    
+    <select id="selectLifeBusinessAddressById" parameterType="Long" resultMap="LifeBusinessAddressResult">
+        <include refid="selectLifeBusinessAddressVo"/>
+        where business_address_id = #{businessAddressId}
+    </select>
+        
+    <insert id="insertLifeBusinessAddress" parameterType="LifeBusinessAddress" useGeneratedKeys="true" keyProperty="businessAddressId">
+        insert into life_business_address
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="businessAddressName != null  and businessAddressName != ''">business_address_name,</if>
+            <if test="businessAddress != null  and businessAddress != ''">business_address,</if>
+            <if test="businessId != null ">business_id,</if>
+            <if test="lon != null  and lon != ''">lon,</if>
+            <if test="lat != null  and lat != ''">lat,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="businessAddressName != null  and businessAddressName != ''">#{businessAddressName},</if>
+            <if test="businessAddress != null  and businessAddress != ''">#{businessAddress},</if>
+            <if test="businessId != null ">#{businessId},</if>
+            <if test="lon != null  and lon != ''">#{lon},</if>
+            <if test="lat != null  and lat != ''">#{lat},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLifeBusinessAddress" parameterType="LifeBusinessAddress">
+        update life_business_address
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="businessAddressName != null  and businessAddressName != ''">business_address_name = #{businessAddressName},</if>
+            <if test="businessAddress != null  and businessAddress != ''">business_address = #{businessAddress},</if>
+            <if test="businessId != null ">business_id = #{businessId},</if>
+            <if test="lon != null  and lon != ''">lon = #{lon},</if>
+            <if test="lat != null  and lat != ''">lat = #{lat},</if>
+        </trim>
+        where business_address_id = #{businessAddressId}
+    </update>
+
+    <delete id="deleteLifeBusinessAddressById" parameterType="Long">
+        delete from life_business_address where business_address_id = #{businessAddressId}
+    </delete>
+
+    <delete id="deleteLifeBusinessAddressByIds" parameterType="String">
+        delete from life_business_address where business_address_id in 
+        <foreach item="businessAddressId" collection="array" open="(" separator="," close=")">
+            #{businessAddressId}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.life.mapper.LifeBusinessMapper">
+    
+    <resultMap type="LifeBusiness" id="LifeBusinessResult">
+        <result property="businessId"    column="business_id"    />
+        <result property="name"    column="name"    />
+        <result property="manageCardb"    column="manage_cardb"    />
+        <result property="manageCardf"    column="manage_cardf"    />
+        <result property="shopUrl"    column="shop_url"    />
+        <result property="shopAround"    column="shop_around"    />
+        <result property="shopIntroduce"    column="shop_introduce"    />
+        <result property="checkFlage"    column="check_flage"    />
+        <result property="checkContent"    column="check_content"    />
+        <result property="adminUser" column="admin_user"/>
+        <result property="addTime" column="add_time"/>
+        <result property="checkTime" column="check_time"/>
+    </resultMap>
+
+    <sql id="selectLifeBusinessVo">
+        select business_id, name, manage_cardb, manage_cardf, shop_url,
+         shop_around, shop_introduce, check_flage, check_content,admin_user,add_time,check_time from life_business
+    </sql>
+
+    <select id="selectLifeBusinessList" parameterType="LifeBusiness" resultMap="LifeBusinessResult">
+        <include refid="selectLifeBusinessVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="manageCardb != null  and manageCardb != ''"> and manage_cardb = #{manageCardb}</if>
+            <if test="manageCardf != null  and manageCardf != ''"> and manage_cardf = #{manageCardf}</if>
+            <if test="shopUrl != null  and shopUrl != ''"> and shop_url = #{shopUrl}</if>
+            <if test="shopAround != null  and shopAround != ''"> and shop_around = #{shopAround}</if>
+            <if test="shopIntroduce != null  and shopIntroduce != ''"> and shop_introduce = #{shopIntroduce}</if>
+            <if test="checkFlage != null "> and check_flage = #{checkFlage}</if>
+            <if test="checkContent != null  and checkContent != ''"> and check_content = #{checkContent}</if>
+            <if test="adminUser != null">and admin_user = #{adminUser}</if>
+        </where>
+    </select>
+    
+    <select id="selectLifeBusinessById" parameterType="Long" resultMap="LifeBusinessResult">
+        <include refid="selectLifeBusinessVo"/>
+        where business_id = #{businessId}
+    </select>
+
+
+    <insert id="insertLifeBusiness" parameterType="LifeBusiness" useGeneratedKeys="true" keyProperty="businessId">
+        insert into life_business
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">name,</if>
+            <if test="manageCardb != null  and manageCardb != ''">manage_cardb,</if>
+            <if test="manageCardf != null  and manageCardf != ''">manage_cardf,</if>
+            <if test="shopUrl != null  and shopUrl != ''">shop_url,</if>
+            <if test="shopAround != null  and shopAround != ''">shop_around,</if>
+            <if test="shopIntroduce != null  and shopIntroduce != ''">shop_introduce,</if>
+            <if test="checkFlage != null ">check_flage,</if>
+            <if test="checkContent != null  and checkContent != ''">check_content,</if>
+            <if test="adminUser != null"> admin_user</if>
+            <if test="addTime != null">and add_time = #{addTime}</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="manageCardb != null  and manageCardb != ''">#{manageCardb},</if>
+            <if test="manageCardf != null  and manageCardf != ''">#{manageCardf},</if>
+            <if test="shopUrl != null  and shopUrl != ''">#{shopUrl},</if>
+            <if test="shopAround != null  and shopAround != ''">#{shopAround},</if>
+            <if test="shopIntroduce != null  and shopIntroduce != ''">#{shopIntroduce},</if>
+            <if test="checkFlage != null ">#{checkFlage},</if>
+            <if test="checkContent != null  and checkContent != ''">#{checkContent},</if>
+            <if test="adminUser != null">#{adminUser},</if>
+            <if test="addTime != null">#{addTime}</if>
+         </trim>
+    </insert>
+
+    <update id="updateLifeBusiness" parameterType="LifeBusiness">
+        update life_business
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="manageCardb != null  and manageCardb != ''">manage_cardb = #{manageCardb},</if>
+            <if test="manageCardf != null  and manageCardf != ''">manage_cardf = #{manageCardf},</if>
+            <if test="shopUrl != null  and shopUrl != ''">shop_url = #{shopUrl},</if>
+            <if test="shopAround != null  and shopAround != ''">shop_around = #{shopAround},</if>
+            <if test="shopIntroduce != null  and shopIntroduce != ''">shop_introduce = #{shopIntroduce},</if>
+            <if test="checkFlage != null ">check_flage = #{checkFlage},</if>
+            <if test="checkContent != null  and checkContent != ''">check_content = #{checkContent},</if>
+            <if test="adminUser != null"> admin_user = #{adminUser}</if>
+        </trim>
+        where business_id = #{businessId}
+    </update>
+
+
+    <delete id="deleteLifeBusinessById" parameterType="Long">
+        delete from life_business where business_id = #{businessId}
+    </delete>
+
+    <delete id="deleteLifeBusinessByIds" parameterType="String">
+        delete from life_business where business_id in 
+        <foreach item="businessId" collection="array" open="(" separator="," close=")">
+            #{businessId}
+        </foreach>
+    </delete>
+
+    <select id="selectLifeBusinessVoBySearchVo" resultType="com.ruoyi.life.domain.vo.system.LifeBusinessVo">
+        select
+            business.business_id as businessId,
+            business.name as name,
+            business.manage_cardb as manageCardb,
+            business.manage_cardf as manageCardf,
+            business.shop_url as shopUrl,
+            business.shop_around as shopAround,
+            business.shop_introduce as shopIntroduce,
+            business.check_flage as checkFlage,
+            business.check_content as checkContent,
+            user.login_name as adminUser,
+            user.phone as adminUserPhone,
+            address.business_address_name as address,
+            address.business_address as addressDetail,
+            business.add_time as addTime,
+            business.check_time as checkTime
+
+        from life_business as business
+        inner join life_business_user as user on user.business_id = business.business_id
+        inner join life_business_address as address on address.business_id = business.business_id
+        <trim prefix="where " suffixOverrides="and|or">
+            <if test="businessId != null">
+                business.business_id = #{businessId} and
+            </if>
+           <if test="name != null and name != ''">
+               business.name = #{name} and
+           </if>
+            <if test="checkFlag != null">
+                business.check_flage = #{checkFlag} and
+            </if>
+            <if test="adminUser != null and adminUser != ''">
+                user.login_name = #{adminUser} and
+            </if>
+            <if test="adminUserPhone != null and adminUserPhone != ''">
+                user.phone = #{adminUserPhone} and
+            </if>
+            <choose>
+                <when test="addTimeStart != null and addTimeEnd != null">
+                    business.add_time >= #{addTimeStart} and #{addTimeEnd} >= business.add_time and
+                </when>
+                <when test="addTimeStart != null">
+                    business.add_time >= #{addTimeStart} and
+                </when>
+                <when test="addTimeEnd != null">
+                    #{addTimeEnd} >= business.add_time and
+                </when>
+            </choose>
+
+            <choose>
+                <when test="checkTimeStart != null and checkTimeEnd != null">
+                    business.check_time >= #{checkTimeStart} and #{checkTimeEnd} >= business.check_time and
+                </when>
+                <when test="checkTimeStart != null">
+                    business.check_time >= #{checkTimeStart} and
+                </when>
+                <when test="checkTimeEnd != null">
+                    #{checkTimeEnd} >= business.check_time and
+                </when>
+            </choose>
+        </trim>
+    </select>
+
+    <update id="checkSuccess">
+        update life_business set check_flage = 1,check_time = now()
+        where check_flage = 0 and business_id = #{businessId}
+    </update>
+    <update id="checkFailure">
+        update life_business set check_flage = 2,check_content = #{param2},check_time = now()
+        where check_flage = 0 and business_id = #{param1}
+    </update>
+</mapper>

@@ -21,7 +21,7 @@ public interface LifeUserService
      * @param userId 用户ID
      * @return 用户
      */
-    public LifeUser selectLifeUserById(Long userId);
+     LifeUser selectLifeUserById(Long userId);
 
     /**
      * 查询用户列表
@@ -29,7 +29,7 @@ public interface LifeUserService
      * @param lifeUser 用户
      * @return 用户集合
      */
-    public List<LifeUser> selectLifeUserList(LifeUser lifeUser);
+     List<LifeUser> selectLifeUserList(LifeUser lifeUser);
 
     /**
      * 新增用户
@@ -37,7 +37,7 @@ public interface LifeUserService
      * @param lifeUser 用户
      * @return 结果
      */
-    public int insertLifeUser(LifeUser lifeUser);
+     int insertLifeUser(LifeUser lifeUser);
 
     /**
      * 修改用户
@@ -45,7 +45,7 @@ public interface LifeUserService
      * @param lifeUser 用户
      * @return 结果
      */
-    public int updateLifeUser(LifeUser lifeUser);
+     int updateLifeUser(LifeUser lifeUser);
 
     /**
      * 批量删除用户
@@ -53,7 +53,7 @@ public interface LifeUserService
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int deleteLifeUserByIds(String ids);
+     int deleteLifeUserByIds(String ids);
 
     /**
      * 删除用户信息
@@ -61,7 +61,7 @@ public interface LifeUserService
      * @param userId 用户ID
      * @return 结果
      */
-    public int deleteLifeUserById(Long userId);
+     int deleteLifeUserById(Long userId);
 
 
     /**

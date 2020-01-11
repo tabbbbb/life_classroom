@@ -165,7 +165,11 @@ public class LifeAutoServiceImpl implements LifeAutoService {
         return user;
     }
 
-
+    /**
+     * 微信登录
+     * @param map
+     * @return
+     */
     @Override
     public UserResponse wxLogin(Map<String, String> map) {
         if (map== null || map.size() == 0){
@@ -207,6 +211,9 @@ public class LifeAutoServiceImpl implements LifeAutoService {
     public UserResponse bindPhone(Long id,String body) {
         String phone = JacksonUtil.parseString(body,"phone");
         String code = JacksonUtil.parseString(body,"code");
+        if (phoneIsBind(phone) != null){
+            return UserResponse.fail(UserResponseCode.BIND_PHONE_ERROR,"手机号已被注册");
+        }
         if (SmsCache.compareSmsCache(phone,code)){
             LifeUser oldUser = userService.selectLifeUserById(id);
             String updateType = "绑定";
@@ -239,7 +246,7 @@ public class LifeAutoServiceImpl implements LifeAutoService {
     public UserResponse bindWx(Long userId,String body) {
         LifeUser oldUser = userService.selectLifeUserById(userId);
         if (oldUser.getOpenId() != null){
-            return UserResponse.fail(UserResponseCode.BIND_WX_ERROR,"微信已被绑定");
+            return UserResponse.fail(UserResponseCode.BIND_WX_ERROR,"微信已绑定");
         }
         String code = JacksonUtil.parseString(body,"code");
         String imgUrl = JacksonUtil.parseString(body,"avatarUrl");
@@ -247,6 +254,8 @@ public class LifeAutoServiceImpl implements LifeAutoService {
         String openId = operation.getOpen(code);
         if (openId == null){
             return UserResponse.fail(UserResponseCode.BIND_WX_ERROR,"绑定微信错误：openId获取失败");
+        }else if (userService.selectLifeUserByOpenId(openId) != null){
+            return UserResponse.fail(UserResponseCode.BIND_WX_ERROR,"微信号已被绑定");
         }
         LifeUser newUser = new LifeUser();
         newUser.setUserId(userId);
