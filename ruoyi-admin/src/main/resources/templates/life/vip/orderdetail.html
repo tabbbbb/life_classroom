@@ -17,6 +17,7 @@
 </div>
 <th:block th:include="include :: footer" />
 <script th:src="@{/ruoyi/js/order.js}"></script>
+<script th:src="@{/ruoyi/js/show.js}"></script>
 <script type="text/javascript">
 
     $.ajax({
@@ -30,7 +31,7 @@
         success : function(data) {
             cloneTr('核销码',data.verificationCode)
             cloneTr('课程类别',courseTypeFormatter(data.courseType))
-            cloneTr('状态',statusFormatter(data.status))
+            cloneTr('状态',statusOrderFormatter(data.status))
             cloneTr('用户手机号',data.userPhone)
             cloneTr('联系人',data.linkman)
             cloneTr('联系人手机号',data.linkmanPhone)
@@ -44,9 +45,9 @@
             }
             cloneTr('上课人', beneficiary)
             cloneTr('支付方式',payTypeFormatter(data.payType))
-            cloneTr('总额',data.total)
-            cloneTr('优惠',data.discounts)
-            cloneTr('实付',data.pay)
+            cloneTr('总额',payCount(data.total,data.payType))
+            cloneTr('优惠',payCount(data.discounts,data.payType))
+            cloneTr('实付',payCount(data.pay,data.payType))
             cloneTr('上课时间(分钟)',data.courseDuration+"分钟")
             cloneTr('创建时间',data.orderTime)
             cloneTr('上课时间',data.useTime)
@@ -56,17 +57,6 @@
             cloneTr('核销时间',data.consumeTime)
         }
     });
-    
-    
-    function cloneTr(name,value) {
-        if (value == null || value == "" || value == undefined){
-            value = '-'
-        }
-        return $('#tbody').append(' <tr>\n' +
-            '                <th class="text-nowrap">'+name+'</th>\n' +
-            '                <td>'+value+'</td>\n' +
-            '            </tr>')
-    }
 
 
     function submitHandler(index, layero) {

@@ -215,7 +215,7 @@ public class LifeCourse extends BaseEntity
         this.ageOnset = ageOnset;
     }
 
-    public Integer getAgeOnset() 
+    public Integer getAgeOnset()
     {
         return ageOnset;
     }
@@ -246,12 +246,12 @@ public class LifeCourse extends BaseEntity
     {
         return teacherExplain;
     }
-    public void setNumber(Integer number) 
+    public void setNumber(Integer number)
     {
         this.number = number;
     }
 
-    public Integer getNumber() 
+    public Integer getNumber()
     {
         return number;
     }

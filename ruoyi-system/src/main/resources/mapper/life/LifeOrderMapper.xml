@@ -295,7 +295,7 @@
             `order`.use_time as useTime,
             `order`.valid_refund_time as validRefundTime,
             if(course.course_kind = 0,'后台',business.name) as terrace,
-            if(course.course_kind = 0,sysuser.user_name,businessuser.nike_name) as checkName,
+            if(course.course_kind = 0,sysuser.user_name,businessuser.nick_name) as checkName,
             `order`.consume_time as consumeTime
 
         from life_order as `order`

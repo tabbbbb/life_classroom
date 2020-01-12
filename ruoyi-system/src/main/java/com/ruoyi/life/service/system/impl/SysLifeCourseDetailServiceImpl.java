@@ -114,13 +114,13 @@ public class SysLifeCourseDetailServiceImpl implements SysLifeCourseDetailServic
 
 
     /**
-     * 获取数据库中是否有和传入集合相同的记录数量
+     * 删除没有的记录
      *
      * @param list
      */
     @Override
-    public int deleteNotInList(List<LifeCourseDetail> list) {
-        return courseDetailMapper.deleteNotInList(list);
+    public int deleteNotInList(List<LifeCourseDetail> list,Long courseId) {
+        return courseDetailMapper.deleteNotInList(list,courseId);
     }
 
 

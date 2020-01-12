@@ -32,6 +32,13 @@ public interface SysLifeCourseService {
     public Map<String,Object> getEditData(Long courseId);
 
 
+    /**
+     * 新增课程
+     * @param course
+     * @return
+     */
+    int insertLifeCourse(LifeCourse course);
+
 
     /**
      * 查询课程

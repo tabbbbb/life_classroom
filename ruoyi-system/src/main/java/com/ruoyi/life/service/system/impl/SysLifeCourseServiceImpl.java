@@ -20,6 +20,7 @@ import com.ruoyi.life.domain.vo.system.LifeCourseVo;
 import com.ruoyi.life.mapper.LifeCourseMapper;
 import com.ruoyi.life.service.system.*;
 import com.ruoyi.life.service.user.LifeCourseDetailService;
+import jodd.util.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,7 +65,7 @@ public class SysLifeCourseServiceImpl implements SysLifeCourseService {
         map.put("courseDuration",courseDetails.get(0).getCourseDuration());
         map.put("courseRefundHour",courseDetails.get(0).getCourseRefundHour());
         String [] carousels = null;
-        if (lifeCourse.getCarouselUrl() == null){
+        if (StringUtil.isEmpty(lifeCourse.getCarouselUrl())){
             carousels = new String[1];
         }else{
             lifeCourse.getCarouselUrl().split(",");
@@ -72,6 +73,18 @@ public class SysLifeCourseServiceImpl implements SysLifeCourseService {
         map.put("carousels",carousels);
         map.put("courseClassify2",courseClassifyService.selectLifeCourseClassifyById(lifeCourse.getCourseClassifyId()).getPid());
         return map;
+    }
+
+
+    /**
+     * 新增课程
+     *
+     * @param course
+     * @return
+     */
+    @Override
+    public int insertLifeCourse(LifeCourse course) {
+        return courseMapper.insertLifeCourse(course);
     }
 
     /**
@@ -186,11 +199,16 @@ public class SysLifeCourseServiceImpl implements SysLifeCourseService {
             for (LifeCourseDetail courseDetail : updateList) {
                 courseDetailService.updateLifeCourseDetail(courseDetail);
             }
-            courseDetailService.deleteNotInList(updateList);
+            courseDetailService.deleteNotInList(updateList,courseId);
         }else{
             courseDetailService.deleteCourseDetailByCourseId(courseId);
         }
-        return courseDetailService.insertCourseDetailList(addList);
+        if (addList.size() != 0){
+            courseDetailService.insertCourseDetailList(addList);
+
+        }
+
+        return 1 ;
     }
 
 

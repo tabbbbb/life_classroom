@@ -16,6 +16,7 @@
     </table>
 </div>
 <th:block th:include="include :: footer" />
+<script th:src="@{/ruoyi/js/show.js}"></script>
 <script type="text/javascript">
 
     $.ajax({
@@ -43,40 +44,13 @@
     });
 
 
-    function cloneTr(name,value) {
-        if (value == null || value == "" || value == undefined){
-            value = '-'
-        }
-        return $('#tbody').append(' <tr>\n' +
-            '                <th class="text-nowrap">'+name+'</th>\n' +
-            '                <td>'+value+'</td>\n' +
-            '            </tr>')
-    }
-
-    function cloneTrImg(name,value) {
-        if (value == null || value == "" || value == undefined){
-            value = ''
-        }
-        return $('#tbody').append(' <tr>\n' +
-            '                <th class="text-nowrap">'+name+'</th>\n' +
-            '                <td><img src=" '+value+'"/></td>\n' +
-            '            </tr>')
-    }
 
 
 
     function submitHandler(index, layero) {
         $.modal.close();
     }
-    function checkFlagFormatter(value) {
-        if (value == 0){
-            return "<span class=\"label label-default\">未审核</span>";
-        }else if (value == 1){
-            return "<span class=\"label label-primary\">审核通过</span>";
-        }else if (value == 2){
-            return "<span class=\"label label-danger\">审核不通过</span>";
-        }
-    }
+
 
 
 </script>

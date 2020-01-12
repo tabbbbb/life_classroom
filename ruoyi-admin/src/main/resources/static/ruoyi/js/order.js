@@ -1,11 +1,6 @@
-function courseTypeFormatter(value) {
-    if (value == 0){
-        return "<span class=\"label label-success\">普通服务</span>";
-    }
-    return "<span class=\"label label-warning\">组团服务</span>";
-}
 
-function statusFormatter(value) {
+
+function statusOrderFormatter(value) {
     if (value == 101){
         return "<span class=\"label label-default\">未付款</span>";
     }else if (value == 102){
@@ -25,11 +20,15 @@ function statusFormatter(value) {
     }
 }
 
-
 function payTypeFormatter(value) {
     if (value == 0){
         return "<span class=\"label label-primary\">积分支付</span>";
     }else if (value == 1) {
         return "<span class=\"label label-success\">余额支付</span>";
     }
+}
+
+
+function payCount(value,type) {
+    return type == 0? value*1/2:value
 }

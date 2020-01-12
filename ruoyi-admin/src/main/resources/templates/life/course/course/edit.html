@@ -137,6 +137,7 @@
 
             <div class="form-group" name="courseDetail" th:each="item:${courseDetailList}">
                 <label class="col-sm-3 control-label">上课时间：</label>
+                <input type="hidden" th:value="${item.courseDetailId}" name="courseDetailId"/>
                 <div class="col-sm-2" style="display: inline-block;" >
                     <select class="form-control m-b" name="week" >
                         <option value="0" >所有</option>
@@ -164,7 +165,7 @@
                 <label class="col-sm-3 control-label">图片：</label>
                 <div class="fileinput fileinput-new col-sm-8" data-provides="fileinput">
                     <div class="fileinput-preview thumbnail" style="width: 200px; height: 150px;" onclick="clickImg(this)">
-                        <img name="imgUrl" th:src="*{imgUrl}" />
+                        <img name="imgUrl" th:src="*{imgUrl}"/>
                         <span class="filenone"><input type="file" onchange="changeFile(this,0)"></span>
                     </div>
                 </div>

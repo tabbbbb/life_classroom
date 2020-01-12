@@ -106,13 +106,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectLifeCourseDetailVo"/>
         where course_id = #{courseId}
     </select>
-    <insert id="deleteNotInList">
+    <delete id="deleteNotInList">
         delete from life_course_detail
-        course_detail_id not in
+        where course_detail_id not in
         <foreach collection="list" separator="," open="(" item="item" close=")">
-            #{item}
+            #{item.courseDetailId}
         </foreach>
-    </insert>
+        and course_id = #{courseId}
+    </delete>
 
     <insert id="insertCourseDetailList">
         insert into life_course_detail(course_id, week, start_hour, start_minute, course_duration, course_refund_hour)

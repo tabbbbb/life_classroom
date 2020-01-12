@@ -84,6 +84,7 @@
     </div>
     <th:block th:include="include :: footer" />
      <script th:src="@{/ruoyi/js/order.js}"></script>
+     <script th:src="@{/ruoyi/js/show.js}"></script>
     <script th:inline="javascript">
         var prefix = ctx + "life/order";
 
@@ -116,7 +117,7 @@
                     field : 'status', 
                     title : '状态',
                     formatter: function(value, row, index) {
-                        return statusFormatter(value)
+                        return statusOrderFormatter(value)
                     }
                 },
                 {
@@ -142,7 +143,10 @@
                 },
                 {
                     field : 'pay',
-                    title : '支付金额/积分'
+                    title : '支付金额/积分',
+                    formatter: function(value, row, index) {
+                        return payCount(value,row.payType)
+                    }
                 },
                 {
                     field : 'orderTime', 

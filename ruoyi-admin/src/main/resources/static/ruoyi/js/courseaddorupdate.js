@@ -16,21 +16,21 @@ function getFromData() {
     var orderBy = $('[name=orderBy]').val()
     var recommend = $('[name=recommend]').val()
     //图片数据
-    var imgUrl = $('[name=imgUrl]').prop('src')
-    console.log($('[name=imgUrl]')[0])
+    var imgUrl = $('[name=imgUrl]').attr('src')
+    console.log(imgUrl)
     var $carousels =  $('[name=carousel]')
     var carousel = ''
     $carousels.each(function (index) {
         if (index == 0){
-            carousel =$(this).prop('src')
+            carousel =$(this).attr('src')
         }else{
-            carousel += ','+$(this).prop('src')
+            carousel += ','+$(this).attr('src')
         }
 
     })
-    var teacher = $('[name=teacher]').prop('src')
-    var rule = $('[name=rule]').prop('src')
-    var information = $('[name=information]').prop('src')
+    var teacher = $('[name=teacher]').attr('src')
+    var rule = $('[name=rule]').attr('src')
+    var information = $('[name=information]').attr('src')
 
     var course = {
         courseId:courseId,
@@ -62,6 +62,7 @@ function getFromData() {
     var $courseDetails = $('[name=courseDetail]')
     $courseDetails.each(function () {
         var courseDetail = {
+            courseDetailId:$(this).find('[name=courseDetailId]').val(),
             week:$(this).find('[name=week]').val(),
             startHour:$(this).find('[name=startHour]').val(),
             startMinute:$(this).find('[name=startMinute]').val()
@@ -74,6 +75,7 @@ function getFromData() {
         courseDuration:courseDuration,
         courseDetails:courseDetailList
     }
+
     return data
 }
 

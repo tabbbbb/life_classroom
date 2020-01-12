@@ -2,6 +2,7 @@ package com.ruoyi.life.mapper;
 
 
 import com.ruoyi.life.domain.LifeCourseDetail;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -94,11 +95,11 @@ public interface LifeCourseDetailMapper
 
 
     /**
-     * 获取数据库中是否有和传入集合相同的记录数量
+     * 删除没有的记录
      *
      * @param list
      */
-    int deleteNotInList(List<LifeCourseDetail> list);
+    int deleteNotInList(@Param("list") List<LifeCourseDetail> list,@Param("courseId") Long courseId);
 
 
 

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('店铺详细')" />
+</head>
+<body class="white-bg">
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody id="tbody">
+        </tbody>
+    </table>
+</div>
+<th:block th:include="include :: footer" />
+<script th:src="@{/ruoyi/js/show.js}"></script>
+<script type="text/javascript">
+
+    $.ajax({
+        cache : false,
+        async:false,
+        type : "GET",
+        url : ctx + "life/businesscourse/detaildata",
+        data:{
+            'businessCourseId':getUrlParam('courseId')
+        },
+        success : function(data) {
+            var businessCourse = data.businessCourseVo
+            cloneTr('课程名称',businessCourse.name)
+            cloneTr('价格',businessCourse.price)
+            cloneTr('课程类型',courseTypeFormatter(businessCourse.courseType))
+            cloneSpan('课程标签',businessCourse.courseLabel,'success')
+            cloneSpan('目标标签',businessCourse.courseClassify,'warning')
+            cloneTr('数量',businessCourse.number)
+            if (businessCourse.ageEnd == -1){
+                cloneTr('适合年龄段','不限')
+            }else{
+                cloneTr('适合年龄段',businessCourse.ageStart +'-'+businessCourse.ageEnd)
+            }
+
+            cloneTr('商户名称',businessCourse.businessName)
+            cloneTr('描述',businessCourse.describe)
+            cloneTrImg('课程图片',businessCourse.imgUrl)
+            cloneTrImg('预约规则',businessCourse.ruleUrl)
+            cloneTrImg('详细信息',businessCourse.information)
+            cloneTr('审核结果',checkFlagFormatter(businessCourse.checkFlage))
+            cloneTr('审核内容',businessCourse.checkContent)
+            cloneTr('添加时间',businessCourse.addTime)
+            cloneTr('审核时间',businessCourse.checkTime)
+            var details = data.details
+            details.forEach(function (item) {
+                cloneTr('上课时间',weekToString(item.week)+'  '+item.startHour+' : '+item.startMinute)
+            })
+            var updates = data.updates
+            cloneTrFor('时间',['说明','不通过说明','结果'])
+            updates.forEach(function (item) {
+                cloneTrFor(item.updateTime,[item.updateExplain,item.failureExplain,updateTypeFormatter(item.updateType)])
+            })
+        }
+    });
+
+
+
+
+
+    function submitHandler(index, layero) {
+        $.modal.close();
+    }
+
+
+
+</script>
+</body>
+</html>

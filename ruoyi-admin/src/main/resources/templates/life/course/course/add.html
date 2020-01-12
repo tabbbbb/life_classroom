@@ -226,6 +226,7 @@
         changeType(true)
         function submitHandler() {
             var fromData = getFromData()
+
             console.log('add',fromData)
             if ($.validate.form()) {
                 $.ajax({

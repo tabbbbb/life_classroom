@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.life.mapper.LifeUpdateMapper">
+    
+    <resultMap type="LifeUpdate" id="LifeUpdateResult">
+        <result property="updateId"    column="update_id"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateExplain"    column="update_explain"    />
+        <result property="updateType"    column="update_type"    />
+        <result property="failureExplain" column="failure_explain"/>
+    </resultMap>
+
+    <sql id="selectLifeUpdateVo">
+        select update_id, update_time, update_explain, update_type,failure_explain from life_update
+    </sql>
+
+    <select id="selectLifeUpdateList" parameterType="LifeUpdate" resultMap="LifeUpdateResult">
+        <include refid="selectLifeUpdateVo"/>
+        <where>  
+            <if test="updateExplain != null  and updateExplain != ''"> and update_explain = #{updateExplain}</if>
+            <if test="updateType != null "> and update_type = #{updateType}</if>
+            <if test="failureExplain != null  and failureExplain != ''"> and failure_explain = #{failureExplain}</if>
+        </where>
+    </select>
+    
+    <select id="selectLifeUpdateById" parameterType="Long" resultMap="LifeUpdateResult">
+        <include refid="selectLifeUpdateVo"/>
+        where update_id = #{updateId}
+        order by update_time desc
+    </select>
+
+
+    <insert id="insertLifeUpdate" parameterType="LifeUpdate">
+        insert into life_update
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="updateId != null ">update_id,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="updateExplain != null  and updateExplain != ''">update_explain,</if>
+            <if test="updateType != null ">update_type,</if>
+            <if test="failureExplain != null  and failureExplain != ''">  failure_explain, </if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="updateId != null ">#{updateId},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateExplain != null  and updateExplain != ''">#{updateExplain},</if>
+            <if test="updateType != null ">#{updateType},</if>
+            <if test="failureExplain != null  and failureExplain != ''">#{failureExplain},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLifeUpdate" parameterType="LifeUpdate">
+        update life_update
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="updateExplain != null  and updateExplain != ''">update_explain = #{updateExplain},</if>
+            <if test="updateType != null ">update_type = #{updateType},</if>
+            <if test="failureExplain != null  and failureExplain != ''">  failure_explain = #{failureExplain},</if>
+        </trim>
+        where update_id = #{updateId}
+    </update>
+
+
+    <delete id="deleteLifeUpdateById" parameterType="Long">
+        delete from life_update where update_id = #{updateId}
+    </delete>
+
+    <delete id="deleteLifeUpdateByIds" parameterType="String">
+        delete from life_update where update_id in 
+        <foreach item="updateId" collection="array" open="(" separator="," close=")">
+            #{updateId}
+        </foreach>
+    </delete>
+
+
+
+
+    <update id="confirmUpdate">
+        update life_update set update_type = #{param2},failure_explain = #{param3}
+        where update_id = #{param1} and update_time = (
+            select update_time from life_update
+            where update_id = #{param1} and update_type = 0
+            order by update_time desc
+            limit 1
+        )
+    </update>
+    
+</mapper>

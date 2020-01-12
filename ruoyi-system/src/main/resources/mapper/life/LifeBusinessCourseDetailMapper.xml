@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.life.mapper.LifeBusinessCourseDetailMapper">
+    
+    <resultMap type="LifeBusinessCourseDetail" id="LifeBusinessCourseDetailResult">
+        <result property="courseDetailId"    column="course_detail_id"    />
+        <result property="courseId"    column="course_id"    />
+        <result property="week"    column="week"    />
+        <result property="startHour"    column="start_hour"    />
+        <result property="startMinute"    column="start_minute"    />
+        <result property="courseDuration"    column="course_duration"    />
+        <result property="courseRefundHour"    column="course_refund_hour"    />
+        <result property="bindTopThread"    column="bind_top_thread"    />
+    </resultMap>
+
+    <sql id="selectLifeBusinessCourseDetailVo">
+        select course_detail_id, course_id, week, start_hour, start_minute, course_duration, course_refund_hour, bind_top_thread from life_business_course_detail
+    </sql>
+
+    <select id="selectLifeBusinessCourseDetailList" parameterType="LifeBusinessCourseDetail" resultMap="LifeBusinessCourseDetailResult">
+        <include refid="selectLifeBusinessCourseDetailVo"/>
+        <where>  
+            <if test="courseId != null "> and course_id = #{courseId}</if>
+            <if test="week != null "> and week = #{week}</if>
+            <if test="startHour != null "> and start_hour = #{startHour}</if>
+            <if test="startMinute != null "> and start_minute = #{startMinute}</if>
+            <if test="courseDuration != null "> and course_duration = #{courseDuration}</if>
+            <if test="courseRefundHour != null "> and course_refund_hour = #{courseRefundHour}</if>
+            <if test="bindTopThread != null "> and bind_top_thread = #{bindTopThread}</if>
+        </where>
+    </select>
+    
+    <select id="selectLifeBusinessCourseDetailById" parameterType="Long" resultMap="LifeBusinessCourseDetailResult">
+        <include refid="selectLifeBusinessCourseDetailVo"/>
+        where course_detail_id = #{courseDetailId}
+    </select>
+        
+    <insert id="insertLifeBusinessCourseDetail" parameterType="LifeBusinessCourseDetail" useGeneratedKeys="true" keyProperty="courseDetailId">
+        insert into life_business_course_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="courseId != null ">course_id,</if>
+            <if test="week != null ">week,</if>
+            <if test="startHour != null ">start_hour,</if>
+            <if test="startMinute != null ">start_minute,</if>
+            <if test="courseDuration != null ">course_duration,</if>
+            <if test="courseRefundHour != null ">course_refund_hour,</if>
+            <if test="bindTopThread != null ">bind_top_thread,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="courseId != null ">#{courseId},</if>
+            <if test="week != null ">#{week},</if>
+            <if test="startHour != null ">#{startHour},</if>
+            <if test="startMinute != null ">#{startMinute},</if>
+            <if test="courseDuration != null ">#{courseDuration},</if>
+            <if test="courseRefundHour != null ">#{courseRefundHour},</if>
+            <if test="bindTopThread != null ">#{bindTopThread},</if>
+         </trim>
+    </insert>
+
+
+    <update id="updateLifeBusinessCourseDetail" parameterType="LifeBusinessCourseDetail">
+        update life_business_course_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="courseId != null ">course_id = #{courseId},</if>
+            <if test="week != null ">week = #{week},</if>
+            <if test="startHour != null ">start_hour = #{startHour},</if>
+            <if test="startMinute != null ">start_minute = #{startMinute},</if>
+            <if test="courseDuration != null ">course_duration = #{courseDuration},</if>
+            <if test="courseRefundHour != null ">course_refund_hour = #{courseRefundHour},</if>
+            <if test="bindTopThread != null ">bind_top_thread = #{bindTopThread},</if>
+        </trim>
+        where course_detail_id = #{courseDetailId}
+    </update>
+
+    <delete id="deleteLifeBusinessCourseDetailById" parameterType="Long">
+        delete from life_business_course_detail where course_detail_id = #{courseDetailId}
+    </delete>
+
+    <delete id="deleteLifeBusinessCourseDetailByIds" parameterType="String">
+        delete from life_business_course_detail where course_detail_id in 
+        <foreach item="courseDetailId" collection="array" open="(" separator="," close=")">
+            #{courseDetailId}
+        </foreach>
+    </delete>
+
+</mapper>

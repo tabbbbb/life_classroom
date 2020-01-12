@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('课程审核列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>审核结果：</p>
+                                <select name="checkFlage">
+                                    <option value="">所有</option>
+                                    <option value="0">未审核</option>
+                                    <option value="1">审核通过</option>
+                                    <option value="2">审核不通过</option>
+                                    <option value="3">申请修改</option>
+                                    <option value="4">修改不通过</option>
+                                    <option value="5">修改通过</option>
+                                </select>
+                            </li>
+
+
+                            <li>
+                                <p>课程标签：</p>
+                                <select name="courseLabel" th:with="type=${@label.selectLifeCourseLabelList(null)}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.courseLabelName}" th:value="${dict.courseLabelId}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>目标一级标签：</p>
+                                <select name="courseClassifyPid" th:with="type=${@classify.getSingleClassify(0)}" onchange="changeType(false)">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.courseClassifyName}" th:value="${dict.courseClassifyId}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>目标二级标签：</p>
+                                <select name="courseClassify2" onchange="changeType(true)">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>目标三级标签：</p>
+                                <select name="courseClassifyId" >
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>团课标识：</p>
+                                <select name="courseType" >
+                                    <option value="">所有</option>
+                                    <option value="1">普通</option>
+                                    <option value="2">团课</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>课程名称：</p>
+                                <input type="text" name="courseName"/>
+                            </li>
+                            <li>
+                                <p>商户名称：</p>
+                                <input type="text" name="businessName"/>
+                            </li>
+
+                            <li class="select-time">
+                                <p>添加时间：</p>
+                                <input type="text" class="time-input" id="startTime1" placeholder="开始时间" name="addTimeStart"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime1" placeholder="结束时间" name="addTimeEnd"/>
+                            </li>
+                            <li class="select-time">
+                                <p>审核时间：</p>
+                                <input type="text" class="time-input" id="startTime2" placeholder="开始时间" name="checkTimeStart"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime2" placeholder="结束时间" name="checkTimeEnd"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="life:course:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+     <script th:src="@{/ruoyi/js/course.js}"></script>
+     <script th:src="@{/ruoyi/js/show.js}"></script>
+    <script th:inline="javascript">
+        var prefix = ctx + "life/businesscourse";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                exportUrl: prefix + "/export",
+                modalName: "课程审核",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'courseId', 
+                    title : 'id',
+                    visible: false
+                },
+                {
+                    field : 'name', 
+                    title : '课程名称'
+                },
+                {
+                    field : 'imgUrl', 
+                    title : '课程图片',
+                    formatter: function(value, row, index) {
+                        return $.table.imageView(value);
+                    }
+                },
+                {
+                    field : 'price', 
+                    title : '价格'
+                },
+                {
+                    field : 'courseType', 
+                    title : '团课标识',
+                    formatter: function(value, row, index) {
+                        return courseTypeFormatter(value);
+                    }
+                },
+                {
+                    field : 'courseLabel',
+                    title : '课程标签',
+                    formatter: function (value, row, index) {
+                        return "<span class=\"label label-success\">"+value+"</span>"
+                    }
+                },
+                {
+                    field : 'courseClassify',
+                    title : '目标标签',
+                    formatter: function (value, row, index) {
+                        return "<span class=\"label label-warning\">"+value+"</span>"
+                    }
+                },
+                {
+                    field : 'number', 
+                    title : '数量'
+                },
+                {
+                    field : 'businessName',
+                    title : '商户名称'
+                },
+                {
+                    field : 'ruleUrl', 
+                    title : '预约规则图片',
+                    formatter: function(value, row, index) {
+                        return $.table.imageView(value);
+                    }
+                },
+                {
+                    field : 'information',
+                    title : '详细信息',
+                    formatter: function(value, row, index) {
+                        return $.table.imageView(value);
+                    }
+                },
+                {
+                    field : 'checkFlage', 
+                    title : '审核结果',
+                    formatter: function(value, row, index) {
+                        return checkFlagFormatter(value)
+                    }
+                },
+                {
+                    field : 'addTime', 
+                    title : '添加时间'
+                },
+                {
+                    field : 'checkTime', 
+                    title : '审核时间'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-primary btn-xs" onclick="businessCourseDetail('+row.courseId+')"><i class="fa fa-paste"></i>&nbsp;详细</a>')
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+        function resetType(name){
+            $("[name = "+name+"]").html("<option value=\"\">所有</option>")
+        }
+        
+        function businessCourseDetail(courseId) {
+            $.modal.open('商品审核详细','/life/businesscourse/detail?courseId='+courseId)
+        }
+        
+    </script>
+</body>
+</html>

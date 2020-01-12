@@ -78,7 +78,7 @@ public interface SysLifeCourseDetailService {
     /**
      * 删除没有的记录
      */
-    int deleteNotInList(List<LifeCourseDetail> list);
+    int deleteNotInList(List<LifeCourseDetail> list,Long courseId);
 
 
     /**
