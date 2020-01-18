@@ -196,12 +196,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         `user`.nick_name as nickName,
         `user`.sex as sex,
         `user`.balance as balance,
-        ifnull(`vip`.vip_name,'普通') as vipName,
         `company`.company_name as companyName,
         `user`.create_date as createDate
       from life_user as `user`
       left  join life_point as `point` on `point`.share_id = `user`.share_id or (`user`.share_id is null and `point`.user_id = `user`.user_id)
-      left join life_vip as `vip` on `point`.vip_id = `vip`.vip_id
       left join life_company as company on company.company_id = user.company_id
       <trim prefix="where " prefixOverrides="and|or" suffixOverrides="and|or">
         <if test="cardNumber != null and cardNumber != ''">
@@ -270,8 +268,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </select>
 
+
     <update id="refund">
         update life_user set balance = balance + #{param2}
         where user_id = #{param1}
     </update>
+
+
+    <select id="selectUserByParentId" resultMap="LifeUserResult">
+        <include refid="selectLifeUserVo"/>
+        where parent_id = #{parentId}
+    </select>
+
+    <update id="updateLeadId">
+        update life_user set lead_id = #{leadId}
+        where user_id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item.userId}
+        </foreach>
+    </update>
+    <update id="becomeExcel">
+       update life_user set lead_id = 0 ,parent_id = 0
+       where user_id = #{userId}
+    </update>
+
+
 </mapper>

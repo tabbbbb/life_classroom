@@ -57,6 +57,10 @@ public class LifeUserVo {
 
     @Excel(name = "绑定用户")
     private String bindShare;
+    /**
+     * vipId
+     */
+    private Long vipId;
 
     @Excel(name = "会员电话")
     private String phone;
@@ -80,6 +84,14 @@ public class LifeUserVo {
 
     public String getInvitationCard() {
         return invitationCard;
+    }
+
+    public Long getVipId() {
+        return vipId;
+    }
+
+    public void setVipId(Long vipId) {
+        this.vipId = vipId;
     }
 
     public void setInvitationCard(String invitationCard) {

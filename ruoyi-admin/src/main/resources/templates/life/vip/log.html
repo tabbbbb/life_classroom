@@ -96,7 +96,11 @@
                 {
                     field : 'point', 
                     title : '积分数',
-                    sortable: true
+                    sortable: true,
+                    formatter: function(value, row, index) {
+                        return value*1/2;
+                    }
+
                 },
                 {
                     field : 'price', 

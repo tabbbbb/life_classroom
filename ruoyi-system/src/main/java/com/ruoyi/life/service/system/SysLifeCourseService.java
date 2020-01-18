@@ -29,7 +29,7 @@ public interface SysLifeCourseService {
      * @param courseId 课程ID
      * @return 课程
      */
-    public Map<String,Object> getEditData(Long courseId);
+    Map<String,Object> getEditData(Long courseId);
 
 
     /**
@@ -46,7 +46,7 @@ public interface SysLifeCourseService {
      * @param courseId 课程ID
      * @return 课程
      */
-    public LifeCourse selectLifeCourseById(Long courseId);
+    LifeCourse selectLifeCourseById(Long courseId);
 
     /**
      * 查询课程列表
@@ -54,7 +54,7 @@ public interface SysLifeCourseService {
      * @param searchVo 课程
      * @return 课程集合
      */
-    public List<LifeCourseVo> selectLifeCourseList(LifeCourseSearchVo searchVo);
+    List<LifeCourseVo> selectLifeCourseList(LifeCourseSearchVo searchVo);
 
     /**
      * 新增课程
@@ -62,7 +62,7 @@ public interface SysLifeCourseService {
      * @param updateOrAddVo 课程
      * @return 结果
      */
-    public Long insertLifeCourse(LifeCourseUpdateOrAddVo updateOrAddVo);
+    Long insertLifeCourse(LifeCourseUpdateOrAddVo updateOrAddVo);
 
     /**
      * 修改课程
@@ -70,17 +70,24 @@ public interface SysLifeCourseService {
      * @param updateOrAddVo 课程
      * @return 结果
      */
-    public int updateLifeCourse(LifeCourseUpdateOrAddVo updateOrAddVo);
+    int updateLifeCourse(LifeCourseUpdateOrAddVo updateOrAddVo);
 
 
 
+    /**
+     * 修改课程
+     *
+     * @param course 课程
+     * @return 结果
+     */
+    int updateLifeCourse(LifeCourse course);
     /**
      * 查询课程
      *
      * @param courseId 课程id
      * @return 课程集合
      */
-    public LifeCourseVo selectLifeCourseVoByCourseId(Long courseId);
+    LifeCourseVo selectLifeCourseVoByCourseId(Long courseId);
 
 
     /**
@@ -89,7 +96,7 @@ public interface SysLifeCourseService {
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int deleteLifeCourseByIds(String ids);
+    int deleteLifeCourseByIds(String ids);
 
 
 

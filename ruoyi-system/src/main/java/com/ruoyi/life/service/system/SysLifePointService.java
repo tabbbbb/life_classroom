@@ -16,6 +16,7 @@ import com.ruoyi.life.domain.vo.system.LifePointVo;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 后台积分服务接口
@@ -40,9 +41,38 @@ public interface SysLifePointService {
 
 
     /**
-     * 退款
+     * 添加积分集合
      * @return
      */
     int insertList(List<LifePoint> points);
+
+
+    /**
+     * 根据userId获取此用户是否是卓越会员
+     * @return
+     */
+    boolean selectExcelVipByUserId(Long userId);
+
+
+    /**
+     * 设置卓越会员赠送的积分
+     * @param userIds
+     */
+    void excelVipPoint(String[]userIds);
+
+
+    /**
+     * 添加
+     * @return
+     */
+    int insertLifePoint(LifePoint point);
+
+
+    /**
+     * 获取卓越会员的userid
+     *
+     * @return
+     */
+    String [] getExcelVipUserId();
 
 }

@@ -18,6 +18,7 @@ import com.ruoyi.quartz.job.past.PastCouponJob;
 import com.ruoyi.quartz.job.past.PastPointChildJob;
 import com.ruoyi.quartz.job.past.PastPointJob;
 import com.ruoyi.quartz.job.past.PastTargetJob;
+import com.ruoyi.quartz.job.rebate.GivePointExcel;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,21 +74,21 @@ public class LifeScheduler {
     public void pastTarget() {
         JobDataMap jobDataMap= new JobDataMap();
         jobDataMap.put("userTargetService",userTargetService);
-        this.groupStart(PastTargetJob.class,"30 0 0 1/1 * ? *",jobDataMap);
+        this.groupStart(PastTargetJob.class,"0 0 0 1/1 * ? *",jobDataMap);
     }
 
 
     public void pastCoupon(){
         JobDataMap jobDataMap= new JobDataMap();
         jobDataMap.put("couponReceiveService",couponReceiveService);
-        this.groupStart(PastCouponJob.class,"0 1 0 1/1 * ? *",jobDataMap);
+        this.groupStart(PastCouponJob.class,"5 0 0 1/1 * ? *",jobDataMap);
     }
 
 
     public void pastPointChild() {
         JobDataMap jobDataMap= new JobDataMap();
         jobDataMap.put("pointChildService",pointChildService);
-        this.groupStart(PastPointChildJob.class,"30 1 0 1/1 * ? *",jobDataMap);
+        this.groupStart(PastPointChildJob.class,"10 0 0 1/1 * ? *",jobDataMap);
     }
 
 
@@ -96,7 +97,7 @@ public class LifeScheduler {
         JobDataMap jobDataMap= new JobDataMap();
         jobDataMap.put("pointLogService",pointLogService);
         jobDataMap.put("pointService",pointService);
-        this.groupStart(PastPointJob.class,"0 2 0 1/1 * ? *",jobDataMap);
+        this.groupStart(PastPointJob.class,"20 0 0 1/1 * ? *",jobDataMap);
     }
 
 
@@ -104,11 +105,15 @@ public class LifeScheduler {
         JobDataMap jobDataMap= new JobDataMap();
         jobDataMap.put("courseDetailService",courseDetailService);
         jobDataMap.put("scheduler",this);
-        this.groupStart(SmsOrderJob.class,"0 3 0 1/1 * ? *",jobDataMap);
+        this.groupStart(SmsOrderJob.class,"30 0 0 1/1 * ? *",jobDataMap);
     }
 
 
-
+    public void givePointExcel(){
+        JobDataMap jobDataMap= new JobDataMap();
+        jobDataMap.put("pointService",pointService);
+        this.delayedStart(GivePointExcel.class,"35 0 0 1 * ? *",jobDataMap);
+    }
 
 
     public void smsDayOrder(String type, Long[] courseDetailIds, LocalDateTime dateTime){

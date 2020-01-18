@@ -3,13 +3,12 @@ package com.ruoyi.life.service.system.impl;
 
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.security.Md5Utils;
 import com.ruoyi.life.domain.LifeCoupon;
+import com.ruoyi.life.domain.LifeCouponReceive;
 import com.ruoyi.life.domain.LifeCourse;
 import com.ruoyi.life.mapper.LifeCouponMapper;
-import com.ruoyi.life.service.system.SysLifeCompanyCouponService;
-import com.ruoyi.life.service.system.SysLifeCouponService;
-import com.ruoyi.life.service.system.SysLifeCourseService;
-import com.ruoyi.life.service.system.SysLifeVipCouponService;
+import com.ruoyi.life.service.system.*;
 import com.ruoyi.life.service.user.LifeCompanyCouponService;
 import com.ruoyi.life.service.user.LifeCourseService;
 import com.ruoyi.life.service.user.LifeVipCouponService;
@@ -20,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,6 +42,10 @@ public class SysLifeCouponServiceImpl implements SysLifeCouponService
 
     @Resource
     private SysLifeCourseService courseService;
+
+
+    @Resource
+    private SysLifeCouponReceiveService couponRecceiveService;
 
     /**
      * 查询优惠卷
@@ -192,5 +196,41 @@ public class SysLifeCouponServiceImpl implements SysLifeCouponService
     @Override
     public int deleteLifeCouponByCourseIds(String[] courseIds) {
         return lifeCouponMapper.deleteLifeCouponByCourseIds(courseIds);
+    }
+
+
+    /**
+     * 赠送优惠券
+     *
+     * @param userIds
+     * @return
+     */
+    @Override
+    public void giveCoupon(String couponIds,String userIds) {
+        if(couponIds == null || userIds == null || couponIds.trim() == "" || userIds.trim() == ""){
+            throw new RuntimeException("参数异常");
+        }
+        String [] couponIdArray = couponIds.split(",");
+        String [] userIdArray = userIds.split(",");
+        List<LifeCouponReceive> couponReceiveList = new ArrayList<>();
+        LocalDateTime start = LocalDateTime.now();
+        for (int i = 0; i <couponIdArray.length ; i++) {
+            LifeCoupon coupon = selectLifeCouponById(Long.valueOf(couponIdArray[i]));
+            LocalDateTime end = start.plusDays(coupon.getEnableDay()+1);
+            for (int j = 0; j <userIdArray.length ; j++) {
+                LifeCouponReceive couponReceive = new LifeCouponReceive();
+                couponReceive.setStartTime(start);
+                couponReceive.setEndTime(end);
+                couponReceive.setStatus(0);
+                couponReceive.setShareId(Long.parseLong(userIdArray[j]));
+                int random = (int) (Math.random()*900000) + 100000;
+                couponReceive.setDestroy(Md5Utils.hash(userIdArray[j]+"_"+System.currentTimeMillis()+"_"+random));
+                couponReceive.setCouponId(coupon.getCouponId());
+                couponReceiveList.add(couponReceive);
+            }
+        }
+        if (couponRecceiveService.insertCouponReceiveList(couponReceiveList) != couponReceiveList.size()){
+            throw new RuntimeException("赠送优惠券失败");
+        }
     }
 }

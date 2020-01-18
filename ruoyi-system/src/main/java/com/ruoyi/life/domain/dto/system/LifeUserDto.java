@@ -78,6 +78,12 @@ public class LifeUserDto {
      */
     private String phone;
 
+
+    /**
+     * vipId
+     */
+    private Long vipId;
+
     /**
      * 最高会员
      */
@@ -92,6 +98,15 @@ public class LifeUserDto {
      * 注册时间
      */
     private Date createDate;
+
+
+    public Long getVipId() {
+        return vipId;
+    }
+
+    public void setVipId(Long vipId) {
+        this.vipId = vipId;
+    }
 
     public String getCardNumber() {
         return cardNumber;
@@ -230,6 +245,7 @@ public class LifeUserDto {
         lifeUserVo.setUserId(userId);
         lifeUserVo.setWxImgUrl(wxImgUrl);
         lifeUserVo.setWxNickName(wxNickName);
+        lifeUserVo.setVipId(vipId);
         return lifeUserVo;
     }
 }

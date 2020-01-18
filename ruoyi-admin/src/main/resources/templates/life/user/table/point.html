@@ -29,20 +29,22 @@
             clickToSelect: true,
             columns: [
                 {
-                    field : 'point',
-                    title : '积分数'
-                },
-                {
                     field : 'source',
                     title : '获取途径',
                     formatter: function(value, row, index) {
-
                         return sourceData[value*1-1];
                     }
                 },
                 {
                     field : 'vipName',
                     title : '开通会员'
+                },
+                {
+                    field : 'point',
+                    title : '积分数',
+                    formatter: function(value, row, index) {
+                        return value*1/2;
+                    }
                 },
                 {
                     field : 'phone',

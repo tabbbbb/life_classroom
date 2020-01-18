@@ -45,4 +45,15 @@ public class SysLifePointLogServiceImpl implements SysLifePointLogService {
     {
         return pointLogMapper.selectLifePointLogVoList(logVo);
     }
+
+    /**
+     * 添加
+     *
+     * @param pointLog
+     * @return
+     */
+    @Override
+    public int insertLifePointLog(LifePointLog pointLog) {
+        return pointLogMapper.insertLifePointLog(pointLog);
+    }
 }

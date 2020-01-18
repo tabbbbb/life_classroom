@@ -12,18 +12,16 @@ package com.ruoyi.life.service.user.impl;
 
 
 import com.ruoyi.life.domain.LifeCompany;
+import com.ruoyi.life.domain.LifeCouponReceive;
 import com.ruoyi.life.domain.LifeShare;
 import com.ruoyi.life.domain.LifeUser;
-import com.ruoyi.life.service.user.LifeAutoService;
+import com.ruoyi.life.service.user.*;
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.common.response.UserResponseCode;
 import com.ruoyi.common.sms.cache.SmsCache;
 import com.ruoyi.common.utils.JacksonUtil;
 import com.ruoyi.common.utils.security.Md5Utils;
 import com.ruoyi.common.weixin.WxOperation;
-import com.ruoyi.life.service.user.LifeCompanyService;
-import com.ruoyi.life.service.user.LifeShareService;
-import com.ruoyi.life.service.user.LifeUserService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -47,6 +45,9 @@ public class LifeAutoServiceImpl implements LifeAutoService {
 
     @Resource
     private LifeCompanyService companyService;
+
+    @Resource
+    private LifeCouponReceiveService couponReceiveService;
 
     /**
      * 手机号注册和登录
@@ -118,19 +119,16 @@ public class LifeAutoServiceImpl implements LifeAutoService {
         user.setParentId(parentUser.getUserId());
         user.setLeadId(parentUser.getLeadId());
         user.setBindDate(LocalDateTime.now());
-        LifeShare share = shareService.selectLifeShareById(parentUser.getUserId());
-        if (share == null){
-            share = new LifeShare();
-            share.setEnable(1);
-            share.setNumber(1);
-            share.setUserId(parentUser.getUserId());
-            shareService.insertLifeShare(share);
-        }else{
-            share.setUserId(parentUser.getUserId());
-            share.setNumber(share.getNumber()+1);
-            shareService.updateLifeShare(share);
-        }
+        shareService.inviteNewUser(parentUser.getUserId());
 
+    }
+
+
+    /**
+     * 新用户优惠券赠送
+     */
+    private void newUserGiveCoupon(Long userId){
+        couponReceiveService.insertLifeCouponReceiveVip(userId,-1L);
     }
 
     /**

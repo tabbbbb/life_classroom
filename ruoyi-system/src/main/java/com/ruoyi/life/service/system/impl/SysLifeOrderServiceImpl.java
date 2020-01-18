@@ -4,12 +4,10 @@ package com.ruoyi.life.service.system.impl;
 import com.ruoyi.life.domain.LifeOrder;
 import com.ruoyi.life.domain.LifePoint;
 import com.ruoyi.life.domain.LifePointLog;
-import com.ruoyi.life.domain.vo.system.LifeOrderDetailVo;
-import com.ruoyi.life.domain.vo.system.LifeOrderRefundVo;
-import com.ruoyi.life.domain.vo.system.LifeOrderSearchVo;
-import com.ruoyi.life.domain.vo.system.LifeOrderVo;
+import com.ruoyi.life.domain.vo.system.*;
 import com.ruoyi.life.mapper.LifeOrderMapper;
 import com.ruoyi.life.service.system.*;
+import com.ruoyi.system.domain.SysUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -203,17 +201,35 @@ public class SysLifeOrderServiceImpl implements SysLifeOrderService
      */
     @Override
     @Transactional
-    public void verification(Long orderId) {
+    public void verification(Long orderId,Long checkId) {
         LifeOrder order = orderMapper.selectLifeOrderById(orderId);
         if (LocalDateTime.now().isBefore(order.getValidRefundTime())){
             throw new RuntimeException("现在时间在最晚退款时间之前，不能核销");
         }
-        if (orderMapper.verificationOrder(orderId) != 1){
+
+        if (orderMapper.verificationOrder(orderId,checkId) != 1){
             throw new RuntimeException("核销订单失败，请重试");
         }
 
         if ( courseService.coursePlusSales(order.getCourseId()) != 1){
             throw new RuntimeException("商品销量增加失败，请重试");
         }
+    }
+
+    /**
+     * 获取卓越下级的消费订单vo
+     *
+     * @return
+     */
+    @Override
+    public List<LifeExcelRebateOrderVo> getExcelOrderVo(Long leadId,Integer year, Integer month) {
+
+        if (year == null || month == null){
+            LocalDate now = LocalDate.now().minusMonths(1);
+            year = now.getYear();
+            month = now.getMonthValue();
+        }
+
+        return orderMapper.getExcelOrderVo(leadId,year,month);
     }
 }

@@ -2,6 +2,7 @@ package com.ruoyi.life.service.system.impl;
 
 
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.life.domain.LifeVip;
 import com.ruoyi.life.domain.LifeVipCoupon;
 import com.ruoyi.life.domain.vo.system.LifeVipCouponSearchVo;
 import com.ruoyi.life.domain.vo.system.LifeVipCouponVo;
@@ -149,5 +150,18 @@ public class SysLifeVipCouponServiceImpl implements SysLifeVipCouponService
     @Override
     public int deleteLifeCouponByCouponIds(String[] couponIds) {
         return lifeVipCouponMapper.deleteLifeCouponByCouponIds(couponIds);
+    }
+
+    /**
+     * 根据vipId获取
+     *
+     * @param vipId
+     * @return
+     */
+    @Override
+    public List<LifeVipCoupon> selectVipCouponByVipId(Long vipId) {
+        LifeVipCoupon vipCoupon = new LifeVipCoupon();
+        vipCoupon.setVipId(vipId);
+        return lifeVipCouponMapper.selectLifeVipCouponList(vipCoupon);
     }
 }

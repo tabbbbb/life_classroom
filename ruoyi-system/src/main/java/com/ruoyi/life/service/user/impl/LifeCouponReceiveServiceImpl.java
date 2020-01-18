@@ -10,6 +10,7 @@ import com.ruoyi.life.domain.LifeVipCoupon;
 import com.ruoyi.life.mapper.LifeCouponReceiveMapper;
 import com.ruoyi.life.service.user.LifeCouponReceiveService;
 import com.ruoyi.life.service.user.LifeCouponService;
+import com.ruoyi.life.service.user.LifeVipCouponService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,8 @@ public class LifeCouponReceiveServiceImpl implements LifeCouponReceiveService
     @Autowired
     private LifeCouponService couponService;
 
+    @Autowired
+    private LifeVipCouponService vipCouponService;
 
     /**
      * 查询用户优惠卷
@@ -118,23 +121,23 @@ public class LifeCouponReceiveServiceImpl implements LifeCouponReceiveService
      */
     private int insertLifeCouponReceive(Long shareId, List<Map<String,Long>> list) {
         List<LifeCouponReceive> couponReceiveList = new ArrayList<>();
-        LocalDateTime start = LocalDateTime.now().plusDays(1);
+        LocalDateTime start = LocalDateTime.now();
         for (Map<String,Long> map : list) {
             LifeCoupon lifeCoupon = couponService.selectLifeCouponById(map.get("couponId"));
             LifeCouponReceive couponReceive = new LifeCouponReceive();
-            LocalDateTime end = LocalDateTime.of(start.getYear(),start.getMonth(),start.getDayOfMonth(),0,0,0).plusDays(lifeCoupon.getEnableDay());
+            LocalDateTime end = start.plusDays(lifeCoupon.getEnableDay()+1);
             couponReceive.setCouponId(lifeCoupon.getCouponId());
             couponReceive.setShareId(shareId);
             couponReceive.setStatus(0);
             couponReceive.setEndTime(end);
-            couponReceive.setStartTime(LocalDateTime.now());
+            couponReceive.setStartTime(start);
 
             for (int i = 0; i < map.get("number"); i++) {
                 if (lifeCoupon.getIntervalDay() != null && lifeCoupon.getIntervalDay() != 0){
                     couponReceive.setStartTime(couponReceive.getEndTime().plusDays(lifeCoupon.getIntervalDay()));
                 }
                 int random = (int) (Math.random()*900000) + 100000;
-                String destroy =shareId+"_"+System.currentTimeMillis()+random;
+                String destroy =shareId+"_"+System.currentTimeMillis()+"_"+random;
                 couponReceive.setDestroy( Md5Utils.hash(destroy));
                 couponReceiveList.add(couponReceive);
             }
@@ -173,11 +176,15 @@ public class LifeCouponReceiveServiceImpl implements LifeCouponReceiveService
      * 新增充值vip所送优惠券
      *
      * @param shareId
-     * @param list    优惠卷ids
+     * @param vipId    vipId
      * @return 结果
      */
     @Override
-    public int insertLifeCouponReceiveVip(Long shareId, List<LifeVipCoupon> list) {
+    public int insertLifeCouponReceiveVip(Long shareId, Long vipId) {
+        LifeVipCoupon selectVipCoupon = new LifeVipCoupon();
+        selectVipCoupon.setVipId(vipId);
+        List<LifeVipCoupon> list = vipCouponService.selectLifeCouponIds(vipId);
+        if (list.size() == 0) return 0;
         List<Map<String,Long>> longList = new ArrayList<>();
         for (LifeVipCoupon coupon : list) {
             Map<String,Long> map = new HashMap<>();
@@ -188,20 +195,7 @@ public class LifeCouponReceiveServiceImpl implements LifeCouponReceiveService
         return this.insertLifeCouponReceive(shareId,longList);
     }
 
-    /**
-     * 获取增加的行数
-     *
-     * @param list
-     * @return
-     */
-    @Override
-    public int insertNumVip(List<LifeVipCoupon> list) {
-        int num = 0;
-        for (LifeVipCoupon vipCoupon : list) {
-            num += vipCoupon.getNumber();
-        }
-        return num;
-    }
+
 
     /**
      * 获取增加的行数

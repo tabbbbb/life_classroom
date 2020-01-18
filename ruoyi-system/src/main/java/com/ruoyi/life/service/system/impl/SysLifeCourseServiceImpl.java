@@ -211,6 +211,16 @@ public class SysLifeCourseServiceImpl implements SysLifeCourseService {
         return 1 ;
     }
 
+    /**
+     * 修改课程
+     *
+     * @param course 课程
+     * @return 结果
+     */
+    @Override
+    public int updateLifeCourse(LifeCourse course) {
+        return courseMapper.updateLifeCourse(course);
+    }
 
     /**
      * 检查课程详细中是否有重复的记录

@@ -22,7 +22,7 @@ public interface SysLifeVipCouponService
      * @param id 充值会员赠送优惠卷ID
      * @return 充值会员赠送优惠卷
      */
-    public Map selectLifeVipCouponById(Long id);
+     Map selectLifeVipCouponById(Long id);
 
     /**
      * 查询充值会员赠送优惠卷列表
@@ -30,7 +30,7 @@ public interface SysLifeVipCouponService
      * @param searchVo 充值会员赠送优惠卷
      * @return 充值会员赠送优惠卷集合
      */
-    public List<LifeVipCouponVo> selectVipCouponVoBySearchVo(LifeVipCouponSearchVo searchVo);
+     List<LifeVipCouponVo> selectVipCouponVoBySearchVo(LifeVipCouponSearchVo searchVo);
 
     /**
      * 新增充值会员赠送优惠卷
@@ -38,7 +38,7 @@ public interface SysLifeVipCouponService
      * @param lifeVipCoupon 充值会员赠送优惠卷
      * @return 结果
      */
-    public int insertLifeVipCoupon(LifeVipCoupon lifeVipCoupon);
+     int insertLifeVipCoupon(LifeVipCoupon lifeVipCoupon);
 
     /**
      * 修改充值会员赠送优惠卷
@@ -46,7 +46,7 @@ public interface SysLifeVipCouponService
      * @param lifeVipCoupon 充值会员赠送优惠卷
      * @return 结果
      */
-    public int updateLifeVipCoupon(LifeVipCoupon lifeVipCoupon);
+     int updateLifeVipCoupon(LifeVipCoupon lifeVipCoupon);
 
     /**
      * 批量删除充值会员赠送优惠卷
@@ -73,4 +73,12 @@ public interface SysLifeVipCouponService
      * @return
      */
     int deleteLifeCouponByCouponIds(String[]couponIds);
+
+
+    /**
+     * 根据vipId获取
+     * @param vipId
+     * @return
+     */
+    List<LifeVipCoupon> selectVipCouponByVipId(Long vipId);
 }

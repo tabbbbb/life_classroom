@@ -2,10 +2,14 @@ package com.ruoyi.life.service.user.impl;
 
 
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.life.domain.LifeCouponReceive;
 import com.ruoyi.life.domain.LifeShare;
 import com.ruoyi.life.mapper.LifeShareMapper;
+import com.ruoyi.life.service.user.LifeCouponReceiveService;
+import com.ruoyi.life.service.user.LifeCouponService;
 import com.ruoyi.life.service.user.LifeShareService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -21,6 +25,9 @@ public class LifeShareServiceImpl implements LifeShareService
 {
     @Resource
     private LifeShareMapper lifeShareMapper;
+
+    @Resource
+    private LifeCouponReceiveService couponReceiveService;
 
     /**
      * 查询分享
@@ -92,5 +99,41 @@ public class LifeShareServiceImpl implements LifeShareService
     public int deleteLifeShareById(Long userId)
     {
         return lifeShareMapper.deleteLifeShareById(userId);
+    }
+
+    /**
+     * 邀请新用户
+     *
+     * @return
+     */
+    @Override
+    public int inviteNewUser(Long userId) {
+        LifeShare share =selectLifeShareById(userId);
+        if (share == null){
+            share = new LifeShare();
+            share.setEnable(1);
+            share.setNumber(1);
+            share.setUserId(userId);
+            insertLifeShare(share);
+        }else{
+            share.setUserId(userId);
+            share.setNumber(share.getNumber()+1);
+            updateLifeShare(share);
+            couponShare(share);
+        }
+        return 0;
+    }
+
+
+    /**
+     * 满足人数赠送优惠券
+     */
+
+    private void couponShare(LifeShare share){
+        if (share.getNumber() >= 10 && share.getEnable() == 0){
+            if(lifeShareMapper.get(share.getUserId()) == 1){
+                couponReceiveService.insertLifeCouponReceiveVip(share.getUserId(),-2L);
+            }
+        }
     }
 }

@@ -40,6 +40,7 @@ public class QuartzStart implements ApplicationRunner {
         lifeScheduler.pastPoint();
         lifeScheduler.pastPointChild();
         lifeScheduler.smsOrder();
+        lifeScheduler.givePointExcel();
     }
 
 

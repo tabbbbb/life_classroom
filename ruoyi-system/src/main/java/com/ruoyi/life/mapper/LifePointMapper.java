@@ -23,7 +23,7 @@ public interface LifePointMapper
      * @param pointId 会员积分和开通记录ID
      * @return 会员积分和开通记录
      */
-    public LifePoint selectLifePointById(Long pointId);
+    LifePoint selectLifePointById(Long pointId);
 
     /**
      * 查询会员积分和开通记录列表
@@ -31,7 +31,7 @@ public interface LifePointMapper
      * @param lifePoint 会员积分和开通记录
      * @return 会员积分和开通记录集合
      */
-    public List<LifePoint> selectLifePointList(LifePoint lifePoint);
+    List<LifePoint> selectLifePointList(LifePoint lifePoint);
 
     /**
      * 新增会员积分和开通记录
@@ -39,7 +39,7 @@ public interface LifePointMapper
      * @param lifePoint 会员积分和开通记录
      * @return 结果
      */
-    public int insertLifePoint(LifePoint lifePoint);
+    int insertLifePoint(LifePoint lifePoint);
 
     /**
      * 修改会员积分和开通记录
@@ -47,7 +47,7 @@ public interface LifePointMapper
      * @param lifePoint 会员积分和开通记录
      * @return 结果
      */
-    public int updateLifePoint(LifePoint lifePoint);
+    int updateLifePoint(LifePoint lifePoint);
 
     /**
      * 删除会员积分和开通记录
@@ -55,7 +55,7 @@ public interface LifePointMapper
      * @param pointId 会员积分和开通记录ID
      * @return 结果
      */
-    public int deleteLifePointById(Long pointId);
+    int deleteLifePointById(Long pointId);
 
     /**
      * 批量删除会员积分和开通记录
@@ -63,7 +63,7 @@ public interface LifePointMapper
      * @param pointIds 需要删除的数据ID
      * @return 结果
      */
-    public int deleteLifePointByIds(String[] pointIds);
+    int deleteLifePointByIds(String[] pointIds);
 
 
     /**
@@ -122,5 +122,18 @@ public interface LifePointMapper
 
 
 
+    /**
+     * 根据userId获取此用户是否是卓越会员
+     * @return
+     */
+    int selectExcelVipByUserId(Long userId);
 
+
+
+    /**
+     * 获取卓越会员的userid
+     *
+     * @return
+     */
+    String [] getExcelVipUserId();
 }

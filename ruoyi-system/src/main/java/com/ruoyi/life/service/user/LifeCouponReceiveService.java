@@ -86,18 +86,13 @@ public interface LifeCouponReceiveService
     /**
      * 新增充值vip所送优惠券
      *
-     * @param list 优惠卷ids
+     * @param vipId 优惠卷ids
      * @return 结果
      */
-    int insertLifeCouponReceiveVip(Long shareId, List<LifeVipCoupon> list);
+    int insertLifeCouponReceiveVip(Long shareId, Long vipId);
 
 
-    /**
-     * 获取增加的行数
-     * @param list
-     * @return
-     */
-    int insertNumVip(List<LifeVipCoupon> list);
+
 
     /**
      * 获取增加的行数

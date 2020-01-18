@@ -3,6 +3,7 @@ package com.ruoyi.life.mapper;
 
 import com.ruoyi.life.domain.LifeOrder;
 import com.ruoyi.life.domain.dto.user.LifeDataDetailDto;
+import com.ruoyi.life.domain.vo.system.LifeExcelRebateOrderVo;
 import com.ruoyi.life.domain.vo.system.LifeOrderDetailVo;
 import com.ruoyi.life.domain.vo.system.LifeOrderSearchVo;
 import com.ruoyi.life.domain.vo.system.LifeOrderVo;
@@ -169,6 +170,15 @@ public interface LifeOrderMapper
      * 核销订单
      * @return
      */
-    int verificationOrder(Long orderId);
+    int verificationOrder(@Param("orderId") Long orderId,@Param("checkId")Long checkId);
+
+
+
+    /**
+     * 获取卓越下级的消费订单vo
+     *
+     * @return
+     */
+    List<LifeExcelRebateOrderVo> getExcelOrderVo( @Param("leadId") Long leadId, @Param("year") Integer year, @Param("month") Integer month);
 
 }

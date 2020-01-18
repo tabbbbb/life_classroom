@@ -60,4 +60,11 @@ public interface LifeShareMapper
      * @return 结果
      */
     public int deleteLifeShareByIds(String[] userIds);
+
+
+    /**
+     * 修改领取状态
+     * @return
+     */
+    int get(Long userId);
 }

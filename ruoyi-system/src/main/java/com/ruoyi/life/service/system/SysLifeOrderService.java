@@ -1,13 +1,12 @@
 package com.ruoyi.life.service.system;
 
 
+import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.life.domain.LifeOrder;
-import com.ruoyi.life.domain.vo.system.LifeOrderDetailVo;
-import com.ruoyi.life.domain.vo.system.LifeOrderRefundVo;
-import com.ruoyi.life.domain.vo.system.LifeOrderSearchVo;
-import com.ruoyi.life.domain.vo.system.LifeOrderVo;
+import com.ruoyi.life.domain.vo.system.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -54,6 +53,13 @@ public interface SysLifeOrderService
      * 核销
      * @return
      */
-    void verification(Long orderId);
+    void verification(Long orderId,Long checkId);
+
+
+    /**
+     * 获取卓越下级的消费订单vo
+     * @return
+     */
+    List<LifeExcelRebateOrderVo> getExcelOrderVo(Long leadId,Integer year, Integer month);
 
 }

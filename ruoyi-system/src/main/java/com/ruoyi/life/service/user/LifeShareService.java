@@ -19,7 +19,7 @@ public interface LifeShareService
      * @param userId 分享ID
      * @return 分享
      */
-    public LifeShare selectLifeShareById(Long userId);
+    LifeShare selectLifeShareById(Long userId);
 
     /**
      * 查询分享列表
@@ -27,7 +27,7 @@ public interface LifeShareService
      * @param lifeShare 分享
      * @return 分享集合
      */
-    public List<LifeShare> selectLifeShareList(LifeShare lifeShare);
+    List<LifeShare> selectLifeShareList(LifeShare lifeShare);
 
     /**
      * 新增分享
@@ -35,7 +35,7 @@ public interface LifeShareService
      * @param lifeShare 分享
      * @return 结果
      */
-    public int insertLifeShare(LifeShare lifeShare);
+    int insertLifeShare(LifeShare lifeShare);
 
     /**
      * 修改分享
@@ -43,7 +43,7 @@ public interface LifeShareService
      * @param lifeShare 分享
      * @return 结果
      */
-    public int updateLifeShare(LifeShare lifeShare);
+    int updateLifeShare(LifeShare lifeShare);
 
     /**
      * 批量删除分享
@@ -51,7 +51,7 @@ public interface LifeShareService
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int deleteLifeShareByIds(String ids);
+    int deleteLifeShareByIds(String ids);
 
     /**
      * 删除分享信息
@@ -59,5 +59,14 @@ public interface LifeShareService
      * @param userId 分享ID
      * @return 结果
      */
-    public int deleteLifeShareById(Long userId);
+    int deleteLifeShareById(Long userId);
+
+
+    /**
+     * 邀请新用户
+     * @return
+     */
+    int inviteNewUser(Long userId);
+
+
 }

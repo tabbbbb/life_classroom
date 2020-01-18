@@ -154,4 +154,29 @@ public interface LifeUserMapper
      * @return
      */
     int refund(Long userId, BigDecimal pay);
+
+
+    /**
+     * 根据上级用户id获取下级
+     * @return
+     */
+    List<LifeUser> selectUserByParentId(Long parentId);
+
+
+    /**
+     * 设置集合的parentId
+     * @param list
+     * @return
+     */
+    int updateLeadId(@Param("leadId") Long leadId,@Param("list")List<LifeUser> list);
+
+
+    /**
+     * 成为卓越会员
+     * @return
+     */
+    int becomeExcel(Long userId);
+
+
+
 }

@@ -62,4 +62,18 @@ public interface SysLifeUserService {
      * @return
      */
     int refund(Long userId, BigDecimal pay);
+
+
+    /**
+     * 设置为卓越会员
+     * @param userIds
+     * @return
+     */
+    void setExcelVip(String userIds);
+
+
+
+
+
+
 }

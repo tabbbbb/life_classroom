@@ -140,8 +140,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join life_vip as vip on vip.vip_id = point.vip_id
         where point.share_id = #{shareId}
     </select>
-
-
+    <select id="selectExcelVipByUserId" resultType="java.lang.Integer">
+        select count(0) from life_point
+        where vip_id in (
+          select vip_id from life_vip
+          where vip_level = 1
+        ) and share_id = #{userId}
+    </select>
+    <select id="getExcelVipUserId">
+        select user_id from life_point
+        where vip_id = 4
+    </select>
 
 
 </mapper>

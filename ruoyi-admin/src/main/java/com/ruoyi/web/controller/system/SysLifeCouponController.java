@@ -12,6 +12,7 @@ import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.life.domain.LifeCoupon;
 import com.ruoyi.life.service.system.SysLifeCouponService;
+import com.ruoyi.life.service.system.SysLifeUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
@@ -37,6 +39,8 @@ public class SysLifeCouponController extends BaseController
 
     @Autowired
     private SysLifeCouponService lifeCouponService;
+
+
 
 
     @Autowired
@@ -127,5 +131,15 @@ public class SysLifeCouponController extends BaseController
             return AjaxResult.error(e.getMessage());
         }
         return url;
+    }
+
+
+    @RequiresPermissions("life:coupon:givecoupon")
+    @Log(title = "赠送优惠券", businessType = BusinessType.UPDATE)
+    @PostMapping("givecoupon")
+    @ResponseBody
+    public int giveCoupon(String couponIds,String userIds){
+        lifeCouponService.giveCoupon(couponIds,userIds);
+        return 200;
     }
 }

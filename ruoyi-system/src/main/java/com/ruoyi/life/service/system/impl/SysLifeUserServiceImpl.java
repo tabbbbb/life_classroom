@@ -11,16 +11,20 @@
 package com.ruoyi.life.service.system.impl;
 
 import com.ruoyi.common.core.text.Convert;
-import com.ruoyi.life.domain.LifeUser;
+import com.ruoyi.common.utils.security.Md5Utils;
+import com.ruoyi.life.domain.*;
 import com.ruoyi.life.domain.dto.system.LifeUserDto;
 import com.ruoyi.life.domain.vo.system.LifeUserSearchVo;
 import com.ruoyi.life.domain.vo.system.LifeUserVo;
 import com.ruoyi.life.mapper.LifeUserMapper;
-import com.ruoyi.life.service.system.SysLifeUserService;
+import com.ruoyi.life.service.system.*;
+import com.ruoyi.life.service.user.LifeCouponReceiveService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +41,25 @@ public class SysLifeUserServiceImpl implements SysLifeUserService {
 
     @Resource
     private LifeUserMapper userMapper;
+
+    @Resource
+    private SysLifePointService pointService;
+
+    @Resource
+    private LifeCouponReceiveService couponReceiveService;
+
+    @Resource
+    private SysLifeVipService vipService;
+
+    @Resource
+    private SysLifeVipCouponService vipCouponService;
+
+
+    @Resource
+    private SysLifeCouponService couponService;
+
+
+
     /**
      * 查询用户
      * @param userId 用户ID
@@ -82,6 +105,13 @@ public class SysLifeUserServiceImpl implements SysLifeUserService {
                 LifeUser user = selectLifeUserById(shareId);
                 phone = user.getPhone();
             }
+            if (userDto.getVipId() == null){
+                userDto.setVipName("普通");
+            }else{
+                LifeVip vip = vipService.selectLifeVipById(userDto.getVipId());
+                userDto.setVipName(vip.getVipName());
+            }
+
             voList.add(userDto.toVo(phone));
         }
         return voList;
@@ -126,4 +156,61 @@ public class SysLifeUserServiceImpl implements SysLifeUserService {
     public int refund(Long userId, BigDecimal pay) {
         return userMapper.refund(userId,pay);
     }
+
+
+    /**
+     * 设置为卓越会员
+     *
+     * @param userIds
+     * @return
+     */
+    @Override
+    @Transactional
+    public void setExcelVip(String userIds) {
+        if (userIds == null || userIds.trim() == ""){
+            throw new RuntimeException("请选择一个用户");
+        }
+
+        String [] userIdArray = userIds.split(",");
+
+        for (String userId : userIdArray) {
+            Long userIdLong = Long.parseLong(userId);
+            if (pointService.selectExcelVipByUserId(userIdLong)){
+                throw new RuntimeException("设置用户组中有卓越会员");
+            }
+            List<LifeUser> list = allUserByParentId(userIdLong);
+            if (list.size() > 0 && userMapper.updateLeadId(Long.valueOf(userId),list) != list.size()){
+                throw new RuntimeException("设置失败");
+            }
+            if (userMapper.becomeExcel(userIdLong) == 0){
+                throw new RuntimeException("设置失败");
+            }
+            couponReceiveService.insertLifeCouponReceiveVip(userIdLong,4L);
+        }
+        pointService.excelVipPoint(userIdArray);
+
+    }
+
+
+    /**
+     * 获取所有下级
+     * @param parentId
+     * @return
+     */
+    private List<LifeUser> allUserByParentId(Long parentId){
+        List<LifeUser> list = userMapper.selectUserByParentId(parentId);
+        if (list.size() == 0){
+            return new ArrayList<>();
+        }
+        for (int i = 0; i < list.size(); i++) {
+            list.addAll(allUserByParentId(list.get(i).getUserId()));
+        }
+        return list;
+    }
+
+
+
+
+
+
 }

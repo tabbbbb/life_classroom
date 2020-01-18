@@ -57,4 +57,13 @@ public interface SysLifeCouponService
      */
     public int deleteLifeCouponByCourseIds(String[] courseIds);
 
+
+
+    /**
+     * 赠送优惠券
+     * @param userIds
+     * @return
+     */
+    void giveCoupon(String couponIds,String userIds);
+
 }

@@ -179,7 +179,7 @@ public class SysLifeBusinessCourseServiceImpl implements SysLifeBusinessCourseSe
     public void checkSuccess(Long businessCourseId) {
         updateService.confirmUpdate(businessCourseId,1,null);
         LifeBusinessCourse businessCourse = selectLifeBusinessCourseById(businessCourseId);
-        assignmentOrVerilyCourse(businessCourse);
+        assignmentCourse(businessCourse);
         assignmentOrVerilyCourseDetail(businessCourse);
     }
 
@@ -188,25 +188,16 @@ public class SysLifeBusinessCourseServiceImpl implements SysLifeBusinessCourseSe
      * 将审核课程移到上架表
      * @param businessCourse
      */
-    private void assignmentOrVerilyCourse(LifeBusinessCourse businessCourse){
+    private void assignmentCourse(LifeBusinessCourse businessCourse){
 
-
+        Long pid = getPidAndVerily(businessCourse);
         LifeCourse course = new LifeCourse();
-        LifeCourseClassify level3Classify = courseClassifyService.selectLifeCourseClassifyById(businessCourse.getCourseClassifyId());
-        if (level3Classify == null){
-            throw new RuntimeException("课程中包含的目标标签已被删除");
-        }
-        LifeCourseClassify level2Classify = courseClassifyService.selectLifeCourseClassifyById(level3Classify.getPid());
-        LifeCourseLabel courseLabel = courseLabelService.selectLifeCourseLabelById(businessCourse.getCourseLabelId());
-        if (courseLabel == null){
-            throw new RuntimeException("课程中包含的课程标签已被删除");
-        }
         course.setName(businessCourse.getName());
         course.setImgUrl(businessCourse.getImgUrl());
         course.setCarouselUrl(businessCourse.getCarousalUrl());
         course.setCourseType(businessCourse.getCourseType());
         course.setCourseLabelId(businessCourse.getCourseLabelId());
-        course.setCourseClassifyPid(level2Classify.getPid());
+        course.setCourseClassifyPid(pid);
         course.setCourseClassifyId(businessCourse.getCourseClassifyId());
         course.setCourseKind(1);
         course.setAgeOnset(businessCourse.getAgeStart());
@@ -232,6 +223,20 @@ public class SysLifeBusinessCourseServiceImpl implements SysLifeBusinessCourseSe
         if (updateLifeBusinessCourse(updateBusinessCourse) == 0){
             throw new RuntimeException("课程关联失败");
         }
+    }
+
+
+    private Long getPidAndVerily(LifeBusinessCourse businessCourse){
+        LifeCourseClassify level3Classify = courseClassifyService.selectLifeCourseClassifyById(businessCourse.getCourseClassifyId());
+        if (level3Classify == null){
+            throw new RuntimeException("课程中包含的目标标签已被删除");
+        }
+        LifeCourseClassify level2Classify = courseClassifyService.selectLifeCourseClassifyById(level3Classify.getPid());
+        LifeCourseLabel courseLabel = courseLabelService.selectLifeCourseLabelById(businessCourse.getCourseLabelId());
+        if (courseLabel == null){
+            throw new RuntimeException("课程中包含的课程标签已被删除");
+        }
+        return level2Classify.getPid();
     }
 
 
@@ -287,8 +292,30 @@ public class SysLifeBusinessCourseServiceImpl implements SysLifeBusinessCourseSe
      * @return
      */
     @Override
+    @Transactional
     public void updateSuccess(Long businessCourseId) {
+
         updateService.confirmUpdate(businessCourseId,1,null);
-        
+        LifeBusinessCourse businessCourse = selectLifeBusinessCourseById(businessCourseId);
+        Long pid = getPidAndVerily(businessCourse);
+        LifeCourse course = new LifeCourse();
+        course.setCourseId(businessCourse.getBindTopThread());
+        course.setName(businessCourse.getName());
+        course.setImgUrl(businessCourse.getImgUrl());
+        course.setCarouselUrl(businessCourse.getCarousalUrl());
+        course.setPrice(businessCourse.getPrice());
+        course.setCourseType(businessCourse.getCourseType());
+        course.setCourseLabelId(businessCourse.getCourseLabelId());
+        course.setCourseClassifyId(businessCourse.getCourseClassifyId());
+        course.setCourseClassifyPid(pid);
+        course.setNumber(businessCourse.getNumber());
+        course.setAgeOnset(businessCourse.getAgeStart());
+        course.setAgeEnd(businessCourse.getAgeEnd());
+        course.setRuleUrl(businessCourse.getRuleUrl());
+        course.setInformation(businessCourse.getInformation());
+        courseService.updateLifeCourse(course);
     }
+
+
+
 }

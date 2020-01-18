@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.life.mapper.LifeExcelRebateMapper">
+    
+    <resultMap type="LifeExcelRebate" id="LifeExcelRebateResult">
+        <result property="rebateId"    column="rebate_id"    />
+        <result property="rebateUserId"    column="rebate_user_id"    />
+        <result property="rebatePoint"    column="rebate_point"    />
+        <result property="rebateTime"    column="rebate_time"    />
+        <result property="shouldRebate"    column="should_rebate"    />
+    </resultMap>
+
+    <sql id="selectLifeExcelRebateVo">
+        select rebate_id, rebate_user_id, rebate_point, rebate_time, should_rebate from life_excel_rebate
+    </sql>
+
+
+        
+    <insert id="insertLifeExcelRebate" parameterType="LifeExcelRebate" useGeneratedKeys="true" keyProperty="rebateId">
+        insert into life_excel_rebate
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="rebateUserId != null ">rebate_user_id,</if>
+            <if test="rebatePoint != null ">rebate_point,</if>
+            <if test="rebateTime != null ">rebate_time,</if>
+            <if test="shouldRebate != null  and shouldRebate != ''">should_rebate,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="rebateUserId != null ">#{rebateUserId},</if>
+            <if test="rebatePoint != null ">#{rebatePoint},</if>
+            <if test="rebateTime != null ">#{rebateTime},</if>
+            <if test="shouldRebate != null  and shouldRebate != ''">#{shouldRebate},</if>
+         </trim>
+    </insert>
+    <select id="selectLifeExcelRebateByExcelRebate" resultMap="LifeExcelRebateResult">
+      <include refid="selectLifeExcelRebateVo"/>
+      where rebate_user_id = #{rebateUserId} and should_rebate = #{shouldRebate}
+    </select>
+
+
+</mapper>

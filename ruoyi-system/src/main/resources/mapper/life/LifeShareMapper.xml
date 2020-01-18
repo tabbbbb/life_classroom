@@ -27,7 +27,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectLifeShareVo"/>
         where user_id = #{userId}
     </select>
-        
+
+
     <insert id="insertLifeShare" parameterType="LifeShare">
         insert into life_share
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -61,5 +62,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{userId}
         </foreach>
     </delete>
-    
+    <update id="get" >
+        update life_share set enable = 1
+        where user_id = #{userId}
+    </update>
 </mapper>

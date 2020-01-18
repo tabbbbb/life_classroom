@@ -12,6 +12,7 @@ package com.ruoyi.web.controller.system;
 
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.life.domain.vo.system.LifeAddPointsVo;
 import com.ruoyi.life.service.system.SysLifePointService;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * 用户积分信息
@@ -64,5 +66,8 @@ public class SysLifePointController extends BaseController {
     public String addPointsView(){
         return "/life/user/table/add";
     }
+
+
+
 
 }

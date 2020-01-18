@@ -198,12 +198,7 @@ public class LifeVipServiceImpl implements LifeVipService
         if (pointLogService.insertLifePointLog(pointLog) == 0){
             throw new RechargerException(UserResponseCode.USER_RECHARGE_ERROR,"积分日志添加失败，请联系管理员",userId);
         }
-        LifeVipCoupon selectVipCoupon = new LifeVipCoupon();
-        selectVipCoupon.setVipId(vipId);
-        List<LifeVipCoupon> list = vipCouponService.selectLifeCouponIds(vipId);
-        if (couponReceiveService.insertLifeCouponReceiveVip(userId,list)!= couponReceiveService.insertNumVip(list)){
-            throw new RechargerException(UserResponseCode.USER_RECHARGE_ERROR,"充值所送优惠券添加失败，请联系管理员",userId);
-        }
+        couponReceiveService.insertLifeCouponReceiveVip(userId,vipId);
         return UserResponse.succeed(point);
     }
 
@@ -319,13 +314,7 @@ public class LifeVipServiceImpl implements LifeVipService
         }
         LifeVipCoupon selectVipCoupon = new LifeVipCoupon();
         selectVipCoupon.setVipId(vipId);
-        List<LifeVipCoupon> list = vipCouponService.selectLifeCouponIds(vipId);
-        if (couponReceiveService.insertLifeCouponReceiveVip(userId,list)!= couponReceiveService.insertNumVip(list)){
-            throw new RechargerException(UserResponseCode.USER_RECHARGE_ERROR,"充值所送优惠券添加失败，请联系管理员",userId);
-        }
-
-
-
+        couponReceiveService.insertLifeCouponReceiveVip(userId,vipId);
         return UserResponse.succeed(point);
     }
 }

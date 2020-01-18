@@ -42,5 +42,13 @@ public interface SysLifePointLogService {
     public List<LifePointLogVo> selectLifePointLogVoList(LifePointLogSearchVo lifePointLog);
 
 
+    /**
+     * 添加
+     * @param pointLog
+     * @return
+     */
+    int insertLifePointLog(LifePointLog pointLog);
+
+
 
 }

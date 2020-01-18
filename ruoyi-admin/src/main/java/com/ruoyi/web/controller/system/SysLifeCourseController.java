@@ -15,6 +15,7 @@ import com.ruoyi.life.domain.vo.system.LifeCourseSearchVo;
 import com.ruoyi.life.domain.vo.system.LifeCourseUpdateOrAddVo;
 import com.ruoyi.life.domain.vo.system.LifeCourseVo;
 import com.ruoyi.life.service.system.SysLifeCourseDetailService;
+
 import com.ruoyi.life.service.system.SysLifeCourseService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('卓越会员返佣')" />
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li style="display: none">
+                            <input type="text" name="leadId"/>
+                        </li>
+                        <li>
+                            <p>年：</p>
+                            <input type="number" name="year" oninput="verilyInput(this)"/>
+                        </li>
+                        <li>
+                            <p>月：</p>
+                            <input type="number" name="month" oninput="verilyMonth()"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="searchRebate()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            总积分：<span id="point"></span>  总金额：<span id="price"></span>
+            <table id="bootstrap-table"></table>
+
+        </div>
+        <div class="col-sm-12 search-collapse" id="rebate" style="display: none">
+            <form id="formId1">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <p>返佣积分：</p>
+                            <input type="number" name="point" oninput="verilyInput(this)"/>
+                        </li>
+                        <li>
+                            <p>有效天数：</p>
+                            <input type="number" name="day" value="30" oninput="verilyInput(this)"/>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-12 search-collapse" id="rebateShow" style="display: none">
+            <p>返佣积分：<span id="rebatePoint"></span></p>
+            <p>返佣时间：<span id="rebateTime"></span></p>
+            <p>对应月份：<span id="shouldRebate"></span></p>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:src="@{/ruoyi/js/order.js}"></script>
+<script th:inline="javascript">
+
+
+    var fromData = "";
+
+    $(function() {
+
+        $('[name=leadId]').val(getUrlParam('leadId'))
+
+        var options = {
+            url: "/life/rebate/getexcelordervo",
+            modalName: "卓越会员返佣订单展示",
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            clickToSelect: true,
+            columns: [
+                {
+                    field : 'orderSn',
+                    title : '订单核销码'
+                },
+                {
+                    field : 'userPhone',
+                    title : '用户手机号'
+                },
+                {
+                    field : 'payType',
+                    title : '支付方式',
+                    formatter: function(value, row, index) {
+                        return payTypeFormatter(value)
+                    }
+                },
+                {
+                    field : 'pay',
+                    title : '支付金额/积分',
+                    formatter: function(value, row, index) {
+                        if (row.payType == 0){
+                            return value*1/2
+                        }
+                        return value
+                    }
+                },
+                {
+                    field : 'orderTime',
+                    title : '订单时间'
+                },
+                {
+                    field : 'consumeTime',
+                    title : '核销时间'
+                }
+            ]
+        };
+        $.table.init(options);
+        searchRebate()
+    });
+
+
+
+
+
+
+    function submitHandler(index, layero) {
+        $('[name=point]').val( $('[name=point]').val()*1*2)
+        searchRebate()
+        $.ajax({
+            cache : false,
+            type : "POST",
+            url : ctx + "life/rebate/rebate?"+fromData+"&"+$('#formId1').serialize(),
+            async : false,
+            success : function(data) {
+                if (data.code == 500){
+                    $.modal.alert(data.msg,'error')
+                    $('[name=point]').val( $('[name=point]').val()/2)
+                }else{
+                    $.modal.close();
+                }
+
+            }
+        });
+
+    }
+
+
+    function searchRebate() {
+        fromData = $('#formId').serialize()
+        $.ajax({
+            cache : false,
+            type : "POST",
+            url : ctx + "life/rebate/getrebateexceldata?"+fromData,
+            success : function(data) {
+                if (data.code == 500){
+                    $.modal.alert(data.msg,'error')
+                }else{
+                    $('[name=year]').val(data.year)
+                    $('[name=month]').val(data.month)
+                    $('#point').text(data.point/2)
+                    $('#price').text(data.price)
+                    var rebate = data.rebate
+                    if (rebate == null){
+                        $('#rebate').show();
+                        $('#rebateShow').hide();
+                    }else{
+                        $('#rebatePoint').text(rebate.rebatePoint/2);
+                        $('#rebateTime').text(rebate.rebateTime);
+                        $('#shouldRebate').text(rebate.shouldRebate);
+                        $('#rebateShow').show();
+                        $('#rebate').hide();
+                    }
+                }
+            }
+        });
+
+        $.table.search()
+    }
+    
+    function verilyMonth() {
+        var value = $('[name=month]').val()
+        if (value > 12){
+            $('[name=month]').val('1')
+        } else if (value < 1){
+            $('[name=month]').val('12')
+        }
+    }
+    
+    
+    function verilyInput(input) {
+        if ($(input).val() < 1) {
+            $(input).val('1')
+        }
+    }
+
+</script>
+</body>
+</html>

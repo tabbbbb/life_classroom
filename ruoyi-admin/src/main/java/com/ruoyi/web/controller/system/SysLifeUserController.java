@@ -8,8 +8,11 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.life.domain.LifeUser;
+import com.ruoyi.life.domain.vo.system.LifeExcelRebateOrderVo;
 import com.ruoyi.life.domain.vo.system.LifeUserSearchVo;
 import com.ruoyi.life.domain.vo.system.LifeUserVo;
+import com.ruoyi.life.service.system.SysLifeExcelRebateService;
+import com.ruoyi.life.service.system.SysLifeOrderService;
 import com.ruoyi.life.service.system.SysLifeUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
@@ -17,7 +20,10 @@ import org.springframework.web.bind.annotation.*;
 import org.w3.x2000.x09.xmldsig.ObjectType;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户Controller
@@ -33,6 +39,11 @@ public class SysLifeUserController extends BaseController
 
     @Resource
     private SysLifeUserService userService;
+
+    @Resource
+    private SysLifeOrderService orderService;
+
+
 
     @RequiresPermissions("life:user:view")
     @GetMapping()
@@ -77,6 +88,15 @@ public class SysLifeUserController extends BaseController
     }
 
 
+
+    @RequiresPermissions("life:user:setexcel")
+    @Log(title = "成为卓越会员", businessType = BusinessType.UPDATE)
+    @PostMapping("setexcel")
+    @ResponseBody
+    public int setVip(String userIds){
+        userService.setExcelVip(userIds);
+        return 200;
+    }
 
 
 

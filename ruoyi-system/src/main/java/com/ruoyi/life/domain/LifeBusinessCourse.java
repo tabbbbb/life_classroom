@@ -99,6 +99,7 @@ public class LifeBusinessCourse extends BaseEntity
      */
     private Long bindTopThread;
 
+
     public Long getBindTopThread() {
         return bindTopThread;
     }
