@@ -11,6 +11,7 @@
 package com.ruoyi.web.controller.user;
 
 import com.ruoyi.life.domain.LifeUser;
+import com.ruoyi.life.domain.vo.user.LifeCourseConditionVo;
 import com.ruoyi.life.service.user.LifeAutoService;
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.common.response.UserResponseCode;
@@ -88,7 +89,7 @@ public class LifeAuthController {
         }
         Integer random = (int)(Math.floor(Math.random()*900000)) + 100000;
         if (SmsCache.compareSmsCache(phone)){
-            return UserResponse.fail(UserResponseCode.SEND_CODE_ERROR,"手机号输入错误");
+            return UserResponse.fail(UserResponseCode.SEND_CODE_ERROR,"验证码有效期内不能重复发送");
         }
         notifySms.notifySend(phone,TemplatesType.code,new String[]{random+"","2"});
         SmsCache.putSmsCache(phone,random+"");
@@ -136,14 +137,20 @@ public class LifeAuthController {
 
     @PostMapping("getToken")
     @ApiOperation(value = "获取某用户的token",response = UserResponse.class,notes = "")
-    @ApiImplicitParams(
-            @ApiImplicitParam(name = "userId",value = "用户id")
-    )
     public Object getToken(Long userId){
         return UserResponse.succeed(UserToken.addToken(userId));
     }
 
 
+
+    @GetMapping("phoneregisterflag")
+    @ApiOperation(value = "判断用户手机号是否注册",response = UserResponse.class,notes = "返回值：false：未注册")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType="query",name="phone",value="手机号",dataTypeClass = String.class)
+    })
+    public Boolean getToken(String phone){
+        return autoService.phoneIsBind(phone) != null;
+    }
 
 
 

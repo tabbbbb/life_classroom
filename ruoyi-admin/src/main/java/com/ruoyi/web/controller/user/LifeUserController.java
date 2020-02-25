@@ -29,8 +29,8 @@ import java.math.BigDecimal;
  * @date 2019-11-29
  */
 @RestController
-@RequestMapping("/life/user")
-@Api(value = "/life/user",description = "用户服务")
+@RequestMapping("/user/user")
+@Api(value = "/user/user",description = "用户服务")
 public class LifeUserController extends BaseController
 {
 
@@ -117,7 +117,7 @@ public class LifeUserController extends BaseController
 
     @PostMapping("updatepwdcode")
     @ApiOperation(value = "修改密码，获取短信验证码修改新密码")
-    public UserResponse updatePassword(@RequestBody @ApiParam(name = "boyd",value = "phone:手机号,code:验证码,newPwd:新密码") String body){
+    public UserResponse updatePassword(@RequestBody @ApiParam(name = "body",value = "phone:手机号,code:验证码,newPwd:新密码") String body){
         return userService.codeUpdatePassword(body);
     }
 

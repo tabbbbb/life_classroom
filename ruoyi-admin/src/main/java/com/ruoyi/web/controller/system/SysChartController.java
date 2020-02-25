@@ -16,10 +16,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.life.domain.dto.system.LifeUserNumDto;
-import com.ruoyi.life.domain.vo.system.LifeChartVo;
-import com.ruoyi.life.domain.vo.system.LifeUserChartVo;
-import com.ruoyi.life.domain.vo.system.LifeUserSearchVo;
-import com.ruoyi.life.domain.vo.system.LifeUserVo;
+import com.ruoyi.life.domain.vo.system.*;
 import com.ruoyi.life.service.system.SysLifeChartService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
@@ -78,4 +75,17 @@ public class SysChartController extends BaseController {
         return util.exportExcel(list, "userChart");
     }
 
+
+    @RequiresPermissions("life:chart:order")
+    @GetMapping("order")
+    public String order(){
+        return prefix+"/order";
+    }
+
+
+    @GetMapping("order/chart")
+    @ResponseBody
+    public Object getOrderChart(LifeOrderChartVo chartVo){
+        return chartService.getOrderChartData(chartVo);
+    }
 }

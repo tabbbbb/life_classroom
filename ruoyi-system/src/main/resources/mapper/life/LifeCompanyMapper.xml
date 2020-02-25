@@ -63,5 +63,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{companyId}
         </foreach>
     </delete>
-    
+
+    <select id="selectLifeCompanyByCode" resultMap="LifeCompanyResult">
+        <include refid="selectLifeCompanyVo"/>
+        where invitation_code = #{code}
+    </select>
 </mapper>

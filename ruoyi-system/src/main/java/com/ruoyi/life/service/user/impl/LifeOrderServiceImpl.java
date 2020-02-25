@@ -7,6 +7,7 @@ import com.ruoyi.common.response.UserResponseCode;
 import com.ruoyi.common.utils.security.Md5Utils;
 import com.ruoyi.life.domain.*;
 import com.ruoyi.life.domain.dto.user.LifeDataDetailDto;
+import com.ruoyi.life.domain.vo.system.LifeOrderChartDataDto;
 import com.ruoyi.life.domain.vo.user.LifeDataDetailVo;
 import com.ruoyi.life.domain.vo.user.LifePayOrderVo;
 import com.ruoyi.life.mapper.LifeOrderMapper;
@@ -498,5 +499,11 @@ public class LifeOrderServiceImpl implements LifeOrderService
     @Override
     public Integer getSumOrderClassify(Long userId) {
         return lifeOrderMapper.getSumOrderClassify(userId);
+    }
+
+
+    @Override
+    public List<LifeOrderChartDataDto> getOrderChartData() {
+        return lifeOrderMapper.getOrderChartData();
     }
 }

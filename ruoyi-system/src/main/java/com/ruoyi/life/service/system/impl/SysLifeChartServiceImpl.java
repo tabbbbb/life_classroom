@@ -14,19 +14,27 @@ import com.ruoyi.common.chart.Option;
 import com.ruoyi.common.chart.TimeLineData;
 import com.ruoyi.common.chart.XAxis;
 import com.ruoyi.common.exception.life.system.ChartDateException;
+import com.ruoyi.life.domain.LifeOrder;
 import com.ruoyi.life.domain.dto.system.LifeUserNumDto;
 import com.ruoyi.life.domain.vo.system.LifeChartVo;
+
+import com.ruoyi.life.domain.vo.system.LifeOrderChartDataDto;
+import com.ruoyi.life.domain.vo.system.LifeOrderChartVo;
 import com.ruoyi.life.domain.vo.system.LifeUserChartVo;
+import com.ruoyi.life.mapper.LifeOrderMapper;
 import com.ruoyi.life.mapper.LifeUserMapper;
 import com.ruoyi.life.service.system.SysLifeChartService;
 
 
+import com.ruoyi.life.service.user.LifeOrderService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +45,9 @@ public class SysLifeChartServiceImpl implements SysLifeChartService {
 
     @Resource
     private LifeUserMapper userMapper;
+
+    @Resource
+    private LifeOrderService orderService;
 
 
     /**
@@ -337,4 +348,66 @@ public class SysLifeChartServiceImpl implements SysLifeChartService {
         return null;
     }
 
+
+    @Override
+    public Object getOrderChartData(LifeOrderChartVo chartVo) {
+        List<LifeOrderChartDataDto> orders = orderService.getOrderChartData();
+        LocalDate start = LocalDate.from(orders.get(0).getUseTime());
+        LocalDate end = LocalDate.now();
+        Long orderNum = 0L;
+        BigDecimal orderPrice = new BigDecimal(0);
+        Long orderPoint = 0L;
+        List<LocalDate> date = new ArrayList<>();
+        List<Long> finishOrderNum = new ArrayList<>();
+        List<BigDecimal> finishOrderPrice = new ArrayList<>();
+        List<Long> finishOrderPoint = new ArrayList<>();
+        while(!start.equals(end)){
+            List<LifeOrderChartDataDto> list = getOrderChartDateByTime(orders,start);
+            date.add(start);
+            for (LifeOrderChartDataDto orderChartDataDto : list) {
+                if (orderChartDataDto.getPid() == 1){
+                    orderPrice.add(orderChartDataDto.getPay());
+                }else{
+                    orderPoint += orderChartDataDto.getPay().longValue();
+                }
+                orderNum += orderChartDataDto.getOrderNum();
+            }
+            finishOrderNum.add(orderNum);
+            finishOrderPrice.add(orderPrice);
+            finishOrderPoint.add(orderPoint);
+            if (chartVo.isTypeFlag()){
+                orderNum = 0L;
+                orderPoint = 0L;
+                orderPrice = new BigDecimal(0);
+
+            }
+            start = start.plusDays(1L);
+        }
+        List result = new ArrayList();
+        result.add(date);
+        result.add(finishOrderNum);
+        result.add(finishOrderPrice);
+        result.add(finishOrderPoint);
+        return result;
+    }
+
+
+    /**
+     * 获取订单数据中符合时间的集合
+     * @return
+     */
+    private List<LifeOrderChartDataDto> getOrderChartDateByTime(List<LifeOrderChartDataDto> list,LocalDate time){
+        List<LifeOrderChartDataDto> listByTime = new ArrayList<>(2);
+        for (int i = 0; i < list.size(); i++) {
+            if (i == 2){
+                break;
+            }
+            if (list.get(i).getUseTime().getYear() == time.getYear() && list.get(i).getUseTime().getDayOfYear() == time.getDayOfYear()){
+                listByTime.add(list.get(i));
+                list.remove(i);
+                i--;
+            }
+        }
+        return listByTime;
+    }
 }

@@ -44,7 +44,7 @@ public class ResourcesConfig implements WebMvcConfigurer
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry)
     {
-        /** 本地文件上传路径 */
+        /** 本地文件上传路径映射 */
         registry.addResourceHandler(Constants.RESOURCE_PREFIX + "/**").addResourceLocations("file:" + Global.getProfile() + "/");
 
         /** swagger配置 */

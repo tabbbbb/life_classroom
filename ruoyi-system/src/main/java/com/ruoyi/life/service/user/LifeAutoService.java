@@ -11,6 +11,7 @@
 package com.ruoyi.life.service.user;
 
 import com.ruoyi.common.response.UserResponse;
+import com.ruoyi.life.domain.LifeUser;
 
 import java.util.Map;
 
@@ -67,5 +68,11 @@ public interface LifeAutoService {
      */
     UserResponse bindUpdateTime(Long userId,String body);
 
+    /**
+     * 根据手机号获取user信息
+     * @param phone
+     * @return
+     */
+     LifeUser phoneIsBind(String phone);
 
 }

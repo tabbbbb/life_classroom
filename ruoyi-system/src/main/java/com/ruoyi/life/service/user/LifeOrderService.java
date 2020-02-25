@@ -3,7 +3,9 @@ package com.ruoyi.life.service.user;
 
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.life.domain.LifeOrder;
+import com.ruoyi.life.domain.vo.system.LifeOrderChartDataDto;
 import com.ruoyi.life.domain.vo.user.LifePayOrderVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -106,4 +108,13 @@ public interface LifeOrderService
      * @return
      */
     Integer getSumOrderClassify(Long userId);
+
+
+
+    /**
+     * 根据状态获取订单集合
+     * @param
+     * @return
+     */
+    List<LifeOrderChartDataDto> getOrderChartData( );
 }

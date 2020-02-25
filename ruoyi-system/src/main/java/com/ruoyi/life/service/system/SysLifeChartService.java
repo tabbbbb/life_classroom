@@ -12,6 +12,7 @@ package com.ruoyi.life.service.system;
 
 import com.ruoyi.life.domain.dto.system.LifeUserNumDto;
 import com.ruoyi.life.domain.vo.system.LifeChartVo;
+import com.ruoyi.life.domain.vo.system.LifeOrderChartVo;
 import com.ruoyi.life.domain.vo.system.LifeUserChartVo;
 
 import java.util.List;
@@ -34,4 +35,14 @@ public interface SysLifeChartService {
      * @return
      */
     List<LifeUserNumDto> getUserNum(LifeUserChartVo chartVo);
+
+
+
+    /**
+     * 获取订单图表的数据
+     * @param chartVo
+     * @return
+     */
+    Object getOrderChartData(LifeOrderChartVo chartVo);
+
 }

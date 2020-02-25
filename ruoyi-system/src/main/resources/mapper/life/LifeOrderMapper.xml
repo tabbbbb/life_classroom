@@ -434,4 +434,12 @@
       where  `user`.lead_id = #{leadId} and date_format(`order`.consume_time,'%Y') = #{year} and date_format(`order`.consume_time,'%m') = #{month}
     </select>
 
+
+    <select id="getOrderChartData" resultType="com.ruoyi.life.domain.vo.system.LifeOrderChartDataDto">
+        SELECT DATE_FORMAT(use_time,'%Y-%m-%d') as useTime,sum(pay) as pay,pid ,count(0) as orderNum  FROM `life_order`
+        where status in (401,402)
+        GROUP BY DATE_FORMAT(use_time,'%Y-%m-%d'),pid
+        ORDER BY useTime
+    </select>
+
 </mapper>

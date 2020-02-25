@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <th:block th:include="include :: header('订单报表')" />
+    <!-- 引入 echarts.js -->
+
+</head>
+<body class="gray-bg">
+
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <p>基准：</p>
+                            <select name="typeFlag">
+                                <option value="true" selected>完成订单增长量</option>
+                                <option value="false">完成订单总量</option>
+                            </select>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <div id="main" style="width: 100%;height:600px ;"></div>
+    </div>
+</div>
+
+
+<th:block th:include="include :: echarts" />
+<th:block th:include="include :: footer" />
+<script th:src="@{/ruoyi/js/date.js}"></script>
+<script type="text/javascript">
+    var myChart = echarts.init(document.getElementById('main'));
+    var startDate = dateMath(false,getDateBarringTime(),14)
+    $.ajax({
+        cache : true,
+        type : "GET",
+        url : ctx + "life/chart/order/chart",
+        data:{'typeFlag':$('[name=typeFlag]').val()},
+        async : false,
+        success : function(data) {
+            console.log(data)
+            myChart.setOption(option = {
+                title: {
+                    text: $('[name=typeFlag]').text()
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis: {
+                    data: data[0]
+                },
+                yAxis: {
+                    splitLine: {
+                        show: false
+                    }
+                },
+                toolbox: {
+                    left: 'center',
+                    feature: {
+                        dataZoom: {
+                            yAxisIndex: 'none'
+                        },
+                        restore: {},
+                        saveAsImage: {}
+                    }
+                },
+                dataZoom: [{
+                    startDate: startDate
+                }, {
+                    type: 'inside'
+                }],
+                series: [
+                    {
+                        name: '订单数量',
+                        type: 'line',
+                        data: data[1]
+                    },{
+                        name: '支付积分',
+                        type: 'line',
+                        data: function (data) {
+                            for (var i = 0; i < data[3].length; i++) {
+                                data[3][i] = data[3][i]/2;
+                            }
+                        }
+
+                    },{
+                        name: '支付余额',
+                        type: 'line',
+                        data:data[2]
+                    }
+                ]
+            });
+
+        }
+    });
+</script>
+</body>
+</html>

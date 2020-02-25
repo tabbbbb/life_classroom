@@ -3,10 +3,7 @@ package com.ruoyi.life.mapper;
 
 import com.ruoyi.life.domain.LifeOrder;
 import com.ruoyi.life.domain.dto.user.LifeDataDetailDto;
-import com.ruoyi.life.domain.vo.system.LifeExcelRebateOrderVo;
-import com.ruoyi.life.domain.vo.system.LifeOrderDetailVo;
-import com.ruoyi.life.domain.vo.system.LifeOrderSearchVo;
-import com.ruoyi.life.domain.vo.system.LifeOrderVo;
+import com.ruoyi.life.domain.vo.system.*;
 import com.ruoyi.life.domain.vo.user.LifeDonateVo;
 import org.apache.ibatis.annotations.Param;
 
@@ -181,4 +178,11 @@ public interface LifeOrderMapper
      */
     List<LifeExcelRebateOrderVo> getExcelOrderVo( @Param("leadId") Long leadId, @Param("year") Integer year, @Param("month") Integer month);
 
+
+    /**
+     * 根据状态获取订单集合
+     * @param
+     * @return
+     */
+    List<LifeOrderChartDataDto> getOrderChartData();
 }

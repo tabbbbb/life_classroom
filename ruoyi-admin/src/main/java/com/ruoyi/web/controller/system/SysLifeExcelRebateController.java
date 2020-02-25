@@ -28,7 +28,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/life/rebate")
-public class LifeExcelRebateController extends BaseController
+public class SysLifeExcelRebateController extends BaseController
 {
     @Resource
     private SysLifeExcelRebateService excelRebateService;

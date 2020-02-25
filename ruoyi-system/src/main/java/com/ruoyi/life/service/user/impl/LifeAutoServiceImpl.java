@@ -144,7 +144,8 @@ public class LifeAutoServiceImpl implements LifeAutoService {
         LifeUser user = phoneIsBind(phone);
         if (user != null){
             password = Md5Utils.hash(password);
-            if (user.getPassword().equals(password)){
+
+            if (user.getPassword() != null && user.getPassword().equals(password)){
                 return UserResponse.succeed(user);
             }
             return UserResponse.fail(UserResponseCode.LOGIN_PASSWORD_ERROR,"密码输入错误");
@@ -158,7 +159,7 @@ public class LifeAutoServiceImpl implements LifeAutoService {
      * @param phone
      * @return
      */
-    private LifeUser phoneIsBind(String phone){
+    public LifeUser phoneIsBind(String phone){
         LifeUser user = userService.selectLifeUserByPhone(phone);
         return user;
     }
@@ -183,7 +184,7 @@ public class LifeAutoServiceImpl implements LifeAutoService {
             user = new LifeUser();
             user.setOpenId(openId);
             user.setCreateDate(LocalDateTime.now());
-            user.setSex(Long.valueOf(map.get("sex")));
+            user.setSex(Long.valueOf(map.get("gender")));
             user.setAddress(map.get("country")+" "+map.get("province")+" "+ map.get("city"));
             user.setNickName(map.get("nickName"));
             user.setImgUrl(map.get("avatarUrl"));
