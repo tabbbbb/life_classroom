@@ -181,9 +181,9 @@ public class UserResponseCode {
 
 
     /**
-     * 预约课程错误
+     * 支付订单错误
      */
-    public static final Integer PAY_COURSE_ERROR = 100024;
+    public static final Integer PAY_ORDER_ERROR = 100024;
 
 
     /**
@@ -248,5 +248,8 @@ public class UserResponseCode {
     public static final Integer CANCEL_ORDER_ERROR = 100034;
 
 
-
+    /**
+     * 支付密码错误
+     */
+    public static final Integer PAY_PASSWORD_ERROR = 100035;
 }

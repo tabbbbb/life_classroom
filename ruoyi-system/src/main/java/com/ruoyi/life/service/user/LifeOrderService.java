@@ -117,14 +117,14 @@ public interface LifeOrderService
      * 生成订单
      * @return
      */
-    UserResponse createOrder(List<LifeCreateOrderVo> createOrderVos,Long userId);
+    void createOrder(List<LifeCreateOrderVo> createOrderVos,Long userId);
 
 
     /**
      * 取消订单
      * @return
      */
-    UserResponse cancelOrder(Long userId,List<Long> orderIds);
+    void cancelOrder(Long userId,List<Long> orderIds);
 
 
     /**
@@ -132,5 +132,15 @@ public interface LifeOrderService
      * @return
      */
     void backCoupon(List<Long> orderIds);
+
+
+    /**
+     * 支付订单
+     * @param userId
+     * @param orderIds
+     */
+    void payOrder(Long userId,String payPassword,List<Long> orderIds);
+
+
 
 }

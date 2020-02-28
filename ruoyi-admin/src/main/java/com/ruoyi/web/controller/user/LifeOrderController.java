@@ -51,7 +51,8 @@ public class LifeOrderController {
     public UserResponse payCourse(@LoginInfo @ApiIgnore UserLoginInfo loginInfo, @ApiParam(name = "payOrderVo",value = "payOrderVo:LifePayOrderVo.class") @RequestBody List<LifeCreateOrderVo> createOrderVos){
         UserResponse response = LoginResponse.toMessage(loginInfo);
         if (response != null) return response;
-        return orderService.createOrder(createOrderVos,loginInfo.getId());
+       orderService.createOrder(createOrderVos,loginInfo.getId());
+       return UserResponse.succeed();
     }
 
 
@@ -60,7 +61,8 @@ public class LifeOrderController {
     public UserResponse cancel(@LoginInfo @ApiIgnore UserLoginInfo loginInfo, @ApiParam(name = "orderIds",value = "例：[1,2,3]") @RequestBody List<Long> orderIds){
         UserResponse response = LoginResponse.toMessage(loginInfo);
         if (response != null) return response;
-        return orderService.cancelOrder(loginInfo.getId(),orderIds);
+         orderService.cancelOrder(loginInfo.getId(),orderIds);
+        return UserResponse.succeed();
     }
 
 

@@ -28,7 +28,7 @@ import java.util.List;
 @RequestMapping("/life/businessaddress")
 public class SysLifeBusinessAddressController extends BaseController
 {
-    private String prefix = "life/business/address";
+    private String prefix = "life/course/address";
 
     @Autowired
     private SysLifeBusinessAddressService businessAddressService;

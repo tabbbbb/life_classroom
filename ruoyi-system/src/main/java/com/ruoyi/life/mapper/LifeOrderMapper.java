@@ -216,4 +216,11 @@ public interface LifeOrderMapper
      * @return
      */
     List<LifeReserve> getBackShareData(@Param("orderIds") List<Long> orderIds);
+
+
+    /**
+     * 支付订单
+     * @return
+     */
+    int payOrder(@Param("shareId")Long shareId,@Param("orderIds") List<Long> orderIds);
 }

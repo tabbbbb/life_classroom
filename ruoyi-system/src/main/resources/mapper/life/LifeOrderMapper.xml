@@ -451,6 +451,7 @@
         </foreach>
     </update>
 
+
     <select id="getBackCoupon" resultType="java.lang.Long">
         select coupon_id from life_order
         where order_id in
@@ -474,4 +475,12 @@
         </foreach>
         group by course_detail_id,use_time
     </select>
+
+    <update id="payOrder">
+        update life_order set status = 201
+        where status = 101 and share_id = #{shareId} and  order_id in
+        <foreach collection="orderIds" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
 </mapper>

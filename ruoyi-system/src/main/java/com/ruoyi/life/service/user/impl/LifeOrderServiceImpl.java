@@ -14,6 +14,7 @@ import com.ruoyi.life.domain.vo.user.LifeDataDetailVo;
 import com.ruoyi.life.mapper.LifeOrderMapper;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.life.service.user.*;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -486,7 +487,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
      */
     @Override
     @Transactional
-    public UserResponse createOrder(List<LifeCreateOrderVo> createOrderVos, Long userId) {
+    public void createOrder(List<LifeCreateOrderVo> createOrderVos, Long userId) {
         LifeUser user = userService.selectLifeUserById(userId);
         List<LifeOrder> orders = new ArrayList<>();
         for (int i = 0; i < createOrderVos.size(); i++) {
@@ -515,7 +516,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
             if(childIds != null && childIds.size() != 0){
                 int peopleNum = pointChildService.getLifePointChildByListNum(childIds);
                 if (peopleNum!= childIds.size()){
-                    throw new OrderException(UserResponseCode.PAY_COURSE_ERROR,"非法选择绑定用户");
+                    throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"非法选择绑定用户");
                 }
                 for (int j = 0; j < childIds.size(); j++) {
                     for (int z = 0; z < childIds.size(); z++) {
@@ -626,7 +627,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
         if (orderMapper.insertLifeOrders(orders) != orders.size()){
             throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"订单添加失败");
         }
-        return UserResponse.succeed();
+
     }
 
 
@@ -650,10 +651,10 @@ public class LifeOrderServiceImpl implements LifeOrderService
      */
     @Override
     @Transactional
-    public UserResponse cancelOrder(Long userId, List<Long> orderIds) {
+    public void cancelOrder(Long userId, List<Long> orderIds) {
         LifeUser user = userService.selectLifeUserById(userId);
         Long shareId = user.getShareId();
-        
+
         if (orderMapper.cancelOrder(shareId,orderIds) != orderIds.size()){
             throw new OrderException(UserResponseCode.CANCEL_ORDER_ERROR,"取消订单列表中有不能取消的");
         }
@@ -661,7 +662,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
         backCoupon(orderIds);
         //退回库存
         reserveService.backCourseSales(orderMapper.getBackShareData(orderIds));
-        return UserResponse.succeed();
+
     }
 
 
@@ -681,6 +682,25 @@ public class LifeOrderServiceImpl implements LifeOrderService
         }
         if (couponIds.size() != 0){
             couponReceiveService.backCoupon(couponIds);
+        }
+    }
+
+
+    /**
+     * 支付订单
+     *
+     * @param userId
+     * @param orderIds
+     */
+    @Override
+    @Transactional
+    public void payOrder(Long userId,String payPassword, List<Long> orderIds) {
+        LifeUser user = userService.selectLifeUserById(userId);
+        if (user.getPaymentCode() == null ){
+            throw new OrderException(UserResponseCode.PAY_PASSWORD_ERROR,"没有设置支付密码");
+        }
+        if (orderMapper.payOrder(user.getShareId(),orderIds) != orderIds.size()){
+            throw new OrderException(UserResponseCode.PAY_ORDER_ERROR,"支付失败，有订单不能支付");
         }
     }
 }
