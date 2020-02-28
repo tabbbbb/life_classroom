@@ -10,10 +10,17 @@
  */
 package com.ruoyi.web.controller.user;
 
+import com.ruoyi.common.config.Global;
+import com.ruoyi.common.exception.file.InvalidExtensionException;
 import com.ruoyi.common.response.UserResponse;
+import com.ruoyi.common.response.UserResponseCode;
+import com.ruoyi.common.utils.file.FileUploadUtils;
+import com.ruoyi.common.utils.file.MimeTypeUtils;
 import com.ruoyi.framework.userlogin.LoginResponse;
 import com.ruoyi.framework.userlogin.annotation.LoginInfo;
 import com.ruoyi.framework.userlogin.info.UserLoginInfo;
+import com.ruoyi.life.domain.LifeUser;
+import com.ruoyi.life.service.user.LifeFileUpService;
 import com.ruoyi.life.service.user.LifePointService;
 import com.ruoyi.life.service.user.LifeUserChildService;
 import io.swagger.annotations.Api;
@@ -21,7 +28,11 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
+
+import javax.annotation.Resource;
+import java.io.IOException;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -43,6 +54,10 @@ public class LifeUserChildController {
 
     @Autowired
     private LifeUserChildService userChildService;
+
+
+    @Resource
+    private LifeFileUpService fileUpService;
 
     @ApiOperation(value = "添加小孩")
     @PutMapping("child")
@@ -72,6 +87,12 @@ public class LifeUserChildController {
     }
 
 
-
+    @PostMapping("avatar")
+    @ApiOperation(value = "设置小孩头像")
+    public UserResponse setAvatarUrl(@ApiIgnore @LoginInfo UserLoginInfo loginInfo,@ApiIgnore MultipartFile file){
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null) return response;
+        return UserResponse.succeed(fileUpService.fileUp(Global.getUserChildPath(),file));
+    }
 
 }

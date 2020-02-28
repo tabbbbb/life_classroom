@@ -4,8 +4,7 @@ package com.ruoyi.life.service.user;
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.life.domain.LifeOrder;
 import com.ruoyi.life.domain.vo.system.LifeOrderChartDataDto;
-import com.ruoyi.life.domain.vo.user.LifePayOrderVo;
-import org.apache.ibatis.annotations.Param;
+import com.ruoyi.life.domain.vo.user.LifeCreateOrderVo;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,7 +23,7 @@ public interface LifeOrderService
      * @param orderId 订单ID
      * @return 订单
      */
-    public LifeOrder selectLifeOrderById(Long orderId);
+    LifeOrder selectLifeOrderById(Long orderId);
 
     /**
      * 查询订单列表
@@ -32,7 +31,7 @@ public interface LifeOrderService
      * @param lifeOrder 订单
      * @return 订单集合
      */
-    public List<LifeOrder> selectLifeOrderList(LifeOrder lifeOrder);
+    List<LifeOrder> selectLifeOrderList(LifeOrder lifeOrder);
 
     /**
      * 新增订单
@@ -40,7 +39,7 @@ public interface LifeOrderService
      * @param lifeOrder 订单
      * @return 结果
      */
-    public int insertLifeOrder(LifeOrder lifeOrder);
+    int insertLifeOrder(LifeOrder lifeOrder);
 
     /**
      * 修改订单
@@ -48,7 +47,7 @@ public interface LifeOrderService
      * @param lifeOrder 订单
      * @return 结果
      */
-    public int updateLifeOrder(LifeOrder lifeOrder);
+    int updateLifeOrder(LifeOrder lifeOrder);
 
     /**
      * 批量删除订单
@@ -56,7 +55,7 @@ public interface LifeOrderService
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int deleteLifeOrderByIds(String ids);
+    int deleteLifeOrderByIds(String ids);
 
     /**
      * 删除订单信息
@@ -64,7 +63,7 @@ public interface LifeOrderService
      * @param orderId 订单ID
      * @return 结果
      */
-    public int deleteLifeOrderById(String orderId);
+    int deleteLifeOrderById(String orderId);
 
 
     /**
@@ -74,12 +73,7 @@ public interface LifeOrderService
     String[] selectNowOrder(Long  courseId);
 
 
-    /**
-     * 预定课程
-     * @param payOrderVo
-     * @return
-     */
-    UserResponse payCourse(LifePayOrderVo payOrderVo,Long userId);
+
 
 
     /**
@@ -112,9 +106,31 @@ public interface LifeOrderService
 
 
     /**
-     * 根据状态获取订单集合
+     * 获取订单图表数据
      * @param
      * @return
      */
     List<LifeOrderChartDataDto> getOrderChartData( );
+
+
+    /**
+     * 生成订单
+     * @return
+     */
+    UserResponse createOrder(List<LifeCreateOrderVo> createOrderVos,Long userId);
+
+
+    /**
+     * 取消订单
+     * @return
+     */
+    UserResponse cancelOrder(Long userId,List<Long> orderIds);
+
+
+    /**
+     * 退回优惠券
+     * @return
+     */
+    void backCoupon(List<Long> orderIds);
+
 }

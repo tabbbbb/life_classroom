@@ -236,6 +236,16 @@ public class UserResponseCode {
     public static final Integer UPDATE_PAY_PASSWORD_ERROR = 100032;
 
 
+    /**
+     * 生成订单错误
+     */
+    public static final Integer CREATE_ORDER_ERROR = 100033;
+
+
+    /**
+     * 取消订单错误
+     */
+    public static final Integer CANCEL_ORDER_ERROR = 100034;
 
 
 

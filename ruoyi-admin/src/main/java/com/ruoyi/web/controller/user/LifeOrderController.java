@@ -14,7 +14,7 @@ import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.framework.userlogin.LoginResponse;
 import com.ruoyi.framework.userlogin.annotation.LoginInfo;
 import com.ruoyi.framework.userlogin.info.UserLoginInfo;
-import com.ruoyi.life.domain.vo.user.LifePayOrderVo;
+import com.ruoyi.life.domain.vo.user.LifeCreateOrderVo;
 import com.ruoyi.life.service.system.SysLifeOrderService;
 import com.ruoyi.life.service.user.LifeOrderService;
 import io.swagger.annotations.Api;
@@ -47,11 +47,20 @@ public class LifeOrderController {
 
 
     @PutMapping("order")
-    @ApiOperation(value = "支付")
-    public UserResponse payCourse(@LoginInfo @ApiIgnore UserLoginInfo loginInfo, @ApiParam(name = "payOrderVo",value = "payOrderVo:LifePayOrderVo.class") @RequestBody LifePayOrderVo payOrderVo){
+    @ApiOperation(value = "生成订单")
+    public UserResponse payCourse(@LoginInfo @ApiIgnore UserLoginInfo loginInfo, @ApiParam(name = "payOrderVo",value = "payOrderVo:LifePayOrderVo.class") @RequestBody List<LifeCreateOrderVo> createOrderVos){
         UserResponse response = LoginResponse.toMessage(loginInfo);
         if (response != null) return response;
-        return orderService.payCourse(payOrderVo,loginInfo.getId());
+        return orderService.createOrder(createOrderVos,loginInfo.getId());
+    }
+
+
+    @PutMapping("cancel")
+    @ApiOperation(value = "取消订单")
+    public UserResponse cancel(@LoginInfo @ApiIgnore UserLoginInfo loginInfo, @ApiParam(name = "orderIds",value = "例：[1,2,3]") @RequestBody List<Long> orderIds){
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null) return response;
+        return orderService.cancelOrder(loginInfo.getId(),orderIds);
     }
 
 

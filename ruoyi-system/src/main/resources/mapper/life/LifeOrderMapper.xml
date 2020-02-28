@@ -175,6 +175,7 @@
         </foreach>
     </delete>
 
+
     <select id="selectNowOrder" resultType="string" >
         select distinct phone from life_order
         where date_format(use_time,'%Y-%m-%d') = current_date and course_detail_id = #{courseId} and status = 201
@@ -442,4 +443,35 @@
         ORDER BY useTime
     </select>
 
+    <update id="cancelOrder">
+        update life_order set status = 102
+        where share_id = #{shareId} and status = 101 and order_id in
+        <foreach collection="orderIds" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="getBackCoupon" resultType="java.lang.Long">
+        select coupon_id from life_order
+        where order_id in
+        <foreach collection="orderIds" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and status in (102,103,302)
+        group by coupon_id
+
+    </select>
+    <select id="filtrateBackCoupon" resultType="java.lang.Integer">
+        select count(0) from life_order
+        where coupon_id = #{couponId}
+        and status not in (102,103,302)
+    </select>
+    <select id="getBackShareData" resultType="com.ruoyi.life.domain.LifeReserve">
+        select count(0) as reserveNum,course_detail_id as courseDetailId,use_time as reserveNum from life_order
+        where status in (102,103,302) and order_id in
+        <foreach collection="orderIds" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        group by course_detail_id,use_time
+    </select>
 </mapper>

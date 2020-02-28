@@ -187,7 +187,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectLifeCourseBySearchVo" resultType="com.ruoyi.life.domain.vo.user.LifeCourseByConditionVo">
         select
-        course.course_id as course_id,
+        course.course_id as courseId,
         course.img_url as url,course.name as `name`,
         classify.img as classifyUrl,
         classify.course_classify_name as classifyName,
@@ -203,18 +203,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
         from life_course as course
         left join life_collect as collect on collect.collect_course_id = course.course_id
-        inner join life_business_address as address on address.business_id = course.business_id
+        LEFT join life_business_address as address on address.business_id = course.business_id
         inner join life_course_classify as classify on classify.course_classify_id = course.course_classify_id
         inner join life_course_detail as detail on detail.course_id = course.course_id
-        left join life_reserve as reserve on reserve.course_detail_id = detail.course_detail_id
+        left join life_reserve as reserve on reserve.course_detail_id = detail.course_detail_id and reserve.reserve_date = #{conditionVo.date}
         <where>
             <if test="conditionVo.date != null">
                 detail.week = date_format(#{conditionVo.date},'%w') and
             </if>
             <if test="conditionVo.endAge != null and conditionVo.endAge != -1">
-                course.age_onset between #{conditionVo.startAge} and #{conditionVo.endAge} or
+                (course.age_onset between #{conditionVo.startAge} and #{conditionVo.endAge} or
                 course.age_end between #{conditionVo.startAge} and #{conditionVo.endAge} or
-                course.age_end = -1 and
+                course.age_end = -1) and
             </if>
             <if test="conditionVo.courseType">
                 course.course_type = #{conditionVo.courseType} and
@@ -225,7 +225,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="conditionVo.courseLabelId != null">
                 course.course_label_id = #{conditionVo.courseLabelId} and
             </if>
-            course.course_kind = #{conditionVo.courseKind} and course.status = 1
+            course.course_kind = #{conditionVo.courseKind} and course.status = 1 and course.delete_flage = 0
         </where>
 
         <choose>
@@ -261,7 +261,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         course.name as `name`,
         classify.img as classifyUrl,
         classify.course_classify_name as classifyName,
-        round(st_distance_sphere (point (#{conditionVo.lon},#{conditionVo.lat}),point (address.lon,address.lat))/1000,1) as addressNum
+        round(st_distance_sphere (point (#{lon},#{lat}),point (address.lon,address.lat))/1000,1) as addressNum
         address.business_address_name as address,
         course.age_onset as startAge,
         course.age_end as endAge,

@@ -96,6 +96,19 @@
         where target.user_id = #{userId} and detail.achieve_time is not null
         group by detail.target_id
     </select>
+    <select id="getUserTargetDetailVo" resultType="com.ruoyi.life.domain.vo.user.LifeUserTargetDetailVo">
+        select
+        target_detail.target_detail_id as targetDetailId,
+        target_detail.target_detail_classify_id as targetDetailClassifyId,
+        target_detail.target_detail_classify_name as targetDetailClassifyName,
+        target_detail.course_duration as courseDuration,
+        target_detail.achieve_time as achieveTime,
+        target_detail.target_id as targetId,
+        classify.img as classifyImg
+         from life_user_target_detail as target_detail
+        inner join life_course_classify as classify  on target_detail.target_detail_classify_id = classify.course_classify_id
+        where target_detail.target_id = #{targetId}
+    </select>
 
 
 </mapper>

@@ -69,8 +69,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       update life_reserve set reserve_num = reserve_num -#{num}
       where course_detail_id = #{courseDetailId} and reserve_num >= #{num} and reserve_date = date_format(#{time},'%Y-%m-%d')
     </update>
+
     <select id="selectLifeReserveNum" resultType="java.lang.Integer">
         select reserve_num from life_reserve
         where course_detail_id = #{courseDetailId} and reserve_date = date_format(#{time},'%Y-%m-%d')
     </select>
+
+    <update id="backCourseSales">
+      update life_reserve set reserve_num = reserve_num + #{reserveNum}
+      where course_detail_id = #{courseDetailId}  and reserve_date = date_format(#{reserveDate},'%Y-%m-%d')
+    </update>
 </mapper>

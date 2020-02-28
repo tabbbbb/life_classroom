@@ -7,6 +7,7 @@ import com.ruoyi.common.response.UserResponseCode;
 import com.ruoyi.life.domain.LifeCourseClassify;
 import com.ruoyi.life.domain.LifeUserTargetDetail;
 import com.ruoyi.life.domain.vo.user.LifeDataVo;
+import com.ruoyi.life.domain.vo.user.LifeUserTargetDetailVo;
 import com.ruoyi.life.mapper.LifeUserTargetDetailMapper;
 import com.ruoyi.life.service.user.LifeCourseClassifyService;
 import com.ruoyi.life.service.user.LifeUserTargetDetailService;
@@ -152,5 +153,17 @@ public class LifeUserTargetDetailServiceImpl implements LifeUserTargetDetailServ
     @Override
     public List<LifeDataVo.ScaleDrawing> getAccomplishTargetDetail(Long userId) {
         return lifeUserTargetDetailMapper.getAccomplishTargetDetail(userId);
+    }
+
+
+    /**
+     * 获取用户目标详细vo
+     *
+     * @param targetId
+     * @return
+     */
+    @Override
+    public List<LifeUserTargetDetailVo> getUserTargetDetailVo(Long targetId) {
+        return lifeUserTargetDetailMapper.getUserTargetDetailVo(targetId);
     }
 }

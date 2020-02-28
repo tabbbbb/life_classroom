@@ -18,7 +18,7 @@
                     <ul>
                         <li>
                             <p>基准：</p>
-                            <select name="typeFlag">
+                            <select name="typeFlag" onchange="flush();">
                                 <option value="true" selected>完成订单增长量</option>
                                 <option value="false">完成订单总量</option>
                             </select>
@@ -27,8 +27,10 @@
                 </div>
             </form>
         </div>
+        <div style="width: 100%;height:150px ;"></div>
         <div id="main" style="width: 100%;height:600px ;"></div>
     </div>
+
 </div>
 
 
@@ -38,68 +40,70 @@
 <script type="text/javascript">
     var myChart = echarts.init(document.getElementById('main'));
     var startDate = dateMath(false,getDateBarringTime(),14)
-    $.ajax({
-        cache : true,
-        type : "GET",
-        url : ctx + "life/chart/order/chart",
-        data:{'typeFlag':$('[name=typeFlag]').val()},
-        async : false,
-        success : function(data) {
-            console.log(data)
-            myChart.setOption(option = {
-                title: {
-                    text: $('[name=typeFlag]').text()
-                },
-                tooltip: {
-                    trigger: 'axis'
-                },
-                xAxis: {
-                    data: data[0]
-                },
-                yAxis: {
-                    splitLine: {
-                        show: false
-                    }
-                },
-                toolbox: {
-                    left: 'center',
-                    feature: {
-                        dataZoom: {
-                            yAxisIndex: 'none'
-                        },
-                        restore: {},
-                        saveAsImage: {}
-                    }
-                },
-                dataZoom: [{
-                    startDate: startDate
-                }, {
-                    type: 'inside'
-                }],
-                series: [
-                    {
-                        name: '订单数量',
-                        type: 'line',
-                        data: data[1]
-                    },{
-                        name: '支付积分',
-                        type: 'line',
-                        data: function (data) {
-                            for (var i = 0; i < data[3].length; i++) {
-                                data[3][i] = data[3][i]/2;
-                            }
+    flush();
+    function flush() {
+        $.ajax({
+            cache : true,
+            type : "GET",
+            url : ctx + "life/chart/order/chart",
+            data:{'typeFlag':$('[name=typeFlag]').val()},
+            async : false,
+            success : function(data) {
+                for (var i = 0; i < data[3].length; i++) {
+                    data[3][i] = data[3][i]/2;
+                }
+
+                myChart.setOption(option = {
+                    title: {
+                        text: $('[name=typeFlag] :selected').text()
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    xAxis: {
+                        data: data[0]
+                    },
+                    yAxis: {
+                        splitLine: {
+                            show: false
                         }
+                    },
+                    toolbox: {
+                        left: 'center',
+                        feature: {
+                            dataZoom: {
+                                yAxisIndex: 'none'
+                            },
+                            restore: {},
+                            saveAsImage: {}
+                        }
+                    },
+                    dataZoom: [{
+                        startValue: startDate
+                    }, {
+                        type: 'inside'
+                    }],
+                    series: [
+                        {
+                            name: '订单数量',
+                            type: 'line',
+                            data: data[1]
+                        },{
+                            name: '支付积分',
+                            type: 'line',
+                            data: data[3]
 
-                    },{
-                        name: '支付余额',
-                        type: 'line',
-                        data:data[2]
-                    }
-                ]
-            });
+                        },{
+                            name: '支付余额',
+                            type: 'line',
+                            data:data[2]
+                        }
+                    ]
+                });
 
-        }
-    });
+            }
+        });
+    }
 </script>
 </body>
 </html>

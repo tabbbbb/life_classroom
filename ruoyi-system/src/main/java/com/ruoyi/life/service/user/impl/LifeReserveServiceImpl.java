@@ -21,7 +21,7 @@ import java.util.List;
 public class LifeReserveServiceImpl implements LifeReserveService
 {
     @Resource
-    private LifeReserveMapper lifeReserveMapper;
+    private LifeReserveMapper reserveMapper;
 
     /**
      * 查询课程预定
@@ -32,7 +32,7 @@ public class LifeReserveServiceImpl implements LifeReserveService
     @Override
     public LifeReserve selectLifeReserveById(Long reserveId)
     {
-        return lifeReserveMapper.selectLifeReserveById(reserveId);
+        return reserveMapper.selectLifeReserveById(reserveId);
     }
 
     /**
@@ -44,19 +44,22 @@ public class LifeReserveServiceImpl implements LifeReserveService
     @Override
     public List<LifeReserve> selectLifeReserveList(LifeReserve lifeReserve)
     {
-        return lifeReserveMapper.selectLifeReserveList(lifeReserve);
+        return reserveMapper.selectLifeReserveList(lifeReserve);
     }
 
     /**
      * 新增课程预定
      * 
-     * @param lifeReserve 课程预定
+     * @param reserve 课程预定
      * @return 结果
      */
     @Override
-    public synchronized int insertLifeReserve(LifeReserve lifeReserve)
+    public synchronized int insertLifeReserve(LifeReserve reserve)
     {
-        return lifeReserveMapper.insertLifeReserve(lifeReserve);
+        if (selectLifeReserveNum(reserve.getCourseDetailId(),reserve.getReserveDate()) == null){
+            reserveMapper.insertLifeReserve(reserve);
+        }
+        return 0;
     }
 
     /**
@@ -68,7 +71,7 @@ public class LifeReserveServiceImpl implements LifeReserveService
     @Override
     public int updateLifeReserve(LifeReserve lifeReserve)
     {
-        return lifeReserveMapper.updateLifeReserve(lifeReserve);
+        return reserveMapper.updateLifeReserve(lifeReserve);
     }
 
     /**
@@ -80,7 +83,7 @@ public class LifeReserveServiceImpl implements LifeReserveService
     @Override
     public int deleteLifeReserveByIds(String ids)
     {
-        return lifeReserveMapper.deleteLifeReserveByIds(Convert.toStrArray(ids));
+        return reserveMapper.deleteLifeReserveByIds(Convert.toStrArray(ids));
     }
 
     /**
@@ -92,7 +95,7 @@ public class LifeReserveServiceImpl implements LifeReserveService
     @Override
     public int deleteLifeReserveById(Long reserveId)
     {
-        return lifeReserveMapper.deleteLifeReserveById(reserveId);
+        return reserveMapper.deleteLifeReserveById(reserveId);
     }
 
 
@@ -106,7 +109,7 @@ public class LifeReserveServiceImpl implements LifeReserveService
      */
     @Override
     public int reduceCourseSales(Long courseDetailId, int num, LocalDateTime time) {
-        return lifeReserveMapper.reduceCourseSales(courseDetailId,num,time);
+        return reserveMapper.reduceCourseSales(courseDetailId,num,time);
     }
 
     /**
@@ -118,6 +121,18 @@ public class LifeReserveServiceImpl implements LifeReserveService
      */
     @Override
     public Integer selectLifeReserveNum(Long courseDetailId, LocalDateTime time) {
-        return lifeReserveMapper.selectLifeReserveNum(courseDetailId,time);
+        return reserveMapper.selectLifeReserveNum(courseDetailId,time);
+    }
+
+
+    /**
+     * 退回课程库存
+     *
+     */
+    @Override
+    public void backCourseSales(List<LifeReserve> reserves) {
+        for (LifeReserve reserve : reserves) {
+            reserveMapper.backCourseSales(reserve);
+        }
     }
 }

@@ -30,7 +30,7 @@ public class LifeUserTargetVo {
     /**
      * 目标详细
      */
-    private List<LifeUserTargetDetail> targetRen;
+    private List<LifeUserTargetDetailVo> targetRen;
 
     public LifeUserTarget getParentTarget() {
         return parentTarget;
@@ -40,11 +40,11 @@ public class LifeUserTargetVo {
         this.parentTarget = parentTarget;
     }
 
-    public List<LifeUserTargetDetail> getTargetRen() {
+    public List<LifeUserTargetDetailVo> getTargetRen() {
         return targetRen;
     }
 
-    public void setTargetRen(List<LifeUserTargetDetail> targetRen) {
+    public void setTargetRen(List<LifeUserTargetDetailVo> targetRen) {
         this.targetRen = targetRen;
     }
 }

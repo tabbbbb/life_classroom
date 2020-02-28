@@ -19,7 +19,7 @@ public interface LifeCourseDetailService
      * @param couponDetailId 课程时间明细ID
      * @return 课程时间明细
      */
-    public LifeCourseDetail selectLifeCourseDetailById(Long couponDetailId);
+    LifeCourseDetail selectLifeCourseDetailById(Long couponDetailId);
 
     /**
      * 查询课程时间明细列表
@@ -27,7 +27,7 @@ public interface LifeCourseDetailService
      * @param lifeCourseDetail 课程时间明细
      * @return 课程时间明细集合
      */
-    public List<LifeCourseDetail> selectLifeCourseDetailList(LifeCourseDetail lifeCourseDetail);
+    List<LifeCourseDetail> selectLifeCourseDetailList(LifeCourseDetail lifeCourseDetail);
 
 
     /**
@@ -43,7 +43,7 @@ public interface LifeCourseDetailService
      * @param lifeCourseDetail 课程时间明细
      * @return 结果
      */
-    public int insertLifeCourseDetail(LifeCourseDetail lifeCourseDetail);
+    int insertLifeCourseDetail(LifeCourseDetail lifeCourseDetail);
 
     /**
      * 修改课程时间明细
@@ -51,7 +51,7 @@ public interface LifeCourseDetailService
      * @param lifeCourseDetail 课程时间明细
      * @return 结果
      */
-    public int updateLifeCourseDetail(LifeCourseDetail lifeCourseDetail);
+    int updateLifeCourseDetail(LifeCourseDetail lifeCourseDetail);
 
     /**
      * 批量删除课程时间明细
@@ -59,7 +59,7 @@ public interface LifeCourseDetailService
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int deleteLifeCourseDetailByIds(String ids);
+    int deleteLifeCourseDetailByIds(String ids);
 
     /**
      * 删除课程时间明细信息
@@ -67,7 +67,7 @@ public interface LifeCourseDetailService
      * @param couponDetailId 课程时间明细ID
      * @return 结果
      */
-    public int deleteLifeCourseDetailById(Long couponDetailId);
+    int deleteLifeCourseDetailById(Long couponDetailId);
 
 
     /**
@@ -86,9 +86,5 @@ public interface LifeCourseDetailService
 
 
 
-    /**
-     * 根据课程id获取详细时间
-     * @return
-     */
-    List<LifeCourseDetail> getListByCourseId(Long courseId);
+
 }

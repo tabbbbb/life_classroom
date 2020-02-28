@@ -9,6 +9,7 @@ import com.ruoyi.life.domain.vo.user.LifeCourseByConditionVo;
 import com.ruoyi.life.domain.vo.user.LifeCourseDetailVo;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -81,7 +82,7 @@ public interface LifeCourseMapper
      * @param courseId
      * @return
      */
-    LifeCourseDetailVo getLifeCourseDetailByCourseId(Long courseId);
+    LifeCourseDetailVo getLifeCourseDetailByCourseId(@Param("courseId") Long courseId, @Param("lon")BigDecimal lon, @Param("lat")BigDecimal lat);
 
 
     /**

@@ -11,10 +11,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="sex"    column="sex"    />
         <result property="birthday"    column="birthday"    />
         <result property="enable"    column="enable"    />
+        <result property="imgUrl"    column="img_url"    />
     </resultMap>
 
     <sql id="selectLifeUserChildVo">
-        select child_id, share_id, name, sex, birthday, enable from life_user_child
+        select child_id, share_id, name, sex, birthday, enable, img_url from life_user_child
     </sql>
 
     <select id="selectLifeUserChildList" parameterType="LifeUserChild" resultMap="LifeUserChildResult">
@@ -25,6 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="sex != null "> and sex = #{sex}</if>
             <if test="birthday != null "> and birthday = #{birthday}</if>
             <if test="enable != null "> and enable = #{enable}</if>
+            <if test="imgUrl != null  and imgUrl != ''"> and img_url = #{imgUrl}</if>
         </where>
     </select>
     
@@ -32,33 +34,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectLifeUserChildVo"/>
         where child_id = #{childId}
     </select>
-
-    <select id="selectLifeUserChildListByIds" resultMap="LifeUserChildResult">
-        <include refid="selectLifeUserChildVo"/>
-        where child_id in
-          <foreach collection="list" item="item" open="(" close=")" separator=",">
-              #{item}
-          </foreach>
-    </select>
-
-
-    <insert id="insertLifeUserChild" parameterType="LifeUserChild">
+        
+    <insert id="insertLifeUserChild" parameterType="LifeUserChild" useGeneratedKeys="true" keyProperty="childId">
         insert into life_user_child
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="childId != null ">child_id,</if>
             <if test="shareId != null ">share_id,</if>
             <if test="name != null  and name != ''">name,</if>
             <if test="sex != null ">sex,</if>
             <if test="birthday != null ">birthday,</if>
             <if test="enable != null ">enable,</if>
+            <if test="imgUrl != null  and imgUrl != ''">img_url,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="childId != null ">#{childId},</if>
             <if test="shareId != null ">#{shareId},</if>
             <if test="name != null  and name != ''">#{name},</if>
             <if test="sex != null ">#{sex},</if>
             <if test="birthday != null ">#{birthday},</if>
             <if test="enable != null ">#{enable},</if>
+            <if test="imgUrl != null  and imgUrl != ''">#{imgUrl},</if>
          </trim>
     </insert>
 
@@ -70,6 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="sex != null ">sex = #{sex},</if>
             <if test="birthday != null ">birthday = #{birthday},</if>
             <if test="enable != null ">enable = #{enable},</if>
+            <if test="imgUrl != null  and imgUrl != ''">img_url = #{imgUrl},</if>
         </trim>
         where child_id = #{childId}
     </update>
@@ -84,7 +78,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{childId}
         </foreach>
     </delete>
-
     <select id="getChildByShareId" resultMap="LifeUserChildResult">
         select uc.child_id as child_id, uc.share_id as share_id,  uc.name as `name` ,  uc.sex as sex,  uc.birthday as birthday,  uc.enable as enable  from life_user_child as uc
         inner join life_point_child as pc on child_id = pc.user_child_id
@@ -100,10 +93,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="getChildArrayShareId" resultType="java.lang.Long">
         select share_id from life_user_child
         where child_id in
-          <foreach collection="childIds" item="item" separator="," open="(" close=")">
-              #{item}
-          </foreach>
+        <foreach collection="childIds" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
         group by share_id
     </select>
-
 </mapper>

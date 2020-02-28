@@ -12,9 +12,11 @@ import com.ruoyi.life.domain.vo.user.LifeCourseDetailVo;
 import com.ruoyi.life.mapper.LifeCourseMapper;
 import com.ruoyi.life.service.user.LifeCourseDetailService;
 import com.ruoyi.life.service.user.LifeCourseService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -116,8 +118,12 @@ public class LifeCourseServiceImpl implements LifeCourseService
     public UserResponse selectLifeCourseBySearchVo(LifeCourseConditionVo searchVo) {
         PageHelper.startPage(searchVo.getPage(),searchVo.getLimit());
         List<LifeCourseByConditionVo> list = lifeCourseMapper.selectLifeCourseBySearchVo(searchVo);
+        int week = searchVo.getDate().getDayOfWeek().getValue();
+        LifeCourseDetail courseDetail = new LifeCourseDetail();
+        courseDetail.setWeek(week);
         for (LifeCourseByConditionVo conditionVo : list) {
-            List<LifeCourseDetail> lifeCourseDetails = courseDetailService.getListByCourseId(conditionVo.getCourseId());
+            courseDetail.setCourseId(conditionVo.getCourseId());
+            List<LifeCourseDetail> lifeCourseDetails = courseDetailService.selectLifeCourseDetailList(courseDetail);
             conditionVo.setCourseDetails(lifeCourseDetails);
         }
         return UserResponse.succeed(list);
@@ -131,9 +137,11 @@ public class LifeCourseServiceImpl implements LifeCourseService
      * @return
      */
     @Override
-    public UserResponse getLifeCourseDetailByCourseId(Long courseId) {
-        LifeCourseDetailVo detailVo = lifeCourseMapper.getLifeCourseDetailByCourseId(courseId);
-        List<LifeCourseDetail> lifeCourseDetails = courseDetailService.getListByCourseId(detailVo.getCourseId());
+    public UserResponse getLifeCourseDetailByCourseId( Long courseId, BigDecimal lon, BigDecimal lat) {
+        LifeCourseDetailVo detailVo = lifeCourseMapper.getLifeCourseDetailByCourseId(courseId,lon,lat);
+        LifeCourseDetail courseDetail = new LifeCourseDetail();
+        courseDetail.setCourseId(courseId);
+        List<LifeCourseDetail> lifeCourseDetails = courseDetailService.selectLifeCourseDetailList(courseDetail);
         detailVo.setDetails(lifeCourseDetails);
         return UserResponse.succeed(detailVo);
     }

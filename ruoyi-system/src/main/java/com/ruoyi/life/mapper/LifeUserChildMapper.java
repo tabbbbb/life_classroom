@@ -31,13 +31,7 @@ public interface LifeUserChildMapper
     public List<LifeUserChild> selectLifeUserChildList(LifeUserChild lifeUserChild);
 
 
-    /**
-     * 查询小孩列表
-     *
-     * @param list 小孩Ids
-     * @return 小孩集合
-     */
-    public List<LifeUserChild> selectLifeUserChildListByIds(List<Long> list);
+    
 
 
 

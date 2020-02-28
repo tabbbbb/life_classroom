@@ -3,6 +3,7 @@ package com.ruoyi.life.service.user;
 
 import com.ruoyi.life.domain.LifeUserTargetDetail;
 import com.ruoyi.life.domain.vo.user.LifeDataVo;
+import com.ruoyi.life.domain.vo.user.LifeUserTargetDetailVo;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface LifeUserTargetDetailService
      * @param targetDetailId 用户目标详细ID
      * @return 用户目标详细
      */
-    public LifeUserTargetDetail selectLifeUserTargetDetailById(Long targetDetailId);
+    LifeUserTargetDetail selectLifeUserTargetDetailById(Long targetDetailId);
 
     /**
      * 查询用户目标详细列表
@@ -28,7 +29,7 @@ public interface LifeUserTargetDetailService
      * @param lifeUserTargetDetail 用户目标详细
      * @return 用户目标详细集合
      */
-    public List<LifeUserTargetDetail> selectLifeUserTargetDetailList(LifeUserTargetDetail lifeUserTargetDetail);
+    List<LifeUserTargetDetail> selectLifeUserTargetDetailList(LifeUserTargetDetail lifeUserTargetDetail);
 
     /**
      * 新增用户目标详细
@@ -36,7 +37,7 @@ public interface LifeUserTargetDetailService
      * @param lifeUserTargetDetail 用户目标详细
      * @return 结果
      */
-    public int insertLifeUserTargetDetail(LifeUserTargetDetail lifeUserTargetDetail);
+    int insertLifeUserTargetDetail(LifeUserTargetDetail lifeUserTargetDetail);
 
     /**
      * 修改用户目标详细
@@ -44,7 +45,7 @@ public interface LifeUserTargetDetailService
      * @param lifeUserTargetDetail 用户目标详细
      * @return 结果
      */
-    public int updateLifeUserTargetDetail(LifeUserTargetDetail lifeUserTargetDetail);
+    int updateLifeUserTargetDetail(LifeUserTargetDetail lifeUserTargetDetail);
 
     /**
      * 批量删除用户目标详细
@@ -52,7 +53,7 @@ public interface LifeUserTargetDetailService
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int deleteLifeUserTargetDetailByIds(String ids);
+    int deleteLifeUserTargetDetailByIds(String ids);
 
     /**
      * 删除用户目标详细信息
@@ -60,7 +61,7 @@ public interface LifeUserTargetDetailService
      * @param targetDetailId 用户目标详细ID
      * @return 结果
      */
-    public int deleteLifeUserTargetDetailById(Long targetDetailId);
+    int deleteLifeUserTargetDetailById(Long targetDetailId);
 
 
     /**
@@ -92,6 +93,10 @@ public interface LifeUserTargetDetailService
     List<LifeDataVo.ScaleDrawing> getAccomplishTargetDetail(Long userId);
 
 
-
+    /**
+     * 获取用户目标详细vo
+     * @return
+     */
+    List<LifeUserTargetDetailVo> getUserTargetDetailVo(Long targetId);
 
 }

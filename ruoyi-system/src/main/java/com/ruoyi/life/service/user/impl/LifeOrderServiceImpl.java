@@ -8,8 +8,9 @@ import com.ruoyi.common.utils.security.Md5Utils;
 import com.ruoyi.life.domain.*;
 import com.ruoyi.life.domain.dto.user.LifeDataDetailDto;
 import com.ruoyi.life.domain.vo.system.LifeOrderChartDataDto;
+import com.ruoyi.life.domain.vo.user.LifeCreateOrderVo;
 import com.ruoyi.life.domain.vo.user.LifeDataDetailVo;
-import com.ruoyi.life.domain.vo.user.LifePayOrderVo;
+
 import com.ruoyi.life.mapper.LifeOrderMapper;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.life.service.user.*;
@@ -37,7 +38,7 @@ import java.util.Map;
 public class LifeOrderServiceImpl implements LifeOrderService
 {
     @Resource
-    private LifeOrderMapper lifeOrderMapper;
+    private LifeOrderMapper orderMapper;
 
     @Resource
     private LifeCourseService courseService;
@@ -76,7 +77,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
     @Override
     public LifeOrder selectLifeOrderById(Long orderId)
     {
-        return lifeOrderMapper.selectLifeOrderById(orderId);
+        return orderMapper.selectLifeOrderById(orderId);
     }
 
     /**
@@ -88,7 +89,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
     @Override
     public List<LifeOrder> selectLifeOrderList(LifeOrder lifeOrder)
     {
-        return lifeOrderMapper.selectLifeOrderList(lifeOrder);
+        return orderMapper.selectLifeOrderList(lifeOrder);
     }
 
     /**
@@ -100,7 +101,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
     @Override
     public int insertLifeOrder(LifeOrder lifeOrder)
     {
-        return lifeOrderMapper.insertLifeOrder(lifeOrder);
+        return orderMapper.insertLifeOrder(lifeOrder);
     }
 
     /**
@@ -112,7 +113,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
     @Override
     public int updateLifeOrder(LifeOrder lifeOrder)
     {
-        return lifeOrderMapper.updateLifeOrder(lifeOrder);
+        return orderMapper.updateLifeOrder(lifeOrder);
     }
 
     /**
@@ -124,7 +125,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
     @Override
     public int deleteLifeOrderByIds(String ids)
     {
-        return lifeOrderMapper.deleteLifeOrderByIds(Convert.toStrArray(ids));
+        return orderMapper.deleteLifeOrderByIds(Convert.toStrArray(ids));
     }
 
     /**
@@ -136,7 +137,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
     @Override
     public int deleteLifeOrderById(String orderId)
     {
-        return lifeOrderMapper.deleteLifeOrderById(orderId);
+        return orderMapper.deleteLifeOrderById(orderId);
     }
 
     /**
@@ -147,7 +148,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
      */
     @Override
     public String[] selectNowOrder(Long courseId) {
-        return lifeOrderMapper.selectNowOrder(courseId);
+        return orderMapper.selectNowOrder(courseId);
     }
 
 
@@ -158,7 +159,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
      * @param payOrderVo
      * @return
      */
-    @Override
+    /*@Override
     @Transactional
     public UserResponse payCourse(LifePayOrderVo payOrderVo,Long userId){
         LifeUser user = userService.selectLifeUserById(userId);
@@ -378,47 +379,11 @@ public class LifeOrderServiceImpl implements LifeOrderService
             throw new OrderException(UserResponseCode.PAY_COURSE_ERROR,"订单添加失败");
         }
         return UserResponse.succeed();
-    }
+    }*/
 
 
 
-    private List<Long> toCourseDetailIdList(List<LifePayOrderVo.ChooseDetail> list){
-        List<Long> courseDetailIds = new ArrayList<>();
-        for (LifePayOrderVo.ChooseDetail detail : list) {
-            courseDetailIds.add(detail.getCourseDetailId());
-        }
-        return courseDetailIds;
-    }
 
-
-
-    private DayOfWeek intToDayOfWeek(Integer week){
-        DayOfWeek dayOfWeek = null;
-        switch (week){
-            case 1:
-                dayOfWeek = DayOfWeek.MONDAY;
-                break;
-            case 2:
-                dayOfWeek = DayOfWeek.TUESDAY;
-                break;
-            case 3:
-                dayOfWeek = DayOfWeek.WEDNESDAY;
-                break;
-            case 4:
-                dayOfWeek = DayOfWeek.THURSDAY;
-                break;
-            case 5:
-                dayOfWeek = DayOfWeek.FRIDAY;
-                break;
-            case 6:
-                dayOfWeek = DayOfWeek.SATURDAY;
-                break;
-            case 7:
-                dayOfWeek = DayOfWeek.SUNDAY;
-                break;
-        }
-        return dayOfWeek;
-    }
 
 
     /**
@@ -427,7 +392,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
     @Override
     public UserResponse getDataDetail(Long userId,LocalDateTime startTime,LocalDateTime endTime) {
         LifeUser user = userService.selectLifeUserById(userId);
-        List<LifeDataDetailDto> list = lifeOrderMapper.getDataDetail(user.getShareId(),startTime,endTime);
+        List<LifeDataDetailDto> list = orderMapper.getDataDetail(user.getShareId(),startTime,endTime);
         List<LifeDataDetailVo> listVo = new ArrayList<>();
         LocalDateTime time = startTime.plusWeeks(1);
         LifeDataDetailVo dataDetailVo = new LifeDataDetailVo();
@@ -463,11 +428,11 @@ public class LifeOrderServiceImpl implements LifeOrderService
      */
     @Override
     public UserResponse donateOrder(Long userId) {
-        Integer min = lifeOrderMapper.getNowCourseDuration(userId);
+        Integer min = orderMapper.getNowCourseDuration(userId);
         if (min == null){
             UserResponse.fail(UserResponseCode.DONATE_ORDER_ERROR,"剩余捐赠时间为0");
         }
-        if (lifeOrderMapper.donateOrder(userId) == 0){
+        if (orderMapper.donateOrder(userId) == 0){
             UserResponse.fail(UserResponseCode.DONATE_ORDER_ERROR,"捐赠失败");
         }
 
@@ -486,7 +451,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
         LocalDate now = LocalDate.now();
         LocalDate start = now.minusDays(now.getDayOfWeek().getValue()-1);
         LocalDate end = now.plusDays(7-now.getDayOfWeek().getValue());
-        return UserResponse.succeed(lifeOrderMapper.getDonate(userId,start,end));
+        return UserResponse.succeed(orderMapper.getDonate(userId,start,end));
     }
 
 
@@ -498,12 +463,224 @@ public class LifeOrderServiceImpl implements LifeOrderService
      */
     @Override
     public Integer getSumOrderClassify(Long userId) {
-        return lifeOrderMapper.getSumOrderClassify(userId);
+        return orderMapper.getSumOrderClassify(userId);
     }
 
 
+    /**
+     * 获取订单图表数据
+     * @return
+     */
     @Override
     public List<LifeOrderChartDataDto> getOrderChartData() {
-        return lifeOrderMapper.getOrderChartData();
+        return orderMapper.getOrderChartData();
+    }
+
+
+    /**
+     * 生成订单
+     *
+     * @param createOrderVos
+     * @param userId
+     * @return
+     */
+    @Override
+    @Transactional
+    public UserResponse createOrder(List<LifeCreateOrderVo> createOrderVos, Long userId) {
+        LifeUser user = userService.selectLifeUserById(userId);
+        List<LifeOrder> orders = new ArrayList<>();
+        for (int i = 0; i < createOrderVos.size(); i++) {
+            LifeCreateOrderVo createOrderVo = createOrderVos.get(i);
+            LifeCourseDetail courseDetail = courseDetailService.selectLifeCourseDetailById(createOrderVo.getCourseDetailId());
+            LifeCourse course = courseService.selectLifeCourseById(courseDetail.getCourseId());
+            if (course.getDeleteFlage() == 1){
+                throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"商品已删除");
+            }
+            if (course.getStatus() == 0){
+                throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"商品已下架");
+            }
+            LocalDateTime useTime = LocalDateTime.of(createOrderVo.getDate().getYear(),createOrderVo.getDate().getMonthValue(),createOrderVo.getDate().getDayOfMonth(),courseDetail.getStartHour(),courseDetail.getStartMinute());
+
+            if (useTime.isBefore(LocalDateTime.now())){
+                throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"时间在今天之后");
+            }
+            if (useTime.getDayOfWeek().getValue() != courseDetail.getWeek()){
+                throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"选择时间与课程详细不符");
+            }
+            List<Long> childIds = createOrderVo.getChildIds();
+            if ((childIds== null || childIds.size() == 0 ) && (createOrderVo.getRandom() == 0 || createOrderVo.getRandom()>3)){
+                throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"没有指定任何一个人");
+            }
+
+            if(childIds != null && childIds.size() != 0){
+                int peopleNum = pointChildService.getLifePointChildByListNum(childIds);
+                if (peopleNum!= childIds.size()){
+                    throw new OrderException(UserResponseCode.PAY_COURSE_ERROR,"非法选择绑定用户");
+                }
+                for (int j = 0; j < childIds.size(); j++) {
+                    for (int z = 0; z < childIds.size(); z++) {
+                        if (j == z){
+                            continue;
+                        }
+                        if (childIds.get(j).equals(childIds.get(z))){
+                            throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"选择用户重复");
+                        }
+                    }
+                }
+            }else{
+                childIds = new ArrayList<>();
+            }
+
+
+            LifeCoupon coupon = null;
+            BigDecimal toUsePrice = null;
+            if (createOrderVo.getCouponReceive() != null && createOrderVo.getCouponReceive() != 0){
+                LifeCouponReceive couponReceive = couponReceiveService.selectLifeCouponReceiveById(createOrderVo.getCouponReceive());
+                if (couponReceive == null || couponReceive.getStatus() ==1){
+                    throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"优惠券不可用");
+                }
+                if (couponReceive.getShareId() != userId){
+                    throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"您没有此优惠券");
+                }
+                coupon = couponService.selectLifeCouponById(couponReceive.getCouponId());
+                if (coupon.getType() == 3 && createOrderVo.getPayType() == 0 || coupon.getType() == 4 && createOrderVo.getPayType() == 1){
+                    throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"优惠券优惠类型选择有误");
+                }
+                if ((course.getCourseKind() == 0 && coupon.getAstrict() != -2 ||  course.getCourseKind() == 1 && coupon.getAstrict() != -1 || coupon.getAstrict() > 0 && course.getCourseId() == coupon.getAstrict()) && coupon.getAstrict() != 0 ){
+                    throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"优惠券选择有误");
+                }
+                toUsePrice = new BigDecimal(coupon.getPoint());
+                couponReceive.setStatus(1);
+                if (couponReceiveService.updateLifeCouponReceive(couponReceive) == 0){
+                    throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"优惠券使用失败");
+                }
+            }
+
+            if (createOrderVo.getRandom() == 1){
+                childIds.add(-1L);
+            }else if(createOrderVo.getRandom() == 2){
+                childIds.add(0L);
+            }else if (createOrderVo.getRandom() == 3){
+                childIds.add(-1L);
+                childIds.add(0L);
+            }
+
+            if (reserveService.selectLifeReserveNum(courseDetail.getCourseDetailId(),useTime) == null){
+                LifeReserve reserve = new LifeReserve();
+                reserve.setReserveNum(course.getNumber());
+                reserve.setReserveDate(useTime);
+                reserve.setCourseDetailId(courseDetail.getCourseDetailId());
+                reserveService.insertLifeReserve(reserve);
+            }
+            if (reserveService.reduceCourseSales(courseDetail.getCourseDetailId(),childIds.size(),useTime) == 0){
+                throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"有课程库存不足");
+            }
+            LocalDateTime orderTime = LocalDateTime.now();
+            LocalDateTime refundTime = useTime.minusHours(courseDetail.getCourseRefundHour());
+            for (int j = 0; j < childIds.size(); j++) {
+                LifeOrder order = new LifeOrder();
+                order.setVerificationCode(createTheVerificationCode(childIds.get(j)));
+                order.setPid(createOrderVo.getPayType());
+                order.setCourseType(0L);
+                order.setStatus(101L);
+                order.setUserId(userId);
+                order.setShareId(user.getShareId());
+                order.setCourseId(course.getCourseId());
+                order.setCourseDetailId(courseDetail.getCourseDetailId());
+                order.setRemark(createOrderVo.getRemark());
+                order.setOrderTime(orderTime);
+                order.setValidRefundTime(refundTime);
+                order.setUseTime(useTime);
+                order.setDonate(1);
+                order.setCourseDuration(courseDetail.getCourseDuration());
+                order.setPhone(createOrderVo.getPhone());
+                order.setCouponId(createOrderVo.getCouponReceive());
+                order.setSaleUser(childIds.get(j));
+                if (createOrderVo.getPayType() == 0){
+                    Long point = course.getPoint();
+                    if (coupon != null){
+                        point = (long)Math.ceil(point*coupon.getDiscount()/100.0);
+                        order.setDiscounts(new BigDecimal((int) (course.getPoint()-point)));
+                    }
+                    order.setTotal(new BigDecimal(course.getPoint()));
+                    order.setPay(new BigDecimal(point));
+                }else{
+                    BigDecimal price = course.getPrice();
+                    order.setTotal(price);
+                    if (coupon != null){
+                        if (toUsePrice.doubleValue() != 0 && toUsePrice.compareTo(price) == 1){
+                            order.setDiscounts(price);
+                            toUsePrice = toUsePrice.subtract(price);
+                            price = new BigDecimal(0);
+                        }else if (toUsePrice.doubleValue() != 0){
+                            order.setDiscounts(toUsePrice);
+                            price = price.subtract(toUsePrice);
+                            toUsePrice = new BigDecimal(0);
+                        }
+                    }
+                    order.setPay(price);
+                }
+                orders.add(order);
+            }
+        }
+        if (orderMapper.insertLifeOrders(orders) != orders.size()){
+            throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"订单添加失败");
+        }
+        return UserResponse.succeed();
+    }
+
+
+    /**
+     * 生成核销码
+     * @return
+     */
+    private String createTheVerificationCode(Long childId){
+        int random = ((int)(Math.random()*900000)+100000);
+        Long timeMillis = System.currentTimeMillis();
+        return Md5Utils.hash(timeMillis+"_"+random+"_"+childId);
+    }
+
+
+    /**
+     * 取消订单
+     *
+     * @param userId
+     * @param orderIds
+     * @return
+     */
+    @Override
+    @Transactional
+    public UserResponse cancelOrder(Long userId, List<Long> orderIds) {
+        LifeUser user = userService.selectLifeUserById(userId);
+        Long shareId = user.getShareId();
+        
+        if (orderMapper.cancelOrder(shareId,orderIds) != orderIds.size()){
+            throw new OrderException(UserResponseCode.CANCEL_ORDER_ERROR,"取消订单列表中有不能取消的");
+        }
+        //退回优惠券
+        backCoupon(orderIds);
+        //退回库存
+        reserveService.backCourseSales(orderMapper.getBackShareData(orderIds));
+        return UserResponse.succeed();
+    }
+
+
+    /**
+     * 退回优惠券
+     *
+     * @param orderIds
+     * @return
+     */
+    @Override
+    public void backCoupon(List<Long> orderIds) {
+        List<Long> couponIds = orderMapper.getBackCoupon(orderIds);
+        for (int i = 0; i < couponIds.size(); i++) {
+            if (orderMapper.filtrateBackCoupon(couponIds.get(i)) != 0) {
+                couponIds.remove(i);
+            }
+        }
+        if (couponIds.size() != 0){
+            couponReceiveService.backCoupon(couponIds);
+        }
     }
 }

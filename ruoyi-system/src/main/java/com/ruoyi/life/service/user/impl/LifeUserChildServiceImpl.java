@@ -64,16 +64,7 @@ public class LifeUserChildServiceImpl implements LifeUserChildService
         return lifeUserChildMapper.selectLifeUserChildList(lifeUserChild);
     }
 
-    /**
-     * 查询小孩列表
-     *
-     * @param list 小孩Ids
-     * @return 小孩集合
-     */
-    @Override
-    public List<LifeUserChild> selectLifeUserChildListByIds(List<Long> list) {
-        return lifeUserChildMapper.selectLifeUserChildListByIds(list);
-    }
+
 
     /**
      * 新增小孩

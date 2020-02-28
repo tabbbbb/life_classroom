@@ -10,9 +10,9 @@ import java.util.Date;
  * 小孩对象 life_user_child
  * 
  * @author ruoyi
- * @date 2019-12-06
+ * @date 2020-02-26
  */
-public class LifeUserChild
+public class LifeUserChild extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
@@ -38,6 +38,10 @@ public class LifeUserChild
     /** 1可用 0不可用 */
     @Excel(name = "1可用 0不可用")
     private Integer enable;
+
+    /** 头像 */
+    @Excel(name = "头像")
+    private String imgUrl;
 
     public void setChildId(Long childId) 
     {
@@ -93,6 +97,15 @@ public class LifeUserChild
     {
         return enable;
     }
+    public void setImgUrl(String imgUrl) 
+    {
+        this.imgUrl = imgUrl;
+    }
+
+    public String getImgUrl() 
+    {
+        return imgUrl;
+    }
 
     @Override
     public String toString() {
@@ -103,6 +116,7 @@ public class LifeUserChild
             .append("sex", getSex())
             .append("birthday", getBirthday())
             .append("enable", getEnable())
+            .append("imgUrl", getImgUrl())
             .toString();
     }
 }

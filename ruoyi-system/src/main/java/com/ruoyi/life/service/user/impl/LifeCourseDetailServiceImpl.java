@@ -131,14 +131,4 @@ public class LifeCourseDetailServiceImpl implements LifeCourseDetailService
     }
 
 
-    /**
-     * 根据课程id获取详细时间
-     *
-     * @param courseId
-     * @return
-     */
-    @Override
-    public List<LifeCourseDetail> getListByCourseId(Long courseId) {
-        return lifeCourseDetailMapper.getListByCourseId(courseId);
-    }
 }

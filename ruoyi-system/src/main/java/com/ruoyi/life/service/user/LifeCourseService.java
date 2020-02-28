@@ -5,6 +5,7 @@ import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.life.domain.LifeCourse;
 import com.ruoyi.life.domain.vo.user.LifeCourseConditionVo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -79,7 +80,7 @@ public interface LifeCourseService
      * @param courseId
      * @return
      */
-    UserResponse getLifeCourseDetailByCourseId(Long courseId);
+    UserResponse getLifeCourseDetailByCourseId(Long courseId, BigDecimal lon, BigDecimal lat);
 
 
 

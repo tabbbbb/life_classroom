@@ -3,6 +3,7 @@ package com.ruoyi.life.mapper;
 
 import com.ruoyi.life.domain.LifeUserTargetDetail;
 import com.ruoyi.life.domain.vo.user.LifeDataVo;
+import com.ruoyi.life.domain.vo.user.LifeUserTargetDetailVo;
 
 import java.util.List;
 
@@ -85,5 +86,11 @@ public interface LifeUserTargetDetailMapper
     List<LifeDataVo.ScaleDrawing> getAccomplishTargetDetail(Long userId);
 
 
+    /**
+     * 获取目标详细vo
+     * @param targetId
+     * @return
+     */
+    List<LifeUserTargetDetailVo> getUserTargetDetailVo(Long targetId);
 
 }

@@ -2,6 +2,7 @@ package com.ruoyi.life.mapper;
 
 
 import com.ruoyi.life.domain.LifeOrder;
+import com.ruoyi.life.domain.LifeReserve;
 import com.ruoyi.life.domain.dto.user.LifeDataDetailDto;
 import com.ruoyi.life.domain.vo.system.*;
 import com.ruoyi.life.domain.vo.user.LifeDonateVo;
@@ -25,7 +26,7 @@ public interface LifeOrderMapper
      * @param orderId 订单ID
      * @return 订单
      */
-    public LifeOrder selectLifeOrderById(Long orderId);
+    LifeOrder selectLifeOrderById(Long orderId);
 
     /**
      * 查询订单列表
@@ -33,7 +34,7 @@ public interface LifeOrderMapper
      * @param lifeOrder 订单
      * @return 订单集合
      */
-    public List<LifeOrder> selectLifeOrderList(LifeOrder lifeOrder);
+    List<LifeOrder> selectLifeOrderList(LifeOrder lifeOrder);
 
     /**
      * 新增订单
@@ -41,7 +42,7 @@ public interface LifeOrderMapper
      * @param lifeOrder 订单
      * @return 结果
      */
-    public int insertLifeOrder(LifeOrder lifeOrder);
+    int insertLifeOrder(LifeOrder lifeOrder);
 
     /**
      * 修改订单
@@ -49,7 +50,7 @@ public interface LifeOrderMapper
      * @param lifeOrder 订单
      * @return 结果
      */
-    public int updateLifeOrder(LifeOrder lifeOrder);
+    int updateLifeOrder(LifeOrder lifeOrder);
 
     /**
      * 删除订单
@@ -57,7 +58,7 @@ public interface LifeOrderMapper
      * @param orderId 订单ID
      * @return 结果
      */
-    public int deleteLifeOrderById(String orderId);
+    int deleteLifeOrderById(String orderId);
 
     /**
      * 批量删除订单
@@ -65,7 +66,7 @@ public interface LifeOrderMapper
      * @param orderIds 需要删除的数据ID
      * @return 结果
      */
-    public int deleteLifeOrderByIds(String[] orderIds);
+    int deleteLifeOrderByIds(String[] orderIds);
 
 
     /**
@@ -185,4 +186,34 @@ public interface LifeOrderMapper
      * @return
      */
     List<LifeOrderChartDataDto> getOrderChartData();
+
+
+    /**
+     * 取消订单
+     * @return
+     */
+    int cancelOrder(@Param("shareId") Long shareId,@Param("orderIds") List<Long> orderIds);
+
+    /**
+     * 获取需要退回的优惠券id
+     *
+     * @param orderIds
+     * @return
+     */
+    List<Long> getBackCoupon(@Param("orderIds") List<Long> orderIds);
+
+
+    /**
+     * 查询该优惠券对应的订单是否还有未退款，未取消的数量
+     * @param couponId
+     * @return
+     */
+    int filtrateBackCoupon(Long couponId);
+
+
+    /**
+     * 获取退回库存的数据
+     * @return
+     */
+    List<LifeReserve> getBackShareData(@Param("orderIds") List<Long> orderIds);
 }

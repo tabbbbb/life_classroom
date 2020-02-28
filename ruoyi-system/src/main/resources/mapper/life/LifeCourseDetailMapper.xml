@@ -102,10 +102,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
               #{item}
           </foreach>
     </select>
-    <select id="getListByCourseId" resultMap="LifeCourseDetailResult">
-        <include refid="selectLifeCourseDetailVo"/>
-        where course_id = #{courseId}
-    </select>
+
     <delete id="deleteNotInList">
         delete from life_course_detail
         where course_detail_id not in

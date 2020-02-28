@@ -211,4 +211,16 @@ public class LifeCouponReceiveServiceImpl implements LifeCouponReceiveService
         }
         return num;
     }
+
+
+    /**
+     * 退回优惠券
+     *
+     * @param couponReceiveIds
+     * @return
+     */
+    @Override
+    public int backCoupon(List<Long> couponReceiveIds) {
+        return couponReceiveMapper.backCoupon(couponReceiveIds);
+    }
 }

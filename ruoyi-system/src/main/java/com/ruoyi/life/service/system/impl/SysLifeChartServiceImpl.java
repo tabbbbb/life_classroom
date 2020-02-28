@@ -366,7 +366,7 @@ public class SysLifeChartServiceImpl implements SysLifeChartService {
             date.add(start);
             for (LifeOrderChartDataDto orderChartDataDto : list) {
                 if (orderChartDataDto.getPid() == 1){
-                    orderPrice.add(orderChartDataDto.getPay());
+                    orderPrice = orderPrice.add(orderChartDataDto.getPay());
                 }else{
                     orderPoint += orderChartDataDto.getPay().longValue();
                 }

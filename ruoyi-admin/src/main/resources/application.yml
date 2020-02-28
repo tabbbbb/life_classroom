@@ -144,8 +144,8 @@ sms:
 
 life:
   wx:
-    app-id: wx972c956af1ffc2ca
-    app-secret: 9b29d2f8aa79549b80c009a5964a3a36
+    app-id: wxd8e881d422cdaf44
+    app-secret: c7befefc95addc6f22a6acf8afe554ce
     mch-id: 1546464881
     mch-key: 33cbc407ecf54de38d41cc3660924911
     notify-url:  http://7p2zs4.natappfree.cc/wx/order/pay-notify

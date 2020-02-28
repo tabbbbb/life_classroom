@@ -22,7 +22,7 @@ public interface LifeReserveMapper
      * @param reserveId 课程预定ID
      * @return 课程预定
      */
-    public LifeReserve selectLifeReserveById(Long reserveId);
+    LifeReserve selectLifeReserveById(Long reserveId);
 
     /**
      * 查询课程预定列表
@@ -30,7 +30,7 @@ public interface LifeReserveMapper
      * @param lifeReserve 课程预定
      * @return 课程预定集合
      */
-    public List<LifeReserve> selectLifeReserveList(LifeReserve lifeReserve);
+    List<LifeReserve> selectLifeReserveList(LifeReserve lifeReserve);
 
     /**
      * 新增课程预定
@@ -38,7 +38,7 @@ public interface LifeReserveMapper
      * @param lifeReserve 课程预定
      * @return 结果
      */
-    public int insertLifeReserve(LifeReserve lifeReserve);
+    int insertLifeReserve(LifeReserve lifeReserve);
 
     /**
      * 修改课程预定
@@ -46,7 +46,7 @@ public interface LifeReserveMapper
      * @param lifeReserve 课程预定
      * @return 结果
      */
-    public int updateLifeReserve(LifeReserve lifeReserve);
+    int updateLifeReserve(LifeReserve lifeReserve);
 
     /**
      * 删除课程预定
@@ -54,7 +54,7 @@ public interface LifeReserveMapper
      * @param reserveId 课程预定ID
      * @return 结果
      */
-    public int deleteLifeReserveById(Long reserveId);
+    int deleteLifeReserveById(Long reserveId);
 
     /**
      * 批量删除课程预定
@@ -62,7 +62,7 @@ public interface LifeReserveMapper
      * @param reserveIds 需要删除的数据ID
      * @return 结果
      */
-    public int deleteLifeReserveByIds(String[] reserveIds);
+    int deleteLifeReserveByIds(String[] reserveIds);
 
 
     /**
@@ -80,5 +80,16 @@ public interface LifeReserveMapper
      * @return 课程预定
      */
     Integer selectLifeReserveNum(@Param("courseDetailId") Long courseDetailId,@Param("time") LocalDateTime time);
+
+
+
+    /**
+     * 增加课程库存
+     * @param reserve
+     * @return
+     */
+    int backCourseSales(LifeReserve reserve);
+
+
 
 }

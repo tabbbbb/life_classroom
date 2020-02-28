@@ -21,7 +21,7 @@ public interface LifeCouponReceiveService
      * @param receiveId 用户优惠卷ID
      * @return 用户优惠卷
      */
-    public LifeCouponReceive selectLifeCouponReceiveById(Long receiveId);
+    LifeCouponReceive selectLifeCouponReceiveById(Long receiveId);
 
     /**
      * 查询用户优惠卷列表
@@ -29,7 +29,7 @@ public interface LifeCouponReceiveService
      * @param lifeCouponReceive 用户优惠卷
      * @return 用户优惠卷集合
      */
-    public List<LifeCouponReceive> selectLifeCouponReceiveList(LifeCouponReceive lifeCouponReceive);
+    List<LifeCouponReceive> selectLifeCouponReceiveList(LifeCouponReceive lifeCouponReceive);
 
     /**
      * 新增用户优惠卷
@@ -37,7 +37,7 @@ public interface LifeCouponReceiveService
      * @param lifeCouponReceive 用户优惠卷
      * @return 结果
      */
-    public int insertLifeCouponReceive(LifeCouponReceive lifeCouponReceive);
+    int insertLifeCouponReceive(LifeCouponReceive lifeCouponReceive);
 
 
 
@@ -48,7 +48,7 @@ public interface LifeCouponReceiveService
      * @param lifeCouponReceive 用户优惠卷
      * @return 结果
      */
-    public int updateLifeCouponReceive(LifeCouponReceive lifeCouponReceive);
+    int updateLifeCouponReceive(LifeCouponReceive lifeCouponReceive);
 
     /**
      * 批量删除用户优惠卷
@@ -56,7 +56,7 @@ public interface LifeCouponReceiveService
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int deleteLifeCouponReceiveByIds(String ids);
+    int deleteLifeCouponReceiveByIds(String ids);
 
     /**
      * 删除用户优惠卷信息
@@ -64,7 +64,7 @@ public interface LifeCouponReceiveService
      * @param receiveId 用户优惠卷ID
      * @return 结果
      */
-    public int deleteLifeCouponReceiveById(Long receiveId);
+    int deleteLifeCouponReceiveById(Long receiveId);
 
 
     /**
@@ -92,12 +92,18 @@ public interface LifeCouponReceiveService
     int insertLifeCouponReceiveVip(Long shareId, Long vipId);
 
 
-
-
     /**
      * 获取增加的行数
      * @param list
      * @return
      */
     int insertNumBalance(List<LifeCompanyCoupon> list);
+
+
+    /**
+     * 退回优惠券
+     * @return
+     */
+    int backCoupon(List<Long> couponReceiveIds);
+
 }

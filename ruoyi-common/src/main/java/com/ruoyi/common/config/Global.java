@@ -99,14 +99,21 @@ public class Global
     }
 
     /**
+     * 获取小孩上传头像
+     */
+    public static String getUserChildPath()
+    {
+        return getProfile() + "/user/child";
+    }
+
+
+    /**
      * 获取用户头像上传路径
      */
     public static String getUserAvatarPath()
     {
         return getProfile() + "/user/avatar";
     }
-
-
 
     public static String getSystemCourseImgUrl(){
         return getProfile() + "/course/img";

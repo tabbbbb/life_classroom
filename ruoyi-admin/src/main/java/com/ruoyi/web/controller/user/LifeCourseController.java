@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+
 /**
  * 〈一句话功能简述〉<br> 
  * 〈〉
@@ -51,11 +53,13 @@ public class LifeCourseController {
 
     @GetMapping("courseDetail")
     @ApiOperation(value = "课程详细")
-    @ApiImplicitParams(
-            @ApiImplicitParam(paramType="query",name="courseId",value="课程id",dataTypeClass = Long.class)
-    )
-    public UserResponse getCourseDetail(Long courseId){
-        return UserResponse.succeed(courseService.getLifeCourseDetailByCourseId(courseId));
+    @ApiImplicitParams({
+                    @ApiImplicitParam(paramType="query",name="courseId",value="课程id",dataTypeClass = Long.class),
+                    @ApiImplicitParam(paramType="query",name="lon",value="经度",dataTypeClass = BigDecimal.class),
+                    @ApiImplicitParam(paramType="query",name="lat",value="纬度",dataTypeClass = BigDecimal.class)
+            })
+    public UserResponse getCourseDetail(Long courseId, BigDecimal lon, BigDecimal lat){
+        return UserResponse.succeed(courseService.getLifeCourseDetailByCourseId(courseId,lon,lat));
     }
 
 }

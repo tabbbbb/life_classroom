@@ -9,6 +9,7 @@ import com.ruoyi.common.utils.JacksonUtil;
 import com.ruoyi.life.domain.LifeCourseClassify;
 import com.ruoyi.life.domain.LifeUserTarget;
 import com.ruoyi.life.domain.LifeUserTargetDetail;
+import com.ruoyi.life.domain.vo.user.LifeUserTargetDetailVo;
 import com.ruoyi.life.domain.vo.user.LifeUserTargetVo;
 import com.ruoyi.life.mapper.LifeUserTargetMapper;
 import com.ruoyi.life.service.user.LifeCourseClassifyService;
@@ -182,9 +183,7 @@ public class LifeUserTargetServiceImpl implements LifeUserTargetService
         List<LifeUserTarget> targetList = this.selectLifeUserTargetList(selectTarget);
         List<LifeUserTargetVo> targetVoList = new ArrayList<>();
         for (LifeUserTarget target : targetList) {
-            LifeUserTargetDetail userTargetDetail = new LifeUserTargetDetail();
-            userTargetDetail.setTargetId(target.getTargetId());
-            List<LifeUserTargetDetail> userTargetDetails = userTargetDetailService.selectLifeUserTargetDetailList(userTargetDetail);
+            List<LifeUserTargetDetailVo> userTargetDetails = userTargetDetailService.getUserTargetDetailVo(target.getTargetId());
             LifeUserTargetVo userTargetVo = new LifeUserTargetVo();
             userTargetVo.setParentTarget(target);
             userTargetVo.setTargetRen(userTargetDetails);
