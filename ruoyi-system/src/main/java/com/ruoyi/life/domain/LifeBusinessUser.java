@@ -42,6 +42,13 @@ public class LifeBusinessUser extends BaseEntity
     @Excel(name = "所属商户")
     private Long businessId;
 
+    /** 微信标识 */
+    @Excel(name = "微信标识")
+    private String openId;
+    /** 图片地址 */
+    @Excel(name = "头像地址")
+    private String imgUrl;
+
 
 
     public void setUserId(Long userId) 
@@ -120,5 +127,21 @@ public class LifeBusinessUser extends BaseEntity
             .append("phone", getPhone())
             .append("businessId", getBusinessId())
             .toString();
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 }

@@ -69,4 +69,19 @@ public interface LifeBusinessUserMapper
      * @return
      */
     List<LifeBusinessUserVo> selectLifeBusinessUserVoBySearchVo(LifeBusinessUserSearchVo searchVo);
+
+    /**
+     *根据手机号获取用户信息
+     * @param phone
+     * @return
+     */
+    LifeBusinessUser selectLifeBusinessUserByPhone(String phone);
+
+
+    /**
+     * 根据openId获取user
+     * @param openId
+     * @return
+     */
+    LifeBusinessUser selectLifeBusinessUserByOpenId(String openId);
 }
