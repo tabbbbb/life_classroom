@@ -77,6 +77,17 @@
                 <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> -1 为不限年龄</span>
             </div>
         </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">上课地址：</label>
+            <div class="col-sm-8">
+                <select name="businessAddressId" class="form-control m-b" th:with="type=${@sysLifeBusinessAddressServiceImpl.selectIAddress()}">
+                    <option th:each="dict : ${type}" th:text="${dict.businessAddressName}" th:value="${dict.businessAddressId}"></option>
+                </select>
+            </div>
+        </div>
+
+
         <div class="form-group">
             <label class="col-sm-3 control-label">老师名称：</label>
             <div class="col-sm-8">
@@ -134,7 +145,20 @@
                 <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 最大72</span>
             </div>
         </div>
-
+        <div class="form-group" name="specification" >
+            <label class="col-sm-3 control-label">规格：</label>
+            <div class="col-sm-2" style="display: inline-block;">
+                <span>规格名：</span> <input type="text" class="form-control inputwidth" name="specificationName" style="width: 100px;" >
+            </div>
+            <div class="col-sm-2" style="display: inline-block;">
+                <span>服务量：</span> <input type="number" class="form-control inputwidth" name="specificationNum"  style="width: 100px;" >
+            </div>
+            <div class="col-sm-2" style="display: inline-block;">
+                <span>折扣(%)：</span> <input type="number" class="form-control inputwidth" name="specificationDiscount"  style="width: 100px;" >
+            </div>
+            <a href="javascript:void(0)"  style="font-size: 30px" onclick="reduceSpecification(this)">-</a>
+            <a href="javascript:void(0)"  style="font-size: 30px" onclick="addCourseDetail(this)">+</a>
+        </div>
         <div class="form-group" name="courseDetail" >
             <label class="col-sm-3 control-label">上课时间：</label>
             <div class="col-sm-2" style="display: inline-block;" >
@@ -223,16 +247,13 @@
             focusCleanup: true
         });
         changeType(false)
-        changeType(true)
         function submitHandler() {
             var fromData = getFromData()
-
-            console.log('add',fromData)
             if ($.validate.form()) {
                 $.ajax({
                     cache : false,
                     type : "POST",
-                    url : ctx + "life/course/add",
+                    url : prefix + "/add",
                     data:JSON.stringify(fromData),
                     headers:{
                         'Content-Type':'application/json;charset=utf-8'
@@ -241,7 +262,7 @@
                         if (data.code == 500) {
                             $.modal.alert(data.msg, 'error')
                         } else {
-                            parent.add(data)
+                            parent.flushTable()
                             $.modal.close()
                         }
                     }

@@ -75,8 +75,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where course_detail_id = #{courseDetailId} and reserve_date = date_format(#{time},'%Y-%m-%d')
     </select>
 
+
     <update id="backCourseSales">
       update life_reserve set reserve_num = reserve_num + #{reserveNum}
       where course_detail_id = #{courseDetailId}  and reserve_date = date_format(#{reserveDate},'%Y-%m-%d')
     </update>
+
+    <select id="getLifeReserveByCourseId" resultMap="LifeReserveResult">
+      SELECT
+        detail.course_detail_id,
+        reserve.reserve_num,
+        reserve.reserve_date
+      FROM
+	    life_course_detail AS detail
+	    LEFT JOIN life_reserve AS reserve ON reserve.course_detail_id = detail.course_detail_id
+	    INNER JOIN life_course AS course ON course.course_id = detail.course_id
+      WHERE
+	    detail.course_id = #{courseId}
+	    and reserve_date BETWEEN current_date
+	    and date_add(current_date,interval 1 month)
+
+    </select>
 </mapper>

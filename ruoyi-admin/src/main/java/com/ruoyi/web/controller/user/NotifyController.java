@@ -48,10 +48,6 @@ public class NotifyController {
     private WxOperation operation;
 
     @Autowired
-    private LifeOrderService orderService;
-
-
-    @Autowired
     private LifeVipService vipService;
 
     @Autowired
@@ -77,7 +73,6 @@ public class NotifyController {
         String outTradeNo = result.getOutTradeNo();
         BigDecimal price = new BigDecimal(result.getTotalFee()).divide(new BigDecimal(100));
         LifeOrder order = null;
-
         if (order != null){
             return null;   //微信购买课程 --  已取消
         }else {

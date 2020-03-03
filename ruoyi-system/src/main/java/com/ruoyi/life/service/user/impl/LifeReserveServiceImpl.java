@@ -8,6 +8,7 @@ import com.ruoyi.life.service.user.LifeReserveService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class LifeReserveServiceImpl implements LifeReserveService
 {
     @Resource
     private LifeReserveMapper reserveMapper;
+
 
     /**
      * 查询课程预定
@@ -120,7 +122,7 @@ public class LifeReserveServiceImpl implements LifeReserveService
      * @return 课程预定
      */
     @Override
-    public Integer selectLifeReserveNum(Long courseDetailId, LocalDateTime time) {
+    public Integer selectLifeReserveNum(Long courseDetailId, LocalDate time) {
         return reserveMapper.selectLifeReserveNum(courseDetailId,time);
     }
 
@@ -134,5 +136,18 @@ public class LifeReserveServiceImpl implements LifeReserveService
         for (LifeReserve reserve : reserves) {
             reserveMapper.backCourseSales(reserve);
         }
+    }
+
+
+    /**
+     * 获取从今后一个月的课程库存
+     *
+     * @return
+     */
+    @Override
+    public List<LifeReserve> getLifeReserveByCourseId(Long courseId) {
+
+
+        return reserveMapper.getLifeReserveByCourseId(courseId);
     }
 }

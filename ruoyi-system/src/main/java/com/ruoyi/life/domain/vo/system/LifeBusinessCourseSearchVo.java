@@ -62,7 +62,7 @@ public class LifeBusinessCourseSearchVo {
     /**
      * 审核结果
      */
-    private Long checkFlage;
+    private Long checkFlag;
 
 
 
@@ -70,9 +70,7 @@ public class LifeBusinessCourseSearchVo {
 
     private Date addTimeEnd;
 
-    private Date checkTimeStart;
 
-    private Date checkTimeEnd;
 
     public Date getAddTimeStart() {
         return addTimeStart;
@@ -90,21 +88,6 @@ public class LifeBusinessCourseSearchVo {
         this.addTimeEnd = addTimeEnd;
     }
 
-    public Date getCheckTimeStart() {
-        return checkTimeStart;
-    }
-
-    public void setCheckTimeStart(Date checkTimeStart) {
-        this.checkTimeStart = checkTimeStart;
-    }
-
-    public Date getCheckTimeEnd() {
-        return checkTimeEnd;
-    }
-
-    public void setCheckTimeEnd(Date checkTimeEnd) {
-        this.checkTimeEnd = checkTimeEnd;
-    }
 
     public Long getCourseId() {
         return courseId;
@@ -170,11 +153,11 @@ public class LifeBusinessCourseSearchVo {
         this.businessName = businessName;
     }
 
-    public Long getCheckFlage() {
-        return checkFlage;
+    public Long getCheckFlag() {
+        return checkFlag;
     }
 
-    public void setCheckFlage(Long checkFlage) {
-        this.checkFlage = checkFlage;
+    public void setCheckFlag(Long checkFlag) {
+        this.checkFlag = checkFlag;
     }
 }

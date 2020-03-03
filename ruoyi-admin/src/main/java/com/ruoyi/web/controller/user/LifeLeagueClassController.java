@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/user/league")
-@Api(value = "/life/league",description = "小团课")
+@Api(value = "/user/league",description = "小团课")
 public class LifeLeagueClassController {
 
 

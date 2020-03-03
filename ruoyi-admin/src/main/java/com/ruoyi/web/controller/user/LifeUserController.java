@@ -126,7 +126,7 @@ public class LifeUserController extends BaseController
 
     @PostMapping("setpaypwd")
     @ApiOperation(value = "设置支付密码")
-    public UserResponse setPayPassword(@ApiIgnore @LoginInfo UserLoginInfo loginInfo,@RequestBody @ApiParam(name = "boyd",value = "payPwd:密码") String body){
+    public UserResponse setPayPassword(@ApiIgnore @LoginInfo UserLoginInfo loginInfo,@RequestBody @ApiParam(name = "body",value = "payPwd:密码") String body){
         UserResponse response = LoginResponse.toMessage(loginInfo);
         if (response != null) return response;
         return userService.setPayPassword(loginInfo.getId(),body);
@@ -134,7 +134,7 @@ public class LifeUserController extends BaseController
 
     @PostMapping("updatepaypwd")
     @ApiOperation(value = "修改支付密码",notes = "获取短信验证码修改支付密码")
-    public UserResponse updatePayPassword(@ApiIgnore @LoginInfo UserLoginInfo loginInfo,@RequestBody @ApiParam(name = "boyd",value = "code:验证码,payPwd:新密码") String body){
+    public UserResponse updatePayPassword(@ApiIgnore @LoginInfo UserLoginInfo loginInfo,@RequestBody @ApiParam(name = "body",value = "code:验证码,payPwd:新密码") String body){
         UserResponse response = LoginResponse.toMessage(loginInfo);
         if (response != null) return response;
         return userService.updatePayPassword(loginInfo.getId(),body);
@@ -142,5 +142,13 @@ public class LifeUserController extends BaseController
 
 
 
-
+    /**
+     * 获取此用户的星星，余额，最近到期的星星信息
+     * @return
+     */
+    @GetMapping("userCapital")
+    @ApiOperation(value = "获取此用户的星星，余额，最近到期的星星信息",notes = "需要token,返回值：{point:总积分，balance：余额，beOnTheVergeOfPoint：最近过期的积分记录}")
+    public UserResponse userCapital(@ApiIgnore @LoginInfo UserLoginInfo loginInfo){
+        return userService.userCapital(loginInfo.getId());
+    }
 }

@@ -176,19 +176,31 @@
                     }
                 },
                 {
-                    field : 'checkFlage', 
-                    title : '审核结果',
+                    field : 'requestInstructions',
+                    title : '请求说明'
+                },
+                {
+                    field : 'checkFlag',
+                    title : '请求结果',
                     formatter: function(value, row, index) {
-                        return checkFlagFormatter(value)
+                        return checkFlagFormatter(value);
                     }
+                },
+                {
+                    field : 'checkContent',
+                    title : '处理内容'
+                },
+                {
+                    field : 'updateTime',
+                    title : '请求提交时间'
+                },
+                {
+                    field : 'checkTime',
+                    title : '审核时间'
                 },
                 {
                     field : 'addTime', 
                     title : '添加时间'
-                },
-                {
-                    field : 'checkTime', 
-                    title : '审核时间'
                 },
                 {
                     title: '操作',
@@ -210,6 +222,8 @@
         function businessCourseDetail(courseId) {
             $.modal.open('商品审核详细','/life/businesscourse/detail?courseId='+courseId)
         }
+
+
         
     </script>
 </body>

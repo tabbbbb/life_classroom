@@ -79,7 +79,7 @@ public interface LifeCouponReceiveService
      * @param list 优惠卷ids
      * @return 结果
      */
-    int insertLifeCouponReceiveBalance(Long shareId, List<LifeCompanyCoupon> list);
+    void insertLifeCouponReceiveBalance(Long shareId, List<LifeCompanyCoupon> list);
 
 
 
@@ -89,15 +89,10 @@ public interface LifeCouponReceiveService
      * @param vipId 优惠卷ids
      * @return 结果
      */
-    int insertLifeCouponReceiveVip(Long shareId, Long vipId);
+    void insertLifeCouponReceiveVip(Long shareId, Long vipId);
 
 
-    /**
-     * 获取增加的行数
-     * @param list
-     * @return
-     */
-    int insertNumBalance(List<LifeCompanyCoupon> list);
+
 
 
     /**

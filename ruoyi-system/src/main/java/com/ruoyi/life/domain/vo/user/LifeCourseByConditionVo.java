@@ -64,9 +64,9 @@ public class LifeCourseByConditionVo {
     private BigDecimal price;
 
     /**
-     * 课程详细列表
+     *
      */
-    private List<LifeCourseDetail> courseDetails;
+    private LifeCourseDetail courseDetail;
 
     /**
      * 年龄开始时间
@@ -105,6 +105,12 @@ public class LifeCourseByConditionVo {
      * 距离多少千米
      */
     private BigDecimal addressNum;
+
+
+    /**
+     * 课程详细Id
+     */
+    private Long courseDetailId;
 
     public BigDecimal getAddressNum() {
         return addressNum;
@@ -170,12 +176,12 @@ public class LifeCourseByConditionVo {
         this.price = price;
     }
 
-    public List<LifeCourseDetail> getCourseDetails() {
-        return courseDetails;
+    public LifeCourseDetail getCourseDetail() {
+        return courseDetail;
     }
 
-    public void setCourseDetails(List<LifeCourseDetail> courseDetails) {
-        this.courseDetails = courseDetails;
+    public void setCourseDetail(LifeCourseDetail courseDetail) {
+        this.courseDetail = courseDetail;
     }
 
     public int getStartAge() {
@@ -224,5 +230,13 @@ public class LifeCourseByConditionVo {
 
     public void setCollect(boolean collect) {
         isCollect = collect;
+    }
+
+    public Long getCourseDetailId() {
+        return courseDetailId;
+    }
+
+    public void setCourseDetailId(Long courseDetailId) {
+        this.courseDetailId = courseDetailId;
     }
 }

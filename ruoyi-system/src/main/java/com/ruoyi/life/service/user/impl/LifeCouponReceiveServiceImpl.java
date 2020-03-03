@@ -2,6 +2,8 @@ package com.ruoyi.life.service.user.impl;
 
 
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.exception.life.user.SendCouponException;
+import com.ruoyi.common.response.UserResponseCode;
 import com.ruoyi.common.utils.security.Md5Utils;
 import com.ruoyi.life.domain.LifeCompanyCoupon;
 import com.ruoyi.life.domain.LifeCoupon;
@@ -161,7 +163,7 @@ public class LifeCouponReceiveServiceImpl implements LifeCouponReceiveService
      * @return 结果
      */
     @Override
-    public int insertLifeCouponReceiveBalance(Long shareId, List<LifeCompanyCoupon> list) {
+    public void insertLifeCouponReceiveBalance(Long shareId, List<LifeCompanyCoupon> list) {
         List<Map<String,Long>> longList = new ArrayList<>();
         for (LifeCompanyCoupon coupon : list) {
             Map<String,Long> map = new HashMap<>();
@@ -169,7 +171,9 @@ public class LifeCouponReceiveServiceImpl implements LifeCouponReceiveService
             map.put("number", Long.valueOf(coupon.getNumber()));
             longList.add(map);
         }
-        return this.insertLifeCouponReceive(shareId,longList);
+        if (insertLifeCouponReceive(shareId,longList) != insertNumBalance(longList)){
+            throw new SendCouponException(UserResponseCode.SEND_COUPON_ERROR,"充值余额赠送优惠券失败");
+        }
     }
 
     /**
@@ -180,11 +184,11 @@ public class LifeCouponReceiveServiceImpl implements LifeCouponReceiveService
      * @return 结果
      */
     @Override
-    public int insertLifeCouponReceiveVip(Long shareId, Long vipId) {
+    public void insertLifeCouponReceiveVip(Long shareId, Long vipId) {
         LifeVipCoupon selectVipCoupon = new LifeVipCoupon();
         selectVipCoupon.setVipId(vipId);
         List<LifeVipCoupon> list = vipCouponService.selectLifeCouponIds(vipId);
-        if (list.size() == 0) return 0;
+        if (list.size() == 0) return ;
         List<Map<String,Long>> longList = new ArrayList<>();
         for (LifeVipCoupon coupon : list) {
             Map<String,Long> map = new HashMap<>();
@@ -192,7 +196,9 @@ public class LifeCouponReceiveServiceImpl implements LifeCouponReceiveService
             map.put("number", Long.valueOf(coupon.getNumber()));
             longList.add(map);
         }
-        return this.insertLifeCouponReceive(shareId,longList);
+        if (insertLifeCouponReceive(shareId,longList) != insertNumBalance(longList)){
+            throw new SendCouponException(UserResponseCode.SEND_COUPON_ERROR,"充值vip赠送优惠券失败");
+        }
     }
 
 
@@ -200,14 +206,13 @@ public class LifeCouponReceiveServiceImpl implements LifeCouponReceiveService
     /**
      * 获取增加的行数
      *
-     * @param list
+     * @param longList
      * @return
      */
-    @Override
-    public int insertNumBalance(List<LifeCompanyCoupon> list) {
+    private int insertNumBalance(List<Map<String,Long>> longList) {
         int num = 0;
-        for (LifeCompanyCoupon companyCoupon : list) {
-            num += companyCoupon.getNumber();
+        for (Map<String, Long> map : longList) {
+            num += map.get("number");
         }
         return num;
     }

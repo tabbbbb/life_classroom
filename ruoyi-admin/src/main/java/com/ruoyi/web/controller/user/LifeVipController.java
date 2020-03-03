@@ -27,16 +27,11 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 
 /**
- * 〈一句话功能简述〉<br> 
- * 〈〉
- *
- * @author Administrator
- * @create 2019/12/4 0004
- * @since 1.0.0
+ * vip
  */
 @RestController
 @RequestMapping("/user/vip")
-@Api(value = "/life/vip",description = "vip充值")
+@Api(value = "/user/vip",description = "vip")
 public class LifeVipController {
 
     @Resource
@@ -71,6 +66,14 @@ public class LifeVipController {
         return vipService.priceRechargeVip(loginInfo.getId(),body);
     }
 
-
+    /**
+     * 获取此用户最大的会员
+     * @return
+     */
+    @GetMapping("bigVip")
+    @ApiOperation(value = "获取此用户最大的会员",notes = "需要token")
+    public UserResponse getBigVip(@ApiIgnore @LoginInfo UserLoginInfo loginInfo){
+        return vipService.getBigVip(loginInfo.getId());
+    }
 
 }

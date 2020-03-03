@@ -3,6 +3,7 @@ package com.ruoyi.life.service.user;
 
 import com.ruoyi.life.domain.LifePoint;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -19,7 +20,7 @@ public interface LifePointService
      * @param pointId 会员积分和开通记录ID
      * @return 会员积分和开通记录
      */
-    public LifePoint selectLifePointById(Long pointId);
+    LifePoint selectLifePointById(Long pointId);
 
     /**
      * 查询会员积分和开通记录列表
@@ -27,7 +28,7 @@ public interface LifePointService
      * @param lifePoint 会员积分和开通记录
      * @return 会员积分和开通记录集合
      */
-    public List<LifePoint> selectLifePointList(LifePoint lifePoint);
+    List<LifePoint> selectLifePointList(LifePoint lifePoint);
 
     /**
      * 新增会员积分和开通记录
@@ -35,7 +36,7 @@ public interface LifePointService
      * @param lifePoint 会员积分和开通记录
      * @return 结果
      */
-    public int insertLifePoint(LifePoint lifePoint);
+    int insertLifePoint(LifePoint lifePoint);
 
     /**
      * 修改会员积分和开通记录
@@ -43,7 +44,7 @@ public interface LifePointService
      * @param lifePoint 会员积分和开通记录
      * @return 结果
      */
-    public int updateLifePoint(LifePoint lifePoint);
+    int updateLifePoint(LifePoint lifePoint);
 
     /**
      * 批量删除会员积分和开通记录
@@ -51,7 +52,7 @@ public interface LifePointService
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int deleteLifePointByIds(String ids);
+    int deleteLifePointByIds(String ids);
 
     /**
      * 删除会员积分和开通记录信息
@@ -59,7 +60,7 @@ public interface LifePointService
      * @param pointId 会员积分和开通记录ID
      * @return 结果
      */
-    public int deleteLifePointById(Long pointId);
+    int deleteLifePointById(Long pointId);
 
 
     /**
@@ -76,7 +77,6 @@ public interface LifePointService
      */
     int pastPoint();
 
-
     /**
      * 支付积分
      * @param shareId
@@ -90,5 +90,28 @@ public interface LifePointService
      * @return
      */
     LifePoint getRecentlyPoint(Long shareId);
+
+
+    /**
+     * 获取积分中最大的vipId
+     * @return
+     */
+    Long getPointByBigVip(Long userId);
+
+
+    /**
+     * 获取用户所有积分
+     * @param shareId
+     * @return
+     */
+    Long getUserPoint(Long shareId);
+
+
+    /**
+     * 获取一条用户快要过期的积分
+     * @param shareId
+     * @return
+     */
+    LifePoint getBeOnTheVergeOfPoint(Long shareId);
 
 }

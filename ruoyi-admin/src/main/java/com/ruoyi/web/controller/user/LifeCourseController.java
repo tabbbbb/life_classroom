@@ -11,6 +11,8 @@
 package com.ruoyi.web.controller.user;
 
 import com.ruoyi.common.response.UserResponse;
+import com.ruoyi.framework.userlogin.annotation.LoginInfo;
+import com.ruoyi.framework.userlogin.info.UserLoginInfo;
 import com.ruoyi.life.domain.vo.user.LifeCourseConditionVo;
 import com.ruoyi.life.service.user.LifeCourseService;
 import io.swagger.annotations.Api;
@@ -21,8 +23,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -47,7 +53,7 @@ public class LifeCourseController {
             @ApiImplicitParam(paramType="query",name="conditionVo",value="课程首页条件",dataTypeClass = LifeCourseConditionVo.class)
     )
     public UserResponse getCourse(LifeCourseConditionVo conditionVo){
-        return UserResponse.succeed(courseService.selectLifeCourseBySearchVo(conditionVo));
+        return courseService.selectLifeCourseBySearchVo(conditionVo);
     }
 
 
@@ -58,8 +64,12 @@ public class LifeCourseController {
                     @ApiImplicitParam(paramType="query",name="lon",value="经度",dataTypeClass = BigDecimal.class),
                     @ApiImplicitParam(paramType="query",name="lat",value="纬度",dataTypeClass = BigDecimal.class)
             })
-    public UserResponse getCourseDetail(Long courseId, BigDecimal lon, BigDecimal lat){
-        return UserResponse.succeed(courseService.getLifeCourseDetailByCourseId(courseId,lon,lat));
+    public UserResponse getCourseDetail(@ApiIgnore @LoginInfo UserLoginInfo loginInfo, Long courseId, BigDecimal lon, BigDecimal lat){
+        Long userId = null;
+        if (loginInfo != null){
+            userId = loginInfo.getId();
+        }
+        return courseService.getLifeCourseDetailByCourseId(courseId,userId,lon,lat);
     }
 
 }

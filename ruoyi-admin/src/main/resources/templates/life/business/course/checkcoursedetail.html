@@ -14,60 +14,92 @@
         <tbody id="tbody">
         </tbody>
     </table>
+
+    <table class="table table-bordered table-striped">
+        <tbody id="updatebody">
+        </tbody>
+    </table>
+    <div class="form-group">
+        <a class="btn btn-danger btn-md" href="javascript:void(0)" style="float: right; margin-right: 20px;"  onclick="failure()"><i class="fa fa-edit"></i>不通过</a>
+        <a class="btn btn-primary btn-md" href="javascript:void(0)" style="float: right; margin-right: 20px;"onclick="success()"><i class="fa fa-edit" ></i>通过</a>
+    </div>
 </div>
 <th:block th:include="include :: footer" />
 <script th:src="@{/ruoyi/js/show.js}"></script>
 <script type="text/javascript">
+    detail();
+    var updateId = 0;
+    function detail() {
+        $.ajax({
+            cache : false,
+            async:false,
+            type : "GET",
+            url : ctx + "life/businesscourse/detaildata",
+            data:{
+                'businessCourseId':getUrlParam('courseId')
+            },
+            success : function(data) {
+                var businessCourse = data.businessCourse
+                cloneTr('课程名称',businessCourse.name)
+                cloneTr('价格',businessCourse.price+'￥')
+                cloneTr('课程类型',courseTypeFormatter(businessCourse.courseType))
+                cloneSpan('课程标签',businessCourse.courseLabel,'success')
+                cloneSpan('目标标签',businessCourse.courseClassify,'warning')
+                cloneTr('数量',businessCourse.number)
+                if (businessCourse.ageEnd == -1){
+                    cloneTr('适合年龄段','不限')
+                }else{
+                    cloneTr('适合年龄段',businessCourse.ageStart +'-'+businessCourse.ageEnd)
+                }
 
-    $.ajax({
-        cache : false,
-        async:false,
-        type : "GET",
-        url : ctx + "life/businesscourse/detaildata",
-        data:{
-            'businessCourseId':getUrlParam('courseId')
-        },
-        success : function(data) {
-            var businessCourse = data.businessCourseVo
-            cloneTr('课程名称',businessCourse.name)
-            cloneTr('价格',businessCourse.price)
-            cloneTr('课程类型',courseTypeFormatter(businessCourse.courseType))
-            cloneSpan('课程标签',businessCourse.courseLabel,'success')
-            cloneSpan('目标标签',businessCourse.courseClassify,'warning')
-            cloneTr('数量',businessCourse.number)
-            if (businessCourse.ageEnd == -1){
-                cloneTr('适合年龄段','不限')
-            }else{
-                cloneTr('适合年龄段',businessCourse.ageStart +'-'+businessCourse.ageEnd)
+                cloneTr('商户名称',businessCourse.businessName)
+                cloneTr('描述',businessCourse.describe)
+                cloneTrImg('课程图片',businessCourse.imgUrl)
+                cloneTrImg('预约规则',businessCourse.ruleUrl)
+                cloneTrImg('详细信息',businessCourse.information)
+                cloneTr('添加时间',businessCourse.addTime)
+                var businessCourseSpecifications = data.businessCourseSpecifications
+                businessCourseSpecifications.forEach(function (item) {
+                    cloneTr('课程规格',item.specificationName+' , '+item.specificationNum+' , '+item.specificationDiscount+'%')
+                })
+                var details = data.details
+                details.forEach(function (item) {
+                    cloneTr('上课时间',weekToString(item.week)+'  '+item.startHour+' : '+item.startMinute)
+                })
+
+                var updates = data.updates
+                cloneTrFor('请求说明',['请求结果','处理说明','请求时间','处理时间'])
+                updates.forEach(function (item,index) {
+                    if (index == updates.length - 1 && item.updateType != 0){
+                        ahide()
+                        updateId = item.updateId
+                    }
+                    cloneTrFor(item.updateExplain,[checkFlagFormatter(item.updateType),updateFormatter(item.failureExplain,item.updateType),item.updateTime,updateFormatter(item.checkTime,item.updateType)])
+                })
             }
+        });
+    }
 
-            cloneTr('商户名称',businessCourse.businessName)
-            cloneTr('描述',businessCourse.describe)
-            cloneTrImg('课程图片',businessCourse.imgUrl)
-            cloneTrImg('预约规则',businessCourse.ruleUrl)
-            cloneTrImg('详细信息',businessCourse.information)
-            cloneTr('审核结果',checkFlagFormatter(businessCourse.checkFlage))
-            cloneTr('审核内容',businessCourse.checkContent)
-            cloneTr('添加时间',businessCourse.addTime)
-            cloneTr('审核时间',businessCourse.checkTime)
-            var details = data.details
-            details.forEach(function (item) {
-                cloneTr('上课时间',weekToString(item.week)+'  '+item.startHour+' : '+item.startMinute)
-            })
-            var updates = data.updates
-            cloneTrFor('时间',['说明','不通过说明','结果'])
-            updates.forEach(function (item) {
-                cloneTrFor(item.updateTime,[item.updateExplain,item.failureExplain,updateTypeFormatter(item.updateType)])
-            })
-        }
-    });
-
-
+    
+    function ahide() {
+        $('a').hide()
+    }
 
 
 
     function submitHandler(index, layero) {
         $.modal.close();
+    }
+    
+    
+    function success() {
+        $.modal.msgSuccess('请求通过')
+
+    }
+    
+    function failure() {
+        $.modal.msgError('请求不通过')
+
     }
 
 

@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -27,7 +28,7 @@ public class LifeReserve
 
     /** 预约日期 */
     @Excel(name = "预约日期", width = 30, dateFormat = "yyyy-MM-dd")
-    private LocalDateTime reserveDate;
+    private LocalDate reserveDate;
 
     /** 剩余数量 */
     @Excel(name = "剩余数量")
@@ -51,16 +52,16 @@ public class LifeReserve
     {
         return courseDetailId;
     }
-    public void setReserveDate(LocalDateTime reserveDate)
-    {
+
+    public LocalDate getReserveDate() {
+        return reserveDate;
+    }
+
+    public void setReserveDate(LocalDate reserveDate) {
         this.reserveDate = reserveDate;
     }
 
-    public LocalDateTime getReserveDate()
-    {
-        return reserveDate;
-    }
-    public void setReserveNum(Integer reserveNum) 
+    public void setReserveNum(Integer reserveNum)
     {
         this.reserveNum = reserveNum;
     }

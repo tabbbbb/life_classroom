@@ -1,6 +1,6 @@
 function changeAstrict(){
     var astrict = $('[name=astrict]').val()
-    console.log(astrict)
+
     if (astrict*1 > 0){
         $.modal.open("选中课程","/life/course")
     }

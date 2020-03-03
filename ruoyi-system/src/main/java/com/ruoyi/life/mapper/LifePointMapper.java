@@ -136,4 +136,28 @@ public interface LifePointMapper
      * @return
      */
     String [] getExcelVipUserId();
+
+
+    /**
+     * 获取积分中最大的vip
+     * @return
+     */
+    Long getPointByBigVip(Long shareId);
+
+
+
+    /**
+     * 获取用户所有积分
+     * @param shareId
+     * @return
+     */
+    Long getUserPoint(Long shareId);
+
+
+    /**
+     * 获取一条用户快要过期的积分
+     * @param shareId
+     * @return
+     */
+    LifePoint getBeOnTheVergeOfPoint(Long shareId);
 }

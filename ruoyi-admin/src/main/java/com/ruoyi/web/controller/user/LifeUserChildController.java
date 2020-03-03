@@ -44,7 +44,7 @@ import java.io.IOException;
  */
 @RestController
 @RequestMapping("/user/child")
-@Api(value = "/life/child",description = "小孩")
+@Api(value = "/user/child",description = "小孩")
 public class LifeUserChildController {
 
 
@@ -79,7 +79,7 @@ public class LifeUserChildController {
 
 
     @GetMapping("childAll")
-    @ApiOperation(value = "获取所有小孩",notes = "childUsable:可选，childDisabled：不可选")
+    @ApiOperation(value = "获取所有小孩",notes = "childUsable:可选，childDisabled：不可选，notSetPoint：没有设置小孩的会员")
     public UserResponse getChildAll(@ApiIgnore @LoginInfo UserLoginInfo loginInfo){
         UserResponse response = LoginResponse.toMessage(loginInfo);
         if (response != null) return response;

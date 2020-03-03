@@ -8,7 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="courseId"    column="course_id"    />
         <result property="name"    column="name"    />
         <result property="imgUrl"    column="img_url"    />
-        <result property="carouselUrl"    column="carouse_url"    />
+        <result property="carouselUrl"    column="carousel_url"    />
         <result property="price"    column="price"    />
         <result property="courseType"    column="course_type"    />
         <result property="courseLabelId"    column="course_label_id"    />
@@ -19,18 +19,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="describe"    column="describe"    />
         <result property="businessId"    column="business_id"    />
         <result property="ruleUrl"    column="rule_url"    />
-        <result property="checkFlage"    column="check_flage"    />
         <result property="information"    column="information"    />
-        <result property="checkContent"    column="check_content"    />
         <result property="addTime"    column="add_time"    />
-        <result property="checkTime"    column="check_time"    />
+        <result property="status"    column="status"    />
+        <result property="deleteFlag"    column="delete_flag"    />
         <result property="bindTopThread"    column="bind_top_thread"    />
     </resultMap>
 
     <sql id="selectLifeBusinessCourseVo">
-        select course_id, name, img_url,carouse_url, price, course_type, course_label_id, course_classify_id, number,
-         age_start, age_end, `describe`, business_id, rule_url, check_flage, information,
-         check_content, add_time, check_time,bind_top_thread from life_business_course
+        select course_id, name, img_url, carousel_url, price, course_type, course_label_id, course_classify_id, number, age_start, age_end, describe, business_id, rule_url, information, add_time, status, delete_flag, bind_top_thread from life_business_course
     </sql>
 
     <select id="selectLifeBusinessCourseList" parameterType="LifeBusinessCourse" resultMap="LifeBusinessCourseResult">
@@ -38,7 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
             <if test="imgUrl != null  and imgUrl != ''"> and img_url = #{imgUrl}</if>
-            <if test="carouselUrl != null  and carouselUrl != ''"> and carouse_url = #{carouselUrl}</if>
+            <if test="carouselUrl != null  and carouselUrl != ''"> and carousel_url = #{carouselUrl}</if>
             <if test="price != null "> and price = #{price}</if>
             <if test="courseType != null "> and course_type = #{courseType}</if>
             <if test="courseLabelId != null "> and course_label_id = #{courseLabelId}</if>
@@ -49,11 +46,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="describe != null  and describe != ''"> and describe = #{describe}</if>
             <if test="businessId != null "> and business_id = #{businessId}</if>
             <if test="ruleUrl != null  and ruleUrl != ''"> and rule_url = #{ruleUrl}</if>
-            <if test="checkFlage != null "> and check_flage = #{checkFlage}</if>
             <if test="information != null  and information != ''"> and information = #{information}</if>
-            <if test="checkContent != null  and checkContent != ''"> and check_content = #{checkContent}</if>
             <if test="addTime != null "> and add_time = #{addTime}</if>
-            <if test="checkTime != null "> and check_time = #{checkTime}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="deleteFlag != null "> and delete_flag = #{deleteFlag}</if>
             <if test="bindTopThread != null "> and bind_top_thread = #{bindTopThread}</if>
         </where>
     </select>
@@ -62,14 +58,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectLifeBusinessCourseVo"/>
         where course_id = #{courseId}
     </select>
-
-
+        
     <insert id="insertLifeBusinessCourse" parameterType="LifeBusinessCourse" useGeneratedKeys="true" keyProperty="courseId">
         insert into life_business_course
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="name != null  and name != ''">name,</if>
             <if test="imgUrl != null  and imgUrl != ''">img_url,</if>
-            <if test="carouselUrl != null  and carouselUrl != ''"> carouse_url ,</if>
+            <if test="carouselUrl != null  and carouselUrl != ''">carousel_url,</if>
             <if test="price != null ">price,</if>
             <if test="courseType != null ">course_type,</if>
             <if test="courseLabelId != null ">course_label_id,</if>
@@ -80,17 +75,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="describe != null  and describe != ''">describe,</if>
             <if test="businessId != null ">business_id,</if>
             <if test="ruleUrl != null  and ruleUrl != ''">rule_url,</if>
-            <if test="checkFlage != null ">check_flage,</if>
             <if test="information != null  and information != ''">information,</if>
-            <if test="checkContent != null  and checkContent != ''">check_content,</if>
             <if test="addTime != null ">add_time,</if>
-            <if test="checkTime != null ">check_time,</if>
-            <if test="bindTopThread != null "> bind_top_thread,</if>
+            <if test="status != null ">status,</if>
+            <if test="deleteFlag != null ">delete_flag,</if>
+            <if test="bindTopThread != null ">bind_top_thread,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="name != null  and name != ''">#{name},</if>
             <if test="imgUrl != null  and imgUrl != ''">#{imgUrl},</if>
-            <if test="carouselUrl != null  and carouselUrl != ''"> #{carouselUrl},</if>
+            <if test="carouselUrl != null  and carouselUrl != ''">#{carouselUrl},</if>
             <if test="price != null ">#{price},</if>
             <if test="courseType != null ">#{courseType},</if>
             <if test="courseLabelId != null ">#{courseLabelId},</if>
@@ -101,12 +95,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="describe != null  and describe != ''">#{describe},</if>
             <if test="businessId != null ">#{businessId},</if>
             <if test="ruleUrl != null  and ruleUrl != ''">#{ruleUrl},</if>
-            <if test="checkFlage != null ">#{checkFlage},</if>
             <if test="information != null  and information != ''">#{information},</if>
-            <if test="checkContent != null  and checkContent != ''">#{checkContent},</if>
             <if test="addTime != null ">#{addTime},</if>
-            <if test="checkTime != null ">#{checkTime},</if>
-            <if test="bindTopThread != null "> #{bindTopThread},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="deleteFlag != null ">#{deleteFlag},</if>
+            <if test="bindTopThread != null ">#{bindTopThread},</if>
          </trim>
     </insert>
 
@@ -115,7 +108,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="name != null  and name != ''">name = #{name},</if>
             <if test="imgUrl != null  and imgUrl != ''">img_url = #{imgUrl},</if>
-            <if test="carouselUrl != null  and carouselUrl != ''"> carouse_url = #{carouselUrl},</if>
+            <if test="carouselUrl != null  and carouselUrl != ''">carousel_url = #{carouselUrl},</if>
             <if test="price != null ">price = #{price},</if>
             <if test="courseType != null ">course_type = #{courseType},</if>
             <if test="courseLabelId != null ">course_label_id = #{courseLabelId},</if>
@@ -126,12 +119,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="describe != null  and describe != ''">describe = #{describe},</if>
             <if test="businessId != null ">business_id = #{businessId},</if>
             <if test="ruleUrl != null  and ruleUrl != ''">rule_url = #{ruleUrl},</if>
-            <if test="checkFlage != null ">check_flage = #{checkFlage},</if>
             <if test="information != null  and information != ''">information = #{information},</if>
-            <if test="checkContent != null  and checkContent != ''">check_content = #{checkContent},</if>
             <if test="addTime != null ">add_time = #{addTime},</if>
-            <if test="checkTime != null ">check_time = #{checkTime},</if>
-            <if test="bindTopThread != null "> bind_top_thread = #{bindTopThread},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="deleteFlag != null ">delete_flag = #{deleteFlag},</if>
+            <if test="bindTopThread != null ">bind_top_thread = #{bindTopThread},</if>
         </trim>
         where course_id = #{courseId}
     </update>
@@ -149,33 +141,36 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectLifeBusinessCourseVoBySearchVo"
             resultType="com.ruoyi.life.domain.vo.system.LifeBusinessCourseVo">
-
         select
-            course.course_id as courseId,
-            course.name as name,
-            course.img_url as imgUrl,
-            course.carousel_url as carouselUrl,
-            course.price as price,
-            course.course_type as courseType,
-            label.course_label_name as courseLabel,
-            classify.course_classify_name as courseClassify,
-            course.number as number,
-            course.age_start as ageStart,
-            course.age_end as ageEnd,
-            course.`describe` as `describe`,
-            business.name as businessName,
-            course.rule_url as ruleUrl,
-            course.check_flage as checkFlage,
-            course.information as information,
-            course.check_content as checkContent,
-            course.add_time as addTime,
-            course.check_time as checkTime,
-            course.bind_top_thread as bindTopThread
+        course.course_id as courseId,
+        course.name as name,
+        course.img_url as imgUrl,
+        course.carousel_url as carouselUrl,
+        course.price as price,
+        course.course_type as courseType,
+        label.course_label_name as courseLabel,
+        classify.course_classify_name as courseClassify,
+        course.number as number,
+        course.age_start as ageStart,
+        course.age_end as ageEnd,
+        course.`describe` as `describe`,
+        business.name as businessName,
+        course.rule_url as ruleUrl,
+        course.information as information,
+        `update`.update_explain as requestInstructions,
+        `update`.update_type as checkFlag,
+        `update`.failure_explain as checkContent,
+        `update`.update_time as updateTime,
+        `update`.check_time as checkTime,
+        course.add_time as addTime,
+        course.bind_top_thread as bindTopThread
+
 
         from life_business_course as course
         left join life_course_label as label on label.course_label_id = course.course_id
         left join life_course_classify as classify on classify.course_classify_id = course.course_classify_id
         inner join life_business as business on business.business_id = course.business_id
+        inner join life_update as `update` on `update`.update_id = course.course_id
         <trim prefix="where " suffixOverrides="and|or">
             <if test="courseId != null">
                 course.course_id = #{courseId} and
@@ -203,10 +198,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="businessName != null and businessName != ''">
                 business.name like concat('%',#{businessName},'%') and
             </if>
-            <if test="checkFlage != null">
-                course.check_flage = #{checkFlage} and
+            <if test="checkFlag != null">
+                `update`.update_type = #{checkFlag} and
             </if>
-
             <choose>
                 <when test="addTimeStart != null and addTimeEnd != null">
                     course.add_time >= #{addTimeStart} and #{addTimeEnd} >= course.add_time and
@@ -218,18 +212,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     #{addTimeEnd} >= course.add_time and
                 </when>
             </choose>
-
-            <choose>
-                <when test="checkTimeStart != null and checkTimeEnd != null">
-                    course.check_time >= #{checkTimeStart} and #{checkTimeEnd} >= course.check_time and
-                </when>
-                <when test="checkTimeStart != null">
-                    course.check_time >= #{checkTimeStart} and
-                </when>
-                <when test="checkTimeEnd != null">
-                    #{checkTimeEnd} >= course.check_time and
-                </when>
-            </choose>
+            `update`.update_time = (select update_time from life_update where update_id = course.course_id order by update_time limit 1)
         </trim>
     </select>
+    
 </mapper>

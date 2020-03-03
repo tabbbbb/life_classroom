@@ -11,16 +11,14 @@
 package com.ruoyi.life.service.system.impl;
 
 import com.ruoyi.common.core.text.Convert;
-import com.ruoyi.life.domain.LifeCourse;
-import com.ruoyi.life.domain.LifeCourseClassify;
-import com.ruoyi.life.domain.LifeCourseDetail;
+import com.ruoyi.life.domain.*;
 import com.ruoyi.life.domain.vo.system.LifeCourseSearchVo;
 import com.ruoyi.life.domain.vo.system.LifeCourseUpdateOrAddVo;
 import com.ruoyi.life.domain.vo.system.LifeCourseVo;
 import com.ruoyi.life.mapper.LifeCourseMapper;
 import com.ruoyi.life.service.system.*;
-import com.ruoyi.life.service.user.LifeCourseDetailService;
 import jodd.util.StringUtil;
+import org.apache.poi.ss.formula.functions.Count;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +45,12 @@ public class SysLifeCourseServiceImpl implements SysLifeCourseService {
     @Resource
     private SysLifeCouponService couponService;
 
+    @Resource
+    private SysLifeBusinessAddressService businessAddressService;
+
+    @Resource
+    private SysLifeCourseSpecificationService specificationService;
+
 
     /**
      * 查询课程
@@ -64,11 +68,14 @@ public class SysLifeCourseServiceImpl implements SysLifeCourseService {
         map.put("courseDetailList",courseDetails);
         map.put("courseDuration",courseDetails.get(0).getCourseDuration());
         map.put("courseRefundHour",courseDetails.get(0).getCourseRefundHour());
+        LifeCourseSpecification specification = new LifeCourseSpecification();
+        specification.setCourseId(courseId);
+        map.put("specificationList",specificationService.selectLifeCourseSpecificationList(specification));
         String [] carousels = null;
         if (StringUtil.isEmpty(lifeCourse.getCarouselUrl())){
             carousels = new String[1];
         }else{
-            lifeCourse.getCarouselUrl().split(",");
+            carousels = lifeCourse.getCarouselUrl().split(",");
         }
         map.put("carousels",carousels);
         map.put("courseClassify2",courseClassifyService.selectLifeCourseClassifyById(lifeCourse.getCourseClassifyId()).getPid());
@@ -98,16 +105,6 @@ public class SysLifeCourseServiceImpl implements SysLifeCourseService {
         return courseMapper.selectLifeCourseById(courseId);
     }
 
-    /**
-     * 查询课程
-     *
-     * @param courseId 课程id
-     * @return 课程集合
-     */
-    @Override
-    public LifeCourseVo selectLifeCourseVoByCourseId(Long courseId) {
-        return courseMapper.selectLifeCourseVoByCourseId(courseId);
-    }
 
     /**
      * 查询课程列表
@@ -129,12 +126,9 @@ public class SysLifeCourseServiceImpl implements SysLifeCourseService {
      */
     @Override
     @Transactional
-    public Long insertLifeCourse(LifeCourseUpdateOrAddVo updateOrAddVo)
+    public void insertLifeCourse(LifeCourseUpdateOrAddVo updateOrAddVo)
     {
         verifyCourse(updateOrAddVo.getCourse());
-        if (courseMapper.selectLifeCourseByName(updateOrAddVo.getCourse().getName()) != 0){
-            throw new RuntimeException("课程名称重复");
-        }
         courseMapper.insertLifeCourse(updateOrAddVo.getCourse());
         Long courseId = updateOrAddVo.getCourse().getCourseId();
         int courseDuration = updateOrAddVo.getCourseDuration();
@@ -154,7 +148,8 @@ public class SysLifeCourseServiceImpl implements SysLifeCourseService {
         }
         verifyCourseDetail(detailList);
         courseDetailService.insertCourseDetailList(detailList);
-        return courseId;
+        verifySpecification(updateOrAddVo.getSpecificationList(),courseId);
+        specificationService.insertLifeCourseSpecificationList(updateOrAddVo.getSpecificationList());
     }
 
     /**
@@ -165,7 +160,7 @@ public class SysLifeCourseServiceImpl implements SysLifeCourseService {
      */
     @Override
     @Transactional
-    public int updateLifeCourse(LifeCourseUpdateOrAddVo updateOrAddVo)
+    public void updateLifeCourse(LifeCourseUpdateOrAddVo updateOrAddVo)
     {
         verifyCourse(updateOrAddVo.getCourse());
         Long courseId = updateOrAddVo.getCourse().getCourseId();
@@ -175,7 +170,7 @@ public class SysLifeCourseServiceImpl implements SysLifeCourseService {
         List<LifeCourseDetail> detailList = updateOrAddVo.getCourseDetails();
         List<LifeCourseDetail> updateList = new ArrayList<>();
         List<LifeCourseDetail> addList = new ArrayList<>();
-            for (int i =0 ;i<detailList.size();i++) {
+        for (int i =0 ;i<detailList.size();i++) {
             LifeCourseDetail courseDetail = detailList.get(i);
             courseDetail.setCourseId(courseId);
             courseDetail.setCourseDuration(courseDuration);
@@ -192,9 +187,7 @@ public class SysLifeCourseServiceImpl implements SysLifeCourseService {
                 updateList.add(courseDetail);
             }
         }
-
         verifyCourseDetail(detailList);
-
         if (updateList.size() != 0){
             for (LifeCourseDetail courseDetail : updateList) {
                 courseDetailService.updateLifeCourseDetail(courseDetail);
@@ -203,12 +196,38 @@ public class SysLifeCourseServiceImpl implements SysLifeCourseService {
         }else{
             courseDetailService.deleteCourseDetailByCourseId(courseId);
         }
+
         if (addList.size() != 0){
             courseDetailService.insertCourseDetailList(addList);
-
         }
 
-        return 1 ;
+        //规格的修改
+
+        List<LifeCourseSpecification> specificationList = updateOrAddVo.getSpecificationList();
+        List<LifeCourseSpecification> updateSpecificationList = new ArrayList<>();
+        List<LifeCourseSpecification> addSpecificationList = new ArrayList<>();
+        verifySpecification(specificationList,courseId);
+        for (int i = 0; i < specificationList.size(); i++) {
+            LifeCourseSpecification specification = specificationList.get(i);
+            if (specification.getSpecificationId() == null){
+                addSpecificationList.add(specification);
+            }else{
+                updateSpecificationList.add(specification);
+            }
+        }
+        if (updateSpecificationList.size() != 0){
+            for (LifeCourseSpecification specification : updateSpecificationList) {
+                specificationService.updateLifeCourseSpecification(specification);
+            }
+            specificationService.deleteNotInList(updateSpecificationList,courseId);
+        }else{
+            specificationService.deleteCourseDetailByCourseId(courseId);
+        }
+
+        if (addSpecificationList.size() != 0){
+            specificationService.insertLifeCourseSpecificationList(addSpecificationList);
+        }
+
     }
 
     /**
@@ -239,11 +258,11 @@ public class SysLifeCourseServiceImpl implements SysLifeCourseService {
             if (courseDetail.getStartHour() == null || courseDetail.getStartHour() > 23 || courseDetail.getStartHour() < 0){
                 throw new  RuntimeException("开始时间填写错误");
             }
-            if (courseDetail.getCourseRefundHour() == null || courseDetail.getCourseRefundHour() > 72){
-                throw new  RuntimeException("退款最大时间不能为空并且不能超过72小时");
+            if (courseDetail.getCourseRefundHour() == null || courseDetail.getCourseRefundHour() > 72 || courseDetail.getCourseRefundHour() < 0){
+                throw new  RuntimeException("退款时间填写错误");
             }
-            if (courseDetail.getCourseDuration() == null || courseDetail.getCourseDuration() > 9999){
-                throw new  RuntimeException("上课时长不能为空并且不能超过9999分钟");
+            if (courseDetail.getCourseDuration() == null || courseDetail.getCourseDuration() > 9999 || courseDetail.getCourseRefundHour() <= 0){
+                throw new  RuntimeException("上课时长填写错误");
             }
             for (LifeCourseDetail detail : detailList) {
                 if (courseDetail != detail){
@@ -258,12 +277,36 @@ public class SysLifeCourseServiceImpl implements SysLifeCourseService {
 
 
     /**
+     * 检查课程规格
+     */
+    private void verifySpecification(List<LifeCourseSpecification> specificationList,Long courseId){
+        if(specificationList == null || specificationList.size() == 0){
+            throw new RuntimeException("必须上传一个课程规格");
+        }
+        for (LifeCourseSpecification courseSpecification : specificationList) {
+            if(courseSpecification.getSpecificationName() == null || courseSpecification.getSpecificationName() == ""){
+                throw new RuntimeException("规格名不能为空");
+            }else if (courseSpecification.getSpecificationNum() == null || courseSpecification.getSpecificationNum() <= 0 ){
+                throw new RuntimeException("服务量不能为空不能小于0");
+            }else if (courseSpecification.getSpecificationDiscount() == null || courseSpecification.getSpecificationDiscount() <= 0 || courseSpecification.getSpecificationDiscount() >100 ){
+                throw new RuntimeException("折扣填写错误");
+            }
+            courseSpecification.setCourseId(courseId);
+
+        }
+    }
+
+
+    /**
      * 检查课程是否合格
      * @param course
      */
     private void verifyCourse(LifeCourse course){
         if(course.getName() == null || course.getName().trim() == ""){
             throw new RuntimeException("课程名称没有填写");
+        }
+        if (courseMapper.selectLifeCourseByName(course.getName(),course.getCourseId()) != 0){
+            throw new RuntimeException("课程名称重复");
         }
         if (course.getCourseType() == null || (course.getCourseType() != 1 && course.getCourseType() != 2)){
             throw new RuntimeException("课程类型选择错误");
@@ -282,7 +325,7 @@ public class SysLifeCourseServiceImpl implements SysLifeCourseService {
         Long pid = courseClassifyService.selectLifeCourseClassifyById(courseClassify.getPid()).getPid();
         course.setCourseClassifyPid(pid);
 
-        if (course.getCourseKind() == null || (course.getCourseKind() != 0 && course.getCourseKind() != 1)){
+        if (course.getCourseKind() == null || course.getCourseKind() != 0 ){
             throw new RuntimeException("课程种类选择错误");
         }
 
@@ -295,6 +338,7 @@ public class SysLifeCourseServiceImpl implements SysLifeCourseService {
         }
         course.setStatus(1L);
         course.setDeleteFlage(0L);
+        course.setPutawayDate(new Date());
         if (course.getPrice() == null || course.getPrice().doubleValue() < 0){
             throw new RuntimeException("课程价格请输入或值小于0");
         }
@@ -306,26 +350,13 @@ public class SysLifeCourseServiceImpl implements SysLifeCourseService {
         if (course.getSales() != null && course.getSales() > 0){
             throw new RuntimeException("课程销量不可设置");
         }
+        LifeBusinessAddress businessAddress = businessAddressService.selectLifeBusinessAddressById(course.getBusinessAddressId());
+        if (businessAddress == null || businessAddress.getBusinessId() != -1){
+            throw new RuntimeException("上课地址设置错误");
+        }
+
+
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -354,6 +385,8 @@ public class SysLifeCourseServiceImpl implements SysLifeCourseService {
     {
         String [] courseIds = Convert.toStrArray(ids);
         couponService.deleteLifeCouponByCourseIds(courseIds);
+        courseDetailService.deleteCourseDetailByCourseIds(courseIds);
+        specificationService.deleteCourseDetailByCourseIds(courseIds);
         return courseMapper.deleteLifeCourseByIds(courseIds);
     }
 
@@ -373,10 +406,10 @@ public class SysLifeCourseServiceImpl implements SysLifeCourseService {
         updateCourse.setCourseId(courseId);
         if (course.getStatus() == 1){
             updateCourse.setStatus(0L);
-            updateCourse.setPutawayDate(new Date());
+            updateCourse.setSoldOutDate(new Date());
         }else{
             updateCourse.setStatus(1L);
-            updateCourse.setSoldOutDate(new Date());
+            updateCourse.setPutawayDate(new Date());
         }
         return courseMapper.updateLifeCourse(updateCourse);
     }
@@ -417,5 +450,17 @@ public class SysLifeCourseServiceImpl implements SysLifeCourseService {
     @Override
     public int coursePlusSales(Long courseId) {
         return courseMapper.coursePlusSales(courseId);
+    }
+
+
+    /**
+     * 获取使用该地址的课程数量
+     *
+     * @param addressIds
+     * @return
+     */
+    @Override
+    public int getCourseNumByAddressIds(String[] addressIds) {
+        return courseMapper.getCourseNumByAddressIds(addressIds);
     }
 }

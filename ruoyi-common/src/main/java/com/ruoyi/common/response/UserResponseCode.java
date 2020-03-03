@@ -252,4 +252,10 @@ public class UserResponseCode {
      * 支付密码错误
      */
     public static final Integer PAY_PASSWORD_ERROR = 100035;
+
+
+    /**
+     * 赠送优惠券错误
+     */
+    public static final Integer SEND_COUPON_ERROR = 100036;
 }

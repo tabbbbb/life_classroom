@@ -15,35 +15,28 @@ public interface SysLifeBusinessAddressService
 {
     /**
      * 查询商家店铺地址
-     * 
      * @param businessAddressId 商家店铺地址ID
      * @return 商家店铺地址
      */
-    public LifeBusinessAddress selectLifeBusinessAddressById(Long businessAddressId);
+    LifeBusinessAddress selectLifeBusinessAddressById(Long businessAddressId);
 
-    /**
-     * 查询商家店铺地址列表
-     * 
-     * @param lifeBusinessAddress 商家店铺地址
-     * @return 商家店铺地址集合
-     */
-    public List<LifeBusinessAddress> selectLifeBusinessAddressList(LifeBusinessAddress lifeBusinessAddress);
+
 
     /**
      * 新增商家店铺地址
-     * 
+     *
      * @param lifeBusinessAddress 商家店铺地址
      * @return 结果
      */
-    public int insertLifeBusinessAddress(LifeBusinessAddress lifeBusinessAddress);
+    int insertLifeBusinessAddress(LifeBusinessAddress lifeBusinessAddress);
 
     /**
      * 修改商家店铺地址
-     * 
+     *
      * @param lifeBusinessAddress 商家店铺地址
      * @return 结果
      */
-    public int updateLifeBusinessAddress(LifeBusinessAddress lifeBusinessAddress);
+    int updateLifeBusinessAddress(LifeBusinessAddress lifeBusinessAddress);
 
     /**
      * 批量删除商家店铺地址
@@ -51,7 +44,7 @@ public interface SysLifeBusinessAddressService
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int deleteLifeBusinessAddressByIds(String ids);
+    int deleteLifeBusinessAddressByIds(String ids);
 
     /**
      * 删除商家店铺地址信息
@@ -59,5 +52,12 @@ public interface SysLifeBusinessAddressService
      * @param businessAddressId 商家店铺地址ID
      * @return 结果
      */
-    public int deleteLifeBusinessAddressById(Long businessAddressId);
+    int deleteLifeBusinessAddressById(Long businessAddressId);
+
+
+    /**
+     * 获取自由课程上课地址
+     * @return
+     */
+    List<LifeBusinessAddress> selectIAddress();
 }

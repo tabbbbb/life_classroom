@@ -2,16 +2,11 @@ package com.ruoyi.life.service.system.impl;
 
 
 import com.ruoyi.common.core.text.Convert;
-import com.ruoyi.life.domain.LifeCourse;
 import com.ruoyi.life.domain.LifeCourseLabel;
 import com.ruoyi.life.mapper.LifeCourseLabelMapper;
-import com.ruoyi.life.service.system.SysLifeCourseClassifyService;
 import com.ruoyi.life.service.system.SysLifeCourseLabelService;
 import com.ruoyi.life.service.system.SysLifeCourseService;
-import com.ruoyi.life.service.user.LifeCourseService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;

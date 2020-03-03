@@ -32,7 +32,7 @@ import springfox.documentation.annotations.ApiIgnore;
  */
 @RestController
 @RequestMapping("/user/target")
-@Api(value = "/life/target",description = "目标")
+@Api(value = "/user/target",description = "目标")
 public class LifeUserTargetController {
 
     @Autowired

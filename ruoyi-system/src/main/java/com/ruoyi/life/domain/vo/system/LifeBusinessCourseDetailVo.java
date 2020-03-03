@@ -10,7 +10,9 @@
  */
 package com.ruoyi.life.domain.vo.system;
 
+import com.ruoyi.life.domain.LifeBusinessCourse;
 import com.ruoyi.life.domain.LifeBusinessCourseDetail;
+import com.ruoyi.life.domain.LifeBusinessCourseSpecification;
 import com.ruoyi.life.domain.LifeUpdate;
 
 import java.util.List;
@@ -24,24 +26,35 @@ public class LifeBusinessCourseDetailVo {
     /**
      * 课程vo
      */
-    private LifeBusinessCourseVo businessCourseVo;
+    private LifeBusinessCourse businessCourse;
 
     /**
      * 上课时间详细
      */
     private List<LifeBusinessCourseDetail> details;
 
+
+    private List<LifeBusinessCourseSpecification> businessCourseSpecifications;
+
     /**
      * 修改记录
      */
     private List<LifeUpdate> updates;
 
-    public LifeBusinessCourseVo getBusinessCourseVo() {
-        return businessCourseVo;
+    public List<LifeBusinessCourseSpecification> getBusinessCourseSpecifications() {
+        return businessCourseSpecifications;
     }
 
-    public void setBusinessCourseVo(LifeBusinessCourseVo businessCourseVo) {
-        this.businessCourseVo = businessCourseVo;
+    public void setBusinessCourseSpecifications(List<LifeBusinessCourseSpecification> businessCourseSpecifications) {
+        this.businessCourseSpecifications = businessCourseSpecifications;
+    }
+
+    public LifeBusinessCourse getBusinessCourse() {
+        return businessCourse;
+    }
+
+    public void setBusinessCourse(LifeBusinessCourse businessCourse) {
+        this.businessCourse = businessCourse;
     }
 
     public List<LifeBusinessCourseDetail> getDetails() {

@@ -46,10 +46,12 @@ public class SysLifeBusinessAddressController extends BaseController
     @RequiresPermissions("life:businessaddress:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(LifeBusinessAddress lifeBusinessAddress)
+    public TableDataInfo list()
     {
         startPage();
-        List<LifeBusinessAddress> list = businessAddressService.selectLifeBusinessAddressList(lifeBusinessAddress);
+        LifeBusinessAddress address = new LifeBusinessAddress();
+        address.setBusinessId(-1L);
+        List<LifeBusinessAddress> list = businessAddressService.selectIAddress();
         return getDataTable(list);
     }
 
@@ -60,9 +62,9 @@ public class SysLifeBusinessAddressController extends BaseController
     @Log(title = "商家店铺地址", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(LifeBusinessAddress lifeBusinessAddress)
+    public AjaxResult export()
     {
-        List<LifeBusinessAddress> list = businessAddressService.selectLifeBusinessAddressList(lifeBusinessAddress);
+        List<LifeBusinessAddress> list = businessAddressService.selectIAddress();
         ExcelUtil<LifeBusinessAddress> util = new ExcelUtil<LifeBusinessAddress>(LifeBusinessAddress.class);
         return util.exportExcel(list, "address");
     }
@@ -85,6 +87,7 @@ public class SysLifeBusinessAddressController extends BaseController
     @ResponseBody
     public AjaxResult addSave(LifeBusinessAddress lifeBusinessAddress)
     {
+        lifeBusinessAddress.setBusinessId(-1L);
         return toAjax(businessAddressService.insertLifeBusinessAddress(lifeBusinessAddress));
     }
 

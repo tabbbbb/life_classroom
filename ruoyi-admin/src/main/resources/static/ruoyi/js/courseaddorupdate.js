@@ -9,6 +9,7 @@ function getFromData() {
     var courseKind = $('[name=courseKind]').val()
     var ageOnset = $('[name=ageOnset]').val()
     var ageEnd = $('[name=ageEnd]').val()
+    var businessAddressId = $('[name=businessAddressId]').val()
     var teacherName = $('[name=teacherName]').val()
     var number = $('[name=number]').val()
     var price = $('[name=price]').val()
@@ -17,7 +18,6 @@ function getFromData() {
     var recommend = $('[name=recommend]').val()
     //图片数据
     var imgUrl = $('[name=imgUrl]').attr('src')
-    console.log(imgUrl)
     var $carousels =  $('[name=carousel]')
     var carousel = ''
     $carousels.each(function (index) {
@@ -44,6 +44,7 @@ function getFromData() {
         courseKind:courseKind,
         ageOnset:ageOnset,
         ageEnd:ageEnd,
+        businessAddressId:businessAddressId,
         teacherName:teacherName,
         number:number,
         price:price,
@@ -69,11 +70,25 @@ function getFromData() {
         }
         courseDetailList.push(courseDetail)
     })
+    var $specification = $('[name=specification]')
+    var specificationList = [];
+    $specification.each(function () {
+        var specification = {
+            specificationId:$(this).find('[name=specificationId]').val(),
+            specificationName:$(this).find('[name=specificationName]').val(),
+            specificationNum:$(this).find('[name=specificationNum]').val(),
+            specificationDiscount:$(this).find('[name=specificationDiscount]').val()
+        }
+        console.log(specification)
+        specificationList.push(specification)
+    })
+
     var data = {
         course:course,
         courseRefundHour:courseRefundHour,
         courseDuration:courseDuration,
-        courseDetails:courseDetailList
+        courseDetails:courseDetailList,
+        specificationList:specificationList
     }
 
     return data
@@ -110,11 +125,21 @@ function reduceCourseDetail(reduce) {
     minus(reduce)
 }
 
+function reduceSpecification(reduce) {
+    if ($('[name=specification]').length <= 1){
+        $.modal.alert('至少要上传一个规格','waring')
+        return
+    }
+    minus(reduce)
+}
+
 
 function plus(add) {
     var $parent = $(add).parent()
     var $clone = $parent.clone()
-    $parent.before($clone)
+    $clone.find('[type=hidden]').val('')
+
+    $parent.after($clone)
 }
 
 function minus(reduce) {

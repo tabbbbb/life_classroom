@@ -38,7 +38,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/user/order")
-@Api(value = "/life/order",description = "订单")
+@Api(value = "/user/order",description = "订单")
 public class LifeOrderController {
 
 

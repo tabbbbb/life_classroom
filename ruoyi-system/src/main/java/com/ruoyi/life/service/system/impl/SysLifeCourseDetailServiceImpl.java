@@ -145,4 +145,15 @@ public class SysLifeCourseDetailServiceImpl implements SysLifeCourseDetailServic
     public int deleteCourseDetailByCourseId(Long courseId) {
         return courseDetailMapper.deleteCourseDetailByCourseId(courseId);
     }
+
+    /**
+     * 删除此课程的所有详细
+     *
+     * @param courseIds
+     * @return
+     */
+    @Override
+    public int deleteCourseDetailByCourseIds(String[] courseIds) {
+        return courseDetailMapper.deleteCourseDetailByCourseIds(courseIds);
+    }
 }

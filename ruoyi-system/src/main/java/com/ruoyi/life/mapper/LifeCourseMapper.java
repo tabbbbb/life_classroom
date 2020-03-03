@@ -82,7 +82,7 @@ public interface LifeCourseMapper
      * @param courseId
      * @return
      */
-    LifeCourseDetailVo getLifeCourseDetailByCourseId(@Param("courseId") Long courseId, @Param("lon")BigDecimal lon, @Param("lat")BigDecimal lat);
+    LifeCourseDetailVo getLifeCourseDetailByCourseId(@Param("courseId") Long courseId,@Param("userId")Long userId, @Param("lon")BigDecimal lon, @Param("lat")BigDecimal lat);
 
 
     /**
@@ -91,13 +91,6 @@ public interface LifeCourseMapper
      */
     List<LifeCourseVo> getSysLifeCourseVoBySearch(LifeCourseSearchVo searchVo);
 
-    /**
-     * 查询课程
-     *
-     * @param courseId 课程id
-     * @return 课程集合
-     */
-    public LifeCourseVo selectLifeCourseVoByCourseId(Long courseId);
 
 
     /**
@@ -130,7 +123,7 @@ public interface LifeCourseMapper
      * @param name
      * @return
      */
-    int selectLifeCourseByName(String name);
+    int selectLifeCourseByName(@Param("name") String name,@Param("courseId") Long courseId);
 
 
     /**
@@ -139,4 +132,12 @@ public interface LifeCourseMapper
      * @return
      */
     int coursePlusSales(Long courseId);
+
+    /**
+     * 获取使用该地址的课程数量
+     *
+     * @param addressIds
+     * @return
+     */
+    int getCourseNumByAddressIds(@Param("addressIds")String[] addressIds);
 }

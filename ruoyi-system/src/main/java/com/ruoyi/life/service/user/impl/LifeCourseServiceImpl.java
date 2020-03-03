@@ -6,17 +6,23 @@ import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.life.domain.LifeCourse;
 import com.ruoyi.life.domain.LifeCourseDetail;
+import com.ruoyi.life.domain.LifeReserve;
 import com.ruoyi.life.domain.vo.user.LifeCourseConditionVo;
 import com.ruoyi.life.domain.vo.user.LifeCourseByConditionVo;
+import com.ruoyi.life.domain.vo.user.LifeCourseDetailAndReserveVo;
 import com.ruoyi.life.domain.vo.user.LifeCourseDetailVo;
 import com.ruoyi.life.mapper.LifeCourseMapper;
 import com.ruoyi.life.service.user.LifeCourseDetailService;
 import com.ruoyi.life.service.user.LifeCourseService;
-import org.apache.ibatis.annotations.Param;
+import com.ruoyi.life.service.user.LifeCourseSpecificationService;
+import com.ruoyi.life.service.user.LifeReserveService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,11 +35,21 @@ import java.util.List;
 public class LifeCourseServiceImpl implements LifeCourseService
 {
     @Resource
-    private LifeCourseMapper lifeCourseMapper;
+    private LifeCourseMapper courseMapper;
 
 
     @Resource
     private LifeCourseDetailService courseDetailService;
+
+
+    @Resource
+    private LifeCourseSpecificationService courseSpecificationService;
+
+
+
+    @Resource
+    private LifeReserveService reserveService;
+
 
     /**
      * 查询课程
@@ -44,7 +60,7 @@ public class LifeCourseServiceImpl implements LifeCourseService
     @Override
     public LifeCourse selectLifeCourseById(Long courseId)
     {
-        return lifeCourseMapper.selectLifeCourseById(courseId);
+        return courseMapper.selectLifeCourseById(courseId);
     }
 
     /**
@@ -56,7 +72,7 @@ public class LifeCourseServiceImpl implements LifeCourseService
     @Override
     public List<LifeCourse> selectLifeCourseList(LifeCourse lifeCourse)
     {
-        return lifeCourseMapper.selectLifeCourseList(lifeCourse);
+        return courseMapper.selectLifeCourseList(lifeCourse);
     }
 
     /**
@@ -68,7 +84,7 @@ public class LifeCourseServiceImpl implements LifeCourseService
     @Override
     public int insertLifeCourse(LifeCourse lifeCourse)
     {
-        return lifeCourseMapper.insertLifeCourse(lifeCourse);
+        return courseMapper.insertLifeCourse(lifeCourse);
     }
 
     /**
@@ -80,7 +96,7 @@ public class LifeCourseServiceImpl implements LifeCourseService
     @Override
     public int updateLifeCourse(LifeCourse lifeCourse)
     {
-        return lifeCourseMapper.updateLifeCourse(lifeCourse);
+        return courseMapper.updateLifeCourse(lifeCourse);
     }
 
     /**
@@ -92,7 +108,7 @@ public class LifeCourseServiceImpl implements LifeCourseService
     @Override
     public int deleteLifeCourseByIds(String ids)
     {
-        return lifeCourseMapper.deleteLifeCourseByIds(Convert.toStrArray(ids));
+        return courseMapper.deleteLifeCourseByIds(Convert.toStrArray(ids));
     }
 
     /**
@@ -104,7 +120,7 @@ public class LifeCourseServiceImpl implements LifeCourseService
     @Override
     public int deleteLifeCourseById(Long courseId)
     {
-        return lifeCourseMapper.deleteLifeCourseById(courseId);
+        return courseMapper.deleteLifeCourseById(courseId);
     }
 
 
@@ -117,14 +133,9 @@ public class LifeCourseServiceImpl implements LifeCourseService
     @Override
     public UserResponse selectLifeCourseBySearchVo(LifeCourseConditionVo searchVo) {
         PageHelper.startPage(searchVo.getPage(),searchVo.getLimit());
-        List<LifeCourseByConditionVo> list = lifeCourseMapper.selectLifeCourseBySearchVo(searchVo);
-        int week = searchVo.getDate().getDayOfWeek().getValue();
-        LifeCourseDetail courseDetail = new LifeCourseDetail();
-        courseDetail.setWeek(week);
+        List<LifeCourseByConditionVo> list = courseMapper.selectLifeCourseBySearchVo(searchVo);
         for (LifeCourseByConditionVo conditionVo : list) {
-            courseDetail.setCourseId(conditionVo.getCourseId());
-            List<LifeCourseDetail> lifeCourseDetails = courseDetailService.selectLifeCourseDetailList(courseDetail);
-            conditionVo.setCourseDetails(lifeCourseDetails);
+            conditionVo.setCourseDetail(courseDetailService.selectLifeCourseDetailById(conditionVo.getCourseDetailId()));
         }
         return UserResponse.succeed(list);
     }
@@ -137,14 +148,64 @@ public class LifeCourseServiceImpl implements LifeCourseService
      * @return
      */
     @Override
-    public UserResponse getLifeCourseDetailByCourseId( Long courseId, BigDecimal lon, BigDecimal lat) {
-        LifeCourseDetailVo detailVo = lifeCourseMapper.getLifeCourseDetailByCourseId(courseId,lon,lat);
-        LifeCourseDetail courseDetail = new LifeCourseDetail();
-        courseDetail.setCourseId(courseId);
-        List<LifeCourseDetail> lifeCourseDetails = courseDetailService.selectLifeCourseDetailList(courseDetail);
-        detailVo.setDetails(lifeCourseDetails);
+    public UserResponse getLifeCourseDetailByCourseId(Long courseId,Long userId, BigDecimal lon, BigDecimal lat) {
+        LifeCourseDetailVo detailVo = courseMapper.getLifeCourseDetailByCourseId(courseId,userId,lon,lat);
+        if (detailVo == null){
+            return UserResponse.succeed(null);
+        }
+
+        detailVo.setSpecificationList(courseSpecificationService.selectLifeCourseSpecificationByCourseId(courseId));
+        List<LifeCourseDetailAndReserveVo> courseDetailAndReserveVos = new ArrayList<>();
+        List<LifeCourseDetail> courseDetails = courseDetailService.getCourseDetailOrderHourAndMinuteByCourseId(courseId);
+        List<LifeReserve> reserves = reserveService.getLifeReserveByCourseId(courseId);
+        LocalDate start = LocalDate.now();
+        LocalDate end = start.plusMonths(1);
+        Integer number =detailVo.getNumber();
+        while (start.isBefore(end)){
+            List<LifeReserve> reservesByDate = new ArrayList<>();
+            if (reserves != null){
+                for (LifeReserve reserve : reserves) {
+                    if (reserve.getReserveDate().equals(start)){
+                        reservesByDate.add(reserve);
+                    }
+                }
+            }
+            int week = start.getDayOfWeek().getValue();
+            for (LifeCourseDetail courseDetail : courseDetails) {
+                if (courseDetail.getWeek() == week){
+                    boolean flag = false;
+                    LifeCourseDetailAndReserveVo courseDetailAndReserveVo = new LifeCourseDetailAndReserveVo();
+                    courseDetailAndReserveVo.setCourseDetailId(courseDetail.getCourseDetailId());
+                    courseDetailAndReserveVo.setCourseDuration(courseDetail.getCourseDuration());
+                    courseDetailAndReserveVo.setCourseId(courseDetail.getCourseId());
+                    courseDetailAndReserveVo.setCourseRefundHour(courseDetail.getCourseRefundHour());
+                    courseDetailAndReserveVo.setWeek(courseDetail.getWeek());
+                    courseDetailAndReserveVo.setStartHour(courseDetail.getStartHour());
+                    courseDetailAndReserveVo.setStartMinute(courseDetail.getStartMinute());
+                    courseDetailAndReserveVo.setDate(start);
+                    for (LifeReserve reserve : reservesByDate) {
+                        if (reserve.getCourseDetailId().equals(courseDetail.getCourseDetailId())){
+                            flag = true;
+                            courseDetailAndReserveVo.setReserveNum(reserve.getReserveNum());
+                            break;
+                        }
+                    }
+                    if (!flag){
+                        courseDetailAndReserveVo.setReserveNum(number);
+                    }
+                    courseDetailAndReserveVos.add(courseDetailAndReserveVo);
+                }
+            }
+            start = start.plusDays(1);
+        }
+        detailVo.setCourseDetailAndReserveVos(courseDetailAndReserveVos);
         return UserResponse.succeed(detailVo);
     }
+
+
+
+
+
 
 
 

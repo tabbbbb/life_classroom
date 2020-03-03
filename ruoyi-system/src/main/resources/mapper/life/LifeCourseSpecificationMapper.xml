@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.life.mapper.LifeCourseSpecificationMapper">
+    
+    <resultMap type="LifeCourseSpecification" id="LifeCourseSpecificationResult">
+        <result property="specificationId"    column="specification_id"    />
+        <result property="courseId"    column="course_id"    />
+        <result property="specificationName"    column="specification_name"    />
+        <result property="specificationNum"    column="specification_num"    />
+        <result property="specificationDiscount"    column="specification_discount"    />
+    </resultMap>
+
+    <sql id="selectLifeCourseSpecificationVo">
+        select specification_id, course_id, specification_name, specification_num, specification_discount from life_course_specification
+    </sql>
+
+    <select id="selectLifeCourseSpecificationList" parameterType="LifeCourseSpecification" resultMap="LifeCourseSpecificationResult">
+        <include refid="selectLifeCourseSpecificationVo"/>
+        <where>  
+            <if test="courseId != null "> and course_id = #{courseId}</if>
+            <if test="specificationName != null  and specificationName != ''"> and specification_name like concat('%', #{specificationName}, '%')</if>
+            <if test="specificationNum != null "> and specification_num = #{specificationNum}</if>
+            <if test="specificationDiscount != null "> and specification_discount = #{specificationDiscount}</if>
+        </where>
+    </select>
+    
+    <select id="selectLifeCourseSpecificationById" parameterType="Long" resultMap="LifeCourseSpecificationResult">
+        <include refid="selectLifeCourseSpecificationVo"/>
+        where specification_id = #{specificationId}
+    </select>
+        
+    <insert id="insertLifeCourseSpecification" parameterType="LifeCourseSpecification" useGeneratedKeys="true" keyProperty="specificationId">
+        insert into life_course_specification
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="courseId != null ">course_id,</if>
+            <if test="specificationName != null  and specificationName != ''">specification_name,</if>
+            <if test="specificationNum != null ">specification_num,</if>
+            <if test="specificationDiscount != null ">specification_discount,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="courseId != null ">#{courseId},</if>
+            <if test="specificationName != null  and specificationName != ''">#{specificationName},</if>
+            <if test="specificationNum != null ">#{specificationNum},</if>
+            <if test="specificationDiscount != null ">#{specificationDiscount},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLifeCourseSpecification" parameterType="LifeCourseSpecification">
+        update life_course_specification
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="courseId != null ">course_id = #{courseId},</if>
+            <if test="specificationName != null  and specificationName != ''">specification_name = #{specificationName},</if>
+            <if test="specificationNum != null ">specification_num = #{specificationNum},</if>
+            <if test="specificationDiscount != null ">specification_discount = #{specificationDiscount},</if>
+        </trim>
+        where specification_id = #{specificationId}
+    </update>
+
+    <delete id="deleteLifeCourseSpecificationById" parameterType="Long">
+        delete from life_course_specification where specification_id = #{specificationId}
+    </delete>
+
+    <delete id="deleteLifeCourseSpecificationByIds" parameterType="String">
+        delete from life_course_specification where specification_id in 
+        <foreach item="specificationId" collection="array" open="(" separator="," close=")">
+            #{specificationId}
+        </foreach>
+    </delete>
+
+    <insert id="insertLifeCourseSpecificationList">
+        insert into life_course_specification (course_id,specification_name,specification_num,specification_discount)
+        values
+        <foreach collection="specificationList" item="item" separator=",">
+            (#{item.courseId},#{item.specificationName},#{item.specificationNum},#{item.specificationDiscount})
+        </foreach>
+    </insert>
+
+    <delete id="deleteNotInList">
+        delete from life_course_specification
+        where course_id = #{courseId} and  specification_id not in
+        <foreach collection="specificationList" item="item" separator="," open="(" close=")">
+            #{item.specificationId}
+        </foreach>
+    </delete>
+    <delete id="deleteCourseDetailByCourseId">
+        delete from life_course_specification
+        where course_id = #{courseId}
+    </delete>
+    <delete id="deleteCourseDetailByCourseIds">
+        delete from life_course_specification
+        where course_id in
+        <foreach collection="courseIds" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

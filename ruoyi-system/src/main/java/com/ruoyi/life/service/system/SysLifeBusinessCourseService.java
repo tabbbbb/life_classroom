@@ -5,10 +5,6 @@ import com.ruoyi.life.domain.LifeBusinessCourse;
 import com.ruoyi.life.domain.vo.system.LifeBusinessCourseDetailVo;
 import com.ruoyi.life.domain.vo.system.LifeBusinessCourseSearchVo;
 import com.ruoyi.life.domain.vo.system.LifeBusinessCourseVo;
-import com.ruoyi.life.domain.vo.system.LifeBusinessVo;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 

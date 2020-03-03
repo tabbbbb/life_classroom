@@ -7,46 +7,49 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="LifeUpdate" id="LifeUpdateResult">
         <result property="updateId"    column="update_id"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="checkTime"    column="check_time"    />
         <result property="updateExplain"    column="update_explain"    />
+        <result property="failureExplain"    column="failure_explain"    />
         <result property="updateType"    column="update_type"    />
-        <result property="failureExplain" column="failure_explain"/>
     </resultMap>
 
     <sql id="selectLifeUpdateVo">
-        select update_id, update_time, update_explain, update_type,failure_explain from life_update
+        select update_id, update_time, check_time, update_explain, failure_explain, update_type from life_update
     </sql>
 
     <select id="selectLifeUpdateList" parameterType="LifeUpdate" resultMap="LifeUpdateResult">
         <include refid="selectLifeUpdateVo"/>
         <where>  
+            <if test="updateId != null "> and update_id = #{updateId}</if>
+            <if test="checkTime != null "> and check_time = #{checkTime}</if>
             <if test="updateExplain != null  and updateExplain != ''"> and update_explain = #{updateExplain}</if>
-            <if test="updateType != null "> and update_type = #{updateType}</if>
             <if test="failureExplain != null  and failureExplain != ''"> and failure_explain = #{failureExplain}</if>
+            <if test="updateType != null "> and update_type = #{updateType}</if>
         </where>
     </select>
     
     <select id="selectLifeUpdateById" parameterType="Long" resultMap="LifeUpdateResult">
         <include refid="selectLifeUpdateVo"/>
         where update_id = #{updateId}
-        order by update_time desc
     </select>
-
-
+        
     <insert id="insertLifeUpdate" parameterType="LifeUpdate">
         insert into life_update
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="updateId != null ">update_id,</if>
             <if test="updateTime != null ">update_time,</if>
+            <if test="checkTime != null ">check_time,</if>
             <if test="updateExplain != null  and updateExplain != ''">update_explain,</if>
+            <if test="failureExplain != null  and failureExplain != ''">failure_explain,</if>
             <if test="updateType != null ">update_type,</if>
-            <if test="failureExplain != null  and failureExplain != ''">  failure_explain, </if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="updateId != null ">#{updateId},</if>
             <if test="updateTime != null ">#{updateTime},</if>
+            <if test="checkTime != null ">#{checkTime},</if>
             <if test="updateExplain != null  and updateExplain != ''">#{updateExplain},</if>
-            <if test="updateType != null ">#{updateType},</if>
             <if test="failureExplain != null  and failureExplain != ''">#{failureExplain},</if>
+            <if test="updateType != null ">#{updateType},</if>
          </trim>
     </insert>
 
@@ -54,13 +57,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update life_update
         <trim prefix="SET" suffixOverrides=",">
             <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="checkTime != null ">check_time = #{checkTime},</if>
             <if test="updateExplain != null  and updateExplain != ''">update_explain = #{updateExplain},</if>
+            <if test="failureExplain != null  and failureExplain != ''">failure_explain = #{failureExplain},</if>
             <if test="updateType != null ">update_type = #{updateType},</if>
-            <if test="failureExplain != null  and failureExplain != ''">  failure_explain = #{failureExplain},</if>
         </trim>
         where update_id = #{updateId}
     </update>
-
 
     <delete id="deleteLifeUpdateById" parameterType="Long">
         delete from life_update where update_id = #{updateId}
@@ -72,18 +75,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{updateId}
         </foreach>
     </delete>
-
-
-
-
     <update id="confirmUpdate">
         update life_update set update_type = #{param2},failure_explain = #{param3}
-        where update_id = #{param1} and update_time = (
-            select update_time from life_update
-            where update_id = #{param1} and update_type = 0
-            order by update_time desc
-            limit 1
-        )
+        where update_id = #{param1}
     </update>
-    
 </mapper>

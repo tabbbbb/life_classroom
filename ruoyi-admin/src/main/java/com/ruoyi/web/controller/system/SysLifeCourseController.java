@@ -10,11 +10,9 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.life.domain.LifeCourse;
 import com.ruoyi.life.domain.vo.system.LifeCourseSearchVo;
 import com.ruoyi.life.domain.vo.system.LifeCourseUpdateOrAddVo;
 import com.ruoyi.life.domain.vo.system.LifeCourseVo;
-import com.ruoyi.life.service.system.SysLifeCourseDetailService;
 
 import com.ruoyi.life.service.system.SysLifeCourseService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -71,23 +69,7 @@ public class SysLifeCourseController extends BaseController
         return getDataTable(list);
     }
 
-    @ResponseBody
-    @GetMapping("/course")
-    public LifeCourseVo get(Long courseId){
-        return courseService.selectLifeCourseVoByCourseId(courseId);
-    }
 
-    @ResponseBody
-    @PostMapping("/course")
-    public TableDataInfo getCourseShowCouponAstrict(Long courseId){
-        List list = new ArrayList();
-        LifeCourseVo course = courseService.selectLifeCourseVoByCourseId(courseId);
-        if (course != null){
-            list.add(course);
-        }
-
-        return getDataTable(list);
-    }
 
 
     /**
@@ -120,9 +102,9 @@ public class SysLifeCourseController extends BaseController
     @Log(title = "课程", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public Long addSave(@RequestBody LifeCourseUpdateOrAddVo updateOrAddVo)
+    public void addSave(@RequestBody LifeCourseUpdateOrAddVo updateOrAddVo)
     {
-        return courseService.insertLifeCourse(updateOrAddVo);
+         courseService.insertLifeCourse(updateOrAddVo);
     }
 
     /**
@@ -142,9 +124,9 @@ public class SysLifeCourseController extends BaseController
     @Log(title = "课程", businessType = BusinessType.UPDATE)
     @PostMapping(value = "/edit",consumes = "application/json;charset=utf-8",produces = "application/json;charset=utf-8")
     @ResponseBody
-    public AjaxResult editSave(@RequestBody LifeCourseUpdateOrAddVo updateOrAddVo)
+    public void editSave(@RequestBody LifeCourseUpdateOrAddVo updateOrAddVo)
     {
-        return toAjax(courseService.updateLifeCourse(updateOrAddVo));
+        courseService.updateLifeCourse(updateOrAddVo);
     }
 
     /**

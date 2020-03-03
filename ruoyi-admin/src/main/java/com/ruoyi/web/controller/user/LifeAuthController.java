@@ -38,7 +38,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/user/auth")
-@Api(value = "/life/auth",description = "用户认证")
+@Api(value = "/user/auth",description = "用户认证")
 public class LifeAuthController {
 
     @Autowired

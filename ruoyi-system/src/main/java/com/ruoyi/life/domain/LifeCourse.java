@@ -12,7 +12,7 @@ import java.util.Date;
  * 课程对象 life_course
  * 
  * @author ruoyi
- * @date 2020-01-02
+ * @date 2020-02-29
  */
 public class LifeCourse extends BaseEntity
 {
@@ -41,12 +41,12 @@ public class LifeCourse extends BaseEntity
     @Excel(name = "课程标签")
     private Long courseLabelId;
 
-    /** 课程一级类型 */
-    @Excel(name = "课程一级类型")
+    /** 目标一级标签 */
+    @Excel(name = "目标一级标签")
     private Long courseClassifyPid;
 
-    /** 课程类型  例如健身类 */
-    @Excel(name = "课程类型  例如健身类")
+    /** 目标标签  例如健身类 */
+    @Excel(name = "目标标签  例如健身类")
     private Long courseClassifyId;
 
     /** 课程种类：0自有1外联 */
@@ -81,6 +81,10 @@ public class LifeCourse extends BaseEntity
     @Excel(name = "商户id")
     private Long businessId;
 
+    /** 地址id */
+    @Excel(name = "地址id")
+    private Long businessAddressId;
+
     /** 规则图片 */
     @Excel(name = "规则图片")
     private String ruleUrl;
@@ -89,12 +93,12 @@ public class LifeCourse extends BaseEntity
     @Excel(name = "详细信息")
     private String information;
 
-    /** 什么价格的会员能买，0 无要求 */
-    @Excel(name = "什么价格的会员能买，0 无要求")
-    private Long rulePrice;
+    /** 什么会员能买 0无要求 */
+    @Excel(name = "什么会员能买 0无要求")
+    private Integer rulePrice;
 
-    /** 0上架 1下架 */
-    @Excel(name = "0上架 1下架")
+    /** 1上架 0下架 */
+    @Excel(name = "1上架 0下架")
     private Long status;
 
     /** 逻辑删除 */
@@ -215,7 +219,7 @@ public class LifeCourse extends BaseEntity
         this.ageOnset = ageOnset;
     }
 
-    public Integer getAgeOnset()
+    public Integer getAgeOnset() 
     {
         return ageOnset;
     }
@@ -246,12 +250,12 @@ public class LifeCourse extends BaseEntity
     {
         return teacherExplain;
     }
-    public void setNumber(Integer number)
+    public void setNumber(Integer number) 
     {
         this.number = number;
     }
 
-    public Integer getNumber()
+    public Integer getNumber() 
     {
         return number;
     }
@@ -273,6 +277,15 @@ public class LifeCourse extends BaseEntity
     {
         return businessId;
     }
+    public void setBusinessAddressId(Long businessAddressId) 
+    {
+        this.businessAddressId = businessAddressId;
+    }
+
+    public Long getBusinessAddressId() 
+    {
+        return businessAddressId;
+    }
     public void setRuleUrl(String ruleUrl) 
     {
         this.ruleUrl = ruleUrl;
@@ -291,12 +304,12 @@ public class LifeCourse extends BaseEntity
     {
         return information;
     }
-    public void setRulePrice(Long rulePrice) 
+    public void setRulePrice(Integer rulePrice) 
     {
         this.rulePrice = rulePrice;
     }
 
-    public Long getRulePrice() 
+    public Integer getRulePrice() 
     {
         return rulePrice;
     }
@@ -327,7 +340,7 @@ public class LifeCourse extends BaseEntity
     {
         return price;
     }
-    public void setPoint(Long point)
+    public void setPoint(Long point) 
     {
         this.point = point;
     }
@@ -336,16 +349,16 @@ public class LifeCourse extends BaseEntity
     {
         return point;
     }
-
-    public Long getOrderBy() {
-        return orderBy;
-    }
-
-    public void setOrderBy(Long orderBy) {
+    public void setOrderBy(Long orderBy) 
+    {
         this.orderBy = orderBy;
     }
 
-    public void setSales(Long sales)
+    public Long getOrderBy() 
+    {
+        return orderBy;
+    }
+    public void setSales(Long sales) 
     {
         this.sales = sales;
     }
@@ -401,6 +414,7 @@ public class LifeCourse extends BaseEntity
             .append("number", getNumber())
             .append("describe", getDescribe())
             .append("businessId", getBusinessId())
+            .append("businessAddressId", getBusinessAddressId())
             .append("ruleUrl", getRuleUrl())
             .append("information", getInformation())
             .append("rulePrice", getRulePrice())
@@ -408,7 +422,7 @@ public class LifeCourse extends BaseEntity
             .append("deleteFlage", getDeleteFlage())
             .append("price", getPrice())
             .append("point", getPoint())
-            .append("orderby", getOrderBy())
+            .append("orderBy", getOrderBy())
             .append("sales", getSales())
             .append("recommend", getRecommend())
             .append("putawayDate", getPutawayDate())

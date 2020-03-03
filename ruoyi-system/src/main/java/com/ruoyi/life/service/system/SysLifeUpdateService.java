@@ -27,7 +27,7 @@ public interface SysLifeUpdateService
      * @param lifeUpdate 修改
      * @return 修改集合
      */
-    public List<LifeUpdate> selectLifeUpdateList(LifeUpdate lifeUpdate);
+    List<LifeUpdate> selectLifeUpdateList(LifeUpdate lifeUpdate);
 
     /**
      * 新增修改
@@ -35,7 +35,7 @@ public interface SysLifeUpdateService
      * @param lifeUpdate 修改
      * @return 结果
      */
-    public int insertLifeUpdate(LifeUpdate lifeUpdate);
+    int insertLifeUpdate(LifeUpdate lifeUpdate);
 
     /**
      * 修改修改
@@ -43,7 +43,7 @@ public interface SysLifeUpdateService
      * @param lifeUpdate 修改
      * @return 结果
      */
-    public int updateLifeUpdate(LifeUpdate lifeUpdate);
+    int updateLifeUpdate(LifeUpdate lifeUpdate);
 
     /**
      * 批量删除修改
@@ -51,7 +51,7 @@ public interface SysLifeUpdateService
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int deleteLifeUpdateByIds(String ids);
+    int deleteLifeUpdateByIds(String ids);
 
     /**
      * 删除修改信息
@@ -59,7 +59,7 @@ public interface SysLifeUpdateService
      * @param updateId 修改ID
      * @return 结果
      */
-    public int deleteLifeUpdateById(Long updateId);
+    int deleteLifeUpdateById(Long updateId);
 
 
     /**

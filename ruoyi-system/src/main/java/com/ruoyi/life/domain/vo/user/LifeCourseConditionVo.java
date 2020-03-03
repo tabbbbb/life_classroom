@@ -21,6 +21,7 @@ package com.ruoyi.life.domain.vo.user;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -31,7 +32,7 @@ public class LifeCourseConditionVo {
     /**
      * 时间
      */
-    private LocalDate date;
+    private LocalDateTime date;
 
     /**
      * 推荐
@@ -111,11 +112,11 @@ public class LifeCourseConditionVo {
     private int limit = 10;
 
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

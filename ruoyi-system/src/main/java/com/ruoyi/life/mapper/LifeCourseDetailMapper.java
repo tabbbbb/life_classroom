@@ -2,8 +2,12 @@ package com.ruoyi.life.mapper;
 
 
 import com.ruoyi.life.domain.LifeCourseDetail;
+import com.ruoyi.life.domain.vo.user.LifeCourseDetailAndReserveVo;
 import org.apache.ibatis.annotations.Param;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,7 +24,7 @@ public interface LifeCourseDetailMapper
      * @param couponDetailId 课程时间明细ID
      * @return 课程时间明细
      */
-    public LifeCourseDetail selectLifeCourseDetailById(Long couponDetailId);
+    LifeCourseDetail selectLifeCourseDetailById(Long couponDetailId);
 
     /**
      * 查询课程时间明细列表
@@ -28,7 +32,7 @@ public interface LifeCourseDetailMapper
      * @param lifeCourseDetail 课程时间明细
      * @return 课程时间明细集合
      */
-    public List<LifeCourseDetail> selectLifeCourseDetailList(LifeCourseDetail lifeCourseDetail);
+    List<LifeCourseDetail> selectLifeCourseDetailList(LifeCourseDetail lifeCourseDetail);
 
 
 
@@ -45,7 +49,7 @@ public interface LifeCourseDetailMapper
      * @param lifeCourseDetail 课程时间明细
      * @return 结果
      */
-    public int insertLifeCourseDetail(LifeCourseDetail lifeCourseDetail);
+    int insertLifeCourseDetail(LifeCourseDetail lifeCourseDetail);
 
     /**
      * 修改课程时间明细
@@ -53,7 +57,7 @@ public interface LifeCourseDetailMapper
      * @param lifeCourseDetail 课程时间明细
      * @return 结果
      */
-    public int updateLifeCourseDetail(LifeCourseDetail lifeCourseDetail);
+    int updateLifeCourseDetail(LifeCourseDetail lifeCourseDetail);
 
     /**
      * 删除课程时间明细
@@ -61,7 +65,7 @@ public interface LifeCourseDetailMapper
      * @param couponDetailId 课程时间明细ID
      * @return 结果
      */
-    public int deleteLifeCourseDetailById(Long couponDetailId);
+    int deleteLifeCourseDetailById(Long couponDetailId);
 
     /**
      * 批量删除课程时间明细
@@ -69,7 +73,7 @@ public interface LifeCourseDetailMapper
      * @param couponDetailIds 需要删除的数据ID
      * @return 结果
      */
-    public int deleteLifeCourseDetailByIds(String[] couponDetailIds);
+    int deleteLifeCourseDetailByIds(String[] couponDetailIds);
 
 
     /**
@@ -85,9 +89,6 @@ public interface LifeCourseDetailMapper
      * @return
      */
     List<Long> getListInCourseId(List<Long> list);
-
-
-
 
 
     /**
@@ -112,4 +113,22 @@ public interface LifeCourseDetailMapper
      * @return
      */
     int deleteCourseDetailByCourseId(Long courseId);
+
+
+
+    /**
+     * 删除此课程的所有详细
+     * @param courseIds
+     * @return
+     */
+    int deleteCourseDetailByCourseIds(@Param("courseIds") String [] courseIds);
+
+
+
+    /**
+     * 根据课程id获取根据上课时间排序的课程详细
+     * @return
+     */
+    List<LifeCourseDetail> getCourseDetailOrderHourAndMinuteByCourseId(Long courseId);
+
 }

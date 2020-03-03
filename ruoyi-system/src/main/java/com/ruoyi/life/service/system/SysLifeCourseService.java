@@ -62,7 +62,7 @@ public interface SysLifeCourseService {
      * @param updateOrAddVo 课程
      * @return 结果
      */
-    Long insertLifeCourse(LifeCourseUpdateOrAddVo updateOrAddVo);
+    void insertLifeCourse(LifeCourseUpdateOrAddVo updateOrAddVo);
 
     /**
      * 修改课程
@@ -70,7 +70,7 @@ public interface SysLifeCourseService {
      * @param updateOrAddVo 课程
      * @return 结果
      */
-    int updateLifeCourse(LifeCourseUpdateOrAddVo updateOrAddVo);
+    void updateLifeCourse(LifeCourseUpdateOrAddVo updateOrAddVo);
 
 
 
@@ -81,13 +81,7 @@ public interface SysLifeCourseService {
      * @return 结果
      */
     int updateLifeCourse(LifeCourse course);
-    /**
-     * 查询课程
-     *
-     * @param courseId 课程id
-     * @return 课程集合
-     */
-    LifeCourseVo selectLifeCourseVoByCourseId(Long courseId);
+
 
 
     /**
@@ -134,5 +128,12 @@ public interface SysLifeCourseService {
      */
     int coursePlusSales(Long courseId);
 
+
+    /**
+     * 获取使用该地址的课程数量
+     * @param addressIds
+     * @return
+     */
+    int getCourseNumByAddressIds(String[] addressIds);
 
 }

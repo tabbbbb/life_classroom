@@ -2,18 +2,12 @@ package com.ruoyi.life.service.system.impl;
 
 
 import com.ruoyi.common.core.text.Convert;
-import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.security.Md5Utils;
 import com.ruoyi.life.domain.LifeCoupon;
 import com.ruoyi.life.domain.LifeCouponReceive;
-import com.ruoyi.life.domain.LifeCourse;
 import com.ruoyi.life.mapper.LifeCouponMapper;
 import com.ruoyi.life.service.system.*;
-import com.ruoyi.life.service.user.LifeCompanyCouponService;
-import com.ruoyi.life.service.user.LifeCourseService;
-import com.ruoyi.life.service.user.LifeVipCouponService;
 import jodd.util.StringUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

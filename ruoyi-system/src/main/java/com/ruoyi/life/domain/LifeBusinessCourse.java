@@ -12,7 +12,7 @@ import java.util.Date;
  * 课程审核对象 life_business_course
  * 
  * @author ruoyi
- * @date 2020-01-11
+ * @date 2020-03-03
  */
 public class LifeBusinessCourse extends BaseEntity
 {
@@ -29,24 +29,24 @@ public class LifeBusinessCourse extends BaseEntity
     @Excel(name = "课程图片")
     private String imgUrl;
 
-    /** 课程图片 */
+    /** 轮播图 */
     @Excel(name = "轮播图")
-    private String carousalUrl;
+    private String carouselUrl;
 
     /** 价格 */
     @Excel(name = "价格")
     private BigDecimal price;
 
-    /** 团课标识 0是 1不是 */
-    @Excel(name = "团课标识 0是 1不是")
+    /** 团课标识 1普通 2 团 */
+    @Excel(name = "团课标识 1普通 2 团")
     private Integer courseType;
 
     /** 课程标签 */
     @Excel(name = "课程标签")
     private Long courseLabelId;
 
-    /** 目标标签  例如健身类 */
-    @Excel(name = "目标标签  例如健身类")
+    /** 目标标签 */
+    @Excel(name = "目标标签")
     private Long courseClassifyId;
 
     /** 数量 */
@@ -74,40 +74,25 @@ public class LifeBusinessCourse extends BaseEntity
     @Excel(name = "预约规则图片")
     private String ruleUrl;
 
-    /** 审核标志位 0提交 1审核通过 2审核不通过 */
-    @Excel(name = "审核标志位 0提交 1审核通过 2审核不通过")
-    private Long checkFlage;
-
     /** 详细信息 */
     @Excel(name = "详细信息")
     private String information;
-
-    /** 审核内容 */
-    @Excel(name = "审核内容")
-    private String checkContent;
 
     /** 添加时间 */
     @Excel(name = "添加时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date addTime;
 
-    /** 审核时间 */
-    @Excel(name = "审核时间", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date checkTime;
+    /** 0下架，1上架 */
+    @Excel(name = "0下架，1上架")
+    private Integer status;
 
-    /**
-     * 绑定上线课程
-     */
+    /** 删除状态，1删除 */
+    @Excel(name = "删除状态，1删除")
+    private Integer deleteFlag;
+
+    /** 绑定上线课程 */
+    @Excel(name = "绑定上线课程")
     private Long bindTopThread;
-
-
-    public Long getBindTopThread() {
-        return bindTopThread;
-    }
-
-    public void setBindTopThread(Long bindTopThread) {
-        this.bindTopThread = bindTopThread;
-    }
-
 
     public void setCourseId(Long courseId) 
     {
@@ -136,16 +121,25 @@ public class LifeBusinessCourse extends BaseEntity
     {
         return imgUrl;
     }
-    public void setPrice(BigDecimal price)
+    public void setCarouselUrl(String carouselUrl) 
     {
+        this.carouselUrl = carouselUrl;
+    }
+
+    public String getCarouselUrl() 
+    {
+        return carouselUrl;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
-    public BigDecimal getPrice()
-    {
-        return price;
-    }
-    public void setCourseType(Integer courseType) 
+    public void setCourseType(Integer courseType)
     {
         this.courseType = courseType;
     }
@@ -172,12 +166,12 @@ public class LifeBusinessCourse extends BaseEntity
     {
         return courseClassifyId;
     }
-    public void setNumber(Integer number)
+    public void setNumber(Integer number) 
     {
         this.number = number;
     }
 
-    public Integer getNumber()
+    public Integer getNumber() 
     {
         return number;
     }
@@ -226,15 +220,6 @@ public class LifeBusinessCourse extends BaseEntity
     {
         return ruleUrl;
     }
-    public void setCheckFlage(Long checkFlage) 
-    {
-        this.checkFlage = checkFlage;
-    }
-
-    public Long getCheckFlage() 
-    {
-        return checkFlage;
-    }
     public void setInformation(String information) 
     {
         this.information = information;
@@ -243,15 +228,6 @@ public class LifeBusinessCourse extends BaseEntity
     public String getInformation() 
     {
         return information;
-    }
-    public void setCheckContent(String checkContent) 
-    {
-        this.checkContent = checkContent;
-    }
-
-    public String getCheckContent() 
-    {
-        return checkContent;
     }
     public void setAddTime(Date addTime) 
     {
@@ -262,22 +238,32 @@ public class LifeBusinessCourse extends BaseEntity
     {
         return addTime;
     }
-    public void setCheckTime(Date checkTime) 
+    public void setStatus(Integer status) 
     {
-        this.checkTime = checkTime;
+        this.status = status;
     }
 
-    public Date getCheckTime() 
+    public Integer getStatus() 
     {
-        return checkTime;
+        return status;
+    }
+    public void setDeleteFlag(Integer deleteFlag) 
+    {
+        this.deleteFlag = deleteFlag;
     }
 
-    public String getCarousalUrl() {
-        return carousalUrl;
+    public Integer getDeleteFlag() 
+    {
+        return deleteFlag;
+    }
+    public void setBindTopThread(Long bindTopThread) 
+    {
+        this.bindTopThread = bindTopThread;
     }
 
-    public void setCarousalUrl(String carousalUrl) {
-        this.carousalUrl = carousalUrl;
+    public Long getBindTopThread() 
+    {
+        return bindTopThread;
     }
 
     @Override
@@ -286,6 +272,7 @@ public class LifeBusinessCourse extends BaseEntity
             .append("courseId", getCourseId())
             .append("name", getName())
             .append("imgUrl", getImgUrl())
+            .append("carouselUrl", getCarouselUrl())
             .append("price", getPrice())
             .append("courseType", getCourseType())
             .append("courseLabelId", getCourseLabelId())
@@ -296,11 +283,11 @@ public class LifeBusinessCourse extends BaseEntity
             .append("describe", getDescribe())
             .append("businessId", getBusinessId())
             .append("ruleUrl", getRuleUrl())
-            .append("checkFlage", getCheckFlage())
             .append("information", getInformation())
-            .append("checkContent", getCheckContent())
             .append("addTime", getAddTime())
-            .append("checkTime", getCheckTime())
+            .append("status", getStatus())
+            .append("deleteFlag", getDeleteFlag())
+            .append("bindTopThread", getBindTopThread())
             .toString();
     }
 }

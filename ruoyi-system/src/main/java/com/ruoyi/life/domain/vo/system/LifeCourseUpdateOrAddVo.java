@@ -12,6 +12,7 @@ package com.ruoyi.life.domain.vo.system;
 
 import com.ruoyi.life.domain.LifeCourse;
 import com.ruoyi.life.domain.LifeCourseDetail;
+import com.ruoyi.life.domain.LifeCourseSpecification;
 
 import java.util.List;
 
@@ -32,6 +33,12 @@ public class LifeCourseUpdateOrAddVo {
 
 
     /**
+     * 课程规格
+     */
+    private List<LifeCourseSpecification> specificationList;
+
+
+    /**
      * 课程时长
      */
     private int courseDuration;
@@ -40,6 +47,14 @@ public class LifeCourseUpdateOrAddVo {
      * 课程开始前多久不能退款
      */
     private int courseRefundHour;
+
+    public List<LifeCourseSpecification> getSpecificationList() {
+        return specificationList;
+    }
+
+    public void setSpecificationList(List<LifeCourseSpecification> specificationList) {
+        this.specificationList = specificationList;
+    }
 
     public LifeCourse getCourse() {
         return course;

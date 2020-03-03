@@ -40,7 +40,7 @@ import java.time.LocalDateTime;
  */
 @RestController
 @RequestMapping("/user/data")
-@Api(value = "/life/data",description = "数据中心")
+@Api(value = "/user/data",description = "数据中心")
 public class LifeDataController {
 
     @Autowired

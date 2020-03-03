@@ -11,6 +11,7 @@
 package com.ruoyi.life.domain.vo.user;
 
 import com.ruoyi.life.domain.LifeCourseDetail;
+import com.ruoyi.life.domain.LifeCourseSpecification;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -25,7 +26,6 @@ public class LifeCourseDetailVo {
      * 课程id
      */
     private Long courseId;
-
 
     /**
      * 课程名称
@@ -47,12 +47,10 @@ public class LifeCourseDetailVo {
      */
     private BigDecimal addressNum;
 
-
     /**
      * 地址
      */
     private String address;
-
 
     /**
      * 开始年龄
@@ -85,15 +83,17 @@ public class LifeCourseDetailVo {
     private BigDecimal price;
 
 
-    /**
-     * 课程时间详细
-     */
-    private List<LifeCourseDetail> details;
 
     /**
      * 描述
      */
     private String describe;
+
+
+    /**
+     * 库存
+     */
+    private Integer number;
 
     /**
      * 商家名称
@@ -122,6 +122,17 @@ public class LifeCourseDetailVo {
      */
     private boolean isCollect;
 
+    /**
+     * 课程时间详细
+     */
+    private List<LifeCourseDetailAndReserveVo> courseDetailAndReserveVos;
+
+    /**
+     * 规格
+     */
+    private List<LifeCourseSpecification> specificationList;
+
+
 
     /**
      * 状态 0上架
@@ -130,6 +141,14 @@ public class LifeCourseDetailVo {
 
     public int getStatus() {
         return status;
+    }
+
+    public List<LifeCourseSpecification> getSpecificationList() {
+        return specificationList;
+    }
+
+    public void setSpecificationList(List<LifeCourseSpecification> specificationList) {
+        this.specificationList = specificationList;
     }
 
     public void setStatus(int status) {
@@ -257,12 +276,12 @@ public class LifeCourseDetailVo {
         this.address = address;
     }
 
-    public List<LifeCourseDetail> getDetails() {
-        return details;
+    public List<LifeCourseDetailAndReserveVo> getCourseDetailAndReserveVos() {
+        return courseDetailAndReserveVos;
     }
 
-    public void setDetails(List<LifeCourseDetail> details) {
-        this.details = details;
+    public void setCourseDetailAndReserveVos(List<LifeCourseDetailAndReserveVo> courseDetailAndReserveVos) {
+        this.courseDetailAndReserveVos = courseDetailAndReserveVos;
     }
 
     public String getDescribe() {
@@ -287,5 +306,13 @@ public class LifeCourseDetailVo {
 
     public void setInformation(String information) {
         this.information = information;
+    }
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
     }
 }

@@ -17,11 +17,10 @@ public interface LifeVipService
 {
     /**
      * 查询vip规则
-     * 
      * @param vipId vip规则ID
      * @return vip规则
      */
-    public LifeVip selectLifeVipById(Long vipId);
+    LifeVip selectLifeVipById(Long vipId);
 
     /**
      * 查询vip规则列表
@@ -29,7 +28,7 @@ public interface LifeVipService
      * @param lifeVip vip规则
      * @return vip规则集合
      */
-    public List<LifeVip> selectLifeVipList(LifeVip lifeVip);
+    List<LifeVip> selectLifeVipList(LifeVip lifeVip);
 
     /**
      * 新增vip规则
@@ -37,7 +36,7 @@ public interface LifeVipService
      * @param lifeVip vip规则
      * @return 结果
      */
-    public int insertLifeVip(LifeVip lifeVip);
+    int insertLifeVip(LifeVip lifeVip);
 
     /**
      * 修改vip规则
@@ -45,7 +44,7 @@ public interface LifeVipService
      * @param lifeVip vip规则
      * @return 结果
      */
-    public int updateLifeVip(LifeVip lifeVip);
+    int updateLifeVip(LifeVip lifeVip);
 
     /**
      * 批量删除vip规则
@@ -53,7 +52,7 @@ public interface LifeVipService
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int deleteLifeVipByIds(String ids);
+    int deleteLifeVipByIds(String ids);
 
     /**
      * 删除vip规则信息
@@ -61,7 +60,7 @@ public interface LifeVipService
      * @param vipId vip规则ID
      * @return 结果
      */
-    public int deleteLifeVipById(Long vipId);
+    int deleteLifeVipById(Long vipId);
 
 
     /**
@@ -70,7 +69,7 @@ public interface LifeVipService
      * @param body 内容
      * @return
      */
-    public UserResponse recharge(Long userId,String body);
+    UserResponse recharge(Long userId,String body);
 
 
     /**
@@ -88,4 +87,12 @@ public interface LifeVipService
      * @return
      */
     UserResponse priceRechargeVip(Long userId, String body);
+
+
+    /**
+     * 获取用户最大的会员
+     * @param shareId
+     * @return
+     */
+    UserResponse getBigVip(Long shareId);
 }

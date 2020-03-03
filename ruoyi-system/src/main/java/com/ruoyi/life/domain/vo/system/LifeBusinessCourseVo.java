@@ -43,7 +43,6 @@ public class LifeBusinessCourseVo {
     @Excel(name = "目标标签")
     private String courseClassify;
 
-
     /** 数量 */
     @Excel(name = "数量")
     private Long number;
@@ -60,41 +59,47 @@ public class LifeBusinessCourseVo {
     @Excel(name = "商户名称")
     private String businessName;
 
-
     /** 预约规则图片 */
     private String ruleUrl;
 
     /** 详细信息 */
     private String information;
 
-
-
-
     /** 描述 */
     @Excel(name = "描述")
     private String describe;
 
-
+    /**
+     * 请求说明
+     */
+    @Excel(name = "请求说明")
+    private String requestInstructions;
 
 
     /** 审核标志位 0提交 1审核通过 2审核不通过 */
-    @Excel(name = "审核结果",readConverterExp = " 0=未审核 ,1=审核通过 ,2=审核不通过,3=申请修改,4=修改通过,5=修改不通过")
-    private Long checkFlage;
+    @Excel(name = "请求结果",readConverterExp = "-1=取消请求,0=待处理,1=通过,2=不通过")
+    private Long checkFlag;
 
     /** 审核内容 */
+    @Excel(name = "处理内容")
     private String checkContent;
 
 
+    /** 审核标志位 0提交 1审核通过 2审核不通过 */
+    @Excel(name = "请求提交时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    private Date updateTime;
 
+
+    /** 审核时间 */
+    @Excel(name = "审核时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    private Date checkTime;
 
 
     /** 添加时间 */
     @Excel(name = "添加时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date addTime;
 
-    /** 审核时间 */
-    @Excel(name = "审核时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
-    private Date checkTime;
+
 
 
     /**
@@ -110,6 +115,21 @@ public class LifeBusinessCourseVo {
         this.bindTopThread = bindTopThread;
     }
 
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getRequestInstructions() {
+        return requestInstructions;
+    }
+
+    public void setRequestInstructions(String requestInstructions) {
+        this.requestInstructions = requestInstructions;
+    }
 
     public Long getCourseId() {
         return courseId;
@@ -215,12 +235,12 @@ public class LifeBusinessCourseVo {
         this.ruleUrl = ruleUrl;
     }
 
-    public Long getCheckFlage() {
-        return checkFlage;
+    public Long getCheckFlag() {
+        return checkFlag;
     }
 
-    public void setCheckFlage(Long checkFlage) {
-        this.checkFlage = checkFlage;
+    public void setCheckFlag(Long checkFlag) {
+        this.checkFlag = checkFlag;
     }
 
     public String getInformation() {

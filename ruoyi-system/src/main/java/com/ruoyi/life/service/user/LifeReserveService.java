@@ -2,8 +2,8 @@ package com.ruoyi.life.service.user;
 
 
 import com.ruoyi.life.domain.LifeReserve;
-import org.apache.ibatis.annotations.Param;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -78,7 +78,7 @@ public interface LifeReserveService
      *
      * @return 课程预定
      */
-    Integer selectLifeReserveNum(Long courseDetailId,LocalDateTime time);
+    Integer selectLifeReserveNum(Long courseDetailId,LocalDate time);
 
 
     /**
@@ -87,4 +87,12 @@ public interface LifeReserveService
      * @return
      */
     void backCourseSales(List<LifeReserve> reserves);
+
+
+    /**
+     * 获取从今后一个月的课程库存
+     * @return
+     */
+    List<LifeReserve> getLifeReserveByCourseId(Long courseId);
+
 }

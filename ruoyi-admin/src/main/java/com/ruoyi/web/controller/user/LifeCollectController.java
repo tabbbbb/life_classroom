@@ -36,7 +36,7 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("/user/collect")
-@Api(value = "/life/collect",description = "用户收藏")
+@Api(value = "/user/collect",description = "用户收藏")
 public class LifeCollectController {
 
     @Resource

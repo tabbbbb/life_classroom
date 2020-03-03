@@ -8,7 +8,6 @@ import com.ruoyi.life.domain.vo.system.LifeBusinessCourseSearchVo;
 import com.ruoyi.life.domain.vo.system.LifeBusinessCourseVo;
 import com.ruoyi.life.mapper.LifeBusinessCourseMapper;
 import com.ruoyi.life.service.system.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +44,9 @@ public class SysLifeBusinessCourseServiceImpl implements SysLifeBusinessCourseSe
 
     @Resource
     private SysLifeCourseDetailService courseDetailService;
+
+    @Resource
+    private SysLifeBusinessCourseSpecificationService businessCourseSpecificationService;
 
     /**
      * 查询课程审核
@@ -140,19 +142,21 @@ public class SysLifeBusinessCourseServiceImpl implements SysLifeBusinessCourseSe
     public LifeBusinessCourseDetailVo selectLifeBusinessCourseDetailVoByBusinessCourseId(Long businessCourseId) {
         LifeBusinessCourseSearchVo searchVo = new LifeBusinessCourseSearchVo();
         searchVo.setCourseId(businessCourseId);
-        List<LifeBusinessCourseVo> list = selectLifeBusinessCourseVoBySearchVo(searchVo);
-        if (list.size() == 0){
+        LifeBusinessCourse businessCourse = selectLifeBusinessCourseById(businessCourseId);
+        if (businessCourse == null){
             throw new RuntimeException("此记录不存在");
         }
-        LifeBusinessCourseVo businessCourseVo = list.get(0);
         LifeBusinessCourseDetail selectDetail = new LifeBusinessCourseDetail();
         selectDetail.setCourseId(businessCourseId);
         List<LifeBusinessCourseDetail> details = businessCourseDetailService.selectLifeBusinessCourseDetailList(selectDetail);
         List<LifeUpdate> updates = updateService.selectLifeUpdateById(businessCourseId);
+        LifeBusinessCourseSpecification businessCourseSpecification = new LifeBusinessCourseSpecification();
+        businessCourseSpecification.setCourseId(businessCourseId);
         LifeBusinessCourseDetailVo businessCourseDetailVo = new LifeBusinessCourseDetailVo();
-        businessCourseDetailVo.setBusinessCourseVo(businessCourseVo);
+        businessCourseDetailVo.setBusinessCourse(businessCourse);
         businessCourseDetailVo.setDetails(details);
         businessCourseDetailVo.setUpdates(updates);
+        businessCourseDetailVo.setBusinessCourseSpecifications(businessCourseSpecificationService.selectLifeBusinessCourseSpecificationList(businessCourseSpecification));
         return businessCourseDetailVo;
     }
 
@@ -179,6 +183,9 @@ public class SysLifeBusinessCourseServiceImpl implements SysLifeBusinessCourseSe
     public void checkSuccess(Long businessCourseId) {
         updateService.confirmUpdate(businessCourseId,1,null);
         LifeBusinessCourse businessCourse = selectLifeBusinessCourseById(businessCourseId);
+        if (businessCourse.getBindTopThread() != null){
+
+        }
         assignmentCourse(businessCourse);
         assignmentOrVerilyCourseDetail(businessCourse);
     }
@@ -189,12 +196,11 @@ public class SysLifeBusinessCourseServiceImpl implements SysLifeBusinessCourseSe
      * @param businessCourse
      */
     private void assignmentCourse(LifeBusinessCourse businessCourse){
-
         Long pid = getPidAndVerily(businessCourse);
         LifeCourse course = new LifeCourse();
         course.setName(businessCourse.getName());
         course.setImgUrl(businessCourse.getImgUrl());
-        course.setCarouselUrl(businessCourse.getCarousalUrl());
+        course.setCarouselUrl(businessCourse.getCarouselUrl());
         course.setCourseType(businessCourse.getCourseType());
         course.setCourseLabelId(businessCourse.getCourseLabelId());
         course.setCourseClassifyPid(pid);
@@ -207,7 +213,7 @@ public class SysLifeBusinessCourseServiceImpl implements SysLifeBusinessCourseSe
         course.setBusinessId(businessCourse.getBusinessId());
         course.setRuleUrl(businessCourse.getRuleUrl());
         course.setInformation(businessCourse.getInformation());
-        course.setStatus(1L);
+        course.setStatus(0L);
         course.setDeleteFlage(0L);
         course.setPrice(businessCourse.getPrice());
         course.setPoint(0L);
@@ -294,7 +300,6 @@ public class SysLifeBusinessCourseServiceImpl implements SysLifeBusinessCourseSe
     @Override
     @Transactional
     public void updateSuccess(Long businessCourseId) {
-
         updateService.confirmUpdate(businessCourseId,1,null);
         LifeBusinessCourse businessCourse = selectLifeBusinessCourseById(businessCourseId);
         Long pid = getPidAndVerily(businessCourse);
@@ -302,7 +307,7 @@ public class SysLifeBusinessCourseServiceImpl implements SysLifeBusinessCourseSe
         course.setCourseId(businessCourse.getBindTopThread());
         course.setName(businessCourse.getName());
         course.setImgUrl(businessCourse.getImgUrl());
-        course.setCarouselUrl(businessCourse.getCarousalUrl());
+        course.setCarouselUrl(businessCourse.getCarouselUrl());
         course.setPrice(businessCourse.getPrice());
         course.setCourseType(businessCourse.getCourseType());
         course.setCourseLabelId(businessCourse.getCourseLabelId());

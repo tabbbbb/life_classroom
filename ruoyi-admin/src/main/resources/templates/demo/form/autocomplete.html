@@ -304,12 +304,19 @@
         });
 	    
 	    $('#typeahead-demo-2').typeahead({
-            source: [
-                {"name": "Afghanistan", "code": "AF", "ccn0": "040"},
-                {"name": "Land Islands", "code": "AX", "ccn0": "050"},
-                {"name": "Albania", "code": "AL","ccn0": "060"},
-                {"name": "Algeria", "code": "DZ","ccn0": "070"}
-            ]
+            source: function (query,x) {
+                console.log(query)
+                x = function (w) {
+                    console.log(w)
+                }
+                return [
+                    {"name": "Afghanistan", "code": "AF", "ccn0": "040"},
+                    {"name": "Land Islands", "code": "AX", "ccn0": "050"},
+                    {"name": "Albania", "code": "AL","ccn0": "060"},
+                    {"name": "Algeria", "code": "DZ","ccn0": "070"}
+
+                ]
+            }
         });
 	    
 	    $.get(ctx + "demo/form/collection", function(data){

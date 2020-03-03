@@ -47,13 +47,8 @@ public class LifeVipServiceImpl implements LifeVipService
     private LifeUserService userService;
 
     @Autowired
-    private LifeVipCouponService vipCouponService;
-
-    @Autowired
     private LifeCouponReceiveService couponReceiveService;
 
-    @Autowired
-    private NotifySms sms;
 
 
 
@@ -222,7 +217,7 @@ public class LifeVipServiceImpl implements LifeVipService
         if (vip == null){
             throw new RechargerException(UserResponseCode.PRICE_RECHARGE_VIP_ERROR,"没有此vip类型",userId);
         }
-        if (vip.getEnable().equals(0)){
+        if (vip.getEnable().equals(1)){
             throw new RechargerException(UserResponseCode.PRICE_RECHARGE_VIP_ERROR,"vip不能充值",userId);
         }
         int flag = userService.deductBalance(userId,vip.getPrint());
@@ -251,7 +246,8 @@ public class LifeVipServiceImpl implements LifeVipService
         }
 
         //返佣
-        if (user.getParentId() != null){
+        LifeUser parentUser = userService.selectLifeUserById(user.getParentId());
+        if (parentUser != null){
             LifePointLog pointLog = new LifePointLog();
             pointLog.setLogType(2);
             pointLog.setUserId(user.getUserId());
@@ -259,7 +255,6 @@ public class LifeVipServiceImpl implements LifeVipService
             if (num == 0){
                 Long commission = Long.valueOf(LifeConfig.getStyMap("commission"));
                 Long commissionDays =  Long.valueOf(LifeConfig.getStyMap("commissionDays"));
-                LifeUser parentUser = userService.selectLifeUserById(user.getParentId());
                 LifePoint pointCommission = new LifePoint();
                 pointCommission.setPoint(commission);
                 pointCommission.setStartDate(start);
@@ -316,5 +311,22 @@ public class LifeVipServiceImpl implements LifeVipService
         selectVipCoupon.setVipId(vipId);
         couponReceiveService.insertLifeCouponReceiveVip(userId,vipId);
         return UserResponse.succeed(point);
+    }
+
+
+    /**
+     * 获取用户最大的会员
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public UserResponse getBigVip(Long userId) {
+        LifeUser user = userService.selectLifeUserById(userId);
+        Long vipId = pointService.getPointByBigVip(user.getShareId());
+        if (vipId == null){
+            return UserResponse.succeed();
+        }
+        return UserResponse.succeed(vipMapper.selectLifeVipById(vipId));
     }
 }

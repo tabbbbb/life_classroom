@@ -6,7 +6,6 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.life.domain.LifeUpdate;
 import com.ruoyi.life.mapper.LifeUpdateMapper;
 import com.ruoyi.life.service.system.SysLifeUpdateService;
-import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -105,7 +104,7 @@ public class SysLifeUpdateServiceImpl implements SysLifeUpdateService
     @Override
     public int confirmUpdate(Long updateId,Integer updateType,String failureExplain) {
         if (updateMapper.confirmUpdate(updateId,updateType,failureExplain) != 1){
-            throw new RuntimeException("状态或已发生改变，请刷新重试");
+            throw new RuntimeException("状态已发生改变，请刷新重试");
         }
         return 1;
     }

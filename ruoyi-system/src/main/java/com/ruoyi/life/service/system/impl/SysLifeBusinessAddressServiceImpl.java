@@ -5,6 +5,7 @@ import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.life.domain.LifeBusinessAddress;
 import com.ruoyi.life.mapper.LifeBusinessAddressMapper;
 import com.ruoyi.life.service.system.SysLifeBusinessAddressService;
+import com.ruoyi.life.service.system.SysLifeCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,9 @@ public class SysLifeBusinessAddressServiceImpl implements SysLifeBusinessAddress
     @Resource
     private LifeBusinessAddressMapper businessAddressMapper;
 
+    @Resource
+    private SysLifeCourseService courseService;
+
     /**
      * 查询商家店铺地址
      * 
@@ -35,17 +39,7 @@ public class SysLifeBusinessAddressServiceImpl implements SysLifeBusinessAddress
         return businessAddressMapper.selectLifeBusinessAddressById(businessAddressId);
     }
 
-    /**
-     * 查询商家店铺地址列表
-     * 
-     * @param lifeBusinessAddress 商家店铺地址
-     * @return 商家店铺地址
-     */
-    @Override
-    public List<LifeBusinessAddress> selectLifeBusinessAddressList(LifeBusinessAddress lifeBusinessAddress)
-    {
-        return businessAddressMapper.selectLifeBusinessAddressList(lifeBusinessAddress);
-    }
+
 
     /**
      * 新增商家店铺地址
@@ -56,6 +50,7 @@ public class SysLifeBusinessAddressServiceImpl implements SysLifeBusinessAddress
     @Override
     public int insertLifeBusinessAddress(LifeBusinessAddress lifeBusinessAddress)
     {
+        verifyAddress(lifeBusinessAddress);
         return businessAddressMapper.insertLifeBusinessAddress(lifeBusinessAddress);
     }
 
@@ -68,6 +63,7 @@ public class SysLifeBusinessAddressServiceImpl implements SysLifeBusinessAddress
     @Override
     public int updateLifeBusinessAddress(LifeBusinessAddress lifeBusinessAddress)
     {
+        verifyAddress(lifeBusinessAddress);
         return businessAddressMapper.updateLifeBusinessAddress(lifeBusinessAddress);
     }
 
@@ -80,6 +76,9 @@ public class SysLifeBusinessAddressServiceImpl implements SysLifeBusinessAddress
     @Override
     public int deleteLifeBusinessAddressByIds(String ids)
     {
+        if (courseService.getCourseNumByAddressIds(Convert.toStrArray(ids)) != 0){
+            throw new RuntimeException("有课程在使用这些地址");
+        }
         return businessAddressMapper.deleteLifeBusinessAddressByIds(Convert.toStrArray(ids));
     }
 
@@ -93,5 +92,36 @@ public class SysLifeBusinessAddressServiceImpl implements SysLifeBusinessAddress
     public int deleteLifeBusinessAddressById(Long businessAddressId)
     {
         return businessAddressMapper.deleteLifeBusinessAddressById(businessAddressId);
+    }
+
+
+    /**
+     * 检查地址信息是否正确
+     * @param address
+     */
+    private void verifyAddress(LifeBusinessAddress address){
+        address.setBusinessId(-1L);
+        if (address.getBusinessAddressName() == null || address.getBusinessAddressName() == "" ){
+            throw new RuntimeException("区域名称不能为空");
+        }
+        if (address.getBusinessAddress() == null|| address.getBusinessAddress() == ""){
+            throw new RuntimeException("区域地址不能为空");
+        }
+        if (address.getLat() == null || address.getLat() == "" || address.getLon() == null || address.getLon() == ""){
+            throw new RuntimeException("请选择一个区域地址");
+        }
+    }
+
+
+    /**
+     * 获取自由课程上课地址
+     *
+     * @return
+     */
+    @Override
+    public List<LifeBusinessAddress> selectIAddress() {
+        LifeBusinessAddress address = new LifeBusinessAddress();
+        address.setBusinessId(-1L);
+        return businessAddressMapper.selectLifeBusinessAddressList(address);
     }
 }

@@ -5,7 +5,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.ruoyi.common.exception.life.user.RechargerException;
 import com.ruoyi.common.sms.cache.SmsCache;
@@ -237,8 +239,8 @@ public class LifeUserServiceImpl implements LifeUserService
         LifeUser user = this.selectLifeUserById(userId);
         if (user.getCompanyId() != null){
             List<LifeCompanyCoupon> list = companyCouponService.selectLifeCompanyCouponByPrice(price.intValue());
-            if (list != null && couponReceiveService.insertLifeCouponReceiveBalance(user.getUserId(),list) != couponReceiveService.insertNumBalance(list)) {
-                throw new RechargerException(UserResponseCode.USER_RECHARGE_BALANCE_ERROR, "赠送优惠券失败，请联系管理员",userId);
+            if (list != null) {
+                couponReceiveService.insertLifeCouponReceiveBalance(user.getUserId(),list);
             }
         }
         int i = 3;
@@ -460,7 +462,7 @@ public class LifeUserServiceImpl implements LifeUserService
 
 
     private boolean verifyPayPassword(String payPassword){
-        if (payPassword == null || payPassword == ""){
+        if (payPassword == null || payPassword.length() != 6){
             return false;
         }
         try {
@@ -469,5 +471,22 @@ public class LifeUserServiceImpl implements LifeUserService
             return false;
         }
         return true;
+    }
+
+
+    /**
+     * 获取此用户的星星，余额，最近到期的星星信息
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public UserResponse userCapital(Long userId) {
+        LifeUser user = selectLifeUserById(userId);
+        Map<String,Object> map = new HashMap<>();
+        map.put("point",pointService.getUserPoint(user.getShareId()));
+        map.put("balance",user.getBalance());
+        map.put("beOnTheVergeOfPoint",pointService.getBeOnTheVergeOfPoint(user.getShareId()));
+        return UserResponse.succeed(map);
     }
 }

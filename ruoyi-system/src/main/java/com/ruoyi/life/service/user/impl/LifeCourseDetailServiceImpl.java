@@ -3,11 +3,15 @@ package com.ruoyi.life.service.user.impl;
 
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.life.domain.LifeCourseDetail;
+import com.ruoyi.life.domain.vo.user.LifeCourseDetailAndReserveVo;
 import com.ruoyi.life.mapper.LifeCourseDetailMapper;
 import com.ruoyi.life.service.user.LifeCourseDetailService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,7 +24,7 @@ import java.util.List;
 public class LifeCourseDetailServiceImpl implements LifeCourseDetailService
 {
     @Resource
-    private LifeCourseDetailMapper lifeCourseDetailMapper;
+    private LifeCourseDetailMapper courseDetailMapper;
 
     /**
      * 查询课程时间明细
@@ -31,7 +35,7 @@ public class LifeCourseDetailServiceImpl implements LifeCourseDetailService
     @Override
     public LifeCourseDetail selectLifeCourseDetailById(Long couponDetailId)
     {
-        return lifeCourseDetailMapper.selectLifeCourseDetailById(couponDetailId);
+        return courseDetailMapper.selectLifeCourseDetailById(couponDetailId);
     }
 
     /**
@@ -43,7 +47,7 @@ public class LifeCourseDetailServiceImpl implements LifeCourseDetailService
     @Override
     public List<LifeCourseDetail> selectLifeCourseDetailList(LifeCourseDetail lifeCourseDetail)
     {
-        return lifeCourseDetailMapper.selectLifeCourseDetailList(lifeCourseDetail);
+        return courseDetailMapper.selectLifeCourseDetailList(lifeCourseDetail);
     }
 
     /**
@@ -54,7 +58,7 @@ public class LifeCourseDetailServiceImpl implements LifeCourseDetailService
      */
     @Override
     public List<LifeCourseDetail> selectLifeCourseDetailListByIds(List<Long> list) {
-        return lifeCourseDetailMapper.selectLifeCourseDetailListByIds(list);
+        return courseDetailMapper.selectLifeCourseDetailListByIds(list);
     }
 
     /**
@@ -66,7 +70,7 @@ public class LifeCourseDetailServiceImpl implements LifeCourseDetailService
     @Override
     public int insertLifeCourseDetail(LifeCourseDetail lifeCourseDetail)
     {
-        return lifeCourseDetailMapper.insertLifeCourseDetail(lifeCourseDetail);
+        return courseDetailMapper.insertLifeCourseDetail(lifeCourseDetail);
     }
 
     /**
@@ -78,7 +82,7 @@ public class LifeCourseDetailServiceImpl implements LifeCourseDetailService
     @Override
     public int updateLifeCourseDetail(LifeCourseDetail lifeCourseDetail)
     {
-        return lifeCourseDetailMapper.updateLifeCourseDetail(lifeCourseDetail);
+        return courseDetailMapper.updateLifeCourseDetail(lifeCourseDetail);
     }
 
     /**
@@ -90,7 +94,7 @@ public class LifeCourseDetailServiceImpl implements LifeCourseDetailService
     @Override
     public int deleteLifeCourseDetailByIds(String ids)
     {
-        return lifeCourseDetailMapper.deleteLifeCourseDetailByIds(Convert.toStrArray(ids));
+        return courseDetailMapper.deleteLifeCourseDetailByIds(Convert.toStrArray(ids));
     }
 
     /**
@@ -102,7 +106,7 @@ public class LifeCourseDetailServiceImpl implements LifeCourseDetailService
     @Override
     public int deleteLifeCourseDetailById(Long couponDetailId)
     {
-        return lifeCourseDetailMapper.deleteLifeCourseDetailById(couponDetailId);
+        return courseDetailMapper.deleteLifeCourseDetailById(couponDetailId);
     }
 
     /**
@@ -112,7 +116,7 @@ public class LifeCourseDetailServiceImpl implements LifeCourseDetailService
      */
     @Override
     public List<LifeCourseDetail> selectNowCourse() {
-        return lifeCourseDetailMapper.selectNowCourse();
+        return courseDetailMapper.selectNowCourse();
     }
 
 
@@ -123,7 +127,7 @@ public class LifeCourseDetailServiceImpl implements LifeCourseDetailService
      */
     @Override
     public Long getListInCourseId(List<Long> list) {
-        List<Long> courseIds = lifeCourseDetailMapper.getListInCourseId(list);
+        List<Long> courseIds = courseDetailMapper.getListInCourseId(list);
         if (courseIds.size() == 1){
             return courseIds.get(0);
         }
@@ -131,4 +135,14 @@ public class LifeCourseDetailServiceImpl implements LifeCourseDetailService
     }
 
 
+    /**
+     * 根据课程id获取根据上课时间排序的课程详细
+     *
+     * @param courseId
+     * @return
+     */
+    @Override
+    public List<LifeCourseDetail> getCourseDetailOrderHourAndMinuteByCourseId(Long courseId) {
+        return courseDetailMapper.getCourseDetailOrderHourAndMinuteByCourseId(courseId);
+    }
 }

@@ -566,10 +566,10 @@ public class LifeOrderServiceImpl implements LifeOrderService
                 childIds.add(0L);
             }
 
-            if (reserveService.selectLifeReserveNum(courseDetail.getCourseDetailId(),useTime) == null){
+            if (reserveService.selectLifeReserveNum(courseDetail.getCourseDetailId(), LocalDate.from(useTime)) == null){
                 LifeReserve reserve = new LifeReserve();
                 reserve.setReserveNum(course.getNumber());
-                reserve.setReserveDate(useTime);
+                reserve.setReserveDate(LocalDate.from(useTime));
                 reserve.setCourseDetailId(courseDetail.getCourseDetailId());
                 reserveService.insertLifeReserve(reserve);
             }

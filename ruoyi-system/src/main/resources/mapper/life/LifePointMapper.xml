@@ -151,6 +151,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select user_id from life_point
         where vip_id = 4
     </select>
+    <select id="getPointByBigVip" resultType="java.lang.Long">
+        select vip_id from life_point
+        where share_id = #{shareId}
+        order by vip_id desc
+        limit 1
+    </select>
+    <select id="getUserPoint" resultType="java.lang.Long">
+        select sum(point) from life_point
+        where share_id = #{shareId}
+        group by share_id
+    </select>
+    <select id="getBeOnTheVergeOfPoint" resultMap="LifePointResult">
+        <include refid="selectLifePointVo"/>
+        where share_id = #{shareId}
+        order by end_date
+        limit 1
+    </select>
 
 
 </mapper>

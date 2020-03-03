@@ -12,7 +12,7 @@ function getFromData(){
     }else{
         pid = pid2
     }
-    console.log(img)
+
     if (img == undefined){
         img = ''
     }

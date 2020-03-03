@@ -1,10 +1,10 @@
 package com.ruoyi.life.mapper;
 
 
-import com.ruoyi.life.domain.LifeCourseDetail;
 import com.ruoyi.life.domain.LifeReserve;
 import org.apache.ibatis.annotations.Param;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -79,7 +79,7 @@ public interface LifeReserveMapper
      *
      * @return 课程预定
      */
-    Integer selectLifeReserveNum(@Param("courseDetailId") Long courseDetailId,@Param("time") LocalDateTime time);
+    Integer selectLifeReserveNum(@Param("courseDetailId") Long courseDetailId,@Param("time") LocalDate time);
 
 
 
@@ -91,5 +91,12 @@ public interface LifeReserveMapper
     int backCourseSales(LifeReserve reserve);
 
 
+
+
+    /**
+     * 获取从今后一个月的课程库存
+     * @return
+     */
+    List<LifeReserve> getLifeReserveByCourseId(Long courseId);
 
 }

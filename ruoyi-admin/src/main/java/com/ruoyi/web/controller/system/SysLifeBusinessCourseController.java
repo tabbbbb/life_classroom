@@ -7,13 +7,10 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.life.domain.LifeBusinessCourse;
 import com.ruoyi.life.domain.vo.system.*;
 import com.ruoyi.life.service.system.SysLifeBusinessCourseService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -99,10 +96,9 @@ public class SysLifeBusinessCourseController extends BaseController
     @RequiresPermissions("life:businesscourse:update")
     @PostMapping("/checkfailure")
     @ResponseBody
-    public int checkFailure(Long businessCourseId,String checkContent)
+    public void checkFailure(Long businessCourseId,String checkContent)
     {
         businessCourseService.checkFailure(businessCourseId,checkContent);
-        return 200;
     }
 
 
@@ -113,10 +109,9 @@ public class SysLifeBusinessCourseController extends BaseController
     @RequiresPermissions("life:businesscourse:update")
     @PostMapping("/checksuccess")
     @ResponseBody
-    public int checkSuccess(Long businessCourseId)
+    public void checkSuccess(Long businessCourseId)
     {
         businessCourseService.checkSuccess(businessCourseId);
-        return 200;
     }
 
 }

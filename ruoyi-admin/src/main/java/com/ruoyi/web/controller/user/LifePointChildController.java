@@ -16,6 +16,7 @@ import com.ruoyi.framework.userlogin.annotation.LoginInfo;
 import com.ruoyi.framework.userlogin.info.UserLoginInfo;
 import com.ruoyi.life.service.user.LifePointChildService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -34,7 +35,7 @@ import springfox.documentation.annotations.ApiIgnore;
  */
 @RestController
 @RequestMapping("/user/pointchild")
-@Api(value = "/life/pointchild",description = "启用或禁用小孩")
+@Api(value = "/user/pointchild",description = "小孩和会员期间关联")
 public class LifePointChildController {
 
     @Autowired
@@ -42,8 +43,9 @@ public class LifePointChildController {
 
 
     @PutMapping("pointchild")
+    @ApiOperation(value = "设置小孩在此会员期间使用",notes = "")
     public UserResponse setPointEnable(@ApiIgnore @LoginInfo UserLoginInfo loginInfo,
-                                       @RequestBody @ApiParam(name = "body",value = "childIds:xxx,xxx,pointId:LifePoint.pointId")
+                                       @RequestBody @ApiParam(name = "body",value = "childIds:xxx,xxx（小孩id）,pointId:LifePoint.pointId（积分记录id）")
                                                String body){
         UserResponse response = LoginResponse.toMessage(loginInfo);
         if (response != null) return response;

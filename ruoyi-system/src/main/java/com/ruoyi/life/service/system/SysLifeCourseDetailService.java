@@ -94,4 +94,17 @@ public interface SysLifeCourseDetailService {
      */
     int deleteCourseDetailByCourseId(Long courseId);
 
+
+
+    /**
+     * 删除此课程的所有详细
+     * @param courseIds
+     * @return
+     */
+    int deleteCourseDetailByCourseIds(String [] courseIds);
+
+
+
+
+
 }

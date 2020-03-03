@@ -71,7 +71,6 @@ public interface LifeUserService
      */
     UserResponse setPassword(Long userId,String body);
 
-
     /**
      * 修改用户信息
      * @param userId
@@ -80,13 +79,11 @@ public interface LifeUserService
      */
     UserResponse setProperty(Long userId,String body);
 
-
     /**
      * 充值余额
      * @return
      */
     UserResponse payBalance(Long userId,String body);
-
 
     /**
      * 充值余额充值成功
@@ -169,8 +166,6 @@ public interface LifeUserService
     UserResponse setPayPassword(Long userId,String body);
 
 
-
-
     /**
      * 修改支付密码
      * @param userId
@@ -178,4 +173,11 @@ public interface LifeUserService
      * @return
      */
     UserResponse updatePayPassword(Long userId,String body);
+
+
+    /**
+     * 获取此用户的星星，余额，最近到期的星星信息
+     * @return
+     */
+    UserResponse userCapital(Long userId);
 }

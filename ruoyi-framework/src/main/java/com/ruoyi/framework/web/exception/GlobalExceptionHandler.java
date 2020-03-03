@@ -3,14 +3,12 @@ package com.ruoyi.framework.web.exception;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ruoyi.common.exception.file.FileException;
-import com.ruoyi.common.exception.life.user.OrderException;
-import com.ruoyi.common.exception.life.user.RechargerException;
-import com.ruoyi.common.exception.life.user.SetChildException;
-import com.ruoyi.common.exception.life.user.TargetException;
+import com.ruoyi.common.exception.life.user.*;
 import com.ruoyi.common.response.UserResponse;
 import org.apache.shiro.authz.AuthorizationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.WebDataBinder;
@@ -25,10 +23,13 @@ import com.ruoyi.common.utils.ServletUtils;
 import com.ruoyi.common.utils.security.PermissionUtils;
 
 import java.beans.PropertyEditorSupport;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 /**
  * 全局异常处理器
@@ -165,6 +166,15 @@ public class GlobalExceptionHandler
         return e.getUserResponse();
     }
 
+    @ExceptionHandler(SendCouponException.class)
+    public UserResponse targetException(SendCouponException e){
+        e.printStackTrace();
+        return e.getUserResponse();
+    }
+
+
+
+
 
 
     @InitBinder
@@ -189,5 +199,12 @@ public class GlobalExceptionHandler
                 setValue(LocalTime.parse(text, DateTimeFormatter.ofPattern("HH:mm:ss")));
             }
         });
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(true);
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+
     }
+
+
 }

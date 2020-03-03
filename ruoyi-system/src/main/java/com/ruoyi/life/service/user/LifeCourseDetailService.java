@@ -2,7 +2,11 @@ package com.ruoyi.life.service.user;
 
 
 import com.ruoyi.life.domain.LifeCourseDetail;
+import com.ruoyi.life.domain.vo.user.LifeCourseDetailAndReserveVo;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -85,6 +89,10 @@ public interface LifeCourseDetailService
     Long getListInCourseId(List<Long> list);
 
 
-
+    /**
+     * 根据课程id获取根据上课时间排序的课程详细
+     * @return
+     */
+    List<LifeCourseDetail> getCourseDetailOrderHourAndMinuteByCourseId(Long courseId);
 
 }

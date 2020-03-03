@@ -22,7 +22,7 @@ import java.util.List;
 public class LifePointServiceImpl implements LifePointService
 {
     @Resource
-    private LifePointMapper lifePointMapper;
+    private LifePointMapper pointMapper;
 
 
     @Resource
@@ -37,7 +37,7 @@ public class LifePointServiceImpl implements LifePointService
     @Override
     public LifePoint selectLifePointById(Long pointId)
     {
-        return lifePointMapper.selectLifePointById(pointId);
+        return pointMapper.selectLifePointById(pointId);
     }
 
     /**
@@ -49,7 +49,7 @@ public class LifePointServiceImpl implements LifePointService
     @Override
     public List<LifePoint> selectLifePointList(LifePoint lifePoint)
     {
-        return lifePointMapper.selectLifePointList(lifePoint);
+        return pointMapper.selectLifePointList(lifePoint);
     }
 
     /**
@@ -61,7 +61,7 @@ public class LifePointServiceImpl implements LifePointService
     @Override
     public int insertLifePoint(LifePoint lifePoint)
     {
-        return lifePointMapper.insertLifePoint(lifePoint);
+        return pointMapper.insertLifePoint(lifePoint);
     }
 
     /**
@@ -73,7 +73,7 @@ public class LifePointServiceImpl implements LifePointService
     @Override
     public int updateLifePoint(LifePoint lifePoint)
     {
-        return lifePointMapper.updateLifePoint(lifePoint);
+        return pointMapper.updateLifePoint(lifePoint);
     }
 
     /**
@@ -85,7 +85,7 @@ public class LifePointServiceImpl implements LifePointService
     @Override
     public int deleteLifePointByIds(String ids)
     {
-        return lifePointMapper.deleteLifePointByIds(Convert.toStrArray(ids));
+        return pointMapper.deleteLifePointByIds(Convert.toStrArray(ids));
     }
 
     /**
@@ -97,7 +97,7 @@ public class LifePointServiceImpl implements LifePointService
     @Override
     public int deleteLifePointById(Long pointId)
     {
-        return lifePointMapper.deleteLifePointById(pointId);
+        return pointMapper.deleteLifePointById(pointId);
     }
 
     /**
@@ -108,7 +108,7 @@ public class LifePointServiceImpl implements LifePointService
      */
     @Override
     public List<LifePoint> selectNotSetChildPoint(Long userId) {
-        return lifePointMapper.selectNotSetChildPoint(userId);
+        return pointMapper.selectNotSetChildPoint(userId);
     }
 
 
@@ -119,7 +119,7 @@ public class LifePointServiceImpl implements LifePointService
      */
     @Override
     public int pastPoint() {
-        return lifePointMapper.pastPoint();
+        return pointMapper.pastPoint();
     }
 
 
@@ -131,7 +131,7 @@ public class LifePointServiceImpl implements LifePointService
      */
     @Override
     public synchronized int payPoint(Long shareId,Long point) {
-        List<LifePoint> pointList = lifePointMapper.getPointByShareId(shareId);
+        List<LifePoint> pointList = pointMapper.getPointByShareId(shareId);
         List<Long> deletePointList = new ArrayList<>();
         LifePoint updatePoint = null;
         for (LifePoint lifePoint : pointList) {
@@ -158,7 +158,7 @@ public class LifePointServiceImpl implements LifePointService
             for (int i = 0; i < deletePointList.size(); i++) {
                 deletePointArray[i] = String.valueOf(deletePointList.get(i));
             }
-            int flag = lifePointMapper.deleteLifePointByIds(deletePointArray);
+            int flag = pointMapper.deleteLifePointByIds(deletePointArray);
             if (flag != deletePointList.size()){
                 return 0;
             }
@@ -168,7 +168,7 @@ public class LifePointServiceImpl implements LifePointService
             }
         }
         if(updatePoint != null){
-            return lifePointMapper.updateLifePoint(updatePoint);
+            return pointMapper.updateLifePoint(updatePoint);
         }
        return 1;
     }
@@ -181,6 +181,39 @@ public class LifePointServiceImpl implements LifePointService
      */
     @Override
     public LifePoint getRecentlyPoint(Long shareId) {
-        return lifePointMapper.getRecentlyPoint(shareId);
+        return pointMapper.getRecentlyPoint(shareId);
+    }
+
+    /**
+     * 获取积分中最大的vip
+     * @param userId
+     * @return
+     */
+    @Override
+    public Long getPointByBigVip(Long userId) {
+        return pointMapper.getPointByBigVip(userId);
+    }
+
+
+    /**
+     * 获取用户所有积分
+     *
+     * @param shareId
+     * @return
+     */
+    @Override
+    public Long getUserPoint(Long shareId) {
+        return pointMapper.getUserPoint(shareId);
+    }
+
+    /**
+     * 获取一条用户快要过期的积分
+     *
+     * @param shareId
+     * @return
+     */
+    @Override
+    public LifePoint getBeOnTheVergeOfPoint(Long shareId) {
+        return pointMapper.getBeOnTheVergeOfPoint(shareId);
     }
 }

@@ -23,6 +23,7 @@ import com.ruoyi.common.utils.JacksonUtil;
 import com.ruoyi.common.utils.security.Md5Utils;
 import com.ruoyi.common.weixin.WxOperation;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
@@ -55,6 +56,7 @@ public class LifeAutoServiceImpl implements LifeAutoService {
      * @return
      */
     @Override
+    @Transactional
     public UserResponse register(String body) {
         String phone = JacksonUtil.parseString(body,"phone");
         String code = JacksonUtil.parseString(body,"code");
@@ -74,6 +76,7 @@ public class LifeAutoServiceImpl implements LifeAutoService {
                 if (userService.insertLifeUser(user) == 0){
                     return UserResponse.fail(UserResponseCode.REGISTER_ERROR,"用户添加失败");
                 }
+                this.newUserGiveCoupon(user.getUserId());
             }
             return UserResponse.succeed(user);
         }
@@ -170,6 +173,7 @@ public class LifeAutoServiceImpl implements LifeAutoService {
      * @return
      */
     @Override
+    @Transactional
     public UserResponse wxLogin(Map<String, String> map) {
         if (map== null || map.size() == 0){
             return UserResponse.fail(UserResponseCode.ERROR,"微信参数为空");
@@ -195,6 +199,7 @@ public class LifeAutoServiceImpl implements LifeAutoService {
             if (userService.insertLifeUser(user) == 0){
                 return UserResponse.fail(UserResponseCode.REGISTER_ERROR,"用户添加失败");
             }
+            this.newUserGiveCoupon(user.getUserId());
         }
         return UserResponse.succeed(user);
     }

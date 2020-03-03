@@ -15,7 +15,8 @@ function courseKindFormatter(value) {
 }
 
 function statusFormatter(value) {
-    if (value == 0){
+
+    if (value == 1){
         return '<span class=\"label label-primary\">上架</span>'
     }else{
         return '<span class=\"label label-default\">下架</span>'
@@ -23,20 +24,23 @@ function statusFormatter(value) {
 }
 function checkFlagFormatter(value) {
     if (value == 0){
-        return "<span class=\"label label-default\">未审核</span>";
+        return "<span class=\"label label-success\">待处理</span>";
     }else if (value == 1){
-        return "<span class=\"label label-primary\">审核通过</span>";
+        return "<span class=\"label label-primary\">通过</span>";
     }else if (value == 2){
-        return "<span class=\"label label-danger\">审核不通过</span>";
-    }else if (value == 3){
-        return "<span class=\"label label-default\">申请修改</span>";
-    }else if (value == 4){
-        return "<span class=\"label label-primary\">修改通过</span>";
-    }else if (value == 5){
-        return "<span class=\"label label-danger\">修改不通过</span>";
+        return "<span class=\"label label-danger\">不通过</span>";
+    }else if (value == -1){
+        return "<span class=\"label label-default\">请求撤销</span>";
     }
-
 }
+
+function updateFormatter(value,updateType) {
+    if (value == null){
+       return checkFlagFormatter(updateType)
+    }
+    return value
+}
+
 
 
 
@@ -79,6 +83,7 @@ function cloneTrFor(head,body) {
     body.forEach(function (item) {
         $tr.append('<td>'+item+'</td>')
     })
+    $('#updatebody').append($tr)
 }
 
 

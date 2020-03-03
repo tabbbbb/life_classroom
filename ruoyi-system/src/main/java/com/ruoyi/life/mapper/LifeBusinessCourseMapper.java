@@ -21,7 +21,7 @@ public interface LifeBusinessCourseMapper
      * @param courseId 课程审核ID
      * @return 课程审核
      */
-    public LifeBusinessCourse selectLifeBusinessCourseById(Long courseId);
+    LifeBusinessCourse selectLifeBusinessCourseById(Long courseId);
 
     /**
      * 查询课程审核列表
@@ -29,7 +29,7 @@ public interface LifeBusinessCourseMapper
      * @param lifeBusinessCourse 课程审核
      * @return 课程审核集合
      */
-    public List<LifeBusinessCourse> selectLifeBusinessCourseList(LifeBusinessCourse lifeBusinessCourse);
+    List<LifeBusinessCourse> selectLifeBusinessCourseList(LifeBusinessCourse lifeBusinessCourse);
 
     /**
      * 新增课程审核
@@ -37,7 +37,7 @@ public interface LifeBusinessCourseMapper
      * @param lifeBusinessCourse 课程审核
      * @return 结果
      */
-    public int insertLifeBusinessCourse(LifeBusinessCourse lifeBusinessCourse);
+    int insertLifeBusinessCourse(LifeBusinessCourse lifeBusinessCourse);
 
     /**
      * 修改课程审核
@@ -45,7 +45,7 @@ public interface LifeBusinessCourseMapper
      * @param lifeBusinessCourse 课程审核
      * @return 结果
      */
-    public int updateLifeBusinessCourse(LifeBusinessCourse lifeBusinessCourse);
+    int updateLifeBusinessCourse(LifeBusinessCourse lifeBusinessCourse);
 
     /**
      * 删除课程审核
@@ -53,7 +53,7 @@ public interface LifeBusinessCourseMapper
      * @param courseId 课程审核ID
      * @return 结果
      */
-    public int deleteLifeBusinessCourseById(Long courseId);
+    int deleteLifeBusinessCourseById(Long courseId);
 
     /**
      * 批量删除课程审核
@@ -61,7 +61,7 @@ public interface LifeBusinessCourseMapper
      * @param courseIds 需要删除的数据ID
      * @return 结果
      */
-    public int deleteLifeBusinessCourseByIds(String[] courseIds);
+    int deleteLifeBusinessCourseByIds(String[] courseIds);
 
 
     /**

@@ -103,6 +103,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
           </foreach>
     </select>
 
+
+
     <delete id="deleteNotInList">
         delete from life_course_detail
         where course_detail_id not in
@@ -125,4 +127,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         delete from life_course_detail
         where course_id = #{courseId}
     </delete>
+    <delete id="deleteCourseDetailByCourseIds">
+         delete from life_course_detail
+         where course_id in
+         <foreach collection="courseIds" item="item" open="(" separator="," close=")">
+             #{item}
+         </foreach>
+    </delete>
+
+    <select id="getCourseDetailOrderHourAndMinuteByCourseId"
+            resultMap="LifeCourseDetailResult">
+        <include refid="selectLifeCourseDetailVo"/>
+        where course_id = #{courseId}
+        order by start_hour asc,start_minute asc
+    </select>
 </mapper>

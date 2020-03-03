@@ -125,7 +125,6 @@
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
-                clickToSelect: true,
                 exportUrl: prefix + "/export",
                 showSearch: flag,
                 showRefresh: flag,
@@ -255,7 +254,8 @@
                         var actions = [];
                         var upOrDown = '上架'
                         var upOrDownStyle = 'primary'
-                        if (row.status == "上架"){
+                        console.log(row.status)
+                        if (row.status == 1){
                             upOrDown = '下架'
                             upOrDownStyle = 'default'
                         }
@@ -288,58 +288,17 @@
                     if (data.code == 500){
                         $.modal.alert(operation+'异常','error')
                     }else{
-                        console.log(1)
-                        row.status = operation
-                        $("#" + table.options.id).bootstrapTable('updateRow', {
-                            index: index,
-                            row: getCourseData(row.courseId)
-                        })
+                        flushTable()
                     }
                 }
             });
         }
 
 
-        function getCourseData(courseId) {
-            var course = null
-            $.ajax({
-                cache : false,
-                async:false,
-                type : "GET",
-                url : ctx + "life/course/course",
-                data:{
-                    'courseId':courseId
-                },
-                success : function(data) {
-                    course = data
-                }
-            });
-            return course
-        }
 
 
-        function update(courseId) {
-            var course = $("#" + table.options.id).bootstrapTable('getData');
-            course.forEach(function (item,index) {
-                if (item.courseId == courseId){
-                    $("#" + table.options.id).bootstrapTable('updateRow', {
-                        index:index,
-                        row:getCourseData(courseId)
-                    })
-                    return
-                }
-            })
-
-        }
-
-
-
-        
-        function add(courseId) {
-            $("#" + table.options.id).bootstrapTable('insertRow', {
-                index: 0, // 你想插入到哪，0表示第一行
-                row: getCourseData(courseId)
-            })
+        function flushTable() {
+            $.table.refresh()
         }
 
 

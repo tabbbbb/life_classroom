@@ -9,7 +9,7 @@ function changeType(type) {
         resetType('courseClassify2')
         resetType('courseClassifyId')
     }
-    if ($changeClassify.val() == ''){
+    if ($changeClassify.val() == null || $changeClassify.val() == ""){
         return
     }
 
@@ -25,6 +25,9 @@ function changeType(type) {
             data.forEach(function (value) {
                 $changeClassifyChild.append("<option value=\""+(value.courseClassifyId)+"\">"+value.courseClassifyName+"</option>")
             })
+            if (!type){
+                changeType(true)
+            }
         }
     });
 }

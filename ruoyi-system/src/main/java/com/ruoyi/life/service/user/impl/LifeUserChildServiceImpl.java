@@ -169,9 +169,10 @@ public class LifeUserChildServiceImpl implements LifeUserChildService
                 }
             }
         }
-        Map<String,List<LifeUserChild>> map = new HashMap<>();
+        Map<String,Object> map = new HashMap<>();
         map.put("childUsable",childUsable);
         map.put("childDisabled",childAll);
+        map.put("notSetPoint",pointService.selectNotSetChildPoint(userId));
         return UserResponse.succeed(map);
     }
 

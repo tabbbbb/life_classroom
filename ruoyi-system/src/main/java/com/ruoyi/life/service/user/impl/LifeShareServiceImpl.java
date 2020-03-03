@@ -107,6 +107,7 @@ public class LifeShareServiceImpl implements LifeShareService
      * @return
      */
     @Override
+    @Transactional
     public int inviteNewUser(Long userId) {
         LifeShare share =selectLifeShareById(userId);
         if (share == null){

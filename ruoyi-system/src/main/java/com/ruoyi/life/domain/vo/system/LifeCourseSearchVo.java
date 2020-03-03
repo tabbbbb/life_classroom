@@ -38,7 +38,7 @@ public class LifeCourseSearchVo {
     /**
      * 目标标签1
      */
-    private Long courseClassify1;
+    private Long courseClassifyPid;
 
     /**
      * 目标标签2
@@ -48,7 +48,7 @@ public class LifeCourseSearchVo {
     /**
      * 目标标签3
      */
-    private Long courseClassify3;
+    private Long courseClassifyId;
 
     /**
      * 课程种类
@@ -90,12 +90,12 @@ public class LifeCourseSearchVo {
         this.courseLabel = courseLabel;
     }
 
-    public Long getCourseClassify1() {
-        return courseClassify1;
+    public Long getCourseClassifyPid() {
+        return courseClassifyPid;
     }
 
-    public void setCourseClassify1(Long courseClassify1) {
-        this.courseClassify1 = courseClassify1;
+    public void setCourseClassifyPid(Long courseClassifyPid) {
+        this.courseClassifyPid = courseClassifyPid;
     }
 
     public Long getCourseClassify2() {
@@ -106,12 +106,12 @@ public class LifeCourseSearchVo {
         this.courseClassify2 = courseClassify2;
     }
 
-    public Long getCourseClassify3() {
-        return courseClassify3;
+    public Long getCourseClassifyId() {
+        return courseClassifyId;
     }
 
-    public void setCourseClassify3(Long courseClassify3) {
-        this.courseClassify3 = courseClassify3;
+    public void setCourseClassifyId(Long courseClassifyId) {
+        this.courseClassifyId = courseClassifyId;
     }
 
     public Integer getCourseKind() {

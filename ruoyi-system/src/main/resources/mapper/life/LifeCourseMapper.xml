@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.life.mapper.LifeCourseMapper">
-    
+
     <resultMap type="LifeCourse" id="LifeCourseResult">
         <result property="courseId"    column="course_id"    />
         <result property="name"    column="name"    />
@@ -21,6 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="number"    column="number"    />
         <result property="describe"    column="describe"    />
         <result property="businessId"    column="business_id"    />
+        <result property="businessAddressId"    column="business_address_id"    />
         <result property="ruleUrl"    column="rule_url"    />
         <result property="information"    column="information"    />
         <result property="rulePrice"    column="rule_price"    />
@@ -36,12 +37,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectLifeCourseVo">
-        select course_id, name, img_url, carousel_url, course_type, course_label_id, course_classify_pid, course_classify_id, course_kind, age_onset, age_end, teacher_name, teacher_explain, `number`, `describe`, business_id, rule_url, information, rule_price, status, delete_flage, price, point, order_by, sales, recommend, putaway_date, sold_out_date from life_course
+        select course_id, name, img_url, carousel_url, course_type, course_label_id, course_classify_pid, course_classify_id, course_kind, age_onset, age_end, teacher_name, teacher_explain, number, `describe`, business_id, business_address_id, rule_url, information, rule_price, status, delete_flage, price, point, order_by, sales, recommend, putaway_date, sold_out_date from life_course
     </sql>
 
     <select id="selectLifeCourseList" parameterType="LifeCourse" resultMap="LifeCourseResult">
         <include refid="selectLifeCourseVo"/>
-        <where>  
+        <where>
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
             <if test="imgUrl != null  and imgUrl != ''"> and img_url = #{imgUrl}</if>
             <if test="carouselUrl != null  and carouselUrl != ''"> and carousel_url = #{carouselUrl}</if>
@@ -57,6 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="number != null "> and number = #{number}</if>
             <if test="describe != null  and describe != ''"> and describe = #{describe}</if>
             <if test="businessId != null "> and business_id = #{businessId}</if>
+            <if test="businessAddressId != null "> and business_address_id = #{businessAddressId}</if>
             <if test="ruleUrl != null  and ruleUrl != ''"> and rule_url = #{ruleUrl}</if>
             <if test="information != null  and information != ''"> and information = #{information}</if>
             <if test="rulePrice != null "> and rule_price = #{rulePrice}</if>
@@ -71,12 +73,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="soldOutDate != null "> and sold_out_date = #{soldOutDate}</if>
         </where>
     </select>
-    
+
     <select id="selectLifeCourseById" parameterType="Long" resultMap="LifeCourseResult">
         <include refid="selectLifeCourseVo"/>
         where course_id = #{courseId}
     </select>
-        
+
     <insert id="insertLifeCourse" parameterType="LifeCourse" useGeneratedKeys="true" keyProperty="courseId">
         insert into life_course
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -95,6 +97,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="number != null ">number,</if>
             <if test="describe != null  and describe != ''">describe,</if>
             <if test="businessId != null ">business_id,</if>
+            <if test="businessAddressId != null ">business_address_id,</if>
             <if test="ruleUrl != null  and ruleUrl != ''">rule_url,</if>
             <if test="information != null  and information != ''">information,</if>
             <if test="rulePrice != null ">rule_price,</if>
@@ -107,7 +110,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="recommend != null ">recommend,</if>
             <if test="putawayDate != null ">putaway_date,</if>
             <if test="soldOutDate != null ">sold_out_date,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="name != null  and name != ''">#{name},</if>
             <if test="imgUrl != null  and imgUrl != ''">#{imgUrl},</if>
@@ -124,6 +127,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="number != null ">#{number},</if>
             <if test="describe != null  and describe != ''">#{describe},</if>
             <if test="businessId != null ">#{businessId},</if>
+            <if test="businessAddressId != null ">#{businessAddressId},</if>
             <if test="ruleUrl != null  and ruleUrl != ''">#{ruleUrl},</if>
             <if test="information != null  and information != ''">#{information},</if>
             <if test="rulePrice != null ">#{rulePrice},</if>
@@ -136,7 +140,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="recommend != null ">#{recommend},</if>
             <if test="putawayDate != null ">#{putawayDate},</if>
             <if test="soldOutDate != null ">#{soldOutDate},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateLifeCourse" parameterType="LifeCourse">
@@ -157,6 +161,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="number != null ">number = #{number},</if>
             <if test="describe != null  and describe != ''">describe = #{describe},</if>
             <if test="businessId != null ">business_id = #{businessId},</if>
+            <if test="businessAddressId != null ">business_address_id = #{businessAddressId},</if>
             <if test="ruleUrl != null  and ruleUrl != ''">rule_url = #{ruleUrl},</if>
             <if test="information != null  and information != ''">information = #{information},</if>
             <if test="rulePrice != null ">rule_price = #{rulePrice},</if>
@@ -176,7 +181,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <delete id="deleteLifeCourseById" parameterType="Long">
         delete from life_course where course_id = #{courseId}
     </delete>
-
 
     <update id="deleteLifeCourseByIds" parameterType="String">
         update life_course set delete_flage = 1 where course_id in
@@ -199,17 +203,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         course.number as maxPeople ,
         IF(reserve.reserve_num is null ,course.number,reserve.reserve_num)  as residuePeople,
         IF(collect.collect_id is null,'false','true') as isCollect,
-        round(st_distance_sphere (point (#{conditionVo.lon},#{conditionVo.lat}),point (address.lon,address.lat))/1000,1) as addressNum
-
+        round(st_distance_sphere (point (#{conditionVo.lon},#{conditionVo.lat}),point (address.lon,address.lat))/1000,1) as addressNum,
+        detail.course_detail_id as courseDetailId
         from life_course as course
         left join life_collect as collect on collect.collect_course_id = course.course_id
-        LEFT join life_business_address as address on address.business_id = course.business_id
+        LEFT join life_business_address as address on address.business_address_id = course.business_address_id
         inner join life_course_classify as classify on classify.course_classify_id = course.course_classify_id
         inner join life_course_detail as detail on detail.course_id = course.course_id
         left join life_reserve as reserve on reserve.course_detail_id = detail.course_detail_id and reserve.reserve_date = #{conditionVo.date}
         <where>
             <if test="conditionVo.date != null">
-                detail.week = date_format(#{conditionVo.date},'%w') and
+                detail.course_detail_id =  (
+                  select course_detail_id from life_course_detail
+                  where course_id = course.course_id and
+                  (
+                    start_hour > date_format(#{conditionVo.date},'%H') or
+                    start_minute > date_format(#{conditionVo.date},'%i') and
+                    start_hour = date_format(#{conditionVo.date},'%H')
+                  ) and
+                  week = date_format(#{conditionVo.date},'%w')
+                  order by start_hour asc,start_minute asc
+                  limit 1
+                ) and
             </if>
             <if test="conditionVo.endAge != null and conditionVo.endAge != -1">
                 (course.age_onset between #{conditionVo.startAge} and #{conditionVo.endAge} or
@@ -261,7 +276,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         course.name as `name`,
         classify.img as classifyUrl,
         classify.course_classify_name as classifyName,
-        round(st_distance_sphere (point (#{lon},#{lat}),point (address.lon,address.lat))/1000,1) as addressNum
+        round(st_distance_sphere (point (#{lon},#{lat}),point (address.lon,address.lat))/1000,1) as addressNum,
         address.business_address_name as address,
         course.age_onset as startAge,
         course.age_end as endAge,
@@ -270,43 +285,47 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         course.point as point,
         course.price as price,
         course.describe as `describe`,
+        course.number as number,
         business.name as businessName,
         course.information as information,
         course.teacher_name as teacherName,
         course.teacher_explain as teacherExplain,
-        IF(collect.collect_id is null,'false','true') as isCollect
+        IF(collect.collect_id is null,'false','true') as isCollect,
         course.status as status
-
         from life_course as course
         left join life_collect as collect on collect.collect_course_id = course.course_id
-        inner join life_business_address as address on address.business_id = course.business_id
-        inner join life_business as business on business.business_id = course.business_id
+        inner join life_business_address as address on address.business_address_id = course.business_address_id
+        left join life_business as business on business.business_id = course.business_id
         inner join life_course_classify as classify on classify.course_classify_id = course.course_classify_id
-        inner join life_course_detail as detail on detail.course_id = course.course_id
-        left join life_reserve as reserve on reserve.course_detail_id = detail.course_detail_id
         where course.course_id = #{courseId}
+        <if test="userId == null">
+            and collect.user_id is null
+        </if>
+        <if  test="userId != null">
+            and collect.user_id = #{userId}
+        </if>
     </select>
     <select id="getSysLifeCourseVoBySearch" resultType="com.ruoyi.life.domain.vo.system.LifeCourseVo">
-         select
-            course.course_id as courseId,
-            course.name as courseName,
-            course.img_url as imgUrl,
-            course.course_type as courseType,
-            label.course_label_name as courseLabel,
-            classify.course_classify_name as courseClassify,
-            course.course_kind = 0 as courseKind,
-            course.number as number,
-            business.name as businessName,
-            course.rule_url as ruleUrl,
-            course.information as information,
-            course.status = 0 as status,
-            course.price as price,
-            course.point as point,
-            course.order_by as orderBy,
-            course.recommend as recommend,
-            course.sales as sales,
-            course.putaway_date as putawayDate,
-            course.sold_out_date as soldOutDate
+        select
+        course.course_id as courseId,
+        course.name as courseName,
+        course.img_url as imgUrl,
+        course.course_type as courseType,
+        label.course_label_name as courseLabel,
+        classify.course_classify_name as courseClassify,
+        course.course_kind as courseKind,
+        course.number as number,
+        business.name as businessName,
+        course.rule_url as ruleUrl,
+        course.information as information,
+        course.status  as status,
+        course.price as price,
+        course.point as point,
+        course.order_by as orderBy,
+        course.recommend as recommend,
+        course.sales as sales,
+        course.putaway_date as putawayDate,
+        course.sold_out_date as soldOutDate
         from life_course as course
         inner join life_course_classify as classify on classify.course_classify_id = course.course_classify_id
         inner join life_course_label as label on label.course_label_id = course.course_label_id
@@ -322,14 +341,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 course.course_label_id = #{courseLabel} and
             </if>
             <choose>
-                <when test="courseClassify3">
-                    course.course_classify_id = #{courseClassify3} and
+                <when test="courseClassifyId">
+                    course.course_classify_id = #{courseClassifyId} and
                 </when>
                 <when test="courseClassify2">
                     classify.pid = #{courseClassify2} and
                 </when>
-                <when test="courseClassify1">
-                    course.course_classify_pid = #{courseClassify1} and
+                <when test="courseClassifyPid">
+                    course.course_classify_pid = #{courseClassifyPid} and
                 </when>
             </choose>
             <if test="courseKind != null">
@@ -343,33 +362,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
             course.delete_flage = 0
         </trim>
-    </select>
-    <select id="selectLifeCourseVoByCourseId" resultType="com.ruoyi.life.domain.vo.system.LifeCourseVo">
-         select
-            course.course_id as courseId,
-            course.name as courseName,
-            course.img_url as imgUrl,
-            course.course_type as courseType,
-            label.course_label_name as courseLabel,
-            classify.course_classify_name as courseClassify,
-            course.course_kind = 0 as courseKind,
-            course.number as number,
-            business.name as businessName,
-            course.rule_url as ruleUrl,
-            course.information as information,
-            course.status = 0 as status,
-            course.price as price,
-            course.point as point,
-            course.order_by as orderBy,
-            course.recommend as recommend,
-            course.sales as sales,
-            course.putaway_date as putawayDate,
-            course.sold_out_date as soldOutDate
-        from life_course as course
-        inner join life_course_classify as classify on classify.course_classify_id = course.course_classify_id
-        inner join life_course_label as label on label.course_label_id = course.course_label_id
-        left join life_business as business on business.business_id = course.business_id
-        where course.course_id = #{courseId} and course.delete_flage = 0
+        order by course_id desc
     </select>
     <select id="selectLifeCourseByClassifyIds" resultType="java.lang.Integer">
         select count(0) from life_course
@@ -399,10 +392,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     <select id="selectLifeCourseByName" resultType="java.lang.Integer">
         select count(0) from life_course
-        where `name` = #{name}
+        where `name` = #{name} and delete_flage = 0
+        <if test="courseId != null">
+            and course_id != #{courseId}
+        </if>
     </select>
+
     <update id="coursePlusSales">
         update life_course set sales = sales+1
         where course_id = #{courseId}
     </update>
+    <select id="getCourseNumByAddressIds" resultType="java.lang.Integer">
+        select count(0) from life_course
+        where business_address_id in
+        <foreach collection="addressIds" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
 </mapper>
