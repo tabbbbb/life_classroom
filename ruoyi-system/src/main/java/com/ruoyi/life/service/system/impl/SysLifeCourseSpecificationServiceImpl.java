@@ -2,6 +2,7 @@ package com.ruoyi.life.service.system.impl;
 
 
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.life.domain.LifeBusinessCourseDetail;
 import com.ruoyi.life.domain.LifeCourseSpecification;
 import com.ruoyi.life.mapper.LifeCourseSpecificationMapper;
 import com.ruoyi.life.service.system.SysLifeCourseSpecificationService;
@@ -138,5 +139,17 @@ public class SysLifeCourseSpecificationServiceImpl implements SysLifeCourseSpeci
     @Override
     public void deleteCourseDetailByCourseIds(String[] courseIds) {
         lifeCourseSpecificationMapper.deleteCourseDetailByCourseIds(courseIds);
+    }
+
+
+    /**
+     * 删除不在商家课程详细中的上线课程详细
+     * @param list
+     * @param courseId
+     * @return
+     */
+    @Override
+    public int deleteNotInBusinessCourseSpecification(List<LifeBusinessCourseDetail> list, Long courseId) {
+        return lifeCourseSpecificationMapper.deleteNotInBusinessCourseSpecification(list,courseId);
     }
 }

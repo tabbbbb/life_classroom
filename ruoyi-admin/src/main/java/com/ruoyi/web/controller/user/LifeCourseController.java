@@ -52,8 +52,12 @@ public class LifeCourseController {
     @ApiImplicitParams(
             @ApiImplicitParam(paramType="query",name="conditionVo",value="课程首页条件",dataTypeClass = LifeCourseConditionVo.class)
     )
-    public UserResponse getCourse(LifeCourseConditionVo conditionVo){
-        return courseService.selectLifeCourseBySearchVo(conditionVo);
+    public UserResponse getCourse(LifeCourseConditionVo conditionVo,@LoginInfo UserLoginInfo loginInfo){
+        Long userId = null;
+        if (loginInfo != null){
+            userId = loginInfo.getId();
+        }
+        return courseService.selectLifeCourseBySearchVo(conditionVo,userId);
     }
 
 

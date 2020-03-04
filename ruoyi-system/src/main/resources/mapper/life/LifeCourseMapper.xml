@@ -95,7 +95,7 @@
             <if test="teacherName != null  and teacherName != ''">teacher_name,</if>
             <if test="teacherExplain != null  and teacherExplain != ''">teacher_explain,</if>
             <if test="number != null ">number,</if>
-            <if test="describe != null  and describe != ''">describe,</if>
+            <if test="describe != null  and describe != ''">`describe`,</if>
             <if test="businessId != null ">business_id,</if>
             <if test="businessAddressId != null ">business_address_id,</if>
             <if test="ruleUrl != null  and ruleUrl != ''">rule_url,</if>
@@ -183,7 +183,7 @@
     </delete>
 
     <update id="deleteLifeCourseByIds" parameterType="String">
-        update life_course set delete_flage = 1 where course_id in
+        update life_course set delete_flage = 1 ,status = 0 where course_id in
         <foreach item="courseId" collection="array" open="(" separator="," close=")">
             #{courseId}
         </foreach>
@@ -206,7 +206,7 @@
         round(st_distance_sphere (point (#{conditionVo.lon},#{conditionVo.lat}),point (address.lon,address.lat))/1000,1) as addressNum,
         detail.course_detail_id as courseDetailId
         from life_course as course
-        left join life_collect as collect on collect.collect_course_id = course.course_id
+        left join life_collect as collect on collect.collect_course_id = course.course_id and collect.user_id = #{userId}
         LEFT join life_business_address as address on address.business_address_id = course.business_address_id
         inner join life_course_classify as classify on classify.course_classify_id = course.course_classify_id
         inner join life_course_detail as detail on detail.course_id = course.course_id
@@ -293,17 +293,12 @@
         IF(collect.collect_id is null,'false','true') as isCollect,
         course.status as status
         from life_course as course
-        left join life_collect as collect on collect.collect_course_id = course.course_id
+        left join life_collect as collect on collect.collect_course_id = course.course_id and collect.user_id = #{userId}
         inner join life_business_address as address on address.business_address_id = course.business_address_id
         left join life_business as business on business.business_id = course.business_id
         inner join life_course_classify as classify on classify.course_classify_id = course.course_classify_id
         where course.course_id = #{courseId}
-        <if test="userId == null">
-            and collect.user_id is null
-        </if>
-        <if  test="userId != null">
-            and collect.user_id = #{userId}
-        </if>
+
     </select>
     <select id="getSysLifeCourseVoBySearch" resultType="com.ruoyi.life.domain.vo.system.LifeCourseVo">
         select

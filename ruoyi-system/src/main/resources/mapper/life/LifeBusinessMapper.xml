@@ -118,7 +118,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             address.business_address as addressDetail,
             business.add_time as addTime,
             business.check_time as checkTime
-
         from life_business as business
         inner join life_business_user as user on user.business_id = business.business_id
         inner join life_business_address as address on address.business_id = business.business_id

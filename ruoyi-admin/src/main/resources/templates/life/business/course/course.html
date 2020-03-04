@@ -223,7 +223,16 @@
             $.modal.open('商品审核详细','/life/businesscourse/detail?courseId='+courseId)
         }
 
+        function flushTable() {
+            $.table.refresh()
+        }
 
+        function success() {
+            $.modal.msgSuccess('请求通过')
+        }
+        function failure() {
+            $.modal.msgError('请求不通过')
+        }
         
     </script>
 </body>

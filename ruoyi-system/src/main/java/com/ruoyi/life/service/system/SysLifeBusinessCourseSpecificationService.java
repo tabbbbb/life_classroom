@@ -60,4 +60,19 @@ public interface SysLifeBusinessCourseSpecificationService
      * @return 结果
      */
     int deleteLifeBusinessCourseSpecificationById(Long specificationId);
+
+
+    /**
+     * 获取未绑定上线或者绑定上线的详细列表
+     * @return
+     */
+    List<LifeBusinessCourseSpecification> getBusinessCourseSpecificationIsNullOrIsNotNull(Long businessCourseId,Long bindTopThread);
+
+
+    /**
+     * 根据商户课程删除商户课程规格
+     * @return
+     */
+    int deleteLifeBusinessCourseSpecificationByBusinessCourseId(Long businessCourseId);
+
 }

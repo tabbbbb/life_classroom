@@ -136,4 +136,13 @@ public interface SysLifeCourseService {
      */
     int getCourseNumByAddressIds(String[] addressIds);
 
+
+    /**
+     * 非此courseId名称数量
+     * @param name
+     * @param courseId
+     * @return
+     */
+    int selectLifeCourseByName(String name,Long courseId);
+
 }

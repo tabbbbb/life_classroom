@@ -67,4 +67,5 @@ public interface SysLifeUpdateService
      * @return
      */
     int confirmUpdate(Long updateId,Integer updateType,String failureExplain);
+
 }

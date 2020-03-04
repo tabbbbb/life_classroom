@@ -74,7 +74,7 @@ public interface LifeCourseService
      * @param searchVo
      * @return
      */
-    UserResponse selectLifeCourseBySearchVo(LifeCourseConditionVo searchVo);
+    UserResponse selectLifeCourseBySearchVo(LifeCourseConditionVo searchVo,Long userId);
 
 
 

@@ -20,7 +20,13 @@ public interface SysLifeBusinessAddressService
      */
     LifeBusinessAddress selectLifeBusinessAddressById(Long businessAddressId);
 
-
+    /**
+     * 查询商家店铺地址列表
+     *
+     * @param lifeBusinessAddress 商家店铺地址
+     * @return 商家店铺地址集合
+     */
+    List<LifeBusinessAddress> selectLifeBusinessAddressList(LifeBusinessAddress lifeBusinessAddress);
 
     /**
      * 新增商家店铺地址

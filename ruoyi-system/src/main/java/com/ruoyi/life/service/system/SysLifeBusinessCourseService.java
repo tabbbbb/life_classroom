@@ -22,7 +22,7 @@ public interface SysLifeBusinessCourseService
      * @param courseId 课程审核ID
      * @return 课程审核
      */
-    public LifeBusinessCourse selectLifeBusinessCourseById(Long courseId);
+    LifeBusinessCourse selectLifeBusinessCourseById(Long courseId);
 
     /**
      * 查询课程审核列表
@@ -30,7 +30,7 @@ public interface SysLifeBusinessCourseService
      * @param lifeBusinessCourse 课程审核
      * @return 课程审核集合
      */
-    public List<LifeBusinessCourse> selectLifeBusinessCourseList(LifeBusinessCourse lifeBusinessCourse);
+    List<LifeBusinessCourse> selectLifeBusinessCourseList(LifeBusinessCourse lifeBusinessCourse);
 
     /**
      * 新增课程审核
@@ -38,7 +38,7 @@ public interface SysLifeBusinessCourseService
      * @param lifeBusinessCourse 课程审核
      * @return 结果
      */
-    public int insertLifeBusinessCourse(LifeBusinessCourse lifeBusinessCourse);
+    int insertLifeBusinessCourse(LifeBusinessCourse lifeBusinessCourse);
 
     /**
      * 修改课程审核
@@ -46,7 +46,7 @@ public interface SysLifeBusinessCourseService
      * @param lifeBusinessCourse 课程审核
      * @return 结果
      */
-    public int updateLifeBusinessCourse(LifeBusinessCourse lifeBusinessCourse);
+    int updateLifeBusinessCourse(LifeBusinessCourse lifeBusinessCourse);
 
     /**
      * 批量删除课程审核
@@ -54,7 +54,7 @@ public interface SysLifeBusinessCourseService
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int deleteLifeBusinessCourseByIds(String ids);
+    int deleteLifeBusinessCourseByIds(String ids);
 
     /**
      * 删除课程审核信息
@@ -62,7 +62,7 @@ public interface SysLifeBusinessCourseService
      * @param courseId 课程审核ID
      * @return 结果
      */
-    public int deleteLifeBusinessCourseById(Long courseId);
+    int deleteLifeBusinessCourseById(Long courseId);
 
 
     /**
@@ -80,7 +80,7 @@ public interface SysLifeBusinessCourseService
 
 
     /**
-     * 审核不通过
+     * 请求不通过
      * @param  businessCourseId
      * @return
      */
@@ -89,25 +89,12 @@ public interface SysLifeBusinessCourseService
 
 
     /**
-     * 审核通过
+     * 请求通过
      * @param  businessCourseId
      * @return
      */
     void checkSuccess(Long businessCourseId);
 
-
-    /**
-     * 修改不通过
-     */
-    void updateFailure(Long businessCourseId,String checkContent);
-
-
-    /**
-     * 修改通过
-     * @param  businessCourseId
-     * @return
-     */
-    void updateSuccess(Long businessCourseId);
 
 
 }

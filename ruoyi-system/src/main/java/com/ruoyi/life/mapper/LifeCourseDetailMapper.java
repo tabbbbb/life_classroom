@@ -1,6 +1,7 @@
 package com.ruoyi.life.mapper;
 
 
+import com.ruoyi.life.domain.LifeBusinessCourseDetail;
 import com.ruoyi.life.domain.LifeCourseDetail;
 import com.ruoyi.life.domain.vo.user.LifeCourseDetailAndReserveVo;
 import org.apache.ibatis.annotations.Param;
@@ -130,5 +131,15 @@ public interface LifeCourseDetailMapper
      * @return
      */
     List<LifeCourseDetail> getCourseDetailOrderHourAndMinuteByCourseId(Long courseId);
+
+
+
+
+    /**
+     * 删除不在商家课程详细中的上线课程详细
+     * @param list
+     * @return
+     */
+    int deleteNotInBusinessCourseDetail(@Param("list") List<LifeBusinessCourseDetail> list, @Param("courseId")Long courseId);
 
 }

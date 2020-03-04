@@ -20,15 +20,16 @@
         </tbody>
     </table>
     <div class="form-group">
-        <a class="btn btn-danger btn-md" href="javascript:void(0)" style="float: right; margin-right: 20px;"  onclick="failure()"><i class="fa fa-edit"></i>不通过</a>
-        <a class="btn btn-primary btn-md" href="javascript:void(0)" style="float: right; margin-right: 20px;"onclick="success()"><i class="fa fa-edit" ></i>通过</a>
+        <a class="btn btn-danger btn-md" href="javascript:void(0)" style="float: right; margin-right: 20px;display: none;"  onclick="failure()"><i class="fa fa-edit"></i>不通过</a>
+        <a class="btn btn-primary btn-md" href="javascript:void(0)" style="float: right; margin-right: 20px;display: none;"onclick="success()"><i class="fa fa-edit" ></i>通过</a>
     </div>
+
+
 </div>
 <th:block th:include="include :: footer" />
 <script th:src="@{/ruoyi/js/show.js}"></script>
 <script type="text/javascript">
     detail();
-    var updateId = 0;
     function detail() {
         $.ajax({
             cache : false,
@@ -43,8 +44,8 @@
                 cloneTr('课程名称',businessCourse.name)
                 cloneTr('价格',businessCourse.price+'￥')
                 cloneTr('课程类型',courseTypeFormatter(businessCourse.courseType))
-                cloneSpan('课程标签',businessCourse.courseLabel,'success')
-                cloneSpan('目标标签',businessCourse.courseClassify,'warning')
+                cloneSpan('课程标签',data.courseLabel,'success')
+                cloneSpan('目标标签',data.courseClassify,'warning')
                 cloneTr('数量',businessCourse.number)
                 if (businessCourse.ageEnd == -1){
                     cloneTr('适合年龄段','不限')
@@ -58,6 +59,7 @@
                 cloneTrImg('预约规则',businessCourse.ruleUrl)
                 cloneTrImg('详细信息',businessCourse.information)
                 cloneTr('添加时间',businessCourse.addTime)
+                cloneTr('上课地址',data.address.businessAddressName+' —— '+data.address.businessAddress)
                 var businessCourseSpecifications = data.businessCourseSpecifications
                 businessCourseSpecifications.forEach(function (item) {
                     cloneTr('课程规格',item.specificationName+' , '+item.specificationNum+' , '+item.specificationDiscount+'%')
@@ -70,9 +72,8 @@
                 var updates = data.updates
                 cloneTrFor('请求说明',['请求结果','处理说明','请求时间','处理时间'])
                 updates.forEach(function (item,index) {
-                    if (index == updates.length - 1 && item.updateType != 0){
-                        ahide()
-                        updateId = item.updateId
+                    if (index == updates.length - 1 && item.updateType == 0){
+                        ashow()
                     }
                     cloneTrFor(item.updateExplain,[checkFlagFormatter(item.updateType),updateFormatter(item.failureExplain,item.updateType),item.updateTime,updateFormatter(item.checkTime,item.updateType)])
                 })
@@ -81,8 +82,8 @@
     }
 
     
-    function ahide() {
-        $('a').hide()
+    function ashow() {
+        $('a').show()
     }
 
 
@@ -93,12 +94,43 @@
     
     
     function success() {
-        $.modal.msgSuccess('请求通过')
-
+        $.ajax({
+            cache : false,
+            type : "POST",
+            url :"/life/businesscourse/checksuccess",
+            data:{'businessCourseId':getUrlParam('courseId')},
+            success : function(data) {
+                if (data.code == 500) {
+                    $.modal.alert(data.msg, 'error')
+                } else {
+                    parent.flushTable()
+                    parent.success()
+                    $.modal.close()
+                }
+            }
+        })
     }
     
     function failure() {
-        $.modal.msgError('请求不通过')
+        layer.prompt({title: '随便写点啥，并确认', formType: 2}, function(text, index){
+            $.ajax({
+                cache : false,
+                type : "POST",
+                url :"/life/businesscourse/checkfailure",
+                data:{'businessCourseId':getUrlParam('courseId'),'checkContent':text},
+                success : function(data) {
+                    if (data.code == 500) {
+                        $.modal.alert(data.msg, 'error')
+                    } else {
+                        parent.flushTable()
+                        parent.failure()
+                        layer.close(index);
+                        $.modal.close()
+                    }
+                }
+            })
+
+        });
 
     }
 

@@ -39,7 +39,16 @@ public class SysLifeBusinessAddressServiceImpl implements SysLifeBusinessAddress
         return businessAddressMapper.selectLifeBusinessAddressById(businessAddressId);
     }
 
-
+    /**
+     * 查询商家店铺地址列表
+     *
+     * @param lifeBusinessAddress 商家店铺地址
+     * @return 商家店铺地址集合
+     */
+    @Override
+    public List<LifeBusinessAddress> selectLifeBusinessAddressList(LifeBusinessAddress lifeBusinessAddress) {
+        return businessAddressMapper.selectLifeBusinessAddressList(lifeBusinessAddress);
+    }
 
     /**
      * 新增商家店铺地址

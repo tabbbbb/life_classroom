@@ -195,13 +195,6 @@
                     }
                 },
                 {
-                    field : 'information', 
-                    title : '详细信息',
-                    formatter: function(value, row, index) {
-                        return $.table.imageView(value);
-                    }
-                },
-                {
                     field : 'status', 
                     title : '状态',
                     formatter: function (value, row, index) {
@@ -254,7 +247,6 @@
                         var actions = [];
                         var upOrDown = '上架'
                         var upOrDownStyle = 'primary'
-                        console.log(row.status)
                         if (row.status == 1){
                             upOrDown = '下架'
                             upOrDownStyle = 'default'
@@ -302,6 +294,8 @@
         }
 
 
+
+
         function toObject(doc) {
             var objectString = doc.replace(new RegExp("AAABBBCCCDDD","g"), "\"").toString();
             var object = JSON.parse(objectString);
@@ -328,6 +322,10 @@
             $.modal.close();
         }
 
+        
+        function consolelog(data) {
+            console.log(data)
+        }
         
     </script>
 </body>

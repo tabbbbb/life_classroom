@@ -305,7 +305,7 @@ public class SysLifeCourseServiceImpl implements SysLifeCourseService {
         if(course.getName() == null || course.getName().trim() == ""){
             throw new RuntimeException("课程名称没有填写");
         }
-        if (courseMapper.selectLifeCourseByName(course.getName(),course.getCourseId()) != 0){
+        if (selectLifeCourseByName(course.getName(),course.getCourseId()) != 0){
             throw new RuntimeException("课程名称重复");
         }
         if (course.getCourseType() == null || (course.getCourseType() != 1 && course.getCourseType() != 2)){
@@ -325,20 +325,18 @@ public class SysLifeCourseServiceImpl implements SysLifeCourseService {
         Long pid = courseClassifyService.selectLifeCourseClassifyById(courseClassify.getPid()).getPid();
         course.setCourseClassifyPid(pid);
 
-        if (course.getCourseKind() == null || course.getCourseKind() != 0 ){
+        if (course.getCourseKind() == null ){
             throw new RuntimeException("课程种类选择错误");
         }
 
-        if (course.getTeacherName() == null || course.getTeacherName().trim() == ""){
+        if ((course.getTeacherName() == null || course.getTeacherName().trim() == "") && course.getCourseKind() == 0){
             throw new RuntimeException("老师名称不能为空");
         }
 
         if (course.getNumber() == null || course.getNumber() < 1){
             throw new RuntimeException("课程数量请输入或值小于1");
         }
-        course.setStatus(1L);
-        course.setDeleteFlage(0L);
-        course.setPutawayDate(new Date());
+
         if (course.getPrice() == null || course.getPrice().doubleValue() < 0){
             throw new RuntimeException("课程价格请输入或值小于0");
         }
@@ -351,11 +349,15 @@ public class SysLifeCourseServiceImpl implements SysLifeCourseService {
             throw new RuntimeException("课程销量不可设置");
         }
         LifeBusinessAddress businessAddress = businessAddressService.selectLifeBusinessAddressById(course.getBusinessAddressId());
-        if (businessAddress == null || businessAddress.getBusinessId() != -1){
+        if ((businessAddress == null || businessAddress.getBusinessId() != -1) && course.getCourseKind() == 0 ){
             throw new RuntimeException("上课地址设置错误");
         }
 
-
+        if (course.getCourseId() == null){
+            course.setStatus(1);
+            course.setDeleteFlage(0);
+        }
+        course.setPutawayDate(new Date());
     }
 
 
@@ -405,10 +407,10 @@ public class SysLifeCourseServiceImpl implements SysLifeCourseService {
 
         updateCourse.setCourseId(courseId);
         if (course.getStatus() == 1){
-            updateCourse.setStatus(0L);
+            updateCourse.setStatus(0);
             updateCourse.setSoldOutDate(new Date());
         }else{
-            updateCourse.setStatus(1L);
+            updateCourse.setStatus(1);
             updateCourse.setPutawayDate(new Date());
         }
         return courseMapper.updateLifeCourse(updateCourse);
@@ -462,5 +464,17 @@ public class SysLifeCourseServiceImpl implements SysLifeCourseService {
     @Override
     public int getCourseNumByAddressIds(String[] addressIds) {
         return courseMapper.getCourseNumByAddressIds(addressIds);
+    }
+
+    /**
+     * 非此courseId名称数量
+     *
+     * @param name
+     * @param courseId
+     * @return
+     */
+    @Override
+    public int selectLifeCourseByName(String name, Long courseId) {
+        return courseMapper.selectLifeCourseByName(name,courseId);
     }
 }

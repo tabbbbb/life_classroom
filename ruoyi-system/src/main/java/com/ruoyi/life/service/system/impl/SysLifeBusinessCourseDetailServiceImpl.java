@@ -97,5 +97,27 @@ public class SysLifeBusinessCourseDetailServiceImpl implements SysLifeBusinessCo
     }
 
 
+    /**
+     * 获取未绑定上线或者绑定上线的详细列表
+     *
+     * @param businessCourseId
+     * @param bindTopThread
+     * @return
+     */
+    @Override
+    public List<LifeBusinessCourseDetail> getBusinessCourseDetailIsNullOrIsNotNull(Long businessCourseId, Long bindTopThread) {
+        return businessCourseDetailMapper.getBusinessCourseDetailIsNullOrIsNotNull(businessCourseId,bindTopThread);
+    }
 
+
+    /**
+     * 删除上课时间信息
+     *
+     * @param businessCourseId 上课时间ID
+     * @return 结果
+     */
+    @Override
+    public int deleteLifeBusinessCourseDetailByBusinessCourseId(Long businessCourseId) {
+        return businessCourseDetailMapper.deleteLifeBusinessCourseDetailByBusinessCourseId(businessCourseId);
+    }
 }

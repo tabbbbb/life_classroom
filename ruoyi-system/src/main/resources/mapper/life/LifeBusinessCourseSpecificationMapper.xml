@@ -32,7 +32,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectLifeBusinessCourseSpecificationVo"/>
         where specification_id = #{specificationId}
     </select>
-        
+
+
     <insert id="insertLifeBusinessCourseSpecification" parameterType="LifeBusinessCourseSpecification" useGeneratedKeys="true" keyProperty="specificationId">
         insert into life_business_course_specification
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -73,5 +74,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{specificationId}
         </foreach>
     </delete>
-    
+
+    <select id="getBusinessCourseSpecificationIsNullOrIsNotNull"
+            resultMap="LifeBusinessCourseSpecificationResult">
+        <include refid="selectLifeBusinessCourseSpecificationVo"/>
+        where course_id = #{businessCourseId}
+        <if test="bindTopThread == null">
+            and bind_top_thread is null
+        </if>
+        <if test="bindTopThread != null">
+            and bind_top_thread is not null
+        </if>
+    </select>
+
+    <delete id="deleteLifeBusinessCourseSpecificationByBusinessCourseId">
+        delete from life_business_course_specification
+        where course_id = #{businessCourseId}
+    </delete>
 </mapper>

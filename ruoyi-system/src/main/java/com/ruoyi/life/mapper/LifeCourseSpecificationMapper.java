@@ -1,6 +1,7 @@
 package com.ruoyi.life.mapper;
 
 
+import com.ruoyi.life.domain.LifeBusinessCourseDetail;
 import com.ruoyi.life.domain.LifeCourseSpecification;
 import org.apache.ibatis.annotations.Param;
 
@@ -70,7 +71,7 @@ public interface LifeCourseSpecificationMapper
      * @param specificationList
      * @return
      */
-    int insertLifeCourseSpecificationList(@Param("specificationList") List<LifeCourseSpecification> specificationList);
+    int insertLifeCourseSpecificationList( List<LifeCourseSpecification> specificationList);
 
 
 
@@ -96,4 +97,13 @@ public interface LifeCourseSpecificationMapper
      * @param courseIds
      */
     void deleteCourseDetailByCourseIds(@Param("courseIds") String[] courseIds);
+
+
+
+    /**
+     * 删除不在商家课程详细中的上线课程详细
+     * @param list
+     * @return
+     */
+    int deleteNotInBusinessCourseSpecification(@Param("list") List<LifeBusinessCourseDetail> list,@Param("courseId") Long courseId);
 }

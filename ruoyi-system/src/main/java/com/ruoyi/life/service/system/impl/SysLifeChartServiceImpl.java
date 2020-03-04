@@ -349,10 +349,18 @@ public class SysLifeChartServiceImpl implements SysLifeChartService {
     }
 
 
+    /**
+     * 获取订单图表的数据
+     * @param chartVo
+     * @return
+     */
     @Override
     public Object getOrderChartData(LifeOrderChartVo chartVo) {
         List<LifeOrderChartDataDto> orders = orderService.getOrderChartData();
-        LocalDate start = LocalDate.from(orders.get(0).getUseTime());
+        LocalDate start = LocalDate.now();
+        if (orders != null && orders.size() != 0){
+            LocalDate.from(orders.get(0).getUseTime());
+        }
         LocalDate end = LocalDate.now();
         Long orderNum = 0L;
         BigDecimal orderPrice = new BigDecimal(0);

@@ -69,10 +69,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
-    <insert id="insertLifeCourseSpecificationList">
+    <insert id="insertLifeCourseSpecificationList" useGeneratedKeys="true" keyProperty="specificationId">
         insert into life_course_specification (course_id,specification_name,specification_num,specification_discount)
         values
-        <foreach collection="specificationList" item="item" separator=",">
+        <foreach collection="list" item="item" separator=",">
             (#{item.courseId},#{item.specificationName},#{item.specificationNum},#{item.specificationDiscount})
         </foreach>
     </insert>
@@ -93,6 +93,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where course_id in
         <foreach collection="courseIds" item="item" open="(" separator="," close=")">
             #{item}
+        </foreach>
+    </delete>
+    <delete id="deleteNotInBusinessCourseSpecification">
+        delete from life_course_specification
+        where course_id = #{courseId} and  specification_id not in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item.bindTopThread}
         </foreach>
     </delete>
 </mapper>

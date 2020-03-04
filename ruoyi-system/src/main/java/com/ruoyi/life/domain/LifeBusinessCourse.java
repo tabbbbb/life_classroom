@@ -12,7 +12,7 @@ import java.util.Date;
  * 课程审核对象 life_business_course
  * 
  * @author ruoyi
- * @date 2020-03-03
+ * @date 2020-03-04
  */
 public class LifeBusinessCourse extends BaseEntity
 {
@@ -67,8 +67,12 @@ public class LifeBusinessCourse extends BaseEntity
 
     /** 商户id
  */
-    @Excel(name = "商户id ")
+    @Excel(name = "商户id")
     private Long businessId;
+
+    /** 商户地址id */
+    @Excel(name = "商户地址id")
+    private Long businessAddressId;
 
     /** 预约规则图片 */
     @Excel(name = "预约规则图片")
@@ -130,16 +134,16 @@ public class LifeBusinessCourse extends BaseEntity
     {
         return carouselUrl;
     }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
+    public void setPrice(BigDecimal price)
+    {
         this.price = price;
     }
 
-    public void setCourseType(Integer courseType)
+    public BigDecimal getPrice()
+    {
+        return price;
+    }
+    public void setCourseType(Integer courseType) 
     {
         this.courseType = courseType;
     }
@@ -210,6 +214,15 @@ public class LifeBusinessCourse extends BaseEntity
     public Long getBusinessId() 
     {
         return businessId;
+    }
+    public void setBusinessAddressId(Long businessAddressId) 
+    {
+        this.businessAddressId = businessAddressId;
+    }
+
+    public Long getBusinessAddressId() 
+    {
+        return businessAddressId;
     }
     public void setRuleUrl(String ruleUrl) 
     {
@@ -282,6 +295,7 @@ public class LifeBusinessCourse extends BaseEntity
             .append("ageEnd", getAgeEnd())
             .append("describe", getDescribe())
             .append("businessId", getBusinessId())
+            .append("businessAddressId", getBusinessAddressId())
             .append("ruleUrl", getRuleUrl())
             .append("information", getInformation())
             .append("addTime", getAddTime())

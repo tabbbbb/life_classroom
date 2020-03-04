@@ -18,6 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="ageEnd"    column="age_end"    />
         <result property="describe"    column="describe"    />
         <result property="businessId"    column="business_id"    />
+        <result property="businessAddressId"    column="business_address_id"    />
         <result property="ruleUrl"    column="rule_url"    />
         <result property="information"    column="information"    />
         <result property="addTime"    column="add_time"    />
@@ -27,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectLifeBusinessCourseVo">
-        select course_id, name, img_url, carousel_url, price, course_type, course_label_id, course_classify_id, number, age_start, age_end, describe, business_id, rule_url, information, add_time, status, delete_flag, bind_top_thread from life_business_course
+        select course_id, name, img_url, carousel_url, price, course_type, course_label_id, course_classify_id, number, age_start, age_end, `describe`, business_id, business_address_id, rule_url, information, add_time, status, delete_flag, bind_top_thread from life_business_course
     </sql>
 
     <select id="selectLifeBusinessCourseList" parameterType="LifeBusinessCourse" resultMap="LifeBusinessCourseResult">
@@ -45,6 +46,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="ageEnd != null "> and age_end = #{ageEnd}</if>
             <if test="describe != null  and describe != ''"> and describe = #{describe}</if>
             <if test="businessId != null "> and business_id = #{businessId}</if>
+            <if test="businessAddressId != null "> and business_address_id = #{businessAddressId}</if>
             <if test="ruleUrl != null  and ruleUrl != ''"> and rule_url = #{ruleUrl}</if>
             <if test="information != null  and information != ''"> and information = #{information}</if>
             <if test="addTime != null "> and add_time = #{addTime}</if>
@@ -74,6 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="ageEnd != null ">age_end,</if>
             <if test="describe != null  and describe != ''">describe,</if>
             <if test="businessId != null ">business_id,</if>
+            <if test="businessAddressId != null ">business_address_id,</if>
             <if test="ruleUrl != null  and ruleUrl != ''">rule_url,</if>
             <if test="information != null  and information != ''">information,</if>
             <if test="addTime != null ">add_time,</if>
@@ -94,6 +97,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="ageEnd != null ">#{ageEnd},</if>
             <if test="describe != null  and describe != ''">#{describe},</if>
             <if test="businessId != null ">#{businessId},</if>
+            <if test="businessAddressId != null ">#{businessAddressId},</if>
             <if test="ruleUrl != null  and ruleUrl != ''">#{ruleUrl},</if>
             <if test="information != null  and information != ''">#{information},</if>
             <if test="addTime != null ">#{addTime},</if>
@@ -118,6 +122,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="ageEnd != null ">age_end = #{ageEnd},</if>
             <if test="describe != null  and describe != ''">describe = #{describe},</if>
             <if test="businessId != null ">business_id = #{businessId},</if>
+            <if test="businessAddressId != null ">business_address_id = #{businessAddressId},</if>
             <if test="ruleUrl != null  and ruleUrl != ''">rule_url = #{ruleUrl},</if>
             <if test="information != null  and information != ''">information = #{information},</if>
             <if test="addTime != null ">add_time = #{addTime},</if>
@@ -138,6 +143,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{courseId}
         </foreach>
     </delete>
+
 
     <select id="selectLifeBusinessCourseVoBySearchVo"
             resultType="com.ruoyi.life.domain.vo.system.LifeBusinessCourseVo">
@@ -164,10 +170,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         `update`.check_time as checkTime,
         course.add_time as addTime,
         course.bind_top_thread as bindTopThread
-
-
         from life_business_course as course
-        left join life_course_label as label on label.course_label_id = course.course_id
+        left join life_course_label as label on label.course_label_id = course.course_label_id
         left join life_course_classify as classify on classify.course_classify_id = course.course_classify_id
         inner join life_business as business on business.business_id = course.business_id
         inner join life_update as `update` on `update`.update_id = course.course_id
@@ -212,7 +216,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     #{addTimeEnd} >= course.add_time and
                 </when>
             </choose>
-            `update`.update_time = (select update_time from life_update where update_id = course.course_id order by update_time limit 1)
+            `update`.update_time = (select update_time from life_update where update_id = course.course_id order by update_time desc limit 1)
         </trim>
     </select>
     

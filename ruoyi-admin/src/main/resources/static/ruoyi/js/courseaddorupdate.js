@@ -16,6 +16,7 @@ function getFromData() {
     var point = $('[name=point]').val()*1*2
     var orderBy = $('[name=orderBy]').val()
     var recommend = $('[name=recommend]').val()
+    var information = $('[name=information]').val()
     //图片数据
     var imgUrl = $('[name=imgUrl]').attr('src')
     var $carousels =  $('[name=carousel]')
@@ -30,7 +31,7 @@ function getFromData() {
     })
     var teacher = $('[name=teacher]').attr('src')
     var rule = $('[name=rule]').attr('src')
-    var information = $('[name=information]').attr('src')
+
 
     var course = {
         courseId:courseId,
@@ -183,4 +184,13 @@ function changeFile(file,type){
             $(file).parent().prev().eq(0).prop("src",data);
         }
     });
+}
+
+
+function waiLianHide() {
+    if ($('[name=courseKind]').val() == 0){
+        return
+    }
+    $('[name=teacherName]').parent().parent().hide()
+    $('[name=teacher]').parent().parent().parent().hide()
 }

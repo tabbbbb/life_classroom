@@ -99,11 +99,11 @@ public class LifeCourse extends BaseEntity
 
     /** 1上架 0下架 */
     @Excel(name = "1上架 0下架")
-    private Long status;
+    private Integer status;
 
     /** 逻辑删除 */
     @Excel(name = "逻辑删除")
-    private Long deleteFlage;
+    private Integer deleteFlage;
 
     /** 价格 */
     @Excel(name = "价格")
@@ -313,24 +313,23 @@ public class LifeCourse extends BaseEntity
     {
         return rulePrice;
     }
-    public void setStatus(Long status) 
-    {
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
-    public Long getStatus() 
-    {
-        return status;
+    public Integer getDeleteFlage() {
+        return deleteFlage;
     }
-    public void setDeleteFlage(Long deleteFlage) 
-    {
+
+    public void setDeleteFlage(Integer deleteFlage) {
         this.deleteFlage = deleteFlage;
     }
 
-    public Long getDeleteFlage() 
-    {
-        return deleteFlage;
-    }
     public void setPrice(BigDecimal price)
     {
         this.price = price;

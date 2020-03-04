@@ -74,7 +74,7 @@ public interface LifeCourseMapper
      * @param conditionVo
      * @return
      */
-    List<LifeCourseByConditionVo> selectLifeCourseBySearchVo(@Param("conditionVo")LifeCourseConditionVo conditionVo);
+    List<LifeCourseByConditionVo> selectLifeCourseBySearchVo(@Param("conditionVo")LifeCourseConditionVo conditionVo,@Param("userId") Long userId);
 
 
     /**

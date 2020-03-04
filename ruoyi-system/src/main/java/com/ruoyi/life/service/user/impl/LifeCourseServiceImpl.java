@@ -131,9 +131,9 @@ public class LifeCourseServiceImpl implements LifeCourseService
      * @return
      */
     @Override
-    public UserResponse selectLifeCourseBySearchVo(LifeCourseConditionVo searchVo) {
+    public UserResponse selectLifeCourseBySearchVo(LifeCourseConditionVo searchVo,Long userId) {
         PageHelper.startPage(searchVo.getPage(),searchVo.getLimit());
-        List<LifeCourseByConditionVo> list = courseMapper.selectLifeCourseBySearchVo(searchVo);
+        List<LifeCourseByConditionVo> list = courseMapper.selectLifeCourseBySearchVo(searchVo,userId);
         for (LifeCourseByConditionVo conditionVo : list) {
             conditionVo.setCourseDetail(courseDetailService.selectLifeCourseDetailById(conditionVo.getCourseDetailId()));
         }

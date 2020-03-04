@@ -114,7 +114,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         and course_id = #{courseId}
     </delete>
 
-    <insert id="insertCourseDetailList">
+    <insert id="insertCourseDetailList" useGeneratedKeys="true" keyProperty="courseDetailId">
         insert into life_course_detail(course_id, week, start_hour, start_minute, course_duration, course_refund_hour)
         values
         <foreach collection="list" item="item" separator="," >
@@ -135,10 +135,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </foreach>
     </delete>
 
+
     <select id="getCourseDetailOrderHourAndMinuteByCourseId"
             resultMap="LifeCourseDetailResult">
         <include refid="selectLifeCourseDetailVo"/>
         where course_id = #{courseId}
         order by start_hour asc,start_minute asc
     </select>
+
+    <delete id="deleteNotInBusinessCourseDetail">
+        delete from life_business_course_detail
+        where course_id = #{courseId} and  course_detail_id not in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item.bindTopThread}
+        </foreach>
+    </delete>
+
 </mapper>

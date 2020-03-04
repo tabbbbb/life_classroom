@@ -10,10 +10,7 @@
  */
 package com.ruoyi.life.domain.vo.system;
 
-import com.ruoyi.life.domain.LifeBusinessCourse;
-import com.ruoyi.life.domain.LifeBusinessCourseDetail;
-import com.ruoyi.life.domain.LifeBusinessCourseSpecification;
-import com.ruoyi.life.domain.LifeUpdate;
+import com.ruoyi.life.domain.*;
 
 import java.util.List;
 
@@ -27,7 +24,6 @@ public class LifeBusinessCourseDetailVo {
      * 课程vo
      */
     private LifeBusinessCourse businessCourse;
-
     /**
      * 上课时间详细
      */
@@ -35,11 +31,43 @@ public class LifeBusinessCourseDetailVo {
 
 
     private List<LifeBusinessCourseSpecification> businessCourseSpecifications;
-
     /**
      * 修改记录
      */
     private List<LifeUpdate> updates;
+
+
+    private  LifeBusinessAddress address;
+
+
+    /**
+     * 课程标签
+     */
+    private String courseLabel;
+
+
+    /**
+     * 目标标签
+     */
+    private String courseClassify;
+
+    public String getCourseLabel() {
+        return courseLabel;
+    }
+
+    public void setCourseLabel(String courseLabel) {
+        this.courseLabel = courseLabel;
+    }
+
+    public String getCourseClassify() {
+        return courseClassify;
+    }
+
+    public void setCourseClassify(String courseClassify) {
+        this.courseClassify = courseClassify;
+    }
+
+
 
     public List<LifeBusinessCourseSpecification> getBusinessCourseSpecifications() {
         return businessCourseSpecifications;
@@ -47,6 +75,14 @@ public class LifeBusinessCourseDetailVo {
 
     public void setBusinessCourseSpecifications(List<LifeBusinessCourseSpecification> businessCourseSpecifications) {
         this.businessCourseSpecifications = businessCourseSpecifications;
+    }
+
+    public LifeBusinessAddress getAddress() {
+        return address;
+    }
+
+    public void setAddress(LifeBusinessAddress address) {
+        this.address = address;
     }
 
     public LifeBusinessCourse getBusinessCourse() {

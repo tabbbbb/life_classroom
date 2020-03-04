@@ -76,7 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
     <update id="confirmUpdate">
-        update life_update set update_type = #{param2},failure_explain = #{param3}
-        where update_id = #{param1}
+        update life_update set update_type = #{param2},failure_explain = #{param3},check_time = now()
+        where update_id = #{param1} and update_type = 0
     </update>
 </mapper>
