@@ -2,6 +2,7 @@ package com.ruoyi.life.service.user;
 
 
 import com.ruoyi.life.domain.LifePoint;
+import com.ruoyi.life.domain.vo.user.LifeNotSetPointVo;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -63,12 +64,6 @@ public interface LifePointService
     int deleteLifePointById(Long pointId);
 
 
-    /**
-     * 获取未设置绑定的会员集合
-     * @param userId
-     * @return
-     */
-    List<LifePoint> selectNotSetChildPoint(Long userId);
 
 
     /**
@@ -113,5 +108,12 @@ public interface LifePointService
      * @return
      */
     LifePoint getBeOnTheVergeOfPoint(Long shareId);
+
+
+    /**
+     * 获取用户没有设置小孩的积分记录
+     * @return
+     */
+    List<LifeNotSetPointVo> getUserNotSetChildPoint(Long userId);
 
 }

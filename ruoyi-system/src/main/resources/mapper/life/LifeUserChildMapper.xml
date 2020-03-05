@@ -88,7 +88,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="getChildAllByShareId" resultMap="LifeUserChildResult">
         <include refid="selectLifeUserChildVo"/>
         where share_id = #{shareId}
-        where
     </select>
     <select id="getChildArrayShareId" resultType="java.lang.Long">
         select share_id from life_user_child

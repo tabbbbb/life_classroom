@@ -3,20 +3,19 @@ package com.ruoyi.life.service.user.impl;
 
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.exception.life.user.SendCouponException;
+import com.ruoyi.common.exception.life.user.UserOperationException;
+import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.common.response.UserResponseCode;
 import com.ruoyi.common.utils.security.Md5Utils;
-import com.ruoyi.life.domain.LifeCompanyCoupon;
-import com.ruoyi.life.domain.LifeCoupon;
-import com.ruoyi.life.domain.LifeCouponReceive;
-import com.ruoyi.life.domain.LifeVipCoupon;
+import com.ruoyi.life.domain.*;
+import com.ruoyi.life.domain.vo.user.LifeUserCouponVo;
 import com.ruoyi.life.mapper.LifeCouponReceiveMapper;
-import com.ruoyi.life.service.user.LifeCouponReceiveService;
-import com.ruoyi.life.service.user.LifeCouponService;
-import com.ruoyi.life.service.user.LifeVipCouponService;
+import com.ruoyi.life.service.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +40,15 @@ public class LifeCouponReceiveServiceImpl implements LifeCouponReceiveService
 
     @Autowired
     private LifeVipCouponService vipCouponService;
+
+    @Autowired
+    private LifeUserService userService;
+
+    @Autowired
+    private LifePointService pointService;
+
+    @Autowired
+    private LifePointLogService pointLogService;
 
     /**
      * 查询用户优惠卷
@@ -227,5 +235,77 @@ public class LifeCouponReceiveServiceImpl implements LifeCouponReceiveService
     @Override
     public int backCoupon(List<Long> couponReceiveIds) {
         return couponReceiveMapper.backCoupon(couponReceiveIds);
+    }
+
+
+    /**
+     * 获取用户优惠券
+     *
+     * @param userId
+     * @param status
+     * @return
+     */
+    @Override
+    public List<LifeUserCouponVo> getUserCoupon(Long userId, int status) {
+        return couponReceiveMapper.getUserCoupon(userId,status);
+    }
+
+
+    /**
+     * 使用充值券
+     *
+     * @param userId
+     * @param couponReceiveId
+     * @return
+     */
+    @Override
+    public void useCouponType2(Long userId, Long couponReceiveId) {
+        Long couponId = couponReceiveMapper.getUserCouponByCouponReceive(userId,couponReceiveId);
+        LifeCoupon coupon = couponService.selectLifeCouponById(couponId);
+        if (coupon == null){
+            throw new UserOperationException(UserResponseCode.USE_COUPON_TYPE_2,"优惠券不存在");
+        }
+        LifeUser user = userService.selectLifeUserById(userId);
+        LifePoint point = new LifePoint();
+        point.setVipId(-1L);
+        point.setUsePoint(coupon.getPoint());
+        point.setIsAddChild(0);
+        point.setIsSetChild(0);
+        point.setShareId(user.getShareId());
+        point.setUserId(user.getUserId());
+        point.setPointType(3);
+        LocalDateTime start = LocalDateTime.now();
+        point.setStartDate(start);
+        point.setEndDate(start.plusDays(coupon.getEnableDay()+1));
+        point.setPoint(coupon.getPoint());
+        if (pointService.insertLifePoint(point) == 0){
+            throw new UserOperationException(UserResponseCode.USE_COUPON_TYPE_2,"积分赠送失败");
+        }
+        LifePointLog pointLog = new LifePointLog();
+        pointLog.setUserId(userId);
+        pointLog.setShareId(user.getShareId());
+        pointLog.setAddTime(start);
+        pointLog.setExplain("使用"+coupon.getName());
+        pointLog.setPoint(coupon.getPoint());
+        pointLog.setLogType(3);
+        if (pointLogService.insertLifePointLog(pointLog) == 0){
+            throw new UserOperationException(UserResponseCode.USE_COUPON_TYPE_2,"积分日志添加失败");
+        }
+        if (useCoupon(couponReceiveId) == 0){
+            throw new UserOperationException(UserResponseCode.USE_COUPON_TYPE_2,"优惠券不可使用");
+        }
+
+    }
+
+
+    /**
+     * 使用优惠券
+     *
+     * @param courseReceiveId
+     * @return
+     */
+    @Override
+    public int useCoupon(Long courseReceiveId) {
+        return couponReceiveMapper.useCoupon(courseReceiveId);
     }
 }

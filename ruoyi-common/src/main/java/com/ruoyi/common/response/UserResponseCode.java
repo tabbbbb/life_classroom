@@ -258,4 +258,11 @@ public class UserResponseCode {
      * 赠送优惠券错误
      */
     public static final Integer SEND_COUPON_ERROR = 100036;
+
+
+
+    /**
+     * 使用充值券错误
+     */
+    public static final Integer USE_COUPON_TYPE_2 = 100037;
 }

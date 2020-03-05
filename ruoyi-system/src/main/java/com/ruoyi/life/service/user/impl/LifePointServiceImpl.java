@@ -2,6 +2,8 @@ package com.ruoyi.life.service.user.impl;
 
 
 import com.ruoyi.life.domain.LifePoint;
+import com.ruoyi.life.domain.vo.system.LifePointVo;
+import com.ruoyi.life.domain.vo.user.LifeNotSetPointVo;
 import com.ruoyi.life.mapper.LifePointMapper;
 import com.ruoyi.life.service.user.LifePointChildService;
 import com.ruoyi.life.service.user.LifePointService;
@@ -100,16 +102,7 @@ public class LifePointServiceImpl implements LifePointService
         return pointMapper.deleteLifePointById(pointId);
     }
 
-    /**
-     * 获取未设置的会员集合
-     *
-     * @param userId
-     * @return
-     */
-    @Override
-    public List<LifePoint> selectNotSetChildPoint(Long userId) {
-        return pointMapper.selectNotSetChildPoint(userId);
-    }
+
 
 
     /**
@@ -215,5 +208,17 @@ public class LifePointServiceImpl implements LifePointService
     @Override
     public LifePoint getBeOnTheVergeOfPoint(Long shareId) {
         return pointMapper.getBeOnTheVergeOfPoint(shareId);
+    }
+
+
+    /**
+     * 获取用户没有设置小孩的积分记录
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<LifeNotSetPointVo> getUserNotSetChildPoint(Long userId) {
+        return pointMapper.getUserNotSetChildPoint(userId);
     }
 }

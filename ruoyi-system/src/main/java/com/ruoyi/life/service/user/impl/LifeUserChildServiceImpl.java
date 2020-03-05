@@ -10,6 +10,7 @@ import com.ruoyi.common.utils.JacksonUtil;
 import com.ruoyi.life.domain.LifePoint;
 import com.ruoyi.life.domain.LifeUser;
 import com.ruoyi.life.domain.LifeUserChild;
+import com.ruoyi.life.domain.vo.user.LifeAddChildVo;
 import com.ruoyi.life.mapper.LifeUserChildMapper;
 import com.ruoyi.life.service.user.LifePointService;
 import com.ruoyi.life.service.user.LifeUserChildService;
@@ -69,21 +70,19 @@ public class LifeUserChildServiceImpl implements LifeUserChildService
     /**
      * 新增小孩
      * 
-     * @param body 小孩
+     * @param childVo 小孩
      * @return 结果
      */
     @Override
     @Transactional
-    public UserResponse insertLifeUserChild(Long userId,String body)
+    public UserResponse insertLifeUserChild(Long userId, LifeAddChildVo childVo)
     {
-        String childString = JacksonUtil.parseString(body,"child");
-        Long pointId = JacksonUtil.parseLong(body,"pointId");
-        if (pointId == null || childString == null){
+
+        if (childVo == null || childVo.getPointId() == null || childVo.getChild() == null){
             return UserResponse.fail(UserResponseCode.USER_ADD_CHILD_ERROR,"参数错误");
         }
-
-        LifeUserChild userChild = JSON.parseObject(childString,LifeUserChild.class);
-
+        Long pointId = childVo.getPointId();
+        LifeUserChild userChild = childVo.getChild();
         LifePoint point = pointService.selectLifePointById(pointId);
         LifeUser user = userService.selectLifeUserById(userId);
         Long shareId = user.getShareId();
@@ -164,7 +163,7 @@ public class LifeUserChildServiceImpl implements LifeUserChildService
         List<LifeUserChild> childUsable = lifeUserChildMapper.getChildByShareId(user.getShareId());
         for (int i = 0;i < childAll.size();i++) {
             for (LifeUserChild userChild : childUsable) {
-                if (childAll.get(i).equals(userChild.getChildId())){
+                if (childAll.get(i).getChildId().equals(userChild.getChildId())){
                     childAll.remove(i);
                 }
             }
@@ -172,7 +171,7 @@ public class LifeUserChildServiceImpl implements LifeUserChildService
         Map<String,Object> map = new HashMap<>();
         map.put("childUsable",childUsable);
         map.put("childDisabled",childAll);
-        map.put("notSetPoint",pointService.selectNotSetChildPoint(userId));
+        map.put("notSetPoint",pointService.getUserNotSetChildPoint(userId));
         return UserResponse.succeed(map);
     }
 

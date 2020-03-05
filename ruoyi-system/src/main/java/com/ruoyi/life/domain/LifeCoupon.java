@@ -41,7 +41,7 @@ public class LifeCoupon
 
     /** 抵用或是充值 */
     @Excel(name = "抵用积分或充值积分")
-    private Integer point;
+    private Long point;
 
     /** 间隔天数 */
     @Excel(name = "间隔天数")
@@ -123,12 +123,12 @@ public class LifeCoupon
     {
         return discount;
     }
-    public void setPoint(Integer point) 
+    public void setPoint(Long point)
     {
         this.point = point;
     }
 
-    public Integer getPoint() 
+    public Long getPoint()
     {
         return point;
     }

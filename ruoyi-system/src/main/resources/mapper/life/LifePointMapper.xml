@@ -72,10 +72,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
     <insert id="insertList">
-        insert into life_point(vip_id,point_type,start_date,end_date,share_id,point,use_point,user_id)
+        insert into life_point(vip_id,point_type,start_date,end_date,share_id,point,use_point,user_id,is_add_child,is_set_child)
         values
         <foreach collection="list" item="item"  separator=",">
-            (#{item.vipId},#{item.pointType},#{item.startDate},#{item.endDate},#{item.shareId},#{item.point},#{item.usePoint},#{item.userId})
+            (#{item.vipId},#{item.pointType},#{item.startDate},#{item.endDate},#{item.shareId},#{item.point},#{item.usePoint},#{item.userId},#{item.isAddChild},#{item.isSetChild})
         </foreach>
     </insert>
 
@@ -118,10 +118,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where share_id = #{shareId}
     </delete>
 
-    <select id="selectNotSetChildPoint" resultMap="LifePointResult">
-        <include refid="selectLifePointVo"/>
-        where is_set_child > 0 and point_type = 1
-    </select>
+
 
     <select id="getPointByShareId" resultMap="LifePointResult">
         <include refid="selectLifePointVo"/>
@@ -167,6 +164,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where share_id = #{shareId}
         order by end_date
         limit 1
+    </select>
+    <select id="getUserNotSetChildPoint" resultType="com.ruoyi.life.domain.vo.user.LifeNotSetPointVo">
+        select
+          point.point_id as pointId,
+          point.is_add_child as addNum,
+          vip.child as setNum,
+          point.is_set_child as setTime,
+          vip.vip_name as vipName,
+          point.start_date as start,
+          point.end_date as `end`
+        from life_point as point
+        inner join life_vip as vip on  vip.vip_id = point.vip_id
+        where user_id = #{userId} and point.is_set_child = 1
     </select>
 
 

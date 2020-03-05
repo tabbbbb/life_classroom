@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.life.mapper.LifeHomePageMapper">
+    
+    <resultMap type="LifeHomePage" id="LifeHomePageResult">
+        <result property="homePageId"    column="home_page_id"    />
+        <result property="type"    column="type"    />
+        <result property="couponIds"    column="coupon_ids"    />
+        <result property="img1"    column="img1"    />
+        <result property="img2"    column="img2"    />
+    </resultMap>
+
+    <sql id="selectLifeHomePageVo">
+        select home_page_id, type, coupon_ids, img1, img2 from life_home_page
+    </sql>
+
+    <select id="selectLifeHomePageList" parameterType="LifeHomePage" resultMap="LifeHomePageResult">
+        <include refid="selectLifeHomePageVo"/>
+        <where>  
+            <if test="type != null "> and type = #{type}</if>
+            <if test="couponIds != null "> and coupon_ids = #{couponIds}</if>
+            <if test="img1 != null  and img1 != ''"> and img1 = #{img1}</if>
+            <if test="img2 != null  and img2 != ''"> and img2 = #{img2}</if>
+        </where>
+    </select>
+    
+    <select id="selectLifeHomePageById" parameterType="Long" resultMap="LifeHomePageResult">
+        <include refid="selectLifeHomePageVo"/>
+        where home_page_id = #{homePageId}
+    </select>
+        
+    <insert id="insertLifeHomePage" parameterType="LifeHomePage" useGeneratedKeys="true" keyProperty="homePageId">
+        insert into life_home_page
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="type != null ">type,</if>
+            <if test="couponIds != null ">coupon_ids,</if>
+            <if test="img1 != null  and img1 != ''">img1,</if>
+            <if test="img2 != null  and img2 != ''">img2,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="type != null ">#{type},</if>
+            <if test="couponIds != null ">#{couponIds},</if>
+            <if test="img1 != null  and img1 != ''">#{img1},</if>
+            <if test="img2 != null  and img2 != ''">#{img2},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLifeHomePage" parameterType="LifeHomePage">
+        update life_home_page
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="type != null ">type = #{type},</if>
+            <if test="couponIds != null ">coupon_ids = #{couponIds},</if>
+            <if test="img1 != null  and img1 != ''">img1 = #{img1},</if>
+            <if test="img2 != null  and img2 != ''">img2 = #{img2},</if>
+        </trim>
+        where home_page_id = #{homePageId}
+    </update>
+
+    <delete id="deleteLifeHomePageById" parameterType="Long">
+        delete from life_home_page where home_page_id = #{homePageId}
+    </delete>
+
+    <delete id="deleteLifeHomePageByIds" parameterType="String">
+        delete from life_home_page where home_page_id in 
+        <foreach item="homePageId" collection="array" open="(" separator="," close=")">
+            #{homePageId}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -20,6 +20,7 @@ import com.ruoyi.framework.userlogin.LoginResponse;
 import com.ruoyi.framework.userlogin.annotation.LoginInfo;
 import com.ruoyi.framework.userlogin.info.UserLoginInfo;
 import com.ruoyi.life.domain.LifeUser;
+import com.ruoyi.life.domain.vo.user.LifeAddChildVo;
 import com.ruoyi.life.service.user.LifeFileUpService;
 import com.ruoyi.life.service.user.LifePointService;
 import com.ruoyi.life.service.user.LifeUserChildService;
@@ -62,10 +63,10 @@ public class LifeUserChildController {
     @ApiOperation(value = "添加小孩")
     @PutMapping("child")
     public UserResponse setChild(@ApiIgnore @LoginInfo UserLoginInfo loginInfo,
-                                 @RequestBody @ApiParam(name = "body",value = "child:LifeUserChild,pointId:LifePoint.pointId") String body){
+                                 @RequestBody @ApiParam(name = "childVo",value = "child:LifeUserChild,pointId:LifePoint.pointId")  LifeAddChildVo childVo){
         UserResponse response = LoginResponse.toMessage(loginInfo);
         if (response != null) return response;
-        return userChildService.insertLifeUserChild(loginInfo.getId(),body);
+        return userChildService.insertLifeUserChild(loginInfo.getId(),childVo);
     }
 
     @ApiOperation(value = "获取可选小孩")

@@ -3,6 +3,7 @@ package com.ruoyi.life.service.user;
 
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.life.domain.LifeUserChild;
+import com.ruoyi.life.domain.vo.user.LifeAddChildVo;
 
 import java.util.List;
 
@@ -20,27 +21,23 @@ public interface LifeUserChildService
      * @param childId 小孩ID
      * @return 小孩
      */
-    public LifeUserChild selectLifeUserChildById(Long childId);
-
+    LifeUserChild selectLifeUserChildById(Long childId);
     /**
      * 查询小孩列表
      * 
      * @param lifeUserChild 小孩
      * @return 小孩集合
      */
-    public List<LifeUserChild> selectLifeUserChildList(LifeUserChild lifeUserChild);
-
-
-
+    List<LifeUserChild> selectLifeUserChildList(LifeUserChild lifeUserChild);
 
 
     /**
      * 新增小孩
      * 
-     * @param body 小孩
+     * @param childVo 小孩
      * @return 结果
      */
-    public UserResponse insertLifeUserChild(Long userId,String body);
+     UserResponse insertLifeUserChild(Long userId, LifeAddChildVo childVo);
 
     /**
      * 修改小孩
@@ -48,7 +45,7 @@ public interface LifeUserChildService
      * @param lifeUserChild 小孩
      * @return 结果
      */
-    public int updateLifeUserChild(LifeUserChild lifeUserChild);
+     int updateLifeUserChild(LifeUserChild lifeUserChild);
 
     /**
      * 批量删除小孩
@@ -56,7 +53,7 @@ public interface LifeUserChildService
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int deleteLifeUserChildByIds(String ids);
+    int deleteLifeUserChildByIds(String ids);
 
     /**
      * 删除小孩信息
@@ -64,7 +61,7 @@ public interface LifeUserChildService
      * @param childId 小孩ID
      * @return 结果
      */
-    public int deleteLifeUserChildById(Long childId);
+    int deleteLifeUserChildById(Long childId);
 
 
     /**

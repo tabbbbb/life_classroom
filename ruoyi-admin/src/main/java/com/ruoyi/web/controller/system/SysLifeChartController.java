@@ -38,7 +38,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/life/chart")
-public class SysChartController extends BaseController {
+public class SysLifeChartController extends BaseController {
 
     private String prefix = "life/chart";
 

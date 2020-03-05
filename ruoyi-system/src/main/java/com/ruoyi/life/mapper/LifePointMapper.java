@@ -3,6 +3,7 @@ package com.ruoyi.life.mapper;
 
 import com.ruoyi.life.domain.LifePoint;
 import com.ruoyi.life.domain.vo.system.LifePointVo;
+import com.ruoyi.life.domain.vo.user.LifeNotSetPointVo;
 import com.ruoyi.life.service.system.SysLifePointService;
 
 import java.awt.*;
@@ -66,12 +67,7 @@ public interface LifePointMapper
     int deleteLifePointByIds(String[] pointIds);
 
 
-    /**
-     *  获取未设置的会员集合
-     * @param userId
-     * @return
-     */
-    List<LifePoint> selectNotSetChildPoint(Long userId);
+
 
 
     /**
@@ -160,4 +156,11 @@ public interface LifePointMapper
      * @return
      */
     LifePoint getBeOnTheVergeOfPoint(Long shareId);
+
+
+    /**
+     * 获取用户没有设置小孩的积分记录
+     * @return
+     */
+    List<LifeNotSetPointVo> getUserNotSetChildPoint(Long userId);
 }

@@ -165,7 +165,7 @@ public class LifeAuthController {
             UserLoginInfo info = UserToken.addToken(user.getUserId());
             Map<String,Object> map = new HashMap<>();
             map.put("info",info);
-            map.put("points",pointService.selectNotSetChildPoint(info.getId()));
+           // map.put("points",pointService.selectNotSetChildPoint(info.getId()));
             response.setData(map);
         }
     }

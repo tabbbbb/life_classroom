@@ -1,7 +1,9 @@
 package com.ruoyi.life.mapper;
 
 
+import com.ruoyi.life.domain.LifeCoupon;
 import com.ruoyi.life.domain.LifeCouponReceive;
+import com.ruoyi.life.domain.vo.user.LifeUserCouponVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -40,7 +42,6 @@ public interface LifeCouponReceiveMapper
     int insertLifeCouponReceive(LifeCouponReceive lifeCouponReserve);
 
 
-
     /**
      * 修改用户优惠卷
      * 
@@ -66,7 +67,6 @@ public interface LifeCouponReceiveMapper
     int deleteLifeCouponReceiveByIds(String[] receiveIds);
 
 
-
     /**
      * 新增用户优惠卷集合
      *
@@ -89,4 +89,27 @@ public interface LifeCouponReceiveMapper
      * @return
      */
     int backCoupon(@Param("couponReceiveIds") List<Long> couponReceiveIds);
+
+
+    /**
+     * 获取用户优惠券
+     * @param userId
+     * @param status
+     * @return
+     */
+    List<LifeUserCouponVo> getUserCoupon(Long userId, int status);
+
+
+    /**
+     * 获取指定用户没有使用的CouponReceiveId优惠券id
+     * @return
+     */
+    Long getUserCouponByCouponReceive(Long userId,Long courseReceiveId);
+
+
+    /**
+     * 使用优惠券
+     * @return
+     */
+    int useCoupon(Long courseReceiveId);
 }

@@ -34,7 +34,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectLifeCouponReceiveVo"/>
         where receive_id = #{receiveId}
     </select>
-        
+
+
     <insert id="insertLifeCouponReceive" parameterType="LifeCouponReceive" useGeneratedKeys="true" keyProperty="receiveId">
         insert into life_coupon_receive
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -109,4 +110,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
 
+
+    <select id="getUserCoupon" resultType="com.ruoyi.life.domain.vo.user.LifeUserCouponVo">
+        select
+            receive.receive_id as couponReceiveId,
+            coupon.name as `name`,
+            coupon.img as img,
+            coupon.type as `type`,
+            ifnull(coupon.discount,coupon.point) as `value`,
+            receive.status as `status`,
+            coupon.astrict as astrict,
+            course.name as astrictCourseName,
+            receive.start_time as startDate,
+            receive.end_time as endDate
+        from life_coupon_receive as receive
+        inner join life_coupon as coupon on  coupon.coupon_id = receive.coupon_id
+        left join life_course as course on  course.course_id = coupon.astrict
+        where receive.share_id = #{param1} and receive.status = #{param2}
+    </select>
+    <select id="getUserCouponByCouponReceive" resultType="java.lang.Long">
+        select coupon_id from life_coupon_receive
+        where share_id = #{param1} and receive_id = #{param2} and status = 0
+    </select>
+
+    <update id="useCoupon">
+        update life_coupon_receive set status = 1
+        where receive_id = #{courseReceiveId}
+    </update>
 </mapper>

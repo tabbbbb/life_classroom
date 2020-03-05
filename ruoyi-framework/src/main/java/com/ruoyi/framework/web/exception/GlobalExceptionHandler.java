@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.ruoyi.common.exception.file.FileException;
 import com.ruoyi.common.exception.life.user.*;
+import com.ruoyi.common.exception.user.UserException;
 import com.ruoyi.common.response.UserResponse;
 import org.apache.shiro.authz.AuthorizationException;
 import org.slf4j.Logger;
@@ -171,6 +172,13 @@ public class GlobalExceptionHandler
         e.printStackTrace();
         return e.getUserResponse();
     }
+
+    @ExceptionHandler(UserOperationException.class)
+    public UserResponse userOperationException(UserOperationException e){
+        e.printStackTrace();
+        return e.getUserResponse();
+    }
+
 
 
 

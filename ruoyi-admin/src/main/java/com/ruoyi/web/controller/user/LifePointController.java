@@ -11,6 +11,7 @@
 package com.ruoyi.web.controller.user;
 
 import com.ruoyi.common.response.UserResponse;
+import com.ruoyi.framework.userlogin.LoginResponse;
 import com.ruoyi.framework.userlogin.annotation.LoginInfo;
 import com.ruoyi.framework.userlogin.info.UserLoginInfo;
 import com.ruoyi.life.service.user.LifePointService;
@@ -35,6 +36,7 @@ public class LifePointController {
 
     @Resource
     private LifePointService pointService;
+
 
 
 }

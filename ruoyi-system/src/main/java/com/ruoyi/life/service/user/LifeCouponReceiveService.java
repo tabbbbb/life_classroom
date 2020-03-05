@@ -1,9 +1,12 @@
 package com.ruoyi.life.service.user;
 
 
+import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.life.domain.LifeCompanyCoupon;
+import com.ruoyi.life.domain.LifeCoupon;
 import com.ruoyi.life.domain.LifeCouponReceive;
 import com.ruoyi.life.domain.LifeVipCoupon;
+import com.ruoyi.life.domain.vo.user.LifeUserCouponVo;
 
 import java.util.List;
 
@@ -38,7 +41,6 @@ public interface LifeCouponReceiveService
      * @return 结果
      */
     int insertLifeCouponReceive(LifeCouponReceive lifeCouponReceive);
-
 
 
 
@@ -82,7 +84,6 @@ public interface LifeCouponReceiveService
     void insertLifeCouponReceiveBalance(Long shareId, List<LifeCompanyCoupon> list);
 
 
-
     /**
      * 新增充值vip所送优惠券
      *
@@ -93,12 +94,33 @@ public interface LifeCouponReceiveService
 
 
 
-
-
     /**
      * 退回优惠券
      * @return
      */
     int backCoupon(List<Long> couponReceiveIds);
+
+
+    /**
+     * 获取用户优惠券
+     * @param userId
+     * @param status
+     * @return
+     */
+    List<LifeUserCouponVo> getUserCoupon(Long userId,int status);
+
+
+    /**
+     * 使用充值券
+     * @return
+     */
+    void useCouponType2(Long userId,Long couponReceiveId);
+
+
+    /**
+     * 使用优惠券
+     * @return
+     */
+    int useCoupon(Long courseReceiveId);
 
 }

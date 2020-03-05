@@ -552,7 +552,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
                 }
                 toUsePrice = new BigDecimal(coupon.getPoint());
                 couponReceive.setStatus(1);
-                if (couponReceiveService.updateLifeCouponReceive(couponReceive) == 0){
+                if (couponReceiveService.useCoupon(couponReceive.getReceiveId()) == 0){
                     throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"优惠券使用失败");
                 }
             }
