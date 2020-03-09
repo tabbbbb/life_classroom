@@ -2,10 +2,17 @@ package com.ruoyi.life.service.user.impl;
 
 
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.exception.life.user.UserOperationException;
+import com.ruoyi.common.response.UserResponse;
+import com.ruoyi.common.response.UserResponseCode;
+import com.ruoyi.life.domain.LifeCoupon;
 import com.ruoyi.life.domain.LifeHomePage;
+import com.ruoyi.life.domain.LifeHomepageCoupon;
+import com.ruoyi.life.domain.vo.user.LifeHomePageCouponDataVo;
 import com.ruoyi.life.mapper.LifeHomePageMapper;
+import com.ruoyi.life.service.user.LifeCouponReceiveService;
 import com.ruoyi.life.service.user.LifeHomePageService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ruoyi.life.service.user.LifeHomepageCouponService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,19 +28,16 @@ import java.util.List;
 public class LifeHomePageServiceImpl implements LifeHomePageService
 {
     @Resource
-    private LifeHomePageMapper lifeHomePageMapper;
+    private LifeHomePageMapper homePageMapper;
 
-    /**
-     * 查询首页信息
-     * 
-     * @param homePageId 首页信息ID
-     * @return 首页信息
-     */
-    @Override
-    public LifeHomePage selectLifeHomePageById(Long homePageId)
-    {
-        return lifeHomePageMapper.selectLifeHomePageById(homePageId);
-    }
+    @Resource
+    private LifeCouponReceiveService couponReceiveService;
+
+    @Resource
+    private LifeHomepageCouponService homepageCouponService;
+
+
+
 
     /**
      * 查询首页信息列表
@@ -44,54 +48,34 @@ public class LifeHomePageServiceImpl implements LifeHomePageService
     @Override
     public List<LifeHomePage> selectLifeHomePageList(LifeHomePage lifeHomePage)
     {
-        return lifeHomePageMapper.selectLifeHomePageList(lifeHomePage);
+        return homePageMapper.selectLifeHomePageList(lifeHomePage);
     }
 
     /**
-     * 新增首页信息
-     * 
-     * @param lifeHomePage 首页信息
-     * @return 结果
+     * @param homePageId
+     * @return
      */
     @Override
-    public int insertLifeHomePage(LifeHomePage lifeHomePage)
-    {
-        return lifeHomePageMapper.insertLifeHomePage(lifeHomePage);
+    public List<LifeHomePageCouponDataVo> homepageCouponData(Long homePageId) {
+        return homePageMapper.homepageCouponData(homePageId);
     }
 
-    /**
-     * 修改首页信息
-     * 
-     * @param lifeHomePage 首页信息
-     * @return 结果
-     */
-    @Override
-    public int updateLifeHomePage(LifeHomePage lifeHomePage)
-    {
-        return lifeHomePageMapper.updateLifeHomePage(lifeHomePage);
-    }
 
     /**
-     * 删除首页信息对象
-     * 
-     * @param ids 需要删除的数据ID
-     * @return 结果
+     * 领取优惠券
+     *
+     * @param userId
+     * @param couponId
      */
     @Override
-    public int deleteLifeHomePageByIds(String ids)
-    {
-        return lifeHomePageMapper.deleteLifeHomePageByIds(Convert.toStrArray(ids));
-    }
+    public void getCoupon(Long userId, Long couponId,Long homepageId) {
+        if (!homepageCouponService.getCouponExist(homepageId,couponId)){
+            throw new UserOperationException(UserResponseCode.GET_COUPON_ERROR,"没有此优惠券，请刷新重试");
+        }
 
-    /**
-     * 删除首页信息信息
-     * 
-     * @param homePageId 首页信息ID
-     * @return 结果
-     */
-    @Override
-    public int deleteLifeHomePageById(Long homePageId)
-    {
-        return lifeHomePageMapper.deleteLifeHomePageById(homePageId);
+        if (homepageCouponService.getCoupon(homepageId,couponId) == 0){
+            throw new UserOperationException(UserResponseCode.GET_COUPON_ERROR,"手慢了，优惠券已被抢光");
+        }
+        couponReceiveService.getCoupon(userId,couponId);
     }
 }

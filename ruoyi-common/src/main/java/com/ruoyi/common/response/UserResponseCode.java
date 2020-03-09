@@ -265,4 +265,10 @@ public class UserResponseCode {
      * 使用充值券错误
      */
     public static final Integer USE_COUPON_TYPE_2 = 100037;
+
+
+    /**
+     * 领取优惠券错误
+     */
+    public static final Integer GET_COUPON_ERROR = 100038;
 }

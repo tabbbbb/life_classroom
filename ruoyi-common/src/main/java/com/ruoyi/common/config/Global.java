@@ -135,6 +135,10 @@ public class Global
         return getProfile() + "/course/information";
     }
 
+    public static String getSysHomepageImgPath(){
+        return getProfile() + "/homepage";
+    }
+
 
     public static String getSystemCourseClassify(){
         return getProfile() + "/classify";

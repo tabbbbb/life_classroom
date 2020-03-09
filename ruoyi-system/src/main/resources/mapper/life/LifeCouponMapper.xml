@@ -48,6 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
 
+
     <insert id="insertLifeCoupon" parameterType="LifeCoupon" useGeneratedKeys="true" keyProperty="couponId">
         insert into life_coupon
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -117,5 +118,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{item}
         </foreach>
     </update>
-
+    <select id="selectLifeCouponByIds" resultMap="LifeCouponResult">
+        <include refid="selectLifeCouponVo"/>
+        where coupon_id in
+        <foreach collection="couponIds" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
 </mapper>

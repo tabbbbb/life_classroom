@@ -72,4 +72,12 @@ public interface LifeCouponMapper
      * @return 结果
      */
      int deleteLifeCouponByCourseIds(@Param("courseIds") String[] courseIds);
+
+
+    /**
+     * 根据ids获取优惠券列表
+     * @param couponIds
+     * @return
+     */
+    List<LifeCoupon> selectLifeCouponByIds(@Param("couponIds") String [] couponIds);
 }

@@ -2,7 +2,9 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
     <th:block th:include="include :: header('新增首页信息')" />
+    <link th:href="@{/ruoyi/css/course.css}" rel="stylesheet"/>
 </head>
+
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-page-add">
@@ -10,42 +12,80 @@
                 <label class="col-sm-3 control-label">类型：</label>
                 <div class="col-sm-8">
                     <select name="type" class="form-control m-b">
-                        <option value="">所有</option>
+
                     </select>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">优惠券ids
-：</label>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">位置：</label>
                 <div class="col-sm-8">
-                    <input name="couponIds" class="form-control" type="text">
+                    <select name="position" class="form-control m-b">
+                    </select>
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">展示图片：</label>
-                <div class="col-sm-8">
-                    <input name="img1" class="form-control" type="text">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">轮播图：</label>
+                <div class="fileinput fileinput-new col-sm-8" data-provides="fileinput">
+                    <div class="fileinput-preview thumbnail" style="width: 200px; height: 150px;" onclick="clickImg(this)">
+                        <img name="img1"  />
+                        <span class="filenone"><input type="file" onchange="changeFile(this,'/life/homepage/upload')"></span>
+                    </div>
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">详细图片：</label>
-                <div class="col-sm-8">
-                    <input name="img2" class="form-control" type="text">
+                <div class="fileinput fileinput-new col-sm-8" data-provides="fileinput">
+                    <div class="fileinput-preview thumbnail" style="width: 200px; height: 150px;" onclick="clickImg(this)">
+                        <img name="img2"/>
+                        <span class="filenone"><input type="file" onchange="changeFile(this,'/life/homepage/upload')"></span>
+                    </div>
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">优惠券名称：</label>
+                <div class="col-sm-8">
+                    <input name="couponId" class="form-control" type="hidden">
+                    <span name="couponName"></span>
+
+                    <button class="btn btn-info btn-xs " type="button" onclick='showCoupon()'><i class="fa fa-paste"></i>选择优惠券</button>
+                    <span style="margin-left:20px ">数量:</span>
+                    <input type="number" value="1" name="number"  style="width:50px "/>
+                </div>
+                <a href="javascript:void(0)"  style="font-size: 30px" onclick="minus(this)">-</a>
+                <a href="javascript:void(0)"  style="font-size: 30px" onclick="plus(this)">+</a>
+            </div>
+
         </form>
     </div>
     <th:block th:include="include :: footer" />
+
+    <script th:src="@{/ruoyi/js/homepage.js}"></script>
+    <script th:src="@{/ruoyi/js/upload.js}"></script>
     <script type="text/javascript">
-        var prefix = ctx + "system/page"
+        var prefix = ctx + "life/homepage"
         $("#form-page-add").validate({
             focusCleanup: true
         });
-
         function submitHandler() {
+            var fromData = getFromData()
             if ($.validate.form()) {
-                $.operate.save(prefix + "/add", $('#form-page-add').serialize());
+                $.ajax({
+                    cache : false,
+                    type : "POST",
+                    url : prefix + "/add",
+                    data:JSON.stringify(fromData),
+                    headers:{
+                        'Content-Type':'application/json;charset=utf-8'
+                    },
+                    success : function(data) {
+                        if (data.code == 500) {
+                            $.modal.alert(data.msg, 'error')
+                        } else {
+                            parent.flushTable()
+                            $.modal.close()
+                        }
+                    }
+                })
             }
         }
     </script>

@@ -2,8 +2,10 @@ package com.ruoyi.life.service.system;
 
 
 import com.ruoyi.life.domain.LifeHomePage;
+import com.ruoyi.life.domain.vo.system.LifeHomePageAddOrUpdateVo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 首页信息Service接口
@@ -32,18 +34,18 @@ public interface SysLifeHomePageService
     /**
      * 新增首页信息
      * 
-     * @param lifeHomePage 首页信息
+     * @param homePageAddOrUpdateVo 首页信息
      * @return 结果
      */
-    int insertLifeHomePage(LifeHomePage lifeHomePage);
+    void insertLifeHomePage(LifeHomePageAddOrUpdateVo homePageAddOrUpdateVo);
 
     /**
      * 修改首页信息
      * 
-     * @param lifeHomePage 首页信息
+     * @param homePageAddOrUpdateVo 首页信息
      * @return 结果
      */
-    int updateLifeHomePage(LifeHomePage lifeHomePage);
+    void updateLifeHomePage(LifeHomePageAddOrUpdateVo homePageAddOrUpdateVo);
 
     /**
      * 批量删除首页信息
@@ -60,4 +62,19 @@ public interface SysLifeHomePageService
      * @return 结果
      */
     int deleteLifeHomePageById(Long homePageId);
+
+    /**
+     * 获取修改数据
+     * @param homePageId
+     * @return
+     */
+    Map getEditData(Long homePageId);
+
+
+    /**
+     * 根据优惠券id删除
+     * @param couponId
+     * @return
+     */
+    int deleteHomePageByCouponId(String [] couponIds);
 }

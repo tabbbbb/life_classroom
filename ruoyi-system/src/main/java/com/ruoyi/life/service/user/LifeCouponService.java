@@ -19,7 +19,8 @@ public interface LifeCouponService
      * @param couponId 优惠卷ID
      * @return 优惠卷
      */
-    public LifeCoupon selectLifeCouponById(Long couponId);
+    LifeCoupon selectLifeCouponById(Long couponId);
+
 
 
 }

@@ -7,20 +7,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="LifeHomePage" id="LifeHomePageResult">
         <result property="homePageId"    column="home_page_id"    />
         <result property="type"    column="type"    />
-        <result property="couponIds"    column="coupon_ids"    />
+        <result property="position"    column="position"    />
         <result property="img1"    column="img1"    />
         <result property="img2"    column="img2"    />
     </resultMap>
 
     <sql id="selectLifeHomePageVo">
-        select home_page_id, type, coupon_ids, img1, img2 from life_home_page
+        select home_page_id, type, position, img1, img2 from life_home_page
     </sql>
 
     <select id="selectLifeHomePageList" parameterType="LifeHomePage" resultMap="LifeHomePageResult">
         <include refid="selectLifeHomePageVo"/>
         <where>  
             <if test="type != null "> and type = #{type}</if>
-            <if test="couponIds != null "> and coupon_ids = #{couponIds}</if>
+            <if test="position != null "> and position = #{position}</if>
             <if test="img1 != null  and img1 != ''"> and img1 = #{img1}</if>
             <if test="img2 != null  and img2 != ''"> and img2 = #{img2}</if>
         </where>
@@ -35,13 +35,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into life_home_page
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="type != null ">type,</if>
-            <if test="couponIds != null ">coupon_ids,</if>
+            <if test="position != null ">position,</if>
             <if test="img1 != null  and img1 != ''">img1,</if>
             <if test="img2 != null  and img2 != ''">img2,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="type != null ">#{type},</if>
-            <if test="couponIds != null ">#{couponIds},</if>
+            <if test="position != null ">#{position},</if>
             <if test="img1 != null  and img1 != ''">#{img1},</if>
             <if test="img2 != null  and img2 != ''">#{img2},</if>
          </trim>
@@ -51,7 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update life_home_page
         <trim prefix="SET" suffixOverrides=",">
             <if test="type != null ">type = #{type},</if>
-            <if test="couponIds != null ">coupon_ids = #{couponIds},</if>
+            <if test="position != null ">position = #{position},</if>
             <if test="img1 != null  and img1 != ''">img1 = #{img1},</if>
             <if test="img2 != null  and img2 != ''">img2 = #{img2},</if>
         </trim>
@@ -68,5 +68,39 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{homePageId}
         </foreach>
     </delete>
-    
+
+    <select id="getRepetitionHomePage" resultType="java.lang.Integer">
+        select count(0) from life_home_page
+        where `type` = #{param1} and `position` = #{param2}
+        <if test="param3 != null">
+            and  home_page_id != #{param3}
+        </if>
+    </select>
+
+    <delete id="deleteHomePageByCouponId">
+        delete from life_home_page
+        where home_page_id in
+        (
+        select homepage_id from life_homepage_coupon
+        where coupon_id  in
+        <foreach collection="couponIds" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        )
+    </delete>
+    <select id="homepageCouponData" resultType="com.ruoyi.life.domain.vo.user.LifeHomePageCouponDataVo">
+        select
+          coupon.coupon_id as couponId,
+          coupon.name as couponName,
+          coupon.img as img,
+          coupon.type as type,
+          ifnull(coupon.discount,coupon.point) as `value`,
+          coupon.astrict as astrict,
+          course.name as astrictCourseName,
+          homepage.number as number
+        from life_coupon as coupon
+        inner join life_homepage_coupon as homepage on homepage.coupon_id = coupon.coupon_id
+        left join life_course as course on  course.course_id = coupon.astrict
+        where homepage.homepage_id = #{homePageId}
+    </select>
 </mapper>

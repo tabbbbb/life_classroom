@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.life.mapper.LifeHomepageCouponMapper">
+    
+    <resultMap type="LifeHomepageCoupon" id="LifeHomepageCouponResult">
+        <result property="homepageCouponId"    column="homepage_coupon_id"    />
+        <result property="homepageId"    column="homepage_id"    />
+        <result property="couponId"    column="coupon_id"    />
+        <result property="number"    column="number"    />
+    </resultMap>
+
+    <sql id="selectLifeHomepageCouponVo">
+        select homepage_coupon_id, homepage_id, coupon_id, number from life_homepage_coupon
+    </sql>
+
+    <select id="selectLifeHomepageCouponList" parameterType="LifeHomepageCoupon" resultMap="LifeHomepageCouponResult">
+        <include refid="selectLifeHomepageCouponVo"/>
+        <where>  
+            <if test="homepageId != null "> and homepage_id = #{homepageId}</if>
+            <if test="couponId != null "> and coupon_id = #{couponId}</if>
+            <if test="number != null "> and number = #{number}</if>
+        </where>
+    </select>
+    
+    <select id="selectLifeHomepageCouponById" parameterType="Long" resultMap="LifeHomepageCouponResult">
+        <include refid="selectLifeHomepageCouponVo"/>
+        where homepage_coupon_id = #{homepageCouponId}
+    </select>
+
+
+
+    <insert id="insertLifeHomepageCoupon" parameterType="LifeHomepageCoupon" useGeneratedKeys="true" keyProperty="homepageCouponId">
+        insert into life_homepage_coupon
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="homepageId != null ">homepage_id,</if>
+            <if test="couponId != null ">coupon_id,</if>
+            <if test="number != null ">number,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="homepageId != null ">#{homepageId},</if>
+            <if test="couponId != null ">#{couponId},</if>
+            <if test="number != null ">#{number},</if>
+         </trim>
+    </insert>
+
+
+    <update id="updateLifeHomepageCoupon" parameterType="LifeHomepageCoupon">
+        update life_homepage_coupon
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="homepageId != null ">homepage_id = #{homepageId},</if>
+            <if test="couponId != null ">coupon_id = #{couponId},</if>
+            <if test="number != null ">number = #{number},</if>
+        </trim>
+        where homepage_coupon_id = #{homepageCouponId}
+    </update>
+
+    <delete id="deleteLifeHomepageCouponById" parameterType="Long">
+        delete from life_homepage_coupon where homepage_coupon_id = #{homepageCouponId}
+    </delete>
+
+    <delete id="deleteLifeHomepageCouponByIds" parameterType="String">
+        delete from life_homepage_coupon where homepage_coupon_id in 
+        <foreach item="homepageCouponId" collection="array" open="(" separator="," close=")">
+            #{homepageCouponId}
+        </foreach>
+    </delete>
+
+    <insert id="insertHomepageCouponList">
+        insert into life_homepage_coupon (homepage_id,coupon_id,number)
+        values
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item.homepageId},#{item.couponId},#{item.number}
+        </foreach>
+    </insert>
+
+    <delete id="deleteHomepageCouponByHomePageId">
+        delete from life_homepage_coupon
+        where homepage_id = #{homepageId}
+    </delete>
+
+
+    <select id="getEditData" resultType="com.ruoyi.life.domain.vo.system.LifeHomePageCouponEditDataVo">
+        select coupon.name as couponName,coupon.coupon_id as couponId,homepage.number as `number`  from life_homepage_coupon as homepage
+        inner join life_coupon as coupon on coupon.coupon_id = homepage.coupon_id
+        where homepage.homepage_id = #{homepageId}
+    </select>
+
+    <delete id="deleteHomePageCouponByHomePageId">
+        delete from life_homepage_coupon
+        where homepage_id in 
+        <foreach collection="homePageIds" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="getCouponExist" resultType="java.lang.Integer">
+        select count(0) from life_homepage_coupon
+        where coupon_id = #{param2} and homepage_id = #{param1}
+    </select>
+    <update id="getCoupon" >
+        update life_homepage_coupon set `number` = `number` - 1
+        where coupon_id = #{param2} and homepage_id = #{param1} and `number` > 0
+    </update>
+</mapper>

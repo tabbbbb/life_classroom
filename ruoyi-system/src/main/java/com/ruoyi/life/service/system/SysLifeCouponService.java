@@ -19,7 +19,7 @@ public interface SysLifeCouponService
      * @param couponId 优惠卷ID
      * @return 优惠卷
      */
-    public LifeCoupon selectLifeCouponById(Long couponId);
+    LifeCoupon selectLifeCouponById(Long couponId);
 
     /**
      * 查询优惠卷列表
@@ -27,7 +27,7 @@ public interface SysLifeCouponService
      * @param lifeCoupon 优惠卷
      * @return 优惠卷集合
      */
-    public List<LifeCoupon> selectLifeCouponList(LifeCoupon lifeCoupon);
+    List<LifeCoupon> selectLifeCouponList(LifeCoupon lifeCoupon);
 
     /**
      * 新增优惠卷
@@ -35,7 +35,7 @@ public interface SysLifeCouponService
      * @param lifeCoupon 优惠卷
      * @return 结果
      */
-    public int insertLifeCoupon(LifeCoupon lifeCoupon);
+    int insertLifeCoupon(LifeCoupon lifeCoupon);
 
 
     /**
@@ -44,7 +44,7 @@ public interface SysLifeCouponService
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int deleteLifeCouponByIds(String ids);
+    int deleteLifeCouponByIds(String ids);
 
 
 
@@ -55,7 +55,7 @@ public interface SysLifeCouponService
      * @param courseIds 需要删除的数据ID
      * @return 结果
      */
-    public int deleteLifeCouponByCourseIds(String[] courseIds);
+    int deleteLifeCouponByCourseIds(String[] courseIds);
 
 
 
@@ -65,5 +65,14 @@ public interface SysLifeCouponService
      * @return
      */
     void giveCoupon(String couponIds,String userIds);
+
+
+
+    /**
+     * 根据ids获取优惠券列表
+     * @param couponIds
+     * @return
+     */
+    List<LifeCoupon> selectLifeCouponByIds(String [] couponIds);
 
 }

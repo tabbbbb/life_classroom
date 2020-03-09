@@ -41,6 +41,11 @@ public class SysLifeCouponServiceImpl implements SysLifeCouponService
     @Resource
     private SysLifeCouponReceiveService couponRecceiveService;
 
+
+    @Resource
+    private SysLifeHomePageService homePageService;
+
+
     /**
      * 查询优惠卷
      * 
@@ -175,6 +180,7 @@ public class SysLifeCouponServiceImpl implements SysLifeCouponService
     public int deleteLifeCouponByIds(String ids)
     {
         String [] couponIds =Convert.toStrArray(ids);
+        homePageService.deleteHomePageByCouponId(couponIds);
         companyCouponService.deleteCompanyCouponByCouponIds(couponIds);
         vipCouponService.deleteLifeCouponByCouponIds(couponIds);
         return lifeCouponMapper.deleteLifeCouponByCouponIds(couponIds);
@@ -226,5 +232,17 @@ public class SysLifeCouponServiceImpl implements SysLifeCouponService
         if (couponRecceiveService.insertCouponReceiveList(couponReceiveList) != couponReceiveList.size()){
             throw new RuntimeException("赠送优惠券失败");
         }
+    }
+
+
+    /**
+     * 根据ids获取优惠券列表
+     *
+     * @param couponIds
+     * @return
+     */
+    @Override
+    public List<LifeCoupon> selectLifeCouponByIds(String[] couponIds) {
+        return lifeCouponMapper.selectLifeCouponByIds(couponIds);
     }
 }

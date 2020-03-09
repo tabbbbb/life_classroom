@@ -9,30 +9,29 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 首页信息对象 life_home_page
  * 
  * @author ruoyi
- * @date 2020-03-05
+ * @date 2020-03-06
  */
-public class LifeHomePage extends BaseEntity
+public class LifeHomePage
 {
     private static final long serialVersionUID = 1L;
 
     /** $column.columnComment */
     private Long homePageId;
 
-    /** 类型 */
-    @Excel(name = "类型")
+    /** 类型 0有链接的轮播图，1无链接的轮播图 */
+    @Excel(name = "类型 0有链接的轮播图，1无链接的轮播图")
     private Integer type;
 
-    /** 优惠券ids
- */
-    @Excel(name = "优惠券ids ")
-    private Long couponIds;
+    /** 位置 */
+    @Excel(name = "位置")
+    private Integer position;
 
-    /** 展示图片 */
-    @Excel(name = "展示图片")
+    /** 展示图 */
+    @Excel(name = "展示图")
     private String img1;
 
-    /** 详细图片 */
-    @Excel(name = "详细图片")
+    /** 详细图 */
+    @Excel(name = "详细图")
     private String img2;
 
     public void setHomePageId(Long homePageId) 
@@ -53,14 +52,14 @@ public class LifeHomePage extends BaseEntity
     {
         return type;
     }
-    public void setCouponIds(Long couponIds) 
+    public void setPosition(Integer position) 
     {
-        this.couponIds = couponIds;
+        this.position = position;
     }
 
-    public Long getCouponIds() 
+    public Integer getPosition() 
     {
-        return couponIds;
+        return position;
     }
     public void setImg1(String img1) 
     {
@@ -86,7 +85,7 @@ public class LifeHomePage extends BaseEntity
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("homePageId", getHomePageId())
             .append("type", getType())
-            .append("couponIds", getCouponIds())
+            .append("position", getPosition())
             .append("img1", getImg1())
             .append("img2", getImg2())
             .toString();

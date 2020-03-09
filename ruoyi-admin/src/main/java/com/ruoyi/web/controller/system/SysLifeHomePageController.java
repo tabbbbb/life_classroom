@@ -2,18 +2,20 @@ package com.ruoyi.web.controller.system;
 
 
 import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.config.Global;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.life.domain.LifeHomePage;
+import com.ruoyi.life.domain.vo.system.LifeHomePageAddOrUpdateVo;
 import com.ruoyi.life.service.system.SysLifeHomePageService;
+import com.ruoyi.life.service.user.LifeFileUpService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -32,6 +34,9 @@ public class SysLifeHomePageController extends BaseController
 
     @Resource
     private SysLifeHomePageService homePageService;
+
+    @Resource
+    private LifeFileUpService fileUpService;
 
     @RequiresPermissions("life:homepage:view")
     @GetMapping()
@@ -70,9 +75,9 @@ public class SysLifeHomePageController extends BaseController
     @Log(title = "首页信息", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(LifeHomePage lifeHomePage)
+    public void addSave(@RequestBody LifeHomePageAddOrUpdateVo homePageAddOrUpdateVo)
     {
-        return toAjax(homePageService.insertLifeHomePage(lifeHomePage));
+        homePageService.insertLifeHomePage(homePageAddOrUpdateVo);
     }
 
     /**
@@ -81,8 +86,7 @@ public class SysLifeHomePageController extends BaseController
     @GetMapping("/edit/{homePageId}")
     public String edit(@PathVariable("homePageId") Long homePageId, ModelMap mmap)
     {
-        LifeHomePage lifeHomePage = homePageService.selectLifeHomePageById(homePageId);
-        mmap.put("lifeHomePage", lifeHomePage);
+        mmap.putAll(homePageService.getEditData(homePageId));
         return prefix + "/edit";
     }
 
@@ -93,9 +97,9 @@ public class SysLifeHomePageController extends BaseController
     @Log(title = "首页信息", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(LifeHomePage lifeHomePage)
+    public void editSave(@RequestBody LifeHomePageAddOrUpdateVo homePageAddOrUpdateVo)
     {
-        return toAjax(homePageService.updateLifeHomePage(lifeHomePage));
+         homePageService.updateLifeHomePage(homePageAddOrUpdateVo);
     }
 
     /**
@@ -109,4 +113,13 @@ public class SysLifeHomePageController extends BaseController
     {
         return toAjax(homePageService.deleteLifeHomePageByIds(ids));
     }
+
+
+    @PutMapping("/upload")
+    @ResponseBody
+    public Object upCourseImg(MultipartFile file){
+        return fileUpService.fileUp(Global.getSysHomepageImgPath(),file);
+    }
+
+
 }

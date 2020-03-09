@@ -114,7 +114,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="getUserCoupon" resultType="com.ruoyi.life.domain.vo.user.LifeUserCouponVo">
         select
             receive.receive_id as couponReceiveId,
-            coupon.name as `name`,
+            coupon.name as `couponName`,
             coupon.img as img,
             coupon.type as `type`,
             ifnull(coupon.discount,coupon.point) as `value`,

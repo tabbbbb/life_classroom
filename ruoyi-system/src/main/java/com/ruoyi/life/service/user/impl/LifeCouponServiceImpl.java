@@ -36,5 +36,4 @@ public class LifeCouponServiceImpl implements LifeCouponService
 
 
 
-
 }

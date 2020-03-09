@@ -45,14 +45,11 @@
         $("#form-coupon-add").validate({
             focusCleanup: true
         });
-
-
         $('[name=couponName]').text("[[${couponName}]]")
         $('[name=companyName]').text("[[${companyName}]]")
 
         function submitHandler() {
             if ($.validate.form()) {
-
                 $.operate.save(prefix + "/add", $('#form-coupon-add').serialize());
             }
         }
