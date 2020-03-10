@@ -1,10 +1,12 @@
 package com.ruoyi.life.mapper;
 
 
+import com.google.common.primitives.Longs;
 import com.ruoyi.life.domain.LifeUser;
 import com.ruoyi.life.domain.dto.system.LifeUserDto;
 import com.ruoyi.life.domain.dto.system.LifeUserNumDto;
 import com.ruoyi.life.domain.vo.system.LifeChartVo;
+import com.ruoyi.life.domain.vo.system.LifeOrderVo;
 import com.ruoyi.life.domain.vo.system.LifeUserSearchVo;
 import com.ruoyi.life.domain.vo.system.LifeUserVo;
 import org.apache.ibatis.annotations.Param;
@@ -78,7 +80,7 @@ public interface LifeUserMapper
      * @param lifeUser 用户
      * @return 结果
      */
-    public int insertLifeUser(LifeUser lifeUser);
+    int insertLifeUser(LifeUser lifeUser);
 
     /**
      * 修改用户
@@ -86,7 +88,7 @@ public interface LifeUserMapper
      * @param lifeUser 用户
      * @return 结果
      */
-    public int updateLifeUser(LifeUser lifeUser);
+    int updateLifeUser(LifeUser lifeUser);
 
     /**
      * 删除用户
@@ -94,7 +96,7 @@ public interface LifeUserMapper
      * @param userId 用户ID
      * @return 结果
      */
-    public int deleteLifeUserById(Long userId);
+    int deleteLifeUserById(Long userId);
 
     /**
      * 批量删除用户
@@ -102,14 +104,14 @@ public interface LifeUserMapper
      * @param userIds 需要删除的数据ID
      * @return 结果
      */
-    public int deleteLifeUserByIds(String[] userIds);
+    int deleteLifeUserByIds(String[] userIds);
 
 
     /**
-     * 充值余额
+     * 扣除余额
      * @return
      */
-    int rechargeBalance(@Param("lifeUser")LifeUser lifeUser, @Param("oldBalance") BigDecimal oldBalance);
+    int deductBalance(@Param("userId")Long userId, @Param("price") BigDecimal price);
 
 
     /**
@@ -178,5 +180,18 @@ public interface LifeUserMapper
     int becomeExcel(Long userId);
 
 
+    /**
+     * 充值余额
+     * @param userId
+     * @param price
+     * @return
+     */
+    int rechargeBalance(@Param("userId")Long userId, @Param("price") BigDecimal price);
 
+
+    /**
+     * 获取绑定用户
+     * @return
+     */
+    LifeUser getShareUser(Long userId);
 }

@@ -156,16 +156,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 
-
-
-
-    <update id="rechargeBalance">
-        update life_user
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="lifeUser.balance != null ">balance = #{lifeUser.balance},</if>
-        </trim>
-        where user_id = #{lifeUser.userId} and balance = #{oldBalance}
-
+    <update id="deductBalance">
+        update life_user set balance = balance - #{price}
+        where user_id = #{userId} and balance >= #{price}
     </update>
 
 
@@ -280,6 +273,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where parent_id = #{parentId}
     </select>
 
+
+
     <update id="updateLeadId">
         update life_user set lead_id = #{leadId}
         where user_id in
@@ -291,6 +286,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
        update life_user set lead_id = 0 ,parent_id = 0
        where user_id = #{userId}
     </update>
+    <update id="rechargeBalance">
+      update life_user set balance = balance + #{price}
+      where user_id = #{userId}
+    </update>
 
-
+    <select id="getShareUser" resultMap="LifeUserResult">
+        <include refid="selectLifeUserVo"/>
+        where share_id = #{userId} and user_id != #{userId}
+    </select>
 </mapper>

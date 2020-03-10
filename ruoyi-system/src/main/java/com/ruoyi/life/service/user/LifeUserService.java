@@ -180,4 +180,11 @@ public interface LifeUserService
      * @return
      */
     UserResponse userCapital(Long userId);
+
+
+    /**
+     * 获取绑定用户
+     * @return
+     */
+    LifeUser getShareUser(Long userId);
 }

@@ -108,7 +108,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
-
     <delete id="pastPoint">
         delete from life_point
         where now() >= end_date
@@ -118,11 +117,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where share_id = #{shareId}
     </delete>
 
-
-
     <select id="getPointByShareId" resultMap="LifePointResult">
         <include refid="selectLifePointVo"/>
-        where share_id = #{shareId}
+        where share_id = #{shareId} and use_point > 0
         order by end_date asc,point_type desc
     </select>
     <select id="getRecentlyPoint" resultMap="LifePointResult">
@@ -178,6 +175,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         inner join life_vip as vip on  vip.vip_id = point.vip_id
         where user_id = #{userId} and point.is_set_child = 1
     </select>
-
+    <update id="reducePoint">
+        update life_point set use_point = use_point - #{param2}
+        where point_id = #{param1} and use_point >= #{param2}
+    </update>
 
 </mapper>

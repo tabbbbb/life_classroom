@@ -27,4 +27,11 @@ public interface LifeCourseSpecificationService {
      */
     List<LifeCourseSpecification> selectLifeCourseSpecificationByCourseId(Long courseId);
 
+
+    /**
+     * 根据id获取规格
+     * @return
+     */
+    LifeCourseSpecification selectLifeCourseSpecificationById(Long specificationId);
+
 }

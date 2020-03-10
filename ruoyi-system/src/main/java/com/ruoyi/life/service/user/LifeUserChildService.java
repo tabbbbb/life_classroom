@@ -69,7 +69,7 @@ public interface LifeUserChildService
      * @param shareId
      * @return
      */
-    UserResponse getChildByShareId(Long shareId);
+    List<LifeUserChild> getChildByShareId(Long shareId);
 
 
     /**

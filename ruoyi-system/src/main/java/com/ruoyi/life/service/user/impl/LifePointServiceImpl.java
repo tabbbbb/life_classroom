@@ -123,47 +123,26 @@ public class LifePointServiceImpl implements LifePointService
      * @return
      */
     @Override
-    public synchronized int payPoint(Long shareId,Long point) {
+    public int payPoint(Long shareId,Long point) {
         List<LifePoint> pointList = pointMapper.getPointByShareId(shareId);
-        List<Long> deletePointList = new ArrayList<>();
-        LifePoint updatePoint = null;
         for (LifePoint lifePoint : pointList) {
-
-            if (point == 0){
-                break;
-            }
-
-            if (point >= lifePoint.getUsePoint()){
-                point -= lifePoint.getUsePoint();
-                deletePointList.add(lifePoint.getUsePoint());
-            }else if (point < lifePoint.getUsePoint()){
-                lifePoint.setUsePoint(lifePoint.getUsePoint()-point);
+            Long usePoint = lifePoint.getUsePoint();
+            Long pay;
+            if (usePoint > point){
+                pay = point;
                 point = 0L;
-                updatePoint = lifePoint;
+            }else{
+                pay = usePoint;
+                point = point - usePoint;
             }
-        }
-        if (point > 0){
-            return -1;
-        }
-
-        if (deletePointList.size() != 0){
-            String [] deletePointArray = new String[deletePointList.size()];
-            for (int i = 0; i < deletePointList.size(); i++) {
-                deletePointArray[i] = String.valueOf(deletePointList.get(i));
-            }
-            int flag = pointMapper.deleteLifePointByIds(deletePointArray);
-            if (flag != deletePointList.size()){
+            if (pointMapper.reducePoint(lifePoint.getPointId(),pay) == 0){
                 return 0;
             }
-            flag = pointChildService.deleteLifePointChildByIds(deletePointArray);
-            if (flag != deletePointList.size()){
-                return -2;
+            if (point == 0){
+                return 1;
             }
         }
-        if(updatePoint != null){
-            return pointMapper.updateLifePoint(updatePoint);
-        }
-       return 1;
+       return 0;
     }
 
 

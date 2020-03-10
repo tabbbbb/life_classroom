@@ -270,10 +270,7 @@ public class LifeUserServiceImpl implements LifeUserService
      */
     @Override
     public int rechargeBalance(Long userId,BigDecimal price) {
-        LifeUser user = this.selectLifeUserById(userId);
-        BigDecimal oldBalance = user.getBalance();
-        user.setBalance(oldBalance.add(price));
-        return userMapper.rechargeBalance(user,oldBalance);
+        return userMapper.rechargeBalance(userId,price);
     }
 
     /**
@@ -285,14 +282,7 @@ public class LifeUserServiceImpl implements LifeUserService
      */
     @Override
     public int deductBalance(Long userId, BigDecimal price) {
-        LifeUser user = this.selectLifeUserById(userId);
-        BigDecimal oldBalance = user.getBalance();
-        BigDecimal balance = oldBalance.subtract(price);
-        if (balance.doubleValue() < 0){
-            return -1;
-        }
-        user.setBalance(balance);
-        return userMapper.rechargeBalance(user,oldBalance);
+        return userMapper.deductBalance(userId,price);
     }
 
 
@@ -488,5 +478,22 @@ public class LifeUserServiceImpl implements LifeUserService
         map.put("balance",user.getBalance());
         map.put("beOnTheVergeOfPoint",pointService.getBeOnTheVergeOfPoint(user.getShareId()));
         return UserResponse.succeed(map);
+    }
+
+
+    /**
+     * 获取绑定用户
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public LifeUser getShareUser(Long userId) {
+        LifeUser user = selectLifeUserById(userId);
+        if (user.getShareId() == userId){
+            return userMapper.getShareUser(userId);
+        }else{
+            return selectLifeUserById(user.getShareId());
+        }
     }
 }

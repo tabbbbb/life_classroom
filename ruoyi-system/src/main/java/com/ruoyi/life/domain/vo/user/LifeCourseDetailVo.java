@@ -33,6 +33,11 @@ public class LifeCourseDetailVo {
     private String name;
 
     /**
+     * 课程种类
+     */
+    private Long courseKind;
+
+    /**
      * 类目图片
      */
     private String classifyUrl;
@@ -314,5 +319,14 @@ public class LifeCourseDetailVo {
 
     public void setNumber(Integer number) {
         this.number = number;
+    }
+
+
+    public Long getCourseKind() {
+        return courseKind;
+    }
+
+    public void setCourseKind(Long courseKind) {
+        this.courseKind = courseKind;
     }
 }

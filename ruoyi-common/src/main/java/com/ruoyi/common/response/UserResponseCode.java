@@ -271,4 +271,10 @@ public class UserResponseCode {
      * 领取优惠券错误
      */
     public static final Integer GET_COUPON_ERROR = 100038;
+
+
+    /**
+     * 订单退款错误
+     */
+    public static final Integer REFUND_ORDER_ERROR = 100039;
 }

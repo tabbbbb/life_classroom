@@ -176,6 +176,7 @@
     </delete>
 
 
+
     <select id="selectNowOrder" resultType="string" >
         select distinct phone from life_order
         where date_format(use_time,'%Y-%m-%d') = current_date and course_detail_id = #{courseId} and status = 201
@@ -183,7 +184,7 @@
 
 
 
-    <insert id="insertLifeOrders">
+    <insert id="insertLifeOrders" useGeneratedKeys="true" keyProperty="orderId">
         insert life_order(
         verification_code,
         pid,
@@ -206,7 +207,7 @@
         valid_refund_time
         )
         values
-        <foreach collection="lifeOrders" item="item"  separator="," >
+        <foreach collection="list" item="item"  separator="," >
             (
             #{item.verificationCode},
             #{item.pid},
@@ -404,10 +405,7 @@
         </trim>
     </select>
 
-    <update id="refund">
-        update life_order set status = 302
-        where status = 301 and order_id = #{orderId}
-    </update>
+
     <select id="orderRefundFlag" resultType="java.lang.Integer">
         select count(0) from life_order
         where status != 301 and order_id in 
@@ -476,6 +474,7 @@
         group by course_detail_id,use_time
     </select>
 
+
     <update id="payOrder">
         update life_order set status = 201
         where status = 101 and share_id = #{shareId} and  order_id in
@@ -483,4 +482,86 @@
             #{item}
         </foreach>
     </update>
+
+
+    <select id="selectLifeOrderByIds" resultType="com.ruoyi.life.domain.dto.user.LifePayOrderDto">
+        select sum(pay) as pay,pid as payType from life_order
+        where order_id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        group by pid
+
+    </select>
+
+    <update id="refund">
+        update life_order set status = 301
+        where valid_refund_time >=now() and (share_id = #{shareId} or share_id is null and user_id = #{shareId}) and status = 201 and order_id in
+        <foreach collection="orderIds" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="cancelRefund">
+        update life_order set status = 201
+        where  (share_id = #{shareId} or share_id is null and user_id = #{shareId}) and status = 301 and order_id in
+        <foreach collection="orderIds" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+
+    <select id="getLifeOrderVo" resultType="com.ruoyi.life.domain.vo.user.LifeOrderDataVo">
+        select
+        `order`.order_id as orderId,
+        `order`.verification_code as verificationCode,
+        `order`.status as status,
+        course.img_url as imgUrl,
+        course.`name` as courseName,
+        classify.img as classifyImg,
+        classify.course_classify_name as classifyName,
+        `order`.pay as pay,
+        `order`.total as total,
+        child.`name` as saleName,
+        `order`.sale_user as saleUser
+        from life_order as `order`
+        inner join life_course as course on course.course_id = `order`.course_id
+        inner join life_course_classify as classify on classify.course_classify_id = course.course_classify_id
+        left join life_user_child as child on child.child_id = `order`.sale_user
+        where `order`.share_id = #{shareId}
+        <if test="status != null">
+            and `order`.status = #{status}
+        </if>
+        <if test="flag">
+            and order_time > date_SUB(now(), INTERVAL 3 DAY)
+        </if>
+        order by `order`.order_time desc
+    </select>
+    <select id="getLifeOrderDetailData" resultType="com.ruoyi.life.domain.vo.user.LifeOrderDetailDataVo">
+         select
+          `order`.order_id as orderId,
+		  `order`.linkman as linkman,
+		  `order`.phone as linkmanPhone,
+		  `order`.status as status,
+		  course.img_url as imgUrl,
+		  course.`name` as courseName,
+		  classify.img as classifyImg,
+		  classify.course_classify_name as classifyName,
+		  `order`.pay as pay,
+          `order`.total as total,
+          `order`.verification_code as verificationCode,
+          `order`.use_time as useTime,
+		  `order`.order_time as orderTime,
+		  address.business_address_name as address,
+		  `order`.valid_refund_time as validRefundTime,
+		  child.`name` as saleName,
+          `order`.sale_user as saleUser
+        from
+          life_order as `order`
+          inner join life_course as course on course.course_id = `order`.course_id
+          inner join life_course_classify as classify on classify.course_classify_id = course.course_classify_id
+          left join life_user_child as child on child.child_id = `order`.sale_user
+		  inner join life_business_address as address on course.business_address_id = address.business_address_id
+        where `order`.order_id = #{orderId} and `order`.share_id = #{shareId}
+    </select>
 </mapper>

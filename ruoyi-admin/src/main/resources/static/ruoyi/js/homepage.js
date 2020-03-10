@@ -58,6 +58,8 @@ function getFromData() {
     var position = $('[name=position]').val();
     var img1 = $('[name=img1]').attr('src')
     var img2 = $('[name=img2]').attr('src')
+    var startDate = $('[name=startDate]').val();
+    var endDate = $('[name=endDate]').val();
     var $couponIds = $('[name=couponId]')
     var $numbers = $('[name=number]')
     var homepageCoupons = [];
@@ -74,6 +76,8 @@ function getFromData() {
             'position':position,
             'img1':img1,
             'img2':img2,
+            'startDate':startDate,
+            'endDate':endDate
         },
         'homepageCoupons':homepageCoupons
     }
@@ -81,10 +85,16 @@ function getFromData() {
 
 function chooseType() {
     var file = $('[name=couponId]')
+    var date1 = $('#date1')
+    var date2 = $('#date2')
     if ($('[name=type]').val() == 1){
         file.parent().parent().hide()
+        date1.parent().parent().hide();
+        date2.parent().parent().hide();
     }else{
         file.parent().parent().show()
+        date1.parent().parent().show();
+        date2.parent().parent().show();
     }
 }
 

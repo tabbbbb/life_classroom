@@ -4,8 +4,11 @@ package com.ruoyi.life.mapper;
 import com.ruoyi.life.domain.LifeOrder;
 import com.ruoyi.life.domain.LifeReserve;
 import com.ruoyi.life.domain.dto.user.LifeDataDetailDto;
+import com.ruoyi.life.domain.dto.user.LifePayOrderDto;
 import com.ruoyi.life.domain.vo.system.*;
 import com.ruoyi.life.domain.vo.user.LifeDonateVo;
+import com.ruoyi.life.domain.vo.user.LifeOrderDataVo;
+import com.ruoyi.life.domain.vo.user.LifeOrderDetailDataVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.time.LocalDate;
@@ -83,7 +86,7 @@ public interface LifeOrderMapper
      * @param lifeOrders 订单
      * @return 结果
      */
-    public int insertLifeOrders(@Param("lifeOrders") List<LifeOrder> lifeOrders);
+    int insertLifeOrders( List<LifeOrder> lifeOrders);
 
 
     /**
@@ -149,12 +152,7 @@ public interface LifeOrderMapper
     List<LifeOrderVo> selectLifeOrderVoBySearchVo(LifeOrderSearchVo searchVo);
 
 
-    /**
-     * 退款
-     * @param orderId
-     * @return
-     */
-    int refund(Long orderId);
+
 
 
     /**
@@ -223,4 +221,42 @@ public interface LifeOrderMapper
      * @return
      */
     int payOrder(@Param("shareId")Long shareId,@Param("orderIds") List<Long> orderIds);
+
+
+    /**
+     * 根据orderIds获取订单集合
+     * @return
+     */
+    List<LifePayOrderDto> selectLifeOrderByIds(List<Long> orderIds);
+
+
+    /**
+     * 退款
+     * @param shareId
+     * @param orderIds
+     */
+    int refund(@Param("shareId") Long shareId , @Param("orderIds") List<Long> orderIds);
+
+
+    /**
+     * 取消退款
+     * @param shareId
+     * @param orderIds
+     */
+    int cancelRefund(@Param("shareId") Long shareId , @Param("orderIds") List<Long> orderIds);
+
+
+
+    /**
+     * 获取订单信息
+     * @return
+     */
+    List<LifeOrderDataVo> getLifeOrderVo(@Param("shareId") Long shareId, @Param("status") Long status, @Param("flag")boolean flag);
+
+
+    /**
+     * 获取订单详细
+     * @return
+     */
+    LifeOrderDetailDataVo getLifeOrderDetailData(@Param("orderId") Long orderId,@Param("shareId") Long shareId);
 }

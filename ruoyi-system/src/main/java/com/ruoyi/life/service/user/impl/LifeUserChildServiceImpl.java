@@ -144,9 +144,9 @@ public class LifeUserChildServiceImpl implements LifeUserChildService
      * @return
      */
     @Override
-    public UserResponse getChildByShareId(Long userId) {
+    public List<LifeUserChild> getChildByShareId(Long userId) {
         LifeUser user = userService.selectLifeUserById(userId);
-        return UserResponse.succeed(lifeUserChildMapper.getChildByShareId(user.getShareId()));
+        return lifeUserChildMapper.getChildByShareId(user.getShareId());
     }
 
 

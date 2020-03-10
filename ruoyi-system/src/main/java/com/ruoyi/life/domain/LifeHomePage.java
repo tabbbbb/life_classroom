@@ -5,11 +5,14 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 /**
  * 首页信息对象 life_home_page
  * 
  * @author ruoyi
- * @date 2020-03-06
+ * @date 2020-03-09
  */
 public class LifeHomePage
 {
@@ -33,6 +36,14 @@ public class LifeHomePage
     /** 详细图 */
     @Excel(name = "详细图")
     private String img2;
+
+    /** 开始时间 */
+    @Excel(name = "开始时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private LocalDate startDate;
+
+    /** 结束时间 */
+    @Excel(name = "结束时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private LocalDate endDate;
 
     public void setHomePageId(Long homePageId) 
     {
@@ -80,6 +91,22 @@ public class LifeHomePage
         return img2;
     }
 
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -88,6 +115,8 @@ public class LifeHomePage
             .append("position", getPosition())
             .append("img1", getImg1())
             .append("img2", getImg2())
+            .append("startDate", getStartDate())
+            .append("endDate", getEndDate())
             .toString();
     }
 }

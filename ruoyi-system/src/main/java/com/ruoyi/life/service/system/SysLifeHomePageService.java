@@ -73,7 +73,7 @@ public interface SysLifeHomePageService
 
     /**
      * 根据优惠券id删除
-     * @param couponId
+     * @param couponIds
      * @return
      */
     int deleteHomePageByCouponId(String [] couponIds);

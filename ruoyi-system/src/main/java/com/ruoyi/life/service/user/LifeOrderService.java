@@ -4,10 +4,13 @@ package com.ruoyi.life.service.user;
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.life.domain.LifeOrder;
 import com.ruoyi.life.domain.vo.system.LifeOrderChartDataDto;
-import com.ruoyi.life.domain.vo.user.LifeCreateOrderVo;
+import com.ruoyi.life.domain.vo.user.LifeOrderDataVo;
+import com.ruoyi.life.domain.vo.user.LifeOrderAndSpecificationVo;
+import com.ruoyi.life.domain.vo.user.LifeOrderDetailDataVo;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 订单Service接口
@@ -117,7 +120,7 @@ public interface LifeOrderService
      * 生成订单
      * @return
      */
-    void createOrder(List<LifeCreateOrderVo> createOrderVos,Long userId);
+    List<Long> createOrder(LifeOrderAndSpecificationVo orderAndSpecificationVo, Long userId);
 
 
     /**
@@ -142,5 +145,42 @@ public interface LifeOrderService
     void payOrder(Long userId,String payPassword,List<Long> orderIds);
 
 
+    /**
+     * 退款
+     * @param userId
+     * @param orderIds
+     */
+    void refund(Long userId , List<Long> orderIds);
 
+
+    /**
+     * 取消退款
+     * @param userId
+     * @param orderIds
+     */
+    void cancelRefund(Long userId,List<Long> orderIds);
+
+
+
+    /**
+     * 获取订单信息
+     * @return
+     */
+    List<LifeOrderDataVo> getLifeOrderVo(Long userId, Long status, boolean flag, int page, int limit);
+
+
+
+
+    /**
+     * 获取订单详细
+     * @return
+     */
+    LifeOrderDetailDataVo getLifeOrderDetailData(Long orderId,Long userId);
+
+
+    /**
+     * 获取可选用户
+     * @return
+     */
+    Map getSaleUser(Long userId);
 }

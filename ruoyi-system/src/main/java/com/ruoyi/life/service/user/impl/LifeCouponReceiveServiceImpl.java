@@ -310,21 +310,5 @@ public class LifeCouponReceiveServiceImpl implements LifeCouponReceiveService
     }
 
 
-    /**
-     * 领取优惠券
-     *
-     * @param userId
-     * @param couponId
-     * @return
-     */
-    @Override
-    public void getCoupon(Long userId, Long couponId) {
-        List<Map<String,Long>> longList = new ArrayList<>();
-        Map<String,Long> map = new HashMap<>();
-        map.put("couponId",couponId);
-        map.put("number", 1L);
-        longList.add(map);
-        if (insertLifeCouponReceive(userId,longList) == 0)throw new UserOperationException(UserResponseCode.GET_COUPON_ERROR,"优惠券领取失败");
 
-    }
 }

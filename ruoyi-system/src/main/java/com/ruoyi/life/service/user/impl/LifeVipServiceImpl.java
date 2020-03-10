@@ -321,12 +321,9 @@ public class LifeVipServiceImpl implements LifeVipService
      * @return
      */
     @Override
-    public UserResponse getBigVip(Long userId) {
+    public LifeVip getBigVip(Long userId) {
         LifeUser user = userService.selectLifeUserById(userId);
         Long vipId = pointService.getPointByBigVip(user.getShareId());
-        if (vipId == null){
-            return UserResponse.succeed();
-        }
-        return UserResponse.succeed(vipMapper.selectLifeVipById(vipId));
+        return vipMapper.selectLifeVipById(vipId);
     }
 }

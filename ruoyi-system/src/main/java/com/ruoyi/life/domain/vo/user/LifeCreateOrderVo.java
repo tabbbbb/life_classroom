@@ -78,7 +78,6 @@ public class LifeCreateOrderVo {
     private String phone;
 
 
-
     public Long getCourseDetailId() {
         return courseDetailId;
     }
@@ -150,4 +149,6 @@ public class LifeCreateOrderVo {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+
 }

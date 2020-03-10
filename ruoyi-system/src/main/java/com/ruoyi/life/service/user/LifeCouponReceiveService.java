@@ -124,10 +124,5 @@ public interface LifeCouponReceiveService
     int useCoupon(Long courseReceiveId);
 
 
-    /**
-     * 领取优惠券
-     * @return
-     */
-    void getCoupon(Long userId,Long couponId);
 
 }

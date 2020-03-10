@@ -103,9 +103,9 @@ public class SysLifeOrderServiceImpl implements SysLifeOrderService
         for (String id: orderIdArray) {
             Long orderId = Long.valueOf(id);
             LifeOrder order = orderMapper.selectLifeOrderById(orderId);
-            if (orderMapper.refund(orderId) == 0){
+            /*if (orderMapper.refund(orderId) == 0){
                 throw new RuntimeException("核销码为"+order.getVerificationCode()+"的订单正在被修改，请重试");
-            }
+            }*/
 
             if (refundVo.getFlag()){
                 pay = order.getPay();
@@ -115,7 +115,7 @@ public class SysLifeOrderServiceImpl implements SysLifeOrderService
             pointLog.setUserId(order.getUserId());
             pointLog.setShareId(order.getShareId());
             pointLog.setLogType(4);
-            pointLog.setExplain("核销码为"+order.getVerificationCode()+"的订单退款");
+            pointLog.setExplain("订单退款");
             pointLog.setAddTime(LocalDateTime.now());
             pointLog.setOrderId(order.getOrderId());
             if (order.getPid() == 0){

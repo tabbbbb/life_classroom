@@ -1,29 +1,28 @@
 package com.ruoyi.life.service.user.impl;
 
 
+import com.github.pagehelper.PageHelper;
 import com.ruoyi.common.exception.life.user.OrderException;
+import com.ruoyi.common.exception.life.user.UserOperationException;
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.common.response.UserResponseCode;
 import com.ruoyi.common.utils.security.Md5Utils;
 import com.ruoyi.life.domain.*;
 import com.ruoyi.life.domain.dto.user.LifeDataDetailDto;
+import com.ruoyi.life.domain.dto.user.LifePayOrderDto;
 import com.ruoyi.life.domain.vo.system.LifeOrderChartDataDto;
-import com.ruoyi.life.domain.vo.user.LifeCreateOrderVo;
-import com.ruoyi.life.domain.vo.user.LifeDataDetailVo;
+import com.ruoyi.life.domain.vo.user.*;
 
 import com.ruoyi.life.mapper.LifeOrderMapper;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.life.service.user.*;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,6 +66,15 @@ public class LifeOrderServiceImpl implements LifeOrderService
 
     @Resource
     private LifePointLogService logService;
+
+    @Resource
+    private LifeCourseSpecificationService courseSpecificationService;
+
+    @Resource
+    private LifeVipService vipService;
+
+    @Resource
+    private LifeUserChildService userChildService;
 
 
     /**
@@ -481,15 +489,24 @@ public class LifeOrderServiceImpl implements LifeOrderService
     /**
      * 生成订单
      *
-     * @param createOrderVos
+     * @param orderAndSpecificationVo
      * @param userId
      * @return
      */
     @Override
     @Transactional
-    public void createOrder(List<LifeCreateOrderVo> createOrderVos, Long userId) {
+    public List<Long> createOrder(LifeOrderAndSpecificationVo orderAndSpecificationVo, Long userId) {
         LifeUser user = userService.selectLifeUserById(userId);
         List<LifeOrder> orders = new ArrayList<>();
+        List<LifeCreateOrderVo> createOrderVos = orderAndSpecificationVo.getCreateOrderVoList();
+        LifeCourseSpecification specification = courseSpecificationService.selectLifeCourseSpecificationById(orderAndSpecificationVo.getSpecificationId());
+        if (specification == null){
+            throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"规格已删除");
+        }
+        if (specification.getSpecificationNum() != createOrderVos.size()){
+            throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"购买数量出现问题");
+        }
+        Integer specificationDiscount = specification.getSpecificationDiscount();
         for (int i = 0; i < createOrderVos.size(); i++) {
             LifeCreateOrderVo createOrderVo = createOrderVos.get(i);
             LifeCourseDetail courseDetail = courseDetailService.selectLifeCourseDetailById(createOrderVo.getCourseDetailId());
@@ -511,6 +528,9 @@ public class LifeOrderServiceImpl implements LifeOrderService
             List<Long> childIds = createOrderVo.getChildIds();
             if ((childIds== null || childIds.size() == 0 ) && (createOrderVo.getRandom() == 0 || createOrderVo.getRandom()>3)){
                 throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"没有指定任何一个人");
+            }
+            if (vipService.getBigVip(user.getShareId()).getChild() < childIds.size()){
+                throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"选择小孩与会员可选数量不同");
             }
 
             if(childIds != null && childIds.size() != 0){
@@ -544,13 +564,17 @@ public class LifeOrderServiceImpl implements LifeOrderService
                     throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"您没有此优惠券");
                 }
                 coupon = couponService.selectLifeCouponById(couponReceive.getCouponId());
-                if (coupon.getType() == 3 && createOrderVo.getPayType() == 0 || coupon.getType() == 4 && createOrderVo.getPayType() == 1){
-                    throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"优惠券优惠类型选择有误");
+                if (coupon.getType() == 1){
+                    coupon = null;
+                }else{
+                    if (coupon.getType() == 3 && createOrderVo.getPayType() == 0 || coupon.getType() == 4 && createOrderVo.getPayType() == 1){
+                        throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"优惠券优惠类型选择有误");
+                    }
+                    if ((course.getCourseKind() == 0 && coupon.getAstrict() != -2 ||  course.getCourseKind() == 1 && coupon.getAstrict() != -1 || coupon.getAstrict() > 0 && course.getCourseId() == coupon.getAstrict()) && coupon.getAstrict() != 0 ){
+                        throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"优惠券选择有误");
+                    }
+                    toUsePrice = new BigDecimal(coupon.getPoint());
                 }
-                if ((course.getCourseKind() == 0 && coupon.getAstrict() != -2 ||  course.getCourseKind() == 1 && coupon.getAstrict() != -1 || coupon.getAstrict() > 0 && course.getCourseId() == coupon.getAstrict()) && coupon.getAstrict() != 0 ){
-                    throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"优惠券选择有误");
-                }
-                toUsePrice = new BigDecimal(coupon.getPoint());
                 couponReceive.setStatus(1);
                 if (couponReceiveService.useCoupon(couponReceive.getReceiveId()) == 0){
                     throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"优惠券使用失败");
@@ -593,6 +617,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
                 order.setValidRefundTime(refundTime);
                 order.setUseTime(useTime);
                 order.setDonate(1);
+                order.setLinkman(createOrderVo.getLinkman());
                 order.setCourseDuration(courseDetail.getCourseDuration());
                 order.setPhone(createOrderVo.getPhone());
                 order.setCouponId(createOrderVo.getCouponReceive());
@@ -600,7 +625,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
                 if (createOrderVo.getPayType() == 0){
                     Long point = course.getPoint();
                     if (coupon != null){
-                        point = (long)Math.ceil(point*coupon.getDiscount()/100.0);
+                        point = (long)Math.ceil(point*coupon.getDiscount()*specificationDiscount/10000.0);
                         order.setDiscounts(new BigDecimal((int) (course.getPoint()-point)));
                     }
                     order.setTotal(new BigDecimal(course.getPoint()));
@@ -608,6 +633,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
                 }else{
                     BigDecimal price = course.getPrice();
                     order.setTotal(price);
+                    price = price.multiply(new BigDecimal(specificationDiscount/100));
                     if (coupon != null){
                         if (toUsePrice.doubleValue() != 0 && toUsePrice.compareTo(price) == 1){
                             order.setDiscounts(price);
@@ -627,7 +653,11 @@ public class LifeOrderServiceImpl implements LifeOrderService
         if (orderMapper.insertLifeOrders(orders) != orders.size()){
             throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"订单添加失败");
         }
-
+        List<Long> orderIds = new ArrayList<>();
+        for (LifeOrder order : orders) {
+            orderIds.add(order.getOrderId());
+        }
+        return orderIds;
     }
 
 
@@ -662,7 +692,6 @@ public class LifeOrderServiceImpl implements LifeOrderService
         backCoupon(orderIds);
         //退回库存
         reserveService.backCourseSales(orderMapper.getBackShareData(orderIds));
-
     }
 
 
@@ -699,8 +728,144 @@ public class LifeOrderServiceImpl implements LifeOrderService
         if (user.getPaymentCode() == null ){
             throw new OrderException(UserResponseCode.PAY_PASSWORD_ERROR,"没有设置支付密码");
         }
+        if (!user.getPaymentCode().equals(Md5Utils.hash(payPassword))){
+            throw new OrderException(UserResponseCode.PAY_PASSWORD_ERROR,"支付密码填写错误");
+        }
         if (orderMapper.payOrder(user.getShareId(),orderIds) != orderIds.size()){
             throw new OrderException(UserResponseCode.PAY_ORDER_ERROR,"支付失败，有订单不能支付");
         }
+        List<LifePayOrderDto> payOrderDtos = orderMapper.selectLifeOrderByIds(orderIds);
+        if (payOrderDtos.size() != 1){
+            throw new OrderException(UserResponseCode.PAY_ORDER_ERROR,"选择订单只能选择一种支付方式");
+        }
+        LifePointLog pointLog = new LifePointLog();
+        pointLog.setLogType(-1);
+        pointLog.setExplain("支付订单");
+        pointLog.setAddTime(LocalDateTime.now());
+        pointLog.setShareId(user.getShareId());
+        pointLog.setUserId(user.getUserId());
+        for (LifePayOrderDto payOrderDto : payOrderDtos) {
+            if (payOrderDto.getPayType() == 0){
+                pointLog.setPoint(payOrderDto.getPay().longValue());
+                pointLog.setPrice(null);
+                if (pointService.payPoint(user.getShareId(),payOrderDto.getPay().longValue()) == 0){
+                    throw new OrderException(UserResponseCode.PAY_ORDER_ERROR,"积分不足");
+                }
+            }else{
+                pointLog.setPoint(null);
+                pointLog.setPrice(payOrderDto.getPay());
+                if (userService.deductBalance(userId,payOrderDto.getPay()) == 0){
+                    throw new OrderException(UserResponseCode.PAY_ORDER_ERROR,"余额不足");
+                }
+            }
+            logService.insertLifePointLog(pointLog);
+        }
+    }
+
+
+    /**
+     * 退款
+     *
+     * @param userId
+     * @param orderIds
+     */
+    @Override
+    public void refund(Long userId, List<Long> orderIds) {
+        LifeUser user = userService.selectLifeUserById(userId);
+        if (orderIds == null || orderIds.size() == 0){
+            throw new UserOperationException(UserResponseCode.REFUND_ORDER_ERROR,"选择一个订单来进行退款");
+        }
+        if (orderMapper.refund(user.getShareId(),orderIds) != orderIds.size()){
+            throw new UserOperationException(UserResponseCode.REFUND_ORDER_ERROR,"有订单不能退款，请刷新重试");
+        }
+    }
+
+
+    /**
+     * 取消退款
+     *
+     * @param userId
+     * @param orderIds
+     */
+    @Override
+    public void cancelRefund(Long userId, List<Long> orderIds) {
+        LifeUser user = userService.selectLifeUserById(userId);
+        if (orderIds == null || orderIds.size() == 0){
+            throw new UserOperationException(UserResponseCode.REFUND_ORDER_ERROR,"选择一个订单来进行退款");
+        }
+        if (orderMapper.cancelRefund(user.getShareId(),orderIds) != orderIds.size()){
+            throw new UserOperationException(UserResponseCode.REFUND_ORDER_ERROR,"有订单不能取消退款，请刷新重试");
+        }
+    }
+
+
+    /**
+     * 获取订单信息
+     *
+     * @param userId
+     * @param status
+     * @param flag
+     * @param page
+     * @param limit
+     * @return
+     */
+    @Override
+    public List<LifeOrderDataVo> getLifeOrderVo(Long userId, Long status, boolean flag, int page, int limit) {
+        LifeUser user = userService.selectLifeUserById(userId);
+        LifeUser shareUser = userService.getShareUser(userId);
+        PageHelper.startPage(page,limit);
+        List<LifeOrderDataVo> list = orderMapper.getLifeOrderVo(user.getShareId(),status,flag);
+        for (LifeOrderDataVo orderVo : list) {
+            if (orderVo.getSaleUser() == -1){
+                orderVo.setSaleName(user.getNickName());
+            }else if (orderVo.getSaleUser() == 0){
+                if (shareUser != null){
+                    orderVo.setSaleName(shareUser.getNickName());
+                }
+            }
+        }
+        return list;
+    }
+
+
+    /**
+     * 获取订单详细
+     *
+     * @param orderId
+     * @return
+     */
+    @Override
+    public LifeOrderDetailDataVo getLifeOrderDetailData(Long orderId,Long userId) {
+        LifeUser user = userService.selectLifeUserById(userId);
+        LifeUser shareUser = userService.getShareUser(userId);
+        LifeOrderDetailDataVo orderDetailDataVo = orderMapper.getLifeOrderDetailData(orderId,user.getShareId());;
+        if (orderDetailDataVo.getSaleUser() == -1){
+            orderDetailDataVo.setSaleName(user.getNickName());
+        }else if (orderDetailDataVo.getSaleUser() == 0){
+            if (shareUser != null){
+                orderDetailDataVo.setSaleName(shareUser.getNickName());
+            }
+        }
+        return orderDetailDataVo;
+    }
+
+
+    /**
+     * 获取可选用户
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public Map getSaleUser(Long userId) {
+        LifeUser user = userService.selectLifeUserById(userId);
+        LifeUser shareUser = userService.getShareUser(userId);
+        Map map = new HashMap();
+        map.put("child",userChildService.getChildByShareId(user.getShareId()));
+        List list = new ArrayList();
+        list.add(user);
+        list.add(shareUser);
+        map.put("saleUser",list);
+        return map;
     }
 }

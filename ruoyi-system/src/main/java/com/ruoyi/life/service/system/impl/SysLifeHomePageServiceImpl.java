@@ -160,6 +160,9 @@ public class SysLifeHomePageServiceImpl implements SysLifeHomePageService
         if (lifeHomePage.getImg2() == null){
             throw new RuntimeException("详细图片请设置");
         }
+        if (lifeHomePage.getStartDate() == null || lifeHomePage.getEndDate() == null || lifeHomePage.getStartDate().isAfter(lifeHomePage.getEndDate()) || lifeHomePage.getStartDate().equals(lifeHomePage.getEndDate())){
+            throw new RuntimeException("活动时间设置错误");
+        }
         List<LifeHomepageCoupon> homepageCoupons = homePageAddOrUpdateVo.getHomepageCoupons();
         if (homepageCoupons == null){
             return ;
@@ -168,7 +171,11 @@ public class SysLifeHomePageServiceImpl implements SysLifeHomePageService
             if (homepageCoupons.get(i).getNumber() == null || homepageCoupons.get(i).getNumber() <=0 ){
                 throw new RuntimeException("优惠券数量填写错误");
             }
+            if (homepageCoupons.get(i).getCouponId() == null){
+                throw new RuntimeException("优惠券请选择");
+            }
         }
+
 
     }
 

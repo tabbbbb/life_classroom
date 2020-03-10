@@ -40,4 +40,16 @@ public class LifeCourseSpecificationServiceImpl implements LifeCourseSpecificati
         specification.setCourseId(courseId);
         return courseSpecificationMapper.selectLifeCourseSpecificationList(specification);
     }
+
+
+    /**
+     * 根据id获取规格
+     *
+     * @param specificationId
+     * @return
+     */
+    @Override
+    public LifeCourseSpecification selectLifeCourseSpecificationById(Long specificationId) {
+        return courseSpecificationMapper.selectLifeCourseSpecificationById(specificationId);
+    }
 }

@@ -69,13 +69,7 @@ public class LifeUserChildController {
         return userChildService.insertLifeUserChild(loginInfo.getId(),childVo);
     }
 
-    @ApiOperation(value = "获取可选小孩")
-    @GetMapping("child")
-    public UserResponse getChild(@ApiIgnore @LoginInfo UserLoginInfo loginInfo){
-        UserResponse response = LoginResponse.toMessage(loginInfo);
-        if (response != null) return response;
-        return userChildService.getChildByShareId(loginInfo.getId());
-    }
+
 
 
 

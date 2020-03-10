@@ -68,8 +68,6 @@ public interface LifePointMapper
 
 
 
-
-
     /**
      * 删除到期的积分记录
      * @return
@@ -163,4 +161,11 @@ public interface LifePointMapper
      * @return
      */
     List<LifeNotSetPointVo> getUserNotSetChildPoint(Long userId);
+
+
+    /**
+     * 减少积分
+     * @return
+     */
+    int reducePoint(Long pointId,Long point);
 }

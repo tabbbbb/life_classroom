@@ -274,6 +274,7 @@
         select
         course.course_id as course_id,
         course.name as `name`,
+        course.course_kind as courseKind,
         classify.img as classifyUrl,
         classify.course_classify_name as classifyName,
         round(st_distance_sphere (point (#{lon},#{lat}),point (address.lon,address.lat))/1000,1) as addressNum,

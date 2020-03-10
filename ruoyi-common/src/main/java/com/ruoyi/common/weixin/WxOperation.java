@@ -128,7 +128,7 @@ public class WxOperation {
      * 获取accessToken
      * @return
      */
-    private String getAccessToken(){
+    public String getAccessToken(){
         if (tokenAcquireTime == null || tokenAcquireTime.plusHours(2).isAfter(LocalDateTime.now())){
             String appId = wxProperties.getAppId();
             String appSecret = wxProperties.getAppSecret();
