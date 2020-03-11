@@ -2,7 +2,9 @@ package com.ruoyi.life.mapper;
 
 
 import com.ruoyi.life.domain.LifeDonate;
+import com.ruoyi.life.domain.vo.user.LifeDonateVo;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -19,7 +21,7 @@ public interface LifeDonateMapper
      * @param donateId 捐赠ID
      * @return 捐赠
      */
-    public LifeDonate selectLifeDonateById(Long donateId);
+    LifeDonate selectLifeDonateById(Long donateId);
 
     /**
      * 查询捐赠列表
@@ -27,7 +29,7 @@ public interface LifeDonateMapper
      * @param lifeDonate 捐赠
      * @return 捐赠集合
      */
-    public List<LifeDonate> selectLifeDonateList(LifeDonate lifeDonate);
+    List<LifeDonate> selectLifeDonateList(LifeDonate lifeDonate);
 
     /**
      * 新增捐赠
@@ -35,7 +37,7 @@ public interface LifeDonateMapper
      * @param lifeDonate 捐赠
      * @return 结果
      */
-    public int insertLifeDonate(LifeDonate lifeDonate);
+    int insertLifeDonate(LifeDonate lifeDonate);
 
     /**
      * 修改捐赠
@@ -43,7 +45,7 @@ public interface LifeDonateMapper
      * @param lifeDonate 捐赠
      * @return 结果
      */
-    public int updateLifeDonate(LifeDonate lifeDonate);
+    int updateLifeDonate(LifeDonate lifeDonate);
 
     /**
      * 删除捐赠
@@ -51,7 +53,7 @@ public interface LifeDonateMapper
      * @param donateId 捐赠ID
      * @return 结果
      */
-    public int deleteLifeDonateById(Long donateId);
+    int deleteLifeDonateById(Long donateId);
 
     /**
      * 批量删除捐赠
@@ -59,5 +61,21 @@ public interface LifeDonateMapper
      * @param donateIds 需要删除的数据ID
      * @return 结果
      */
-    public int deleteLifeDonateByIds(String[] donateIds);
+    int deleteLifeDonateByIds(String[] donateIds);
+
+
+    /**
+     * 获取一周的所有的捐赠时间
+     * @return
+     */
+    List<LifeDonateVo> getDonate(Long userId,LocalDate start);
+
+
+    /**
+     * 获取单个用户这周的捐赠时间
+     * @param userId
+     * @param start
+     * @return
+     */
+    long getDonateTimeByUser(Long userId, LocalDate start);
 }

@@ -296,7 +296,7 @@ public class LifeUserServiceImpl implements LifeUserService
     public UserResponse getUserHome(Long userId) {
         LifeUser user = this.selectLifeUserById(userId);
         LifePoint point = pointService.getRecentlyPoint(user.getShareId());
-        List<LifeUserChild> userChildList = (List<LifeUserChild>) userChildService.getChildByShareId(user.getShareId()).getData();
+        List<LifeUserChild> userChildList =  userChildService.getChildByShareId(user.getShareId());
         LifeUserHomeVo userHomeVo = new LifeUserHomeVo();
         userHomeVo.setChildList(userChildList);
         userHomeVo.setPoint(point);

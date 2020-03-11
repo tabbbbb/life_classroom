@@ -25,12 +25,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 
 /**
- * 〈一句话功能简述〉<br> 
- * 〈〉
  *
- * @author Administrator
- * @create 2019/12/11 0011
- * @since 1.0.0
  */
 public class SmsDayOrderJob implements Job {
 

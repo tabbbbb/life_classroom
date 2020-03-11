@@ -209,8 +209,14 @@ public class SysLifeUserServiceImpl implements SysLifeUserService {
     }
 
 
-
-
-
-
+    /**
+     * 获取绑定用户
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public LifeUser getShareUser(Long userId) {
+        return userMapper.getShareUser(userId);
+    }
 }

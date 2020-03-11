@@ -1,12 +1,11 @@
 package com.ruoyi.life.service.system.impl;
 
 
-import com.ruoyi.life.domain.LifeOrder;
-import com.ruoyi.life.domain.LifePoint;
-import com.ruoyi.life.domain.LifePointLog;
+import com.ruoyi.life.domain.*;
 import com.ruoyi.life.domain.vo.system.*;
 import com.ruoyi.life.mapper.LifeOrderMapper;
 import com.ruoyi.life.service.system.*;
+import com.ruoyi.life.service.user.LifeOrderService;
 import com.ruoyi.system.domain.SysUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +40,13 @@ public class SysLifeOrderServiceImpl implements SysLifeOrderService
 
     @Resource
     private SysLifeCourseService courseService;
+
+
+    @Resource
+    private LifeOrderService orderService;
+
+    @Resource
+    private SysLifeUserTargetDetailService userTargetDetailService;
 
 
     /**
@@ -90,22 +96,19 @@ public class SysLifeOrderServiceImpl implements SysLifeOrderService
     @Transactional
     public void refund(LifeOrderRefundVo refundVo) {
         verilyRefund(refundVo);
-        String orderIds = refundVo.getOrderIds();
         BigDecimal pay = refundVo.getPay();
         LocalDateTime endTime = refundVo.getEndTime();
-        String [] orderIdArray = orderIds.split(",");
-        if (orderMapper.orderRefundFlag(orderIdArray) != 0){
-            throw new RuntimeException("选择订单中有未退款的记录");
+        List<Long> orderIds = refundVo.getOrderIds();
+        List<LifeOrder> orderList = orderMapper.selectRefundOrderByOrderIds(orderIds);
+        if (orderIds.size() != orderList.size()){
+            throw new RuntimeException("选择订单中有未退款的，请刷新重试");
         }
-
         List<LifePointLog> pointLogs = new ArrayList<>();
         List<LifePoint> points = new ArrayList<>();
-        for (String id: orderIdArray) {
-            Long orderId = Long.valueOf(id);
-            LifeOrder order = orderMapper.selectLifeOrderById(orderId);
-            /*if (orderMapper.refund(orderId) == 0){
-                throw new RuntimeException("核销码为"+order.getVerificationCode()+"的订单正在被修改，请重试");
-            }*/
+        for (LifeOrder order : orderList) {
+            if (orderMapper.refundSuccess(order.getOrderId()) == 0){
+                throw new RuntimeException("核销码为"+order.getVerificationCode()+"的状态发生改变，请重试");
+            }
 
             if (refundVo.getFlag()){
                 pay = order.getPay();
@@ -142,7 +145,7 @@ public class SysLifeOrderServiceImpl implements SysLifeOrderService
             pointLogs.add(pointLog);
 
         }
-
+        orderService.backCoupon(orderIds);
         if (pointLogService.insertPointLogList(pointLogs) != pointLogs.size()){
             throw new RuntimeException("日志添加失败，请重试");
         }
@@ -159,7 +162,7 @@ public class SysLifeOrderServiceImpl implements SysLifeOrderService
      * 验证退款信息
      */
     private void verilyRefund(LifeOrderRefundVo refundVo){
-        if (refundVo.getOrderIds() == null || refundVo.getOrderIds().trim() == ""){
+        if (refundVo.getOrderIds() == null ){
             throw new RuntimeException("选择一个订单");
         }
 
@@ -168,29 +171,11 @@ public class SysLifeOrderServiceImpl implements SysLifeOrderService
         }
 
         if (!refundVo.getFlag()){
-
             if (refundVo.getPay() == null || refundVo.getPay().doubleValue() < 0){
                 throw new RuntimeException("输入退款值为空或值小于0");
             }
-
-            LifeOrder order = orderMapper.selectLifeOrderById(Long.valueOf(refundVo.getOrderIds()));
-            if (order == null){
-                throw new RuntimeException("选择一个订单");
-            }
-
-            if(order.getPid() == 0){
-                if (refundVo.getEndTime() == null){
-                    throw new RuntimeException("到期时间未选择");
-                }
-                LocalDateTime endTime = refundVo.getEndTime();
-                LocalDate endDate = LocalDate.of(endTime.getYear(),endTime.getMonthValue(),endTime.getDayOfMonth());
-                if (endDate.isBefore(LocalDate.now())||endDate.equals(LocalDate.now())){
-                    throw new RuntimeException("到期时间必须大于今天");
-                }
-            }
-
-
         }
+
     }
 
 
@@ -213,6 +198,17 @@ public class SysLifeOrderServiceImpl implements SysLifeOrderService
 
         if ( courseService.coursePlusSales(order.getCourseId()) != 1){
             throw new RuntimeException("商品销量增加失败，请重试");
+        }
+        LifeCourse course = courseService.selectLifeCourseById(order.getCourseId());
+        LifeUser user = userService.selectLifeUserById(order.getUserId());
+        Long userId = user.getUserId();
+        if (order.getSaleUser() <= 0){
+            if (order.getSaleUser() == 0){
+                userId = userService.getShareUser(userId).getUserId();
+            }
+        }
+        if (userTargetDetailService.accomplishLifeUserTargetDetail(userId,course.getCourseClassifyId(),order.getCourseDuration()) == 0){
+            throw new RuntimeException("用户目标完成失败，请重试");
         }
     }
 

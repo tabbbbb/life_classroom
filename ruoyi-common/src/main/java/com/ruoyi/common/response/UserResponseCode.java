@@ -277,4 +277,11 @@ public class UserResponseCode {
      * 订单退款错误
      */
     public static final Integer REFUND_ORDER_ERROR = 100039;
+
+
+
+    /**
+     * 订单退款错误
+     */
+    public static final Integer DONATE_ERROR = 100040;
 }

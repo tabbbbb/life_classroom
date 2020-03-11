@@ -6,6 +6,7 @@ import com.ruoyi.life.domain.LifeReserve;
 import com.ruoyi.life.domain.dto.user.LifeDataDetailDto;
 import com.ruoyi.life.domain.dto.user.LifePayOrderDto;
 import com.ruoyi.life.domain.vo.system.*;
+import com.ruoyi.life.domain.vo.user.LifeDataVo;
 import com.ruoyi.life.domain.vo.user.LifeDonateVo;
 import com.ruoyi.life.domain.vo.user.LifeOrderDataVo;
 import com.ruoyi.life.domain.vo.user.LifeOrderDetailDataVo;
@@ -89,22 +90,12 @@ public interface LifeOrderMapper
     int insertLifeOrders( List<LifeOrder> lifeOrders);
 
 
-    /**
-     *  获取数据详细
-     * @param startTime
-     * @param endTime
-     * @return
-     */
-    List<LifeDataDetailDto> getDataDetail(@Param("shareId") Long shareId,@Param("startTime")LocalDateTime startTime,@Param("endTime")LocalDateTime endTime);
-
-
-
 
     /**
      * 捐赠时间
      * @return
      */
-    int donateOrder(Long userId);
+    int donateOrder(@Param("start") LocalDate start,@Param("userId") Long userId,@Param("shareId") Long shareId);
 
 
     /**
@@ -112,17 +103,9 @@ public interface LifeOrderMapper
      * @param userId
      * @return
      */
-    Integer getNowCourseDuration(Long userId);
+    long getNowCourseDuration(@Param("start") LocalDate start,@Param("userId") Long userId,@Param("shareId") Long shareId);
 
 
-    /**
-     * 获取最近一周的捐赠时间
-     * @param userId
-     * @param start
-     * @param end
-     * @return
-     */
-    List<LifeDonateVo> getDonate(@Param("userId") Long userId, @Param("start") LocalDate start, @Param("end")LocalDate end);
 
 
 
@@ -159,7 +142,7 @@ public interface LifeOrderMapper
      * 检查订单id数组中是否有不能退款的订单
      * @return
      */
-    int orderRefundFlag(@Param("orderIds") String [] orderIds);
+    int orderRefundFlag( List<Long> orderIds);
 
 
     /**
@@ -259,4 +242,35 @@ public interface LifeOrderMapper
      * @return
      */
     LifeOrderDetailDataVo getLifeOrderDetailData(@Param("orderId") Long orderId,@Param("shareId") Long shareId);
+
+
+    /**
+     * 根据订单ids获取退款订单
+     * @param orderIds
+     * @return
+     */
+    List<LifeOrder> selectRefundOrderByOrderIds(List<Long> orderIds);
+
+
+    /**
+     * 退款成功
+     * @return
+     */
+    int refundSuccess(Long orderId);
+
+
+
+    /**
+     * 获取某时间到现在的用户完成订单
+     * @return
+     */
+    List<LifeOrder> selectLifeOrderByStartAndUserId(@Param("start") LocalDate start,@Param("userId") Long userId,@Param("shareId") Long shareId);
+
+
+
+    /**
+     * 获取一周的目标上课信息
+     * @return
+     */
+    List<LifeDataVo.ScaleDrawing> get1WeekOrderCourseDuration(@Param("shareId") Long shareId,@Param("userId") Long userId,@Param("start") LocalDate start,@Param("end") LocalDate end);
 }

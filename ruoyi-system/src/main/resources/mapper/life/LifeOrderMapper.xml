@@ -202,6 +202,7 @@
         linkman,
         phone,
         donate,
+        course_duration,
         order_time,
         use_time,
         valid_refund_time
@@ -226,6 +227,7 @@
             #{item.linkman},
             #{item.phone},
             #{item.donate},
+            #{item.courseDuration},
             #{item.orderTime},
             #{item.useTime},
             #{item.validRefundTime}
@@ -235,43 +237,49 @@
 
 
 
-    <select id="getDataDetail" resultType="com.ruoyi.life.domain.dto.user.LifeDataDetailDto">
-        select
-        classify.course_classify_id as classifyId,
-        classify.course_classify_name as classifyName ,
-        detail.course_duration as courseDuration ,
-        `order`.from life_order as `order`.consume_time as `time`
-        inner join life_course_detail as detail on detail.course_detail_id = order.course_detail_id
-        inner join life_course as course on course.course_id = detail.course_id
-        inner join life_course_classify as classify on classify.course_classify_id = course.course_classify_pid
-        where date_format(consume_time,'%Y-%m-%d') between #{startTime} and #{endTime} and `order`.share_id = #{shareId}
-    </select>
-
 
     <update id="donateOrder">
         update life_order set donate = 0
-        where user_id = #{userId} and donate = 1 and date_format(consume_time,'%Y-%m-%d') = current_date
+        where share_id = #{shareId}
+        AND (
+          sale_user = -1 and user_id = #{userId} or sale_user = 0 and user_id != #{userId}
+        )
+        AND
+        consume_time >= #{start}
+        AND
+        status = 401
+        AND
+        donate = 1
     </update>
 
 
-    <select id="getNowCourseDuration" resultType="java.lang.Integer">
+    <select id="getNowCourseDuration" resultType="java.lang.Long">
         select sum(course_duration) from life_order
-        where user_id = #{userId} and date_format(consume_time,'%Y-%m-%d') = current_date and donate = 1
-        group by user_id
+        where share_id = #{shareId}
+        AND (
+          sale_user = -1 and user_id = #{userId} or sale_user = 0 and user_id != #{userId}
+        )
+        AND
+        consume_time >= #{start}
+        AND
+        status = 401
+        AND
+        donate = 1
+        GROUP BY donate
     </select>
-    <select id="getDonate" resultType="com.ruoyi.life.domain.vo.user.LifeDonateVo">
-        select user.wx_img_url as wxImg , user.wx_nick_name ,sum(`order`.course_duration) as `min` from life_order as `order`
-        inner join life_user as user on user.user_id = `order`.user_id
-        where date_format(consume_time,'%Y-%m-%d') between #{start} and #{end} and `order`.user_id = #{userId} and donate = 0
-        group by `order`.user_id
-        order by `min` desc
-    </select>
+
+
+
+
+
     <select id="getSumOrderClassify" resultType="java.lang.Integer">
         select count(0) from life_order as `order`
         inner join life_course as course on course.course_id = `order`.course_id
         where `order`.user_id = #{userId}
         group by course.course_classify_id
     </select>
+
+
     <select id="selectLifeOrderDetailBySearchVo"
             resultType="com.ruoyi.life.domain.vo.system.LifeOrderDetailVo">
         select
@@ -311,7 +319,7 @@
         left join sys_user as sysuser on sysuser.user_id = `order`.check_id
         <trim prefix="where " suffixOverrides="and|or">
             <if test="orderId != null">
-                `order`.orderId = #{orderId} and
+                `order`.order_id = #{orderId} and
             </if>
             <if test="payType != null">
                 `order`.pid = #{payType} and
@@ -409,7 +417,7 @@
     <select id="orderRefundFlag" resultType="java.lang.Integer">
         select count(0) from life_order
         where status != 301 and order_id in 
-        <foreach collection="orderIds" item="item" open="(" separator="," close=")">
+        <foreach collection="list" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>
     </select>
@@ -509,6 +517,10 @@
             #{item}
         </foreach>
     </update>
+    <update id="refundSuccess">
+        update life_order set status = 302
+        where status = 301
+    </update>
 
 
     <select id="getLifeOrderVo" resultType="com.ruoyi.life.domain.vo.user.LifeOrderDataVo">
@@ -563,5 +575,41 @@
           left join life_user_child as child on child.child_id = `order`.sale_user
 		  inner join life_business_address as address on course.business_address_id = address.business_address_id
         where `order`.order_id = #{orderId} and `order`.share_id = #{shareId}
+    </select>
+    <select id="selectRefundOrderByOrderIds" resultMap="LifeOrderResult">
+        <include refid="selectLifeOrderVo"/>
+        where status = 301 and order_id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <select id="selectLifeOrderByStartAndUserId" resultMap="LifeOrderResult">
+        <include refid="selectLifeOrderVo"/>
+        where share_id = #{shareId}
+        and (
+          sale_user = -1 and user_id = #{userId} or sale_user = 0 and user_id != #{userId}
+        )
+        and
+        consume_time >= #{start}
+        AND
+        status = 401
+    </select>
+    <select id="get1WeekOrderCourseDuration"
+            resultType="com.ruoyi.life.domain.vo.user.LifeDataVo$ScaleDrawing">
+        SELECT
+        	classify.course_classify_name AS name,
+        	sum( `order`.course_duration ) AS min
+        FROM
+        	life_order AS `order`
+        	INNER JOIN life_course AS course ON course.course_id = `order`.course_id
+        	INNER JOIN life_course_classify AS classify ON course.course_classify_pid = classify.course_classify_id
+        WHERE
+        	share_id = #{shareId}
+        	AND ( sale_user = - 1 AND user_id = #{userId} OR sale_user = 0 AND user_id != #{userId} )
+        	AND `order`.consume_time >= #{start}
+        	AND #{end} >= `order`.consume_time
+        	AND `order`.STATUS = 401
+        GROUP BY
+	        course.course_classify_pid
     </select>
 </mapper>

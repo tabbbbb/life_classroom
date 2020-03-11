@@ -13,6 +13,7 @@ package com.ruoyi.life.domain.vo.system;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 订单退款vo
@@ -21,7 +22,7 @@ public class LifeOrderRefundVo {
     /**
      * 订单id拼接的字符串
      */
-    private String orderIds;
+    private List<Long> orderIds;
     /**
      * 退回金额
      */
@@ -39,11 +40,11 @@ public class LifeOrderRefundVo {
     private Boolean flag ;
 
 
-    public String getOrderIds() {
+    public List<Long> getOrderIds() {
         return orderIds;
     }
 
-    public void setOrderIds(String orderIds) {
+    public void setOrderIds(List<Long> orderIds) {
         this.orderIds = orderIds;
     }
 

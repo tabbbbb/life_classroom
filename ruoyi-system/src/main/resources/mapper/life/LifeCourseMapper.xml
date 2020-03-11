@@ -272,7 +272,7 @@
 
     <select id="getLifeCourseDetailByCourseId" resultType="com.ruoyi.life.domain.vo.user.LifeCourseDetailVo">
         select
-        course.course_id as course_id,
+        course.course_id as courseId,
         course.name as `name`,
         course.course_kind as courseKind,
         classify.img as classifyUrl,

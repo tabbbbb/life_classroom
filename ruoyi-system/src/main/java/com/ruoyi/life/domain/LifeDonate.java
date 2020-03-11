@@ -6,6 +6,7 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 import org.springframework.cglib.core.Local;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -28,18 +29,18 @@ public class LifeDonate
 
     /** 捐赠分钟数 */
     @Excel(name = "捐赠分钟数")
-    private Integer donateMinute;
+    private Long donateMinute;
 
     /** 捐赠时间 */
     @Excel(name = "捐赠时间", width = 30, dateFormat = "yyyy-MM-dd")
-    private LocalDateTime donateDate;
+    private LocalDate donateDate;
 
     public void setDonateId(Long donateId) 
     {
         this.donateId = donateId;
     }
 
-    public Long getDonateId() 
+    public Long getDonateId()
     {
         return donateId;
     }
@@ -52,21 +53,21 @@ public class LifeDonate
     {
         return userId;
     }
-    public void setDonateMinute(Integer donateMinute) 
+    public void setDonateMinute(Long donateMinute)
     {
         this.donateMinute = donateMinute;
     }
 
-    public Integer getDonateMinute() 
+    public Long getDonateMinute()
     {
         return donateMinute;
     }
 
-    public LocalDateTime getDonateDate() {
+    public LocalDate getDonateDate() {
         return donateDate;
     }
 
-    public void setDonateDate(LocalDateTime donateDate) {
+    public void setDonateDate(LocalDate donateDate) {
         this.donateDate = donateDate;
     }
 

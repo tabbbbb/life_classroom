@@ -64,6 +64,7 @@
         where target_detail_id = #{targetDetailId}
     </update>
 
+
     <delete id="deleteLifeUserTargetDetailById" parameterType="Long">
         delete from life_user_target_detail where target_detail_id = #{targetDetailId}
     </delete>
@@ -82,11 +83,10 @@
 
 
     <select id="getAccomplishTarget" resultType="com.ruoyi.life.domain.vo.user.LifeDataVo$WeekData">
-        select date_format(detail.achieve_time,'%w') as `week`,count(detail.achieve_time) as `num` from life_user_target_detail as detail
+        select date_format(detail.achieve_time,'%w') as `week`,count(detail.course_duration) as `num` from life_user_target_detail as detail
         inner join life_user_target as target on target.target_id = detail.target_id
-        where target.user_id = #{userId} and detail.achieve_time is not null
+        where target.user_id = #{userId} and detail.course_duration is not null
         group by `week`
-
     </select>
 
 
@@ -110,5 +110,11 @@
         where target_detail.target_id = #{targetId}
     </select>
 
-
+    <update id="accomplishLifeUserTargetDetail">
+        update life_user_target_detail set course_duration = #{param3}
+        where target_detail_classify_id = #{param2} and target_id in (
+          select target_id from life_user_target
+          where user_id = #{param1}
+        )
+    </update>
 </mapper>

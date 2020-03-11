@@ -38,7 +38,7 @@
     var endTime = null;
     /* 添加用户-选择用户-提交 */
     function submitHandler(index, layero) {
-
+        var pay = $('[name=pay]').val();
         if (payType == 0 && endTime== null){
             $.modal.alert('请选择时间','error')
             return
@@ -46,6 +46,7 @@
             endTime = null
         }else{
             endTime+=' 00:01:01'
+            pay = pay*2;
         }
         $.ajax({
             cache : false,
@@ -56,9 +57,9 @@
                 'Content-Type':'application/json;charset=utf-8'
             },
             data:JSON.stringify({
-                "orderIds":orderId,
+                "orderIds":[orderId],
                 'flag':false,
-                'pay':$('[name=pay]').val(),
+                'pay':pay,
                 'endTime':endTime
             }),
 

@@ -26,7 +26,7 @@
         type : "GET",
         url : ctx + "life/order/detaildata",
         data:{
-            'courseId':getUrlParam('orderId')
+            'orderId':getUrlParam('orderId')
         },
         success : function(data) {
             cloneTr('核销码',data.verificationCode)

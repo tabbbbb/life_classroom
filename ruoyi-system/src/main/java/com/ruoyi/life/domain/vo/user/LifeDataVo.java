@@ -20,7 +20,30 @@ public class LifeDataVo {
     /**
      * 总体验数量
      */
-    private Integer sumNum;
+    private long sumNum;
+
+
+    /**
+     * 捐赠时间
+     */
+    private long donateTime;
+
+
+    /**
+     * 总体验时间
+     */
+    private long sumTime;
+
+
+    /**
+     * 累计天数
+     */
+    private long sumDay;
+
+    /**
+     * 连续天数
+     */
+    private long continuousDay;
 
 
     /**
@@ -33,13 +56,6 @@ public class LifeDataVo {
      */
     private List<ScaleDrawing> scaleDrawing;
 
-    public Integer getSumNum() {
-        return sumNum;
-    }
-
-    public void setSumNum(Integer sumNum) {
-        this.sumNum = sumNum;
-    }
 
     public List<WeekData> getWeekData() {
         return weekData;
@@ -55,6 +71,46 @@ public class LifeDataVo {
 
     public void setScaleDrawing(List<ScaleDrawing> scaleDrawing) {
         this.scaleDrawing = scaleDrawing;
+    }
+
+    public long getSumNum() {
+        return sumNum;
+    }
+
+    public void setSumNum(long sumNum) {
+        this.sumNum = sumNum;
+    }
+
+    public long getDonateTime() {
+        return donateTime;
+    }
+
+    public void setDonateTime(long donateTime) {
+        this.donateTime = donateTime;
+    }
+
+    public long getSumTime() {
+        return sumTime;
+    }
+
+    public void setSumTime(long sumTime) {
+        this.sumTime = sumTime;
+    }
+
+    public long getSumDay() {
+        return sumDay;
+    }
+
+    public void setSumDay(long sumDay) {
+        this.sumDay = sumDay;
+    }
+
+    public long getContinuousDay() {
+        return continuousDay;
+    }
+
+    public void setContinuousDay(long continuousDay) {
+        this.continuousDay = continuousDay;
     }
 
     /**

@@ -2,13 +2,21 @@ package com.ruoyi.life.service.user.impl;
 
 
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.exception.life.user.UserOperationException;
 import com.ruoyi.common.response.UserResponse;
+import com.ruoyi.common.response.UserResponseCode;
 import com.ruoyi.life.domain.LifeDonate;
+import com.ruoyi.life.domain.LifeUser;
+import com.ruoyi.life.domain.vo.user.LifeDonateVo;
 import com.ruoyi.life.mapper.LifeDonateMapper;
 import com.ruoyi.life.service.user.LifeDonateService;
+import com.ruoyi.life.service.user.LifeOrderService;
+import com.ruoyi.life.service.user.LifeUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -20,88 +28,69 @@ import java.util.List;
 @Service
 public class LifeDonateServiceImpl implements LifeDonateService
 {
-    @Autowired
-    private LifeDonateMapper lifeDonateMapper;
+    @Resource
+    private LifeDonateMapper donateMapper;
 
-    /**
-     * 查询捐赠
-     * 
-     * @param donateId 捐赠ID
-     * @return 捐赠
-     */
-    @Override
-    public LifeDonate selectLifeDonateById(Long donateId)
-    {
-        return lifeDonateMapper.selectLifeDonateById(donateId);
-    }
+    @Resource
+    private LifeOrderService orderService;
 
-    /**
-     * 查询捐赠列表
-     * 
-     * @param lifeDonate 捐赠
-     * @return 捐赠
-     */
-    @Override
-    public List<LifeDonate> selectLifeDonateList(LifeDonate lifeDonate)
-    {
-        return lifeDonateMapper.selectLifeDonateList(lifeDonate);
-    }
-
-    /**
-     * 新增捐赠
-     * 
-     * @param lifeDonate 捐赠
-     * @return 结果
-     */
-    @Override
-    public int insertLifeDonate(LifeDonate lifeDonate)
-    {
-        return lifeDonateMapper.insertLifeDonate(lifeDonate);
-    }
-
-    /**
-     * 修改捐赠
-     * 
-     * @param lifeDonate 捐赠
-     * @return 结果
-     */
-    @Override
-    public int updateLifeDonate(LifeDonate lifeDonate)
-    {
-        return lifeDonateMapper.updateLifeDonate(lifeDonate);
-    }
-
-    /**
-     * 删除捐赠对象
-     * 
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-    @Override
-    public int deleteLifeDonateByIds(String ids)
-    {
-        return lifeDonateMapper.deleteLifeDonateByIds(Convert.toStrArray(ids));
-    }
-
-    /**
-     * 删除捐赠信息
-     * 
-     * @param donateId 捐赠ID
-     * @return 结果
-     */
-    @Override
-    public int deleteLifeDonateById(Long donateId)
-    {
-        return lifeDonateMapper.deleteLifeDonateById(donateId);
-    }
+    @Resource
+    private LifeUserService userService;
 
 
     /**
-     * 捐赠时间
+     * 获取用户这一周的捐赠时间
+     *
+     * @param userId
+     * @param start
      * @return
      */
     @Override
-    public UserResponse donateOrder() {
-        return null;
+    public long getDonateTimeByUser(Long userId, LocalDate start) {
+        return donateMapper.getDonateTimeByUser(userId,start);
     }
+
+
+    /**
+     * 捐赠
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public long donateOrder(Long userId) {
+        LifeUser user = userService.selectLifeUserById(userId);
+        LocalDate now = LocalDate.now();
+        LocalDate start = now.minusDays(now.getDayOfWeek().getValue() - 1);
+        Long shareId = user.getShareId();
+        long minute = orderService.donateOrderTime(userId,shareId,start);
+        if (minute == 0){
+            throw new UserOperationException(UserResponseCode.DONATE_ERROR,"捐赠时间不足");
+        }
+        if (orderService.donateOrder(userId,shareId,start) == 0){
+            throw new UserOperationException(UserResponseCode.DONATE_ERROR,"捐赠失败");
+        }
+        LifeDonate donate = new LifeDonate();
+        donate.setUserId(userId);
+        donate.setDonateDate(now);
+        donate.setDonateMinute(minute);
+        if (donateMapper.insertLifeDonate(donate) == 0){
+            throw new UserOperationException(UserResponseCode.DONATE_ERROR,"捐赠失败");
+        }
+        return minute;
+    }
+
+    /**
+     * 获取一周的捐赠量
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<LifeDonateVo> getDonate(Long userId) {
+        LocalDate now = LocalDate.now();
+        LocalDate start = now.minusDays(now.getDayOfWeek().getValue() - 1);
+        return donateMapper.getDonate(userId,start);
+    }
+
 }

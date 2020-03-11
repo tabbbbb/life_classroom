@@ -21,7 +21,7 @@ public interface LifeUserTargetDetailMapper
      * @param targetDetailId 用户目标详细ID
      * @return 用户目标详细
      */
-    public LifeUserTargetDetail selectLifeUserTargetDetailById(Long targetDetailId);
+    LifeUserTargetDetail selectLifeUserTargetDetailById(Long targetDetailId);
 
     /**
      * 查询用户目标详细列表
@@ -29,7 +29,7 @@ public interface LifeUserTargetDetailMapper
      * @param lifeUserTargetDetail 用户目标详细
      * @return 用户目标详细集合
      */
-    public List<LifeUserTargetDetail> selectLifeUserTargetDetailList(LifeUserTargetDetail lifeUserTargetDetail);
+    List<LifeUserTargetDetail> selectLifeUserTargetDetailList(LifeUserTargetDetail lifeUserTargetDetail);
 
     /**
      * 新增用户目标详细
@@ -37,7 +37,7 @@ public interface LifeUserTargetDetailMapper
      * @param lifeUserTargetDetail 用户目标详细
      * @return 结果
      */
-    public int insertLifeUserTargetDetail(LifeUserTargetDetail lifeUserTargetDetail);
+    int insertLifeUserTargetDetail(LifeUserTargetDetail lifeUserTargetDetail);
 
     /**
      * 修改用户目标详细
@@ -45,7 +45,7 @@ public interface LifeUserTargetDetailMapper
      * @param lifeUserTargetDetail 用户目标详细
      * @return 结果
      */
-    public int updateLifeUserTargetDetail(LifeUserTargetDetail lifeUserTargetDetail);
+    int updateLifeUserTargetDetail(LifeUserTargetDetail lifeUserTargetDetail);
 
     /**
      * 删除用户目标详细
@@ -53,7 +53,7 @@ public interface LifeUserTargetDetailMapper
      * @param targetDetailId 用户目标详细ID
      * @return 结果
      */
-    public int deleteLifeUserTargetDetailById(Long targetDetailId);
+    int deleteLifeUserTargetDetailById(Long targetDetailId);
 
     /**
      * 批量删除用户目标详细
@@ -61,7 +61,7 @@ public interface LifeUserTargetDetailMapper
      * @param targetDetailIds 需要删除的数据ID
      * @return 结果
      */
-    public int deleteLifeUserTargetDetailByIds(String[] targetDetailIds);
+    int deleteLifeUserTargetDetailByIds(String[] targetDetailIds);
 
 
     /**
@@ -92,5 +92,13 @@ public interface LifeUserTargetDetailMapper
      * @return
      */
     List<LifeUserTargetDetailVo> getUserTargetDetailVo(Long targetId);
+
+
+
+    /**
+     * 完成用户目标详细
+     * @return
+     */
+    int accomplishLifeUserTargetDetail(Long userId,Long classifyId,Integer courseDuration);
 
 }

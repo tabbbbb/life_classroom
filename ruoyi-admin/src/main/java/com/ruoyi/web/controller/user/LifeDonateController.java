@@ -11,8 +11,11 @@
 package com.ruoyi.web.controller.user;
 
 import com.ruoyi.common.response.UserResponse;
+import com.ruoyi.framework.userlogin.LoginResponse;
 import com.ruoyi.framework.userlogin.annotation.LoginInfo;
 import com.ruoyi.framework.userlogin.info.UserLoginInfo;
+import com.ruoyi.life.domain.LifeDonate;
+import com.ruoyi.life.service.user.LifeDonateService;
 import com.ruoyi.life.service.user.LifeOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,21 +39,25 @@ import springfox.documentation.annotations.ApiIgnore;
 @Api(value = "/user/donate",description = "捐赠")
 public class LifeDonateController {
 
-    @Autowired
-    private LifeOrderService orderService;
 
+    @Autowired
+    private LifeDonateService donateService;
 
     @PostMapping("donate")
     @ApiOperation(value = "捐赠")
     public UserResponse donateOrder(@ApiIgnore @LoginInfo UserLoginInfo loginInfo){
-        return orderService.donateOrder(loginInfo.getId());
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null) return response;
+        return UserResponse.succeed(donateService.donateOrder(loginInfo.getId()));
     }
 
 
     @GetMapping("donate")
     @ApiOperation(value = "最近一周的捐赠")
     public UserResponse getDonate(@ApiIgnore @LoginInfo UserLoginInfo loginInfo){
-        return orderService.getDonate(loginInfo.getId());
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null) return response;
+        return UserResponse.succeed(donateService.getDonate(loginInfo.getId()));
     }
 
 }

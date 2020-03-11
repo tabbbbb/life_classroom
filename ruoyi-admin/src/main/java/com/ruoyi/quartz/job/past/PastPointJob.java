@@ -21,12 +21,7 @@ import org.slf4j.LoggerFactory;
 import java.time.LocalDateTime;
 
 /**
- * 〈一句话功能简述〉<br> 
- * 〈〉
- *
- * @author Administrator
- * @create 2019/12/8 0008
- * @since 1.0.0
+ * 过期积分
  */
 
 public class PastPointJob implements Job {

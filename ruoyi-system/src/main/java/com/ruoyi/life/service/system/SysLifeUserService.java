@@ -74,6 +74,10 @@ public interface SysLifeUserService {
 
 
 
-
+    /**
+     * 获取绑定用户
+     * @return
+     */
+    LifeUser getShareUser(Long userId);
 
 }

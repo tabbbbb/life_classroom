@@ -28,7 +28,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectLifeDonateVo"/>
         where donate_id = #{donateId}
     </select>
-        
+
+
     <insert id="insertLifeDonate" parameterType="LifeDonate" useGeneratedKeys="true" keyProperty="donateId">
         insert into life_donate
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -63,5 +64,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{donateId}
         </foreach>
     </delete>
-    
+    <select id="getDonateTimeByUser" resultType="java.lang.Long">
+        select count(donate_minute) from life_donate
+        where user_id = #{param1} and donate_date >= #{param2}
+    </select>
+    <select id="getDonate" resultType="com.ruoyi.life.domain.vo.user.LifeDonateVo">
+        select `user`.wx_img_url as wxImg , `user`.wx_nick_name as wxName , `donate`.donate_minute as `min` from life_donate as donate
+        inner join life_user as `user` on `user`.user_id = donate.user_id
+        where `donate`.user_id = #{param1} and `donate`.donate_date >= #{param2}
+    </select>
 </mapper>

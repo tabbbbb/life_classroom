@@ -71,9 +71,9 @@
                 <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="life:order:export">
                     <i class="fa fa-download"></i> 导出
                  </a>
-                <a class="btn btn-danger" onclick="batchRefund()" shiro:hasPermission="life:order:batchrefund">
+               <!-- <a class="btn btn-danger" onclick="batchRefund()" shiro:hasPermission="life:order:batchrefund">
                     <i class="fa fa-exchange"></i> 批量退款
-                </a>
+                </a>-->
             </div>
 
 
@@ -93,9 +93,8 @@
                 url: prefix + "/list",
                 exportUrl: prefix + "/export",
                 modalName: "订单",
-                clickToSelect: true,
                 columns: [{
-                    checkbox: true
+                    checkbox: false
                 },
                 {
                     field : 'orderId', 
@@ -163,7 +162,7 @@
                         }else if (row.status == 201) {
                             actions.push('<a class="btn btn-success btn-xs" onclick="verification('+row.orderId+')"><i class="fa fa-paste"></i>&nbsp;核销</a>')
                         }
-                        return actions.join('');
+                        return actions.join(' ');
                     }
                 }]
             };
@@ -216,9 +215,8 @@
             }
         }
 
-        var tableIndex = 0
+
         function refund(orderId,payType,index){
-            tableIndex = index
             $.modal.open('退款参数','/life/order/refundview?orderId='+orderId+"&payType="+payType)
         }
 
@@ -229,23 +227,26 @@
 
 
         function verification(orderId) {
-            $.ajax({
-                cache : false,
-                async:false,
-                type : "POST",
-                url : ctx + "life/order/verification",
-                data:{
-                    "orderId":orderId
-                },
-                success : function(data) {
-                    if (data.code == 500){
-                        $.modal.alert(data.msg,'error')
-                    }else{
-                        $.modal.msgSuccess('核销成功')
-                        reset()
+            $.modal.confirm("确定要核销吗?", function() {
+                $.ajax({
+                    cache : false,
+                    async:false,
+                    type : "POST",
+                    url : ctx + "life/order/verification",
+                    data:{
+                        "orderId":orderId
+                    },
+                    success : function(data) {
+                        if (data.code == 500){
+                            $.modal.alert(data.msg,'error')
+                        }else{
+                            $.modal.msgSuccess('核销成功')
+                            reset()
+                        }
                     }
-                }
-            })
+                })
+            });
+
         }
     </script>
 </body>

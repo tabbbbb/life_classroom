@@ -4,10 +4,12 @@ package com.ruoyi.life.service.user;
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.life.domain.LifeOrder;
 import com.ruoyi.life.domain.vo.system.LifeOrderChartDataDto;
+import com.ruoyi.life.domain.vo.user.LifeDataVo;
 import com.ruoyi.life.domain.vo.user.LifeOrderDataVo;
 import com.ruoyi.life.domain.vo.user.LifeOrderAndSpecificationVo;
 import com.ruoyi.life.domain.vo.user.LifeOrderDetailDataVo;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -77,27 +79,19 @@ public interface LifeOrderService
 
 
 
-
-
-    /**
-     * 获取数据详细
-     */
-    UserResponse getDataDetail(Long userId,LocalDateTime startTime,LocalDateTime endTime);
-
-
     /**
      * 捐赠时间
      * @return
      */
-    UserResponse donateOrder(Long userId);
+    long donateOrderTime(Long userId,Long shareId,LocalDate start);
 
 
     /**
-     * 获取最近一周的捐赠时间
+     * 捐赠订单
+     * @param userId
      * @return
      */
-    UserResponse getDonate(Long userId);
-
+    int donateOrder(Long userId,Long shareId,LocalDate start);
 
     /**
      * 获取总体验数量
@@ -183,4 +177,19 @@ public interface LifeOrderService
      * @return
      */
     Map getSaleUser(Long userId);
+
+
+    /**
+     * 获取某时间到现在的用户完成订单
+     * @return
+     */
+    List<LifeOrder> selectLifeOrderByStartAndUserId(LocalDate start,Long userId);
+
+
+    /**
+     * 获取一周的目标上课信息
+     * @return
+     */
+    List<LifeDataVo.ScaleDrawing> get1WeekOrderCourseDuration(Long userId,LocalDate start,LocalDate end);
+
 }
