@@ -284,4 +284,27 @@ public class UserResponseCode {
      * 订单退款错误
      */
     public static final Integer DONATE_ERROR = 100040;
+
+
+
+
+    /**
+     * 添加到校团课错误
+     */
+    public static final Integer ADD_LEAGUE_CLASS_ERROR = 100041;
+
+
+
+    /**
+     * 删除小团课错误
+     */
+    public static final Integer DELETE_LEAGUE_CLASS_ERROR = 100042;
+
+
+
+    /**
+     * 设置公司错误
+     */
+    public static final Integer SET_COMPANY_ERROR = 100043;
+
 }

@@ -62,6 +62,12 @@ public class LifeOrderDataVo {
      */
     private BigDecimal total;
 
+
+    /**
+     * 支付方式
+     */
+    private Long payType;
+
     /**
      * 消费用户
      */
@@ -156,5 +162,14 @@ public class LifeOrderDataVo {
 
     public void setSaleUser(Long saleUser) {
         this.saleUser = saleUser;
+    }
+
+
+    public Long getPayType() {
+        return payType;
+    }
+
+    public void setPayType(Long payType) {
+        this.payType = payType;
     }
 }

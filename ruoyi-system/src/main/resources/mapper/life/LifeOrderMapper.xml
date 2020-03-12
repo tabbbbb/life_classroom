@@ -534,6 +534,7 @@
         classify.course_classify_name as classifyName,
         `order`.pay as pay,
         `order`.total as total,
+        `order`.pid as payType,
         child.`name` as saleName,
         `order`.sale_user as saleUser
         from life_order as `order`

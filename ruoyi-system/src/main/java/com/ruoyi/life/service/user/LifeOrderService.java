@@ -114,7 +114,7 @@ public interface LifeOrderService
      * 生成订单
      * @return
      */
-    List<Long> createOrder(LifeOrderAndSpecificationVo orderAndSpecificationVo, Long userId);
+    List<Long> createOrder(LifeOrderAndSpecificationVo orderAndSpecificationVo, Long userId,boolean type);
 
 
     /**

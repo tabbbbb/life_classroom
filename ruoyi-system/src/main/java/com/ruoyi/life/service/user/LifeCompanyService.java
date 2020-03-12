@@ -19,7 +19,7 @@ public interface LifeCompanyService
      * @param companyId 公司ID
      * @return 公司
      */
-    public LifeCompany selectLifeCompanyById(Long companyId);
+    LifeCompany selectLifeCompanyById(Long companyId);
 
     /**
      * 查询公司列表
@@ -27,7 +27,7 @@ public interface LifeCompanyService
      * @param lifeCompany 公司
      * @return 公司集合
      */
-    public List<LifeCompany> selectLifeCompanyList(LifeCompany lifeCompany);
+    List<LifeCompany> selectLifeCompanyList(LifeCompany lifeCompany);
 
     /**
      * 新增公司
@@ -35,7 +35,7 @@ public interface LifeCompanyService
      * @param lifeCompany 公司
      * @return 结果
      */
-    public int insertLifeCompany(LifeCompany lifeCompany);
+    int insertLifeCompany(LifeCompany lifeCompany);
 
     /**
      * 修改公司
@@ -43,7 +43,7 @@ public interface LifeCompanyService
      * @param lifeCompany 公司
      * @return 结果
      */
-    public int updateLifeCompany(LifeCompany lifeCompany);
+    int updateLifeCompany(LifeCompany lifeCompany);
 
     /**
      * 批量删除公司
@@ -51,7 +51,7 @@ public interface LifeCompanyService
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int deleteLifeCompanyByIds(String ids);
+    int deleteLifeCompanyByIds(String ids);
 
     /**
      * 删除公司信息
@@ -59,7 +59,7 @@ public interface LifeCompanyService
      * @param companyId 公司ID
      * @return 结果
      */
-    public int deleteLifeCompanyById(Long companyId);
+    int deleteLifeCompanyById(Long companyId);
 
 
     /**

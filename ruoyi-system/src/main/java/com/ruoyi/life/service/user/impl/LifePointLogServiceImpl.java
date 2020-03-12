@@ -1,10 +1,13 @@
 package com.ruoyi.life.service.user.impl;
 
 
+import com.github.pagehelper.PageHelper;
 import com.ruoyi.life.domain.LifePointLog;
+import com.ruoyi.life.domain.LifeUser;
 import com.ruoyi.life.mapper.LifePointLogMapper;
 import com.ruoyi.life.service.user.LifePointLogService;
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.life.service.user.LifeUserService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -20,7 +23,10 @@ import java.util.List;
 public class LifePointLogServiceImpl implements LifePointLogService
 {
     @Resource
-    private LifePointLogMapper lifePointLogMapper;
+    private LifePointLogMapper pointLogMapper;
+
+    @Resource
+    private LifeUserService userService;
 
     /**
      * 查询积分日志
@@ -31,7 +37,7 @@ public class LifePointLogServiceImpl implements LifePointLogService
     @Override
     public LifePointLog selectLifePointLogById(Integer logId)
     {
-        return lifePointLogMapper.selectLifePointLogById(logId);
+        return pointLogMapper.selectLifePointLogById(logId);
     }
 
     /**
@@ -43,7 +49,7 @@ public class LifePointLogServiceImpl implements LifePointLogService
     @Override
     public List<LifePointLog> selectLifePointLogList(LifePointLog lifePointLog)
     {
-        return lifePointLogMapper.selectLifePointLogList(lifePointLog);
+        return pointLogMapper.selectLifePointLogList(lifePointLog);
     }
 
     /**
@@ -55,7 +61,7 @@ public class LifePointLogServiceImpl implements LifePointLogService
     @Override
     public int insertLifePointLog(LifePointLog lifePointLog)
     {
-        return lifePointLogMapper.insertLifePointLog(lifePointLog);
+        return pointLogMapper.insertLifePointLog(lifePointLog);
     }
 
     /**
@@ -67,7 +73,7 @@ public class LifePointLogServiceImpl implements LifePointLogService
     @Override
     public int updateLifePointLog(LifePointLog lifePointLog)
     {
-        return lifePointLogMapper.updateLifePointLog(lifePointLog);
+        return pointLogMapper.updateLifePointLog(lifePointLog);
     }
 
     /**
@@ -79,7 +85,7 @@ public class LifePointLogServiceImpl implements LifePointLogService
     @Override
     public int deleteLifePointLogByIds(String ids)
     {
-        return lifePointLogMapper.deleteLifePointLogByIds(Convert.toStrArray(ids));
+        return pointLogMapper.deleteLifePointLogByIds(Convert.toStrArray(ids));
     }
 
     /**
@@ -91,12 +97,33 @@ public class LifePointLogServiceImpl implements LifePointLogService
     @Override
     public int deleteLifePointLogById(Integer logId)
     {
-        return lifePointLogMapper.deleteLifePointLogById(logId);
+        return pointLogMapper.deleteLifePointLogById(logId);
     }
 
 
+    /**
+     * 过期积分的日志
+     * @return
+     */
     @Override
     public int pastPointLog() {
-        return lifePointLogMapper.pastPointLog();
+        return pointLogMapper.pastPointLog();
+    }
+
+
+    /**
+     * 获取用户消费日志
+     *
+     * @param userId
+     * @param logType
+     * @param page
+     * @param limit
+     * @return
+     */
+    @Override
+    public List<LifePointLog> getUserLog(Long userId, Integer logType, Integer page, Integer limit) {
+        PageHelper.startPage(page,limit);
+        LifeUser user = userService.selectLifeUserById(userId);
+        return pointLogMapper.getUserLog(user.getShareId(),logType);
     }
 }

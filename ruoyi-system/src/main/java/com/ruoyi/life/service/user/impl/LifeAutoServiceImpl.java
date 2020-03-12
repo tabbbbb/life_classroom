@@ -84,9 +84,11 @@ public class LifeAutoServiceImpl implements LifeAutoService {
     }
 
 
-
-
-
+    /**
+     * 在user对象中设置公司Id
+     * @param user
+     * @param companyInvitationCard
+     */
     private void setCompany(LifeUser user,String companyInvitationCard){
         LifeCompany company = companyService.selectLifeCompanyByCode(companyInvitationCard);
         if (company != null) {

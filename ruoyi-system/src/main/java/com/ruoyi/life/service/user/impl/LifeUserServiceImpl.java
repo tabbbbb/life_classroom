@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ruoyi.common.exception.life.user.RechargerException;
+import com.ruoyi.common.exception.life.user.UserOperationException;
 import com.ruoyi.common.sms.cache.SmsCache;
 import com.ruoyi.common.weixin.WxOperation;
 import com.ruoyi.life.domain.*;
@@ -57,6 +58,10 @@ public class LifeUserServiceImpl implements LifeUserService
 
     @Resource
     private LifeUserChildService userChildService;
+
+
+    @Resource
+    private LifeCompanyService companyService;
 
     /**
      * 查询用户
@@ -495,5 +500,25 @@ public class LifeUserServiceImpl implements LifeUserService
         }else{
             return selectLifeUserById(user.getShareId());
         }
+    }
+
+
+    /**
+     * 设置公司
+     *
+     * @param userId
+     * @param invitationCode
+     * @return
+     */
+    @Override
+    public void setCompany(Long userId, String invitationCode) {
+        LifeCompany company = companyService.selectLifeCompanyByCode(invitationCode);
+        if (company == null) {
+            throw new UserOperationException(UserResponseCode.SET_COMPANY_ERROR,"没有此公司");
+        }
+        LifeUser user = new LifeUser();
+        user.setCompanyId(company.getCompanyId());
+        user.setUserId(userId);
+        updateLifeUser(user);
     }
 }

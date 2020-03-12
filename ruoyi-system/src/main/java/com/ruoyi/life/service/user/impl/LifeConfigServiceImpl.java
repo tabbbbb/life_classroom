@@ -20,7 +20,7 @@ import java.util.List;
 public class LifeConfigServiceImpl implements LifeConfigService
 {
     @Resource
-    private LifeConfigMapper lifeConfigMapper;
+    private LifeConfigMapper configMapper;
 
     /**
      * 查询全局配置
@@ -31,7 +31,7 @@ public class LifeConfigServiceImpl implements LifeConfigService
     @Override
     public LifeConfig selectLifeConfigById(Long id)
     {
-        return lifeConfigMapper.selectLifeConfigById(id);
+        return configMapper.selectLifeConfigById(id);
     }
 
     /**
@@ -43,7 +43,7 @@ public class LifeConfigServiceImpl implements LifeConfigService
     @Override
     public List<LifeConfig> selectLifeConfigList(LifeConfig lifeConfig)
     {
-        return lifeConfigMapper.selectLifeConfigList(lifeConfig);
+        return configMapper.selectLifeConfigList(lifeConfig);
     }
 
     /**
@@ -55,7 +55,7 @@ public class LifeConfigServiceImpl implements LifeConfigService
     @Override
     public int insertLifeConfig(LifeConfig lifeConfig)
     {
-        return lifeConfigMapper.insertLifeConfig(lifeConfig);
+        return configMapper.insertLifeConfig(lifeConfig);
     }
 
     /**
@@ -67,7 +67,7 @@ public class LifeConfigServiceImpl implements LifeConfigService
     @Override
     public int updateLifeConfig(LifeConfig lifeConfig)
     {
-        return lifeConfigMapper.updateLifeConfig(lifeConfig);
+        return configMapper.updateLifeConfig(lifeConfig);
     }
 
     /**
@@ -79,7 +79,7 @@ public class LifeConfigServiceImpl implements LifeConfigService
     @Override
     public int deleteLifeConfigByIds(String ids)
     {
-        return lifeConfigMapper.deleteLifeConfigByIds(Convert.toStrArray(ids));
+        return configMapper.deleteLifeConfigByIds(Convert.toStrArray(ids));
     }
 
     /**
@@ -91,6 +91,6 @@ public class LifeConfigServiceImpl implements LifeConfigService
     @Override
     public int deleteLifeConfigById(Long id)
     {
-        return lifeConfigMapper.deleteLifeConfigById(id);
+        return configMapper.deleteLifeConfigById(id);
     }
 }

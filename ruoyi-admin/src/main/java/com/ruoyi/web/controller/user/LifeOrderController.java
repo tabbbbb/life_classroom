@@ -57,10 +57,10 @@ public class LifeOrderController {
 
     @PutMapping("order")
     @ApiOperation(value = "生成订单")
-    public UserResponse payCourse(@LoginInfo @ApiIgnore UserLoginInfo loginInfo, @ApiParam(name = "payOrderVo",value = "payOrderVo:LifePayOrderVo.class") @RequestBody LifeOrderAndSpecificationVo orderAndSpecificationVo){
+    public UserResponse payCourse(@LoginInfo @ApiIgnore UserLoginInfo loginInfo, @ApiParam(name = "orderAndSpecificationVo",value = "订单创建") @RequestBody LifeOrderAndSpecificationVo orderAndSpecificationVo){
         UserResponse response = LoginResponse.toMessage(loginInfo);
         if (response != null) return response;
-        return UserResponse.succeed( orderService.createOrder(orderAndSpecificationVo,loginInfo.getId()));
+        return UserResponse.succeed( orderService.createOrder(orderAndSpecificationVo,loginInfo.getId(),false));
     }
 
 

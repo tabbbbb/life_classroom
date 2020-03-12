@@ -4,15 +4,17 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
  * 小团课对象 life_league_class
  * 
  * @author ruoyi
- * @date 2019-12-19
+ * @date 2020-03-11
  */
-public class LifeLeagueClass
+public class LifeLeagueClass extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
@@ -27,13 +29,21 @@ public class LifeLeagueClass
     @Excel(name = "选择课程详细")
     private Long courseDetailId;
 
-    /** 选择人 */
-    @Excel(name = "选择人")
-    private String choosePeople;
-
     /** 选择时间 */
     @Excel(name = "选择时间", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date chooseTime;
+    private LocalDate chooseTime;
+
+    /** 选择规格 */
+    @Excel(name = "选择规格")
+    private Long chooseSpecification;
+
+    /** 唯一码 */
+    @Excel(name = "唯一码")
+    private String sole;
+
+    /** 是否过期，1过期 */
+    @Excel(name = "是否过期，1过期")
+    private Integer pastFlag;
 
     public void setLeagueClassId(Long leagueClassId) 
     {
@@ -62,23 +72,41 @@ public class LifeLeagueClass
     {
         return courseDetailId;
     }
-    public void setChoosePeople(String choosePeople) 
-    {
-        this.choosePeople = choosePeople;
-    }
-
-    public String getChoosePeople() 
-    {
-        return choosePeople;
-    }
-    public void setChooseTime(Date chooseTime) 
+    public void setChooseTime(LocalDate chooseTime)
     {
         this.chooseTime = chooseTime;
     }
 
-    public Date getChooseTime() 
+    public LocalDate getChooseTime()
     {
         return chooseTime;
+    }
+    public void setChooseSpecification(Long chooseSpecification) 
+    {
+        this.chooseSpecification = chooseSpecification;
+    }
+
+    public Long getChooseSpecification() 
+    {
+        return chooseSpecification;
+    }
+    public void setSole(String sole) 
+    {
+        this.sole = sole;
+    }
+
+    public String getSole() 
+    {
+        return sole;
+    }
+    public void setPastFlag(Integer pastFlag) 
+    {
+        this.pastFlag = pastFlag;
+    }
+
+    public Integer getPastFlag() 
+    {
+        return pastFlag;
     }
 
     @Override
@@ -87,8 +115,10 @@ public class LifeLeagueClass
             .append("leagueClassId", getLeagueClassId())
             .append("userId", getUserId())
             .append("courseDetailId", getCourseDetailId())
-            .append("choosePeople", getChoosePeople())
             .append("chooseTime", getChooseTime())
+            .append("chooseSpecification", getChooseSpecification())
+            .append("sole", getSole())
+            .append("pastFlag", getPastFlag())
             .toString();
     }
 }

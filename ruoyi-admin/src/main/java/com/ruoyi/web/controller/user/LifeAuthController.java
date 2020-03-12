@@ -47,8 +47,6 @@ public class LifeAuthController {
     @Autowired
     private LifeAutoService autoService;
 
-    @Autowired
-    private LifePointService pointService;
 
 
     @PostMapping("phonelogin")

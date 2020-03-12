@@ -22,6 +22,7 @@ public class LifeOrderAndSpecificationVo {
      */
     private Long specificationId;
 
+
     /**
      * 创建订单vo
      */
@@ -43,4 +44,6 @@ public class LifeOrderAndSpecificationVo {
     public void setCreateOrderVoList(List<LifeCreateOrderVo> createOrderVoList) {
         this.createOrderVoList = createOrderVoList;
     }
+
+
 }

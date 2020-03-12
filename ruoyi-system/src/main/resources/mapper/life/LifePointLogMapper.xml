@@ -150,5 +150,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
           </if>
         </trim>
     </select>
+    <select id="getUserLog" resultMap="LifePointLogResult">
+        <include refid="selectLifePointLogVo"/>
+        where share_id = #{shareId}
+        <if test="logType != null">
+            log_type = #{logType}
+        </if>
+        order by add_time desc
+    </select>
 
 </mapper>

@@ -132,6 +132,8 @@ public class LifeUserController extends BaseController
         return userService.setPayPassword(loginInfo.getId(),body);
     }
 
+
+
     @PostMapping("updatepaypwd")
     @ApiOperation(value = "修改支付密码",notes = "获取短信验证码修改支付密码")
     public UserResponse updatePayPassword(@ApiIgnore @LoginInfo UserLoginInfo loginInfo,@RequestBody @ApiParam(name = "body",value = "code:验证码,payPwd:新密码") String body){
@@ -151,4 +153,16 @@ public class LifeUserController extends BaseController
     public UserResponse userCapital(@ApiIgnore @LoginInfo UserLoginInfo loginInfo){
         return userService.userCapital(loginInfo.getId());
     }
+
+
+
+    @PostMapping("setCompany")
+    @ApiOperation(value = "设置公司",notes = "")
+    public UserResponse setCompany(@ApiIgnore @LoginInfo UserLoginInfo loginInfo,String invitationCode){
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null) return response;
+        userService.setCompany(loginInfo.getId(),invitationCode);
+        return UserResponse.succeed();
+    }
+
 }

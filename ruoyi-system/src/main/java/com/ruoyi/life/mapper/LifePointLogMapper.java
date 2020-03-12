@@ -4,7 +4,7 @@ package com.ruoyi.life.mapper;
 import com.ruoyi.life.domain.LifePointLog;
 import com.ruoyi.life.domain.vo.system.LifePointLogSearchVo;
 import com.ruoyi.life.domain.vo.system.LifePointLogVo;
-import com.ruoyi.life.domain.vo.system.LifePointVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -85,5 +85,14 @@ public interface LifePointLogMapper
      * @return
      */
     List<LifePointLogVo> selectLifePointLogVoList(LifePointLogSearchVo logVo);
+
+
+
+
+    /**
+     * 获取用户消费日志
+     * @return
+     */
+    List<LifePointLog> getUserLog(@Param("shareId") Long shareId, @Param("logType")Integer logType);
 
 }

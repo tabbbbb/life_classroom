@@ -187,4 +187,13 @@ public interface LifeUserService
      * @return
      */
     LifeUser getShareUser(Long userId);
+
+
+    /**
+     * 设置公司
+     * @param id
+     * @param invitationCode
+     * @return
+     */
+    void setCompany(Long id, String invitationCode);
 }

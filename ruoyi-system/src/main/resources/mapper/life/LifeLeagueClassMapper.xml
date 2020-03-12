@@ -4,16 +4,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.life.mapper.LifeLeagueClassMapper">
     
-    <resultMap type="com.ruoyi.life.domain.LifeLeagueClass" id="LifeLeagueClassResult">
+    <resultMap type="LifeLeagueClass" id="LifeLeagueClassResult">
         <result property="leagueClassId"    column="league_class_id"    />
         <result property="userId"    column="user_id"    />
         <result property="courseDetailId"    column="course_detail_id"    />
-        <result property="choosePeople"    column="choose_people"    />
         <result property="chooseTime"    column="choose_time"    />
+        <result property="chooseSpecification"    column="choose_specification"    />
+        <result property="sole"    column="sole"    />
+        <result property="pastFlag"    column="past_flag"    />
     </resultMap>
 
     <sql id="selectLifeLeagueClassVo">
-        select league_class_id, user_id, course_detail_id, choose_people, choose_time from life_league_class
+        select league_class_id, user_id, course_detail_id, choose_time, choose_specification, sole, past_flag from life_league_class
     </sql>
 
     <select id="selectLifeLeagueClassList" parameterType="LifeLeagueClass" resultMap="LifeLeagueClassResult">
@@ -21,8 +23,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="userId != null "> and user_id = #{userId}</if>
             <if test="courseDetailId != null "> and course_detail_id = #{courseDetailId}</if>
-            <if test="choosePeople != null  and choosePeople != ''"> and choose_people = #{choosePeople}</if>
             <if test="chooseTime != null "> and choose_time = #{chooseTime}</if>
+            <if test="chooseSpecification != null "> and choose_specification = #{chooseSpecification}</if>
+            <if test="sole != null  and sole != ''"> and sole = #{sole}</if>
+            <if test="pastFlag != null "> and past_flag = #{pastFlag}</if>
         </where>
     </select>
     
@@ -30,32 +34,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectLifeLeagueClassVo"/>
         where league_class_id = #{leagueClassId}
     </select>
-        
-    <insert id="insertLifeLeagueClass" parameterType="LifeLeagueClass">
+
+
+    <insert id="insertLifeLeagueClass" parameterType="LifeLeagueClass" useGeneratedKeys="true" keyProperty="leagueClassId">
         insert into life_league_class
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="leagueClassId != null ">league_class_id,</if>
             <if test="userId != null ">user_id,</if>
             <if test="courseDetailId != null ">course_detail_id,</if>
-            <if test="choosePeople != null  and choosePeople != ''">choose_people,</if>
             <if test="chooseTime != null ">choose_time,</if>
+            <if test="chooseSpecification != null ">choose_specification,</if>
+            <if test="sole != null  and sole != ''">sole,</if>
+            <if test="pastFlag != null ">past_flag,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="leagueClassId != null ">#{leagueClassId},</if>
             <if test="userId != null ">#{userId},</if>
             <if test="courseDetailId != null ">#{courseDetailId},</if>
-            <if test="choosePeople != null  and choosePeople != ''">#{choosePeople},</if>
             <if test="chooseTime != null ">#{chooseTime},</if>
+            <if test="chooseSpecification != null ">#{chooseSpecification},</if>
+            <if test="sole != null  and sole != ''">#{sole},</if>
+            <if test="pastFlag != null ">#{pastFlag},</if>
          </trim>
     </insert>
+
 
     <update id="updateLifeLeagueClass" parameterType="LifeLeagueClass">
         update life_league_class
         <trim prefix="SET" suffixOverrides=",">
             <if test="userId != null ">user_id = #{userId},</if>
             <if test="courseDetailId != null ">course_detail_id = #{courseDetailId},</if>
-            <if test="choosePeople != null  and choosePeople != ''">choose_people = #{choosePeople},</if>
             <if test="chooseTime != null ">choose_time = #{chooseTime},</if>
+            <if test="chooseSpecification != null ">choose_specification = #{chooseSpecification},</if>
+            <if test="sole != null  and sole != ''">sole = #{sole},</if>
+            <if test="pastFlag != null ">past_flag = #{pastFlag},</if>
         </trim>
         where league_class_id = #{leagueClassId}
     </update>
@@ -65,10 +75,72 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteLifeLeagueClassByIds" parameterType="String">
-        delete from life_league_class where league_class_id in 
-        <foreach item="leagueClassId" collection="array" open="(" separator="," close=")">
+        delete from life_league_class where user_id = #{userId} and league_class_id in
+        <foreach item="leagueClassId" collection="leagueClassIds" open="(" separator="," close=")">
             #{leagueClassId}
         </foreach>
     </delete>
-    
+
+    <select id="getRepetitionClass" resultType="java.lang.Integer">
+        select count(0) from life_league_class
+        where choose_time = #{chooseTime} and course_detail_id = #{courseDetailId} and user_id = #{userId}
+    </select>
+
+
+    <insert id="insertLifeLeagueClassList">
+        insert into life_league_class
+          (user_id,course_detail_id,choose_time,choose_specification,sole,past_flag)
+        values
+          <foreach collection="list" item="item"  separator="," >
+              (#{item.userId},#{item.courseDetailId},#{item.chooseTime},#{item.chooseSpecification},#{item.sole},#{item.pastFlag})
+          </foreach>
+    </insert>
+
+
+    <select id="getSoleByIds" resultType="java.lang.String">
+        select sole from life_league_class
+        where league_class_id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <select id="getNumBySoles" resultType="java.lang.Integer">
+        select count(0) from life_league_class
+        where sole in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <delete id="deleteLeagueClassByUserId">
+        delete from life_league_class
+        where user_id = #{userId}
+    </delete>
+
+    <select id="getLeagueClassInfo"
+            resultType="com.ruoyi.life.domain.vo.user.LifeLeagueClassVo$LifeLeagueClassInfoVo">
+        SELECT
+            class.league_class_id AS leagueClassId,
+            course.img_url AS courseImgUrl,
+            course.NAME AS courseName,
+            classify.img AS classifyImgUrl,
+            classify.course_classify_name AS classifyName,
+            course.point AS point,
+            course.price AS price,
+            class.choose_time AS chooseTime,
+            detail.course_detail_id AS courseDetailId,
+            detail.start_hour AS startHour,
+            detail.start_minute AS startMinute,
+            detail.course_duration AS courseDuration,
+            course.age_onset AS ageOnset,
+            course.age_end AS ageEnd,
+            detail.course_refund_hour AS courseRefundHour
+        FROM
+            life_league_class AS class
+            INNER JOIN life_course_detail AS detail ON detail.course_detail_id = class.course_detail_id
+            INNER JOIN life_course AS course ON course.course_id = detail.course_id
+            INNER JOIN life_course_classify AS classify ON classify.course_classify_id = course.course_classify_id
+        WHERE
+            class.user_id = #{userId}
+    </select>
 </mapper>

@@ -2,6 +2,7 @@ package com.ruoyi.life.service.user.impl;
 
 
 import com.github.pagehelper.PageHelper;
+import com.ruoyi.common.config.LifeConfig;
 import com.ruoyi.common.exception.life.user.OrderException;
 import com.ruoyi.common.exception.life.user.UserOperationException;
 import com.ruoyi.common.response.UserResponse;
@@ -16,6 +17,8 @@ import com.ruoyi.life.domain.vo.user.*;
 import com.ruoyi.life.mapper.LifeOrderMapper;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.life.service.user.*;
+import com.ruoyi.system.domain.SysConfig;
+import com.ruoyi.system.mapper.SysConfigMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -77,7 +80,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
     private LifeUserChildService userChildService;
 
     @Resource
-    private LifeDonateService donateService;
+    private LifeConfigService configService;
 
 
     /**
@@ -216,22 +219,36 @@ public class LifeOrderServiceImpl implements LifeOrderService
      */
     @Override
     @Transactional
-    public List<Long> createOrder(LifeOrderAndSpecificationVo orderAndSpecificationVo, Long userId) {
+    public List<Long> createOrder(LifeOrderAndSpecificationVo orderAndSpecificationVo, Long userId,boolean type) {
         LifeUser user = userService.selectLifeUserById(userId);
         List<LifeOrder> orders = new ArrayList<>();
         List<LifeCreateOrderVo> createOrderVos = orderAndSpecificationVo.getCreateOrderVoList();
-        LifeCourseSpecification specification = courseSpecificationService.selectLifeCourseSpecificationById(orderAndSpecificationVo.getSpecificationId());
-        if (specification == null){
-            throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"规格已删除");
+        Integer specificationDiscount = 100;
+        Integer leagueClassDiscount = 100;
+        if (!type){
+            LifeCourseSpecification specification = courseSpecificationService.selectLifeCourseSpecificationById(orderAndSpecificationVo.getSpecificationId());
+            if (specification == null){
+                throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"规格已删除");
+            }
+            if (specification.getSpecificationNum() != createOrderVos.size()){
+                throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"购买数量出现问题");
+            }
+            specificationDiscount =  specification.getSpecificationDiscount();
+        }else{
+            leagueClassDiscount = Integer.valueOf(LifeConfig.getStyMap("leagueClassDiscount"));
+            Integer leagueClassMeetNum = Integer.valueOf(LifeConfig.getStyMap("leagueClassMeetNum"));
+            if (createOrderVos.size() != leagueClassMeetNum){
+                throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"团课数量未满足");
+            }
         }
-        if (specification.getSpecificationNum() != createOrderVos.size()){
-            throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"购买数量出现问题");
-        }
-        Integer specificationDiscount = specification.getSpecificationDiscount();
+
         for (int i = 0; i < createOrderVos.size(); i++) {
             LifeCreateOrderVo createOrderVo = createOrderVos.get(i);
             LifeCourseDetail courseDetail = courseDetailService.selectLifeCourseDetailById(createOrderVo.getCourseDetailId());
             LifeCourse course = courseService.selectLifeCourseById(courseDetail.getCourseId());
+            if (type && course.getCourseType() == 1){
+                throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"有服务取消拼团");
+            }
             if (course.getDeleteFlage() == 1){
                 throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"商品已删除");
             }
@@ -277,7 +294,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
 
             LifeCoupon coupon = null;
             BigDecimal toUsePrice = null;
-            if (createOrderVo.getCouponReceive() != null && createOrderVo.getCouponReceive() != 0){
+            if (!type  && createOrderVo.getCouponReceive() != null && createOrderVo.getCouponReceive() != 0){
                 LifeCouponReceive couponReceive = couponReceiveService.selectLifeCouponReceiveById(createOrderVo.getCouponReceive());
                 if (couponReceive == null || couponReceive.getStatus() ==1){
                     throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"优惠券不可用");
@@ -346,8 +363,9 @@ public class LifeOrderServiceImpl implements LifeOrderService
                 order.setSaleUser(childIds.get(j));
                 if (createOrderVo.getPayType() == 0){
                     Long point = course.getPoint();
+                    point = (long)Math.ceil(point*specificationDiscount*leagueClassDiscount/10000.0);
                     if (coupon != null){
-                        point = (long)Math.ceil(point*coupon.getDiscount()*specificationDiscount/10000.0);
+                        point = (long)Math.ceil(point*coupon.getDiscount()/100.0);
                         order.setDiscounts(new BigDecimal((int) (course.getPoint()-point)));
                     }
                     order.setTotal(new BigDecimal(course.getPoint()));
@@ -355,7 +373,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
                 }else{
                     BigDecimal price = course.getPrice();
                     order.setTotal(price);
-                    price = price.multiply(new BigDecimal(specificationDiscount/100));
+                    price = price.multiply(new BigDecimal(specificationDiscount*leagueClassDiscount/10000.0));
                     if (coupon != null){
                         if (toUsePrice.doubleValue() != 0 && toUsePrice.compareTo(price) == 1){
                             order.setDiscounts(price);
@@ -586,8 +604,16 @@ public class LifeOrderServiceImpl implements LifeOrderService
         map.put("child",userChildService.getChildByShareId(user.getShareId()));
         List list = new ArrayList();
         list.add(user);
-        list.add(shareUser);
+        if(shareUser != null){
+            list.add(shareUser);
+        }
         map.put("saleUser",list);
+        LifeVip vip = vipService.getBigVip(user.getShareId());
+        int maxMeetNum = list.size();
+        if (vip != null){
+            maxMeetNum += vip.getChild();
+        }
+        map.put("maxMeetNum",maxMeetNum);
         return map;
     }
 
