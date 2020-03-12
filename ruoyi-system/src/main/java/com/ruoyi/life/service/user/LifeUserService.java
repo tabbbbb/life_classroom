@@ -3,9 +3,12 @@ package com.ruoyi.life.service.user;
 
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.life.domain.LifeUser;
+import com.ruoyi.life.domain.vo.user.LifeGeneralizeUserVo;
+import org.apache.poi.ss.formula.ptg.MemAreaPtg;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户Service接口
@@ -196,4 +199,19 @@ public interface LifeUserService
      * @return
      */
     void setCompany(Long id, String invitationCode);
+
+
+    /**
+     * 获取推广用户
+     * @param userId
+     * @return
+     */
+    List<LifeGeneralizeUserVo> generalizeUser(Long userId,int page,int limit);
+
+
+    /**
+     * 获取邀请好友数据
+     * @return
+     */
+    Map getInvite(Long userId,int page,int limit);
 }

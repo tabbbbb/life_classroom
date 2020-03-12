@@ -9,11 +9,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.ruoyi.common.exception.life.user.RechargerException;
 import com.ruoyi.common.exception.life.user.UserOperationException;
 import com.ruoyi.common.sms.cache.SmsCache;
 import com.ruoyi.common.weixin.WxOperation;
 import com.ruoyi.life.domain.*;
+import com.ruoyi.life.domain.vo.user.LifeGeneralizeUserVo;
+import com.ruoyi.life.domain.vo.user.LifeInviteVo;
 import com.ruoyi.life.domain.vo.user.LifeUserHomeVo;
 import com.ruoyi.life.mapper.LifeUserMapper;
 import com.ruoyi.common.response.UserResponse;
@@ -62,6 +66,10 @@ public class LifeUserServiceImpl implements LifeUserService
 
     @Resource
     private LifeCompanyService companyService;
+
+
+    @Resource
+    private LifeVipService vipService;
 
     /**
      * 查询用户
@@ -520,5 +528,57 @@ public class LifeUserServiceImpl implements LifeUserService
         user.setCompanyId(company.getCompanyId());
         user.setUserId(userId);
         updateLifeUser(user);
+    }
+
+
+    /**
+     * 获取推广人数
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<LifeGeneralizeUserVo> generalizeUser(Long userId,int page,int limit) {
+        PageHelper.startPage(page,limit);
+        List<LifeGeneralizeUserVo> generalizeUserVos = userMapper.generalizeUser(userId);
+        for (LifeGeneralizeUserVo generalizeUserVo : generalizeUserVos) {
+            LifeVip vip = vipService.getBigVip(generalizeUserVo.getUserId());
+            if (vip == null){
+                generalizeUserVo.setVipName("普通会员");
+            }else {
+                generalizeUserVo.setVipName(vip.getVipName());
+            }
+
+        }
+        return generalizeUserVos;
+    }
+
+
+    /**
+     * 获取邀请好友数据
+     *
+     * @param userId
+     * @param page
+     * @param limit
+     * @return
+     */
+    @Override
+    public Map getInvite(Long userId, int page, int limit) {
+        Map map = new HashMap();
+        PageHelper.startPage(page,limit);
+        List<LifeInviteVo> inviteVos = userMapper.getInviteVo(userId);
+        for (LifeInviteVo inviteVo : inviteVos) {
+            LifeVip vip = vipService.getBigVip(inviteVo.getUserId());
+            if (vip == null){
+                inviteVo.setVipName("普通会员");
+            }else {
+                inviteVo.setVipName(vip.getVipName());
+            }
+        }
+        LifeUser user = selectLifeUserById(userId);
+        map.put("inviteVo",inviteVos);
+        map.put("qrCode",user.getQrcode());
+        map.put("rebatePoint",pointLogService.getRebatePoint(userId));
+        return map;
     }
 }

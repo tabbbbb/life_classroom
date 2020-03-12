@@ -94,5 +94,5 @@ public interface LifeVipService
      * @param shareId
      * @return
      */
-    LifeVip getBigVip(Long shareId);
+    LifeVip getBigVip(Long userId);
 }

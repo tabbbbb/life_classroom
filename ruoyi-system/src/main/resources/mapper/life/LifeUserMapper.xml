@@ -295,4 +295,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectLifeUserVo"/>
         where share_id = #{userId} and user_id != #{userId}
     </select>
+    <select id="generalizeUser" resultType="com.ruoyi.life.domain.vo.user.LifeGeneralizeUserVo">
+        select
+          user_id as userId,
+          img_url as userImgUrl,
+          nick_name as nickName,
+          create_date as addTime
+        from life_user
+        where parent_id = #{userId}
+    </select>
+    <select id="getInviteVo" resultType="com.ruoyi.life.domain.vo.user.LifeInviteVo">
+        SELECT
+	      `user`.user_id AS userId,
+	      `user`.img_url AS userImgUrl,
+	      `user`.nick_name AS nickName,
+	      log.point AS point,
+	      log.add_time AS addTime
+        FROM
+        	life_point_log AS log
+        	INNER JOIN life_user AS `user` ON `user`.user_id = log.user_id
+        WHERE
+        	`user`.parent_id = 13
+        	AND log.log_id = ( SELECT log_id FROM life_point_log WHERE user_id = `user`.user_id AND log_type = 2 ORDER BY add_time LIMIT 1 )
+    </select>
 </mapper>

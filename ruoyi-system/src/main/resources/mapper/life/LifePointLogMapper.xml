@@ -158,5 +158,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </if>
         order by add_time desc
     </select>
+    <select id="getRebatePoint" resultType="java.lang.Long">
+        select sum(point) from life_point_log
+        where user_id = 11 and log_type = 5
+        group by user_id
+    </select>
 
 </mapper>

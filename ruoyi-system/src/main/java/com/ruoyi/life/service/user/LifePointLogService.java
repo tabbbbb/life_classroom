@@ -4,6 +4,7 @@ package com.ruoyi.life.service.user;
 import com.ruoyi.life.domain.LifePointLog;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 积分日志Service接口
@@ -75,5 +76,11 @@ public interface LifePointLogService
      */
     List<LifePointLog> getUserLog(Long userId, Integer logType, Integer page, Integer limit);
 
+
+    /**
+     * 获取返佣获取的积分
+     * @return
+     */
+    long getRebatePoint(Long userId);
 
 }

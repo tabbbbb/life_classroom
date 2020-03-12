@@ -165,4 +165,30 @@ public class LifeUserController extends BaseController
         return UserResponse.succeed();
     }
 
+
+    @GetMapping("generalizeCompany")
+    @ApiOperation(value = "推广人数",notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page",value = "页码"),
+            @ApiImplicitParam(name = "limit",value = "条数")
+    })
+    public UserResponse generalizePeopleNumber(@ApiIgnore @LoginInfo UserLoginInfo loginInfo,int page,int limit){
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null) return response;
+        return UserResponse.succeed(userService.generalizeUser(loginInfo.getId(),page,limit));
+    }
+
+
+    @GetMapping("getInvite")
+    @ApiOperation(value = "邀请好友",notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page",value = "页码"),
+            @ApiImplicitParam(name = "limit",value = "条数")
+    })
+    public UserResponse getInvite(@ApiIgnore @LoginInfo UserLoginInfo loginInfo,int page,int limit){
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null) return response;
+        return UserResponse.succeed(userService.getInvite(loginInfo.getId(),page,limit));
+    }
+
 }

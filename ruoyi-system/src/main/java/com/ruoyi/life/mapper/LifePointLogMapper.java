@@ -95,4 +95,13 @@ public interface LifePointLogMapper
      */
     List<LifePointLog> getUserLog(@Param("shareId") Long shareId, @Param("logType")Integer logType);
 
+
+
+
+    /**
+     * 获取返佣获取的积分
+     * @return
+     */
+    long getRebatePoint(Long userId);
+
 }

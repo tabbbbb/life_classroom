@@ -9,6 +9,8 @@ import com.ruoyi.life.domain.vo.system.LifeChartVo;
 import com.ruoyi.life.domain.vo.system.LifeOrderVo;
 import com.ruoyi.life.domain.vo.system.LifeUserSearchVo;
 import com.ruoyi.life.domain.vo.system.LifeUserVo;
+import com.ruoyi.life.domain.vo.user.LifeGeneralizeUserVo;
+import com.ruoyi.life.domain.vo.user.LifeInviteVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
@@ -194,4 +196,21 @@ public interface LifeUserMapper
      * @return
      */
     LifeUser getShareUser(Long userId);
+
+
+
+    /**
+     * 获取推广用户
+     * @param userId
+     * @return
+     */
+    List<LifeGeneralizeUserVo> generalizeUser(Long userId);
+
+
+    /**
+     * 获取邀请好友数据
+     * @param userId
+     * @return
+     */
+    List<LifeInviteVo> getInviteVo(Long userId);
 }

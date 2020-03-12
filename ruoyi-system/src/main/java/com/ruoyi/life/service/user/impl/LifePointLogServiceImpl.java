@@ -126,4 +126,16 @@ public class LifePointLogServiceImpl implements LifePointLogService
         LifeUser user = userService.selectLifeUserById(userId);
         return pointLogMapper.getUserLog(user.getShareId(),logType);
     }
+
+
+    /**
+     * 获取返佣获取的积分
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public long getRebatePoint(Long userId) {
+        return pointLogMapper.getRebatePoint(userId);
+    }
 }
