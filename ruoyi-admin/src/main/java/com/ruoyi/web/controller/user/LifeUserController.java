@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.user;
 
 import com.ruoyi.life.domain.LifeUser;
+import com.ruoyi.life.domain.vo.user.LifeSetOrUpdatePayPasswordVo;
 import com.ruoyi.life.service.user.LifeUserService;
 import com.ruoyi.common.config.Global;
 import com.ruoyi.common.config.ServerConfig;
@@ -123,27 +124,6 @@ public class LifeUserController extends BaseController
 
 
 
-
-    @PostMapping("setpaypwd")
-    @ApiOperation(value = "设置支付密码")
-    public UserResponse setPayPassword(@ApiIgnore @LoginInfo UserLoginInfo loginInfo,@RequestBody @ApiParam(name = "body",value = "payPwd:密码") String body){
-        UserResponse response = LoginResponse.toMessage(loginInfo);
-        if (response != null) return response;
-        return userService.setPayPassword(loginInfo.getId(),body);
-    }
-
-
-
-    @PostMapping("updatepaypwd")
-    @ApiOperation(value = "修改支付密码",notes = "获取短信验证码修改支付密码")
-    public UserResponse updatePayPassword(@ApiIgnore @LoginInfo UserLoginInfo loginInfo,@RequestBody @ApiParam(name = "body",value = "code:验证码,payPwd:新密码") String body){
-        UserResponse response = LoginResponse.toMessage(loginInfo);
-        if (response != null) return response;
-        return userService.updatePayPassword(loginInfo.getId(),body);
-    }
-
-
-
     /**
      * 获取此用户的星星，余额，最近到期的星星信息
      * @return
@@ -190,5 +170,48 @@ public class LifeUserController extends BaseController
         if (response != null) return response;
         return UserResponse.succeed(userService.getInvite(loginInfo.getId(),page,limit));
     }
+
+
+
+
+    @PostMapping("setOrUpdatePassword")
+    @ApiOperation(value = "获取短信验证码修改或设置支付密码",notes = "获取短信验证码修改或设置支付密码")
+    public UserResponse updatePayPassword(@ApiIgnore @LoginInfo UserLoginInfo loginInfo,
+                                          @RequestBody @ApiParam(name = "setOrUpdatePayPasswordVo",value = "{code:xxx,payPassword:xxx}")
+                                                  LifeSetOrUpdatePayPasswordVo setOrUpdatePayPasswordVo){
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null) return response;
+        userService.setOrUpdatePayPassword(setOrUpdatePayPasswordVo,loginInfo.getId());
+        return UserResponse.succeed();
+    }
+
+
+    @PostMapping("getPayPassword")
+    @ApiOperation(value = "查询是否有支付密码",notes = "true:有")
+    public UserResponse getPayPassword(@ApiIgnore @LoginInfo UserLoginInfo loginInfo){
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null) return response;
+        return UserResponse.succeed(userService.getPayPassword(loginInfo.getId()));
+    }
+
+
+
+    @GetMapping("getBalance")
+    @ApiOperation(value = "获取余额",notes = "")
+    public UserResponse getBalance(@ApiIgnore @LoginInfo UserLoginInfo loginInfo){
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null) return response;
+        return UserResponse.succeed(userService.getBalance(loginInfo.getId()));
+    }
+
+
+    @GetMapping("getPersonInfo")
+    @ApiOperation(value = "获取个人中心数据",notes = "")
+    public UserResponse getPersonInfo(@ApiIgnore @LoginInfo UserLoginInfo loginInfo){
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null) return response;
+        return UserResponse.succeed(userService.getPersonInfo(loginInfo.getId()));
+    }
+
 
 }

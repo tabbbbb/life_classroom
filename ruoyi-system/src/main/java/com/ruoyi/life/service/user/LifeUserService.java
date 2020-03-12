@@ -4,6 +4,8 @@ package com.ruoyi.life.service.user;
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.life.domain.LifeUser;
 import com.ruoyi.life.domain.vo.user.LifeGeneralizeUserVo;
+import com.ruoyi.life.domain.vo.user.LifePersonInfoVo;
+import com.ruoyi.life.domain.vo.user.LifeSetOrUpdatePayPasswordVo;
 import org.apache.poi.ss.formula.ptg.MemAreaPtg;
 
 import java.math.BigDecimal;
@@ -160,22 +162,6 @@ public interface LifeUserService
     UserResponse codeUpdatePassword(String body);
 
 
-    /**
-     * 设置支付密码
-     * @param userId
-     * @param body
-     * @return
-     */
-    UserResponse setPayPassword(Long userId,String body);
-
-
-    /**
-     * 修改支付密码
-     * @param userId
-     * @param body
-     * @return
-     */
-    UserResponse updatePayPassword(Long userId,String body);
 
 
     /**
@@ -214,4 +200,34 @@ public interface LifeUserService
      * @return
      */
     Map getInvite(Long userId,int page,int limit);
+
+
+    /**
+     * 获取此用户是否有支付密码
+     * @param id
+     * @return
+     */
+    boolean  getPayPassword(Long id);
+
+
+    /**
+     * 设置或修改支付密码
+     * @param setOrUpdatePayPasswordVo
+     * @return
+     */
+    void setOrUpdatePayPassword(LifeSetOrUpdatePayPasswordVo setOrUpdatePayPasswordVo,Long userId);
+
+    /**
+     * 获取此用户的余额
+     * @return
+     */
+    BigDecimal getBalance(Long userId);
+
+
+    /**
+     * 个人设置信息
+     * @param userId
+     * @return
+     */
+    LifePersonInfoVo getPersonInfo(Long userId);
 }

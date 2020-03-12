@@ -318,4 +318,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         	`user`.parent_id = 13
         	AND log.log_id = ( SELECT log_id FROM life_point_log WHERE user_id = `user`.user_id AND log_type = 2 ORDER BY add_time LIMIT 1 )
     </select>
+    <select id="getPersonInfo" resultType="com.ruoyi.life.domain.vo.user.LifePersonInfoVo">
+        select
+          `user`.user_id as userId,
+          `user`.img_url as imgUrl,
+          `user`.nick_name as nickName,
+          `user`.birthday as birthday,
+          `user`.sex as sex,
+          `user`.address as address,
+          `user`.phone as phone,
+          company.company_name as companyName,
+          if(`user`.payment_code is null ,false,true) as payPasswordFlag,
+          `user`.wx_nick_name as wxName
+        from life_user as `user`
+        left join life_company as company on company.company_id = `user`.company_id
+        where `user`.user_id = #{userId}
+    </select>
+
+
 </mapper>

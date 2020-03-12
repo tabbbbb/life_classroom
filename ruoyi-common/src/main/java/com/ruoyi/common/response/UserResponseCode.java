@@ -233,7 +233,7 @@ public class UserResponseCode {
     /**
      * 修改支付密码错误
      */
-    public static final Integer UPDATE_PAY_PASSWORD_ERROR = 100032;
+    public static final Integer SET_OR_UPDATE_PAY_PASSWORD_ERROR = 100032;
 
 
     /**

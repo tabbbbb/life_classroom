@@ -11,6 +11,7 @@ import com.ruoyi.life.domain.vo.system.LifeUserSearchVo;
 import com.ruoyi.life.domain.vo.system.LifeUserVo;
 import com.ruoyi.life.domain.vo.user.LifeGeneralizeUserVo;
 import com.ruoyi.life.domain.vo.user.LifeInviteVo;
+import com.ruoyi.life.domain.vo.user.LifePersonInfoVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
@@ -213,4 +214,12 @@ public interface LifeUserMapper
      * @return
      */
     List<LifeInviteVo> getInviteVo(Long userId);
+
+
+    /**
+     * 个人设置信息
+     * @param userId
+     * @return
+     */
+    LifePersonInfoVo getPersonInfo(Long userId);
 }

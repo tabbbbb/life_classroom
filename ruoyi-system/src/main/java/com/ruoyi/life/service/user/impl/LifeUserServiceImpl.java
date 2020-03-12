@@ -16,9 +16,7 @@ import com.ruoyi.common.exception.life.user.UserOperationException;
 import com.ruoyi.common.sms.cache.SmsCache;
 import com.ruoyi.common.weixin.WxOperation;
 import com.ruoyi.life.domain.*;
-import com.ruoyi.life.domain.vo.user.LifeGeneralizeUserVo;
-import com.ruoyi.life.domain.vo.user.LifeInviteVo;
-import com.ruoyi.life.domain.vo.user.LifeUserHomeVo;
+import com.ruoyi.life.domain.vo.user.*;
 import com.ruoyi.life.mapper.LifeUserMapper;
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.common.response.UserResponseCode;
@@ -411,66 +409,13 @@ public class LifeUserServiceImpl implements LifeUserService
     }
 
 
-    /**
-     * 设置支付密码
-     *
-     * @param userId
-     * @param body
-     * @return
-     */
-    @Override
-    public UserResponse setPayPassword(Long userId, String body) {
-        LifeUser user = selectLifeUserById(userId);
-        if (user.getPaymentCode() != null){
-            return UserResponse.fail(UserResponseCode.SET_PAY_PASSWORD_ERROR,"支付密码已经设置");
-        }
-        String payPwd = JacksonUtil.parseString(body,"payPwd");
-        if (!verifyPayPassword(payPwd)){
-            return UserResponse.fail(UserResponseCode.SET_PAY_PASSWORD_ERROR,"支付密码必须为6位数字");
-        }
-        LifeUser updateUser = new LifeUser();
-        updateUser.setUserId(userId);
-        updateUser.setPaymentCode(Md5Utils.hash(payPwd));
-        if (updateLifeUser(updateUser) == 0){
-            return UserResponse.fail(UserResponseCode.SET_PAY_PASSWORD_ERROR,"支付密码设置错误");
-        }
-        return UserResponse.succeed();
-    }
-
-    /**
-     * 修改支付密码
-     *
-     * @param body
-     * @return
-     */
-    @Override
-    public UserResponse updatePayPassword(Long userId,String body) {
-        LifeUser user = selectLifeUserById(userId);
-        String code = JacksonUtil.parseString(body,"code");
-        if (!SmsCache.compareSmsCache(user.getPhone(),code)){
-            return UserResponse.fail(UserResponseCode.UPDATE_PAY_PASSWORD_ERROR,"验证码输入错误");
-        }
-        String payPwd = JacksonUtil.parseString(body,"payPwd");
-        if (!verifyPayPassword(payPwd)){
-            return UserResponse.fail(UserResponseCode.SET_PAY_PASSWORD_ERROR,"支付密码必须为6位数字");
-        }
-        LifeUser updateUser = new LifeUser();
-        updateUser.setUserId(userId);
-        updateUser.setPaymentCode(Md5Utils.hash(code));
-        if (updateLifeUser(updateUser) == 0){
-            return UserResponse.fail(UserResponseCode.SET_PAY_PASSWORD_ERROR,"修改支付密码失败");
-        }
-        return UserResponse.succeed();
-    }
 
 
-    private boolean verifyPayPassword(String payPassword){
-        if (payPassword == null || payPassword.length() != 6){
-            return false;
-        }
-        try {
-            Integer.valueOf(payPassword);
-        }catch (NumberFormatException e){
+
+
+
+    private boolean verifyPayPassword(Long payPassword){
+        if (payPassword == null || payPassword < 100000 || payPassword > 999999){
             return false;
         }
         return true;
@@ -580,5 +525,70 @@ public class LifeUserServiceImpl implements LifeUserService
         map.put("qrCode",user.getQrcode());
         map.put("rebatePoint",pointLogService.getRebatePoint(userId));
         return map;
+    }
+
+
+    /**
+     * 获取此用户是否有支付密码
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public boolean getPayPassword(Long id) {
+        LifeUser user = selectLifeUserById(id);
+        return user.getPaymentCode() == null ? false:true;
+    }
+
+
+    /**
+     * 设置或修改支付密码
+     *
+     * @param setOrUpdatePayPasswordVo
+     * @return
+     */
+    @Override
+    public void setOrUpdatePayPassword(LifeSetOrUpdatePayPasswordVo setOrUpdatePayPasswordVo,Long userId) {
+        LifeUser user = selectLifeUserById(userId);
+        if (!SmsCache.compareSmsCache(user.getPhone(),setOrUpdatePayPasswordVo.getCode())){
+             throw new UserOperationException(UserResponseCode.SET_OR_UPDATE_PAY_PASSWORD_ERROR,"验证码输入错误");
+        }
+        if (!verifyPayPassword(setOrUpdatePayPasswordVo.getPayPassword())){
+            throw new UserOperationException(UserResponseCode.SET_OR_UPDATE_PAY_PASSWORD_ERROR,"支付密码必须为6位数字");
+        }
+        LifeUser updateUser = new LifeUser();
+        updateUser.setUserId(userId);
+        updateUser.setPaymentCode(Md5Utils.hash(setOrUpdatePayPasswordVo.getPayPassword()+""));
+        if (updateLifeUser(updateUser) == 0){
+            throw new UserOperationException(UserResponseCode.SET_OR_UPDATE_PAY_PASSWORD_ERROR,"修改支付密码失败");
+        }
+    }
+
+    /**
+     * 获取此用户的余额
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public BigDecimal getBalance(Long userId) {
+        return selectLifeUserById(userId).getBalance();
+    }
+
+
+    /**
+     * 个人设置信息
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public LifePersonInfoVo getPersonInfo(Long userId) {
+        LifePersonInfoVo personInfoVo = userMapper.getPersonInfo(userId);
+        LifeUser shareUser = getShareUser(userId);
+        if (shareUser != null){
+            personInfoVo.setSharePhone(shareUser.getPhone());
+        }
+        return personInfoVo;
     }
 }

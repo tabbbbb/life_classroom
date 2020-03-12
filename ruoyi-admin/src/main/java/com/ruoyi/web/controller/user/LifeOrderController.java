@@ -147,7 +147,6 @@ public class LifeOrderController {
     public UserResponse saleUser(@ApiIgnore @LoginInfo UserLoginInfo loginInfo){
         UserResponse response = LoginResponse.toMessage(loginInfo);
         if (response != null) return response;
-        Map map = new HashMap();
         return UserResponse.succeed(orderService.getSaleUser(loginInfo.getId()));
     }
 

@@ -542,9 +542,14 @@
         inner join life_course_classify as classify on classify.course_classify_id = course.course_classify_id
         left join life_user_child as child on child.child_id = `order`.sale_user
         where `order`.share_id = #{shareId}
-        <if test="status != null">
-            and `order`.status = #{status}
-        </if>
+        <choose>
+            <when test="status != null and status == 102">
+                and `order`.status in (102,103)
+            </when>
+            <when test="status != null">
+                and `order`.status = #{status}
+            </when>
+        </choose>
         <if test="flag">
             and order_time > date_SUB(now(), INTERVAL 3 DAY)
         </if>
