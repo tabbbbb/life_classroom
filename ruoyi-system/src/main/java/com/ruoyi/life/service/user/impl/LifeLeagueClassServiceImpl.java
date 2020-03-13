@@ -88,7 +88,6 @@ public class LifeLeagueClassServiceImpl implements LifeLeagueClassService
             LifeLeagueClass leagueClass = new LifeLeagueClass();
             leagueClass.setChooseSpecification(courseSpecification.getSpecificationId());
             leagueClass.setChooseTime(choose.getChooseTime());
-            leagueClass.setPastFlag(0);
             leagueClass.setCourseDetailId(choose.getCourseDetail());
             leagueClass.setUserId(userId);
             leagueClass.setSole(sole);
@@ -121,8 +120,8 @@ public class LifeLeagueClassServiceImpl implements LifeLeagueClassService
      * @return
      */
     @Override
-    public List<Long> createLeagueClassOrder(LifeOrderAndSpecificationVo orderAndSpecificationVo, Long userId) {
-        List<Long> orderIds = orderService.createOrder(orderAndSpecificationVo,userId,true);
+    public List<Long> createLeagueClassOrder( LocalDateTime orderTime,LifeOrderAndSpecificationVo orderAndSpecificationVo, Long userId) {
+        List<Long> orderIds = orderService.createOrder(orderTime,orderAndSpecificationVo,userId,true);
         leagueClassMapper.deleteLeagueClassByUserId(userId);
         return orderIds;
     }

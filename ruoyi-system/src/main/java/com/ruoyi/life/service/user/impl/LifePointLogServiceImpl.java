@@ -138,4 +138,16 @@ public class LifePointLogServiceImpl implements LifePointLogService
     public long getRebatePoint(Long userId) {
         return pointLogMapper.getRebatePoint(userId);
     }
+
+
+    /**
+     * 根据userId设置shareId
+     * @param userId
+     * @param shareId
+     * @return
+     */
+    @Override
+    public int setShareIdByUserId(Long userId, Long shareId) {
+        return pointLogMapper.setShareIdByUserId(userId,shareId);
+    }
 }

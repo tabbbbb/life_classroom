@@ -33,7 +33,7 @@ public interface LifeUserMapper
      * @param userId 用户ID
      * @return 用户
      */
-    public LifeUser selectLifeUserById(Long userId);
+    LifeUser selectLifeUserById(Long userId);
 
     /**
      * 查询用户列表
@@ -41,7 +41,7 @@ public interface LifeUserMapper
      * @param lifeUser 用户
      * @return 用户集合
      */
-    public List<LifeUser> selectLifeUserList(LifeUser lifeUser);
+    List<LifeUser> selectLifeUserList(LifeUser lifeUser);
 
 
     /**
@@ -222,4 +222,12 @@ public interface LifeUserMapper
      * @return
      */
     LifePersonInfoVo getPersonInfo(Long userId);
+
+
+    /**
+     * 根据userId设置shareId
+     * @param userId
+     * @return
+     */
+    int setShareIdByUserId(@Param("userId") Long userId, @Param("shareId") Long shareId);
 }

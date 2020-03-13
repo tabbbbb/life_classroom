@@ -104,4 +104,13 @@ public interface LifePointLogMapper
      */
     long getRebatePoint(Long userId);
 
+
+
+    /**
+     * 根据userId设置shareId
+     * @param userId
+     * @return
+     */
+    int setShareIdByUserId(@Param("userId") Long userId,@Param("shareId") Long shareId);
+
 }

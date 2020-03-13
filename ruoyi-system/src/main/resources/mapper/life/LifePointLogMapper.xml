@@ -164,4 +164,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         group by user_id
     </select>
 
+    <update id="setShareIdByUserId">
+        update life_point_log set share_id = #{userId}
+        where user_id = #{shareId}
+    </update>
+
 </mapper>

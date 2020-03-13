@@ -42,8 +42,6 @@ public interface LifeCouponReceiveService
      */
     int insertLifeCouponReceive(LifeCouponReceive lifeCouponReceive);
 
-
-
     /**
      * 修改用户优惠卷
      * 

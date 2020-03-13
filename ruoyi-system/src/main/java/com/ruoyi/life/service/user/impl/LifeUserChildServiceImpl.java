@@ -190,4 +190,16 @@ public class LifeUserChildServiceImpl implements LifeUserChildService
         }
         return false;
     }
+
+
+    /**
+     * 根据userId设置shareId
+     * @param userId
+     * @param shareId
+     * @return
+     */
+    @Override
+    public int setShareIdByUserId(Long userId, Long shareId) {
+        return lifeUserChildMapper.setShareIdByUserId(userId,shareId);
+    }
 }

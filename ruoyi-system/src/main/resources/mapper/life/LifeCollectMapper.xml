@@ -28,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectLifeCollectVo"/>
         where collect_id = #{collectId}
     </select>
-        
+
     <insert id="insertLifeCollect" parameterType="LifeCollect" useGeneratedKeys="true" keyProperty="collectId">
         insert into life_collect
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -63,5 +63,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{collectId}
         </foreach>
     </delete>
-    
+    <select id="getCollectInfo" resultType="com.ruoyi.life.domain.vo.user.LifeCollectInfoVo">
+        SELECT
+        	course.course_id AS courseId,
+        	course.img_url AS courseImgUrl,
+        	course.NAME AS courseName,
+        	classify.img AS classifyImgUrl,
+        	classify.course_classify_name AS classifyName,
+        	course.point AS point,
+        	course.price AS price,
+        	course.age_onset AS ageOnset,
+        	course.age_end AS ageEnd
+        FROM
+        	life_collect AS collect
+        	INNER JOIN life_course AS course ON course.course_id = collect.collect_course_id
+        	INNER JOIN life_course_classify AS classify ON classify.course_classify_id = course.course_classify_id
+        WHERE
+        	collect.user_id = 11
+    </select>
+
 </mapper>

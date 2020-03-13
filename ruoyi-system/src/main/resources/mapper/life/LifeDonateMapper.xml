@@ -65,12 +65,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
     <select id="getDonateTimeByUser" resultType="java.lang.Long">
-        select count(donate_minute) from life_donate
+        select sum(donate_minute) from life_donate
         where user_id = #{param1} and donate_date >= #{param2}
+        group by user_id
     </select>
     <select id="getDonate" resultType="com.ruoyi.life.domain.vo.user.LifeDonateVo">
-        select `user`.wx_img_url as wxImg , `user`.wx_nick_name as wxName , `donate`.donate_minute as `min` from life_donate as donate
+        select `user`.wx_img_url as wxImg , `user`.wx_nick_name as wxName , sum(`donate`.donate_minute) as `min` from life_donate as donate
         inner join life_user as `user` on `user`.user_id = donate.user_id
         where `donate`.user_id = #{param1} and `donate`.donate_date >= #{param2}
+        group by `user`.user_id , `user`.wx_img_url , `user`.wx_nick_name
     </select>
 </mapper>

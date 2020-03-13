@@ -41,9 +41,6 @@ public class LifeLeagueClass extends BaseEntity
     @Excel(name = "唯一码")
     private String sole;
 
-    /** 是否过期，1过期 */
-    @Excel(name = "是否过期，1过期")
-    private Integer pastFlag;
 
     public void setLeagueClassId(Long leagueClassId) 
     {
@@ -99,15 +96,6 @@ public class LifeLeagueClass extends BaseEntity
     {
         return sole;
     }
-    public void setPastFlag(Integer pastFlag) 
-    {
-        this.pastFlag = pastFlag;
-    }
-
-    public Integer getPastFlag() 
-    {
-        return pastFlag;
-    }
 
     @Override
     public String toString() {
@@ -118,7 +106,6 @@ public class LifeLeagueClass extends BaseEntity
             .append("chooseTime", getChooseTime())
             .append("chooseSpecification", getChooseSpecification())
             .append("sole", getSole())
-            .append("pastFlag", getPastFlag())
             .toString();
     }
 }

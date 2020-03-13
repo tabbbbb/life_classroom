@@ -6,6 +6,7 @@ import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.common.response.UserResponseCode;
 import com.ruoyi.common.utils.JacksonUtil;
 import com.ruoyi.life.domain.LifeCollect;
+import com.ruoyi.life.domain.vo.user.LifeCollectInfoVo;
 import com.ruoyi.life.mapper.LifeCollectMapper;
 import com.ruoyi.life.service.user.LifeCollectService;
 import org.springframework.stereotype.Service;
@@ -126,5 +127,17 @@ public class LifeCollectServiceImpl implements LifeCollectService
             }
         }
         return UserResponse.succeed();
+    }
+
+
+    /**
+     * 获取收藏信息
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<LifeCollectInfoVo> getCollectInfo(Long userId) {
+        return lifeCollectMapper.getCollectInfo(userId);
     }
 }

@@ -3,6 +3,7 @@ package com.ruoyi.life.service.user.impl;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
@@ -68,6 +69,12 @@ public class LifeUserServiceImpl implements LifeUserService
 
     @Resource
     private LifeVipService vipService;
+
+    @Resource
+    private LifeOrderService orderService;
+
+    @Resource
+    private LifeDonateService donateService;
 
     /**
      * 查询用户
@@ -297,26 +304,6 @@ public class LifeUserServiceImpl implements LifeUserService
     }
 
 
-    /**
-     * 获取用户页信息
-     *
-     * @param userId
-     * @return
-     */
-    @Override
-    public UserResponse getUserHome(Long userId) {
-        LifeUser user = this.selectLifeUserById(userId);
-        LifePoint point = pointService.getRecentlyPoint(user.getShareId());
-        List<LifeUserChild> userChildList =  userChildService.getChildByShareId(user.getShareId());
-        LifeUserHomeVo userHomeVo = new LifeUserHomeVo();
-        userHomeVo.setChildList(userChildList);
-        userHomeVo.setPoint(point);
-        userHomeVo.setUserId(user.getUserId());
-        userHomeVo.setImgUrl(user.getImgUrl());
-        userHomeVo.setCardNumber(user.getCardNumber());
-        userHomeVo.setInvitationCard(user.getInvitationCard());
-        return UserResponse.succeed(userHomeVo);
-    }
 
 
     /**
@@ -429,13 +416,13 @@ public class LifeUserServiceImpl implements LifeUserService
      * @return
      */
     @Override
-    public UserResponse userCapital(Long userId) {
+    public Map userCapital(Long userId) {
         LifeUser user = selectLifeUserById(userId);
         Map<String,Object> map = new HashMap<>();
         map.put("point",pointService.getUserPoint(user.getShareId()));
         map.put("balance",user.getBalance());
         map.put("beOnTheVergeOfPoint",pointService.getBeOnTheVergeOfPoint(user.getShareId()));
-        return UserResponse.succeed(map);
+        return map;
     }
 
 
@@ -591,4 +578,69 @@ public class LifeUserServiceImpl implements LifeUserService
         }
         return personInfoVo;
     }
+
+
+    /**
+     * 绑定用户
+     *
+     * @param userId
+     * @param shareUserVo
+     */
+    @Override
+    public void bindShareUser(Long userId, LifeShareUserVo shareUserVo) {
+        LifeUser user = userMapper.selectLifeUserById(userId);
+        LifeVip vip = vipService.getBigVip(userId);
+        if (vip == null || vip.getBindRelative() == 0){
+            throw new UserOperationException(UserResponseCode.BIND_SHARE_USER_ERROR,"你的会员级别不够");
+        }
+        if (user.getShareId() != null){
+            throw new UserOperationException(UserResponseCode.BIND_SHARE_USER_ERROR,"你已经有绑定用户了");
+        }
+        if (user.getPhone() != null && user.getPhone().equals(shareUserVo.getPhone())){
+            throw new UserOperationException(UserResponseCode.BIND_SHARE_USER_ERROR,"不能绑定自己");
+        }
+        LifeUser shareUser = selectLifeUserByPhone(shareUserVo.getPhone());
+        Long shareId = shareUser.getUserId();
+        orderService.setShareIdByUserId(userId,shareId);
+        pointLogService.setShareIdByUserId(userId,shareId);
+        pointService.setShareIdByUserId(userId,shareId);
+        userChildService.setShareIdByUserId(userId,shareId);
+        userMapper.setShareIdByUserId(userId,shareId);
+    }
+
+
+    /**
+     * 获取用户页信息
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public LifeUserHomeVo getUserHome(Long userId) {
+        LocalDate now = LocalDate.now();
+        LocalDate start = now.minusDays(now.getDayOfWeek().getValue()-1);
+        LifeUser user = this.selectLifeUserById(userId);
+        LifePoint point = pointService.getBeOnTheVergeOfPoint(user.getShareId());
+        List<LifeUserChild> userChildList =  userChildService.getChildByShareId(user.getShareId());
+        long couponNum = couponReceiveService.getUserCoupon(userId,0).size();
+        long experienceNum = orderService.selectLifeOrderByStartAndUserId(start,userId).size();
+        Long donateMinute = donateService.getDonateTimeByUser(userId,start);
+        boolean orderVerificationFlag = orderService.getOrderVerificationFlag(userId);
+        LifeUserHomeVo userHomeVo = new LifeUserHomeVo();
+        userHomeVo.setUserId(user.getUserId());
+        userHomeVo.setNickName(user.getNickName());
+        userHomeVo.setCardNumber(user.getCardNumber());
+        userHomeVo.setInvitationCard(user.getInvitationCard());
+        userHomeVo.setImgUrl(user.getImgUrl());
+        userHomeVo.setChildList(userChildList);
+        userHomeVo.setPoint(pointService.getUserPoint(user.getShareId()));
+        userHomeVo.setBalance(user.getBalance());
+        userHomeVo.setCouponNum(couponNum);
+        userHomeVo.setLifePoint(point);
+        userHomeVo.setExperienceNum(experienceNum);
+        userHomeVo.setDonateMinute(donateMinute);
+        userHomeVo.setOrderVerificationFlag(orderVerificationFlag);
+        return userHomeVo;
+    }
+
 }

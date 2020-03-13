@@ -18,6 +18,7 @@ import com.ruoyi.life.domain.LifeLeagueClass;
 import com.ruoyi.life.domain.vo.user.LifeAddLeagueClassVo;
 import com.ruoyi.life.domain.vo.user.LifeOrderAndSpecificationVo;
 import com.ruoyi.life.service.user.LifeLeagueClassService;
+import com.ruoyi.quartz.LifeScheduler;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -36,12 +38,16 @@ import java.util.List;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping("/life/league")
-@Api(value = "/life/league",description = "小团课")
+@RequestMapping("/user/league")
+@Api(value = "/user/league",description = "小团课")
 public class LifeLeagueClassController {
 
     @Resource
     private LifeLeagueClassService leagueClassService;
+
+
+    @Resource
+    private LifeScheduler lifeScheduler;
 
     @ApiOperation(value = "添加小团课")
     @PutMapping("/add")
@@ -68,7 +74,10 @@ public class LifeLeagueClassController {
     public UserResponse createLeagueClassOrder(@ApiIgnore @LoginInfo UserLoginInfo loginInfo, @ApiParam(name = "orderAndSpecificationVo") @RequestBody LifeOrderAndSpecificationVo orderAndSpecificationVo){
         UserResponse response = LoginResponse.toMessage(loginInfo);
         if (response != null) return response;
-        return UserResponse.succeed(leagueClassService.createLeagueClassOrder(orderAndSpecificationVo,loginInfo.getId()));
+        LocalDateTime now = LocalDateTime.now();
+        List<Long> orderIds = leagueClassService.createLeagueClassOrder(now,orderAndSpecificationVo,loginInfo.getId());
+        lifeScheduler.past101Order(now);
+        return UserResponse.succeed(orderIds);
     }
 
 

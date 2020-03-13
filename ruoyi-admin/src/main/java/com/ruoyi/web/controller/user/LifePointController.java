@@ -37,6 +37,12 @@ public class LifePointController {
     @Resource
     private LifePointService pointService;
 
-
+    @GetMapping("showPointInfo")
+    @ApiOperation(value = "显示用户积分信息")
+    public UserResponse showCollect(@ApiIgnore @LoginInfo UserLoginInfo loginInfo){
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null)return response;
+        return UserResponse.succeed(pointService.getUserPointInfo(loginInfo.getId()));
+    }
 
 }

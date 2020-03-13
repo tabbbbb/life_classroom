@@ -83,6 +83,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
     private LifeConfigService configService;
 
 
+
     /**
      * 查询订单
      *
@@ -188,16 +189,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
         return orderMapper.donateOrder(start,userId,shareId);
     }
 
-    /**
-     * 获取总体验数量
-     *
-     * @param userId
-     * @return
-     */
-    @Override
-    public Integer getSumOrderClassify(Long userId) {
-        return orderMapper.getSumOrderClassify(userId);
-    }
+
 
 
     /**
@@ -219,7 +211,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
      */
     @Override
     @Transactional
-    public List<Long> createOrder(LifeOrderAndSpecificationVo orderAndSpecificationVo, Long userId,boolean type) {
+    public List<Long> createOrder(LocalDateTime orderTime,LifeOrderAndSpecificationVo orderAndSpecificationVo, Long userId,boolean type) {
         LifeUser user = userService.selectLifeUserById(userId);
         List<LifeOrder> orders = new ArrayList<>();
         List<LifeCreateOrderVo> createOrderVos = orderAndSpecificationVo.getCreateOrderVoList();
@@ -241,7 +233,6 @@ public class LifeOrderServiceImpl implements LifeOrderService
                 throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"团课数量未满足");
             }
         }
-
         for (int i = 0; i < createOrderVos.size(); i++) {
             LifeCreateOrderVo createOrderVo = createOrderVos.get(i);
             LifeCourseDetail courseDetail = courseDetailService.selectLifeCourseDetailById(createOrderVo.getCourseDetailId());
@@ -339,7 +330,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
             if (reserveService.reduceCourseSales(courseDetail.getCourseDetailId(),childIds.size(),useTime) == 0){
                 throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"有课程库存不足");
             }
-            LocalDateTime orderTime = LocalDateTime.now();
+
             LocalDateTime refundTime = useTime.minusHours(courseDetail.getCourseRefundHour());
             for (int j = 0; j < childIds.size(); j++) {
                 LifeOrder order = new LifeOrder();
@@ -397,6 +388,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
         for (LifeOrder order : orders) {
             orderIds.add(order.getOrderId());
         }
+
         return orderIds;
     }
 
@@ -642,5 +634,51 @@ public class LifeOrderServiceImpl implements LifeOrderService
     public List<LifeDataVo.ScaleDrawing> get1WeekOrderCourseDuration(Long userId, LocalDate start,LocalDate end) {
         LifeUser user = userService.selectLifeUserById(userId);
         return orderMapper.get1WeekOrderCourseDuration(user.getShareId(),userId,start,end);
+    }
+
+    /**
+     * 根据userId设置shareId
+     * @param userId
+     * @param shareId
+     * @return
+     */
+    @Override
+    public int setShareIdByUserId(Long userId, Long shareId) {
+        return orderMapper.setShareIdByUserId(userId,shareId);
+    }
+
+
+    /**
+     * 获取用户是否有订单要核销
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public boolean getOrderVerificationFlag(Long userId) {
+        return orderMapper.getOrderVerificationFlag(userId) == 0?false:true;
+    }
+
+
+    /**
+     * 获取系统取消的订单id
+     *
+     * @param orderTime
+     * @return
+     */
+    @Override
+    public List<Long> pastOrderIdData(LocalDateTime orderTime) {
+        return orderMapper.pastOrderIdData(orderTime);
+    }
+
+    /**
+     * 系统取消订单
+     *
+     * @param orderTime
+     * @return
+     */
+    @Override
+    public int past101Order(LocalDateTime orderTime) {
+        return orderMapper.past101Order(orderTime);
     }
 }

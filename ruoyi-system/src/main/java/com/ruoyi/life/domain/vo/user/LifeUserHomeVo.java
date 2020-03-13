@@ -13,6 +13,7 @@ package com.ruoyi.life.domain.vo.user;
 import com.ruoyi.life.domain.LifePoint;
 import com.ruoyi.life.domain.LifeUserChild;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -24,15 +25,13 @@ public class LifeUserHomeVo {
      */
     private Long userId;
 
-
     /**
-     * 图片
+     * 昵称
      */
-    private String imgUrl;
-
+    private String nickName;
 
     /**
-     * 会员号
+     * 会员ID
      */
     private String cardNumber;
 
@@ -42,16 +41,55 @@ public class LifeUserHomeVo {
     private String invitationCard;
 
     /**
-     * 积分信息
+     * 头像
      */
-    private LifePoint point;
+    private String imgUrl;
 
 
     /**
-     * 小孩
+     * 孩子头像
      */
     private List<LifeUserChild> childList;
 
+
+    /**
+     * 余额
+     */
+    private BigDecimal balance;
+
+
+    /**
+     * 积分数量
+     */
+    private Long point;
+
+
+    /**
+     * 优惠券数量
+     */
+    private long couponNum;
+
+
+    /**
+     * 要过期的积分
+     */
+    private LifePoint lifePoint;
+
+
+    /**
+     * 总体验数量
+     */
+    private long experienceNum;
+
+    /**
+     * 捐赠分钟数
+     */
+    private Long donateMinute;
+
+    /**
+     * true 有未核销
+     */
+    private boolean orderVerificationFlag;
 
     public Long getUserId() {
         return userId;
@@ -61,12 +99,12 @@ public class LifeUserHomeVo {
         this.userId = userId;
     }
 
-    public String getImgUrl() {
-        return imgUrl;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public String getCardNumber() {
@@ -85,12 +123,12 @@ public class LifeUserHomeVo {
         this.invitationCard = invitationCard;
     }
 
-    public LifePoint getPoint() {
-        return point;
+    public String getImgUrl() {
+        return imgUrl;
     }
 
-    public void setPoint(LifePoint point) {
-        this.point = point;
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 
     public List<LifeUserChild> getChildList() {
@@ -99,5 +137,64 @@ public class LifeUserHomeVo {
 
     public void setChildList(List<LifeUserChild> childList) {
         this.childList = childList;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
+    public Long getPoint() {
+        return point;
+    }
+
+    public void setPoint(Long point) {
+        this.point = point;
+    }
+
+
+
+    public LifePoint getLifePoint() {
+        return lifePoint;
+    }
+
+    public void setLifePoint(LifePoint lifePoint) {
+        this.lifePoint = lifePoint;
+    }
+
+
+    public Long getDonateMinute() {
+        return donateMinute;
+    }
+
+    public void setDonateMinute(Long donateMinute) {
+        this.donateMinute = donateMinute;
+    }
+
+    public boolean isOrderVerificationFlag() {
+        return orderVerificationFlag;
+    }
+
+    public void setOrderVerificationFlag(boolean orderVerificationFlag) {
+        this.orderVerificationFlag = orderVerificationFlag;
+    }
+
+    public long getCouponNum() {
+        return couponNum;
+    }
+
+    public void setCouponNum(long couponNum) {
+        this.couponNum = couponNum;
+    }
+
+    public long getExperienceNum() {
+        return experienceNum;
+    }
+
+    public void setExperienceNum(long experienceNum) {
+        this.experienceNum = experienceNum;
     }
 }

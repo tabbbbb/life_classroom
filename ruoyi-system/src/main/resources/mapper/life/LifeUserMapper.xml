@@ -291,6 +291,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       where user_id = #{userId}
     </update>
 
+
     <select id="getShareUser" resultMap="LifeUserResult">
         <include refid="selectLifeUserVo"/>
         where share_id = #{userId} and user_id != #{userId}
@@ -334,6 +335,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join life_company as company on company.company_id = `user`.company_id
         where `user`.user_id = #{userId}
     </select>
+
+
+    <update id="setShareIdByUserId">
+        update life_user set share_id = #{userId}
+        where user_id in (#{userId},#{shareId})
+    </update>
 
 
 </mapper>

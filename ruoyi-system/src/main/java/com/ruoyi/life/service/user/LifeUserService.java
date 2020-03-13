@@ -3,9 +3,7 @@ package com.ruoyi.life.service.user;
 
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.life.domain.LifeUser;
-import com.ruoyi.life.domain.vo.user.LifeGeneralizeUserVo;
-import com.ruoyi.life.domain.vo.user.LifePersonInfoVo;
-import com.ruoyi.life.domain.vo.user.LifeSetOrUpdatePayPasswordVo;
+import com.ruoyi.life.domain.vo.user.*;
 import org.apache.poi.ss.formula.ptg.MemAreaPtg;
 
 import java.math.BigDecimal;
@@ -116,11 +114,7 @@ public interface LifeUserService
     int deductBalance(Long userId,BigDecimal price);
 
 
-    /**
-     * 获取用户页信息
-     * @return
-     */
-    UserResponse getUserHome(Long userId);
+
 
 
     /**
@@ -168,7 +162,7 @@ public interface LifeUserService
      * 获取此用户的星星，余额，最近到期的星星信息
      * @return
      */
-    UserResponse userCapital(Long userId);
+    Map userCapital(Long userId);
 
 
     /**
@@ -230,4 +224,22 @@ public interface LifeUserService
      * @return
      */
     LifePersonInfoVo getPersonInfo(Long userId);
+
+
+    /**
+     * 绑定用户
+     * @param userId
+     * @param shareUserVo
+     */
+    void bindShareUser(Long userId, LifeShareUserVo shareUserVo);
+
+
+
+
+    /**
+     * 获取用户页信息
+     * @return
+     */
+    LifeUserHomeVo getUserHome(Long userId);
+
 }

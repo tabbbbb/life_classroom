@@ -97,7 +97,7 @@ public class LifeScheduler {
         JobDataMap jobDataMap= new JobDataMap();
         jobDataMap.put("pointLogService",pointLogService);
         jobDataMap.put("pointService",pointService);
-        this.groupStart(PastPointJob.class,"20 0 0 1/1 * ? *",jobDataMap);
+        this.groupStart(PastPointJob.class,"15 0 0 1/1 * ? *",jobDataMap);
     }
 
 
@@ -105,7 +105,7 @@ public class LifeScheduler {
         JobDataMap jobDataMap= new JobDataMap();
         jobDataMap.put("courseDetailService",courseDetailService);
         jobDataMap.put("scheduler",this);
-        this.groupStart(SmsOrderJob.class,"30 0 0 1/1 * ? *",jobDataMap);
+        this.groupStart(SmsOrderJob.class,"20 0 0 1/1 * ? *",jobDataMap);
     }
 
 
@@ -129,6 +129,15 @@ public class LifeScheduler {
     }
 
 
+
+    public void past101Order(LocalDateTime orderTime){
+        JobDataMap jobDataMap= new JobDataMap();
+        jobDataMap.put("orderTime",orderTime);
+        jobDataMap.put("orderService",orderService);
+        LocalDateTime pastTime = orderTime.plusMinutes(15);
+        String cron = pastTime.getSecond()+" "+pastTime.getMinute()+" "+pastTime.getHour()+" "+pastTime.getDayOfMonth()+" "+pastTime.getMonth().getValue()+" ? "+pastTime.getYear();
+        this.delayedStart(SmsDayOrderJob.class,cron,jobDataMap);
+    }
 
     private void start(JobDetail jobDetail,Trigger trigger){
         try {

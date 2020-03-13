@@ -53,20 +53,18 @@ public class SmsOrderJob implements Job {
             LocalDateTime m15 = startTime.minusMinutes(15);
             LocalDateTime h2 = startTime.minusHours(2);
             LocalDateTime now = LocalDateTime.now();
-            if (m15.isAfter(now) || m15.equals(now)){
+            if (h2.isAfter(now) || h2.equals(now)){
+                List<Long> courseIds2H = map2H.get(h2);
                 List<Long> courseIds15M = map15M.get(m15);
+                if (courseIds2H == null){
+                    courseIds2H = new ArrayList<>();
+                    map2H.put(h2,courseIds2H);
+                }
                 if (courseIds15M == null){
                     courseIds15M = new ArrayList<>();
                     map15M.put(m15,courseIds15M);
                 }
                 courseIds15M.add(courseDetail.getCourseDetailId());
-            }
-            if (h2.isAfter(now) || h2.equals(now)){
-                List<Long> courseIds2H = map2H.get(h2);
-                if (courseIds2H == null){
-                    courseIds2H = new ArrayList<>();
-                    map2H.put(h2,courseIds2H);
-                }
                 courseIds2H.add(courseDetail.getCourseDetailId());
             }
 

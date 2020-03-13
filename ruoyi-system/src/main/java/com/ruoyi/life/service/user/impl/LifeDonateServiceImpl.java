@@ -46,7 +46,7 @@ public class LifeDonateServiceImpl implements LifeDonateService
      * @return
      */
     @Override
-    public long getDonateTimeByUser(Long userId, LocalDate start) {
+    public Long getDonateTimeByUser(Long userId, LocalDate start) {
         return donateMapper.getDonateTimeByUser(userId,start);
     }
 

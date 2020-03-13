@@ -86,4 +86,13 @@ public interface LifeUserChildService
      * @return
      */
     boolean childBySoleShareId(String [] childIds,Long shareId);
+
+
+
+    /**
+     * 根据userId设置shareId
+     * @param userId
+     * @return
+     */
+    int setShareIdByUserId(Long userId,Long shareId);
 }

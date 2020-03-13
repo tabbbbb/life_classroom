@@ -83,4 +83,13 @@ public interface LifePointLogService
      */
     long getRebatePoint(Long userId);
 
+
+
+    /**
+     * 根据userId设置shareId
+     * @param userId
+     * @return
+     */
+    int setShareIdByUserId(Long userId,Long shareId);
+
 }

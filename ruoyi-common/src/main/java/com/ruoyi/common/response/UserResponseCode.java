@@ -307,4 +307,10 @@ public class UserResponseCode {
      */
     public static final Integer SET_COMPANY_ERROR = 100043;
 
+
+    /**
+     * 绑定用户失败
+     */
+    public static final Integer BIND_SHARE_USER_ERROR = 100044;
+
 }

@@ -77,5 +77,5 @@ public interface LifeDonateMapper
      * @param start
      * @return
      */
-    long getDonateTimeByUser(Long userId, LocalDate start);
+    Long getDonateTimeByUser(Long userId, LocalDate start);
 }

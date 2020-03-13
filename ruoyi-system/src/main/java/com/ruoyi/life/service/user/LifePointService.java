@@ -47,24 +47,6 @@ public interface LifePointService
      */
     int updateLifePoint(LifePoint lifePoint);
 
-    /**
-     * 批量删除会员积分和开通记录
-     * 
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-    int deleteLifePointByIds(String ids);
-
-    /**
-     * 删除会员积分和开通记录信息
-     * 
-     * @param pointId 会员积分和开通记录ID
-     * @return 结果
-     */
-    int deleteLifePointById(Long pointId);
-
-
-
 
     /**
      * 删除到期的积分记录
@@ -79,12 +61,6 @@ public interface LifePointService
      */
     int payPoint(Long shareId,Long point);
 
-
-    /**
-     * 获取最近过期的积分
-     * @return
-     */
-    LifePoint getRecentlyPoint(Long shareId);
 
 
     /**
@@ -116,4 +92,19 @@ public interface LifePointService
      */
     List<LifeNotSetPointVo> getUserNotSetChildPoint(Long userId);
 
+
+
+    /**
+     * 根据userId设置shareId
+     * @param userId
+     * @return
+     */
+    int setShareIdByUserId(Long userId,Long shareId);
+
+
+    /**
+     * 获取用户所有的积分信息
+     * @return
+     */
+    List<LifePoint> getUserPointInfo(Long userId);
 }

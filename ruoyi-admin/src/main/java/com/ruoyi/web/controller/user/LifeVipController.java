@@ -73,6 +73,8 @@ public class LifeVipController {
     @GetMapping("bigVip")
     @ApiOperation(value = "获取此用户最大的会员",notes = "需要token")
     public UserResponse getBigVip(@ApiIgnore @LoginInfo UserLoginInfo loginInfo){
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null) return response;
         return UserResponse.succeed(vipService.getBigVip(loginInfo.getId()));
     }
 

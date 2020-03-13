@@ -143,6 +143,11 @@ public class LifeLeagueClassVo {
          */
         private int courseRefundHour;
 
+        /**
+         * 课程类别 为1不是团课，提醒删除
+         */
+        private int courseType;
+
         public Long getLeagueClassId() {
             return leagueClassId;
         }
@@ -261,6 +266,15 @@ public class LifeLeagueClassVo {
 
         public void setCourseRefundHour(int courseRefundHour) {
             this.courseRefundHour = courseRefundHour;
+        }
+
+
+        public int getCourseType() {
+            return courseType;
+        }
+
+        public void setCourseType(int courseType) {
+            this.courseType = courseType;
         }
     }
 }

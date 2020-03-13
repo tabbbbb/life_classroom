@@ -91,4 +91,13 @@ public interface LifeUserChildMapper
      */
     List<Long> getChildArrayShareId(@Param("childIds") String[] childIds);
 
+
+
+    /**
+     * 根据userId设置shareId
+     * @param userId
+     * @return
+     */
+    int setShareIdByUserId(@Param("userId") Long userId, @Param("shareId") Long shareId);
+
 }

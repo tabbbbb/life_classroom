@@ -110,12 +110,7 @@ public interface LifeOrderMapper
 
 
 
-    /**
-     * 获取总体验数量
-     * @param userId
-     * @return
-     */
-    Integer getSumOrderClassify(Long userId);
+
 
 
 
@@ -273,4 +268,39 @@ public interface LifeOrderMapper
      * @return
      */
     List<LifeDataVo.ScaleDrawing> get1WeekOrderCourseDuration(@Param("shareId") Long shareId,@Param("userId") Long userId,@Param("start") LocalDate start,@Param("end") LocalDate end);
+
+
+
+
+    /**
+     * 根据userId设置shareId
+     * @param userId
+     * @return
+     */
+    int setShareIdByUserId(@Param("userId") Long userId,@Param("shareId") Long shareId);
+
+
+
+
+    /**
+     * 获取用户是否有订单要核销
+     * @return
+     */
+    int getOrderVerificationFlag(Long userId);
+
+
+
+    /**
+     * 获取系统取消的订单id
+     * @return
+     */
+    List<Long> pastOrderIdData(LocalDateTime orderTime);
+
+
+    /**
+     * 系统取消订单
+     * @return
+     */
+    int past101Order(LocalDateTime orderTime);
+
 }

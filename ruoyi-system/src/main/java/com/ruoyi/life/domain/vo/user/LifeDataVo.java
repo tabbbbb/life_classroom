@@ -26,7 +26,7 @@ public class LifeDataVo {
     /**
      * 捐赠时间
      */
-    private long donateTime;
+    private Long donateTime;
 
 
     /**
@@ -81,11 +81,11 @@ public class LifeDataVo {
         this.sumNum = sumNum;
     }
 
-    public long getDonateTime() {
+    public Long getDonateTime() {
         return donateTime;
     }
 
-    public void setDonateTime(long donateTime) {
+    public void setDonateTime(Long donateTime) {
         this.donateTime = donateTime;
     }
 

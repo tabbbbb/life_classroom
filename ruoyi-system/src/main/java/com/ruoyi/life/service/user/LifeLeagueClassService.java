@@ -6,6 +6,7 @@ import com.ruoyi.life.domain.vo.user.LifeAddLeagueClassVo;
 import com.ruoyi.life.domain.vo.user.LifeLeagueClassVo;
 import com.ruoyi.life.domain.vo.user.LifeOrderAndSpecificationVo;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -33,7 +34,7 @@ public interface LifeLeagueClassService
      * 创建小团课的订单
      * @return
      */
-    List<Long> createLeagueClassOrder(LifeOrderAndSpecificationVo orderAndSpecificationVo,Long userId);
+    List<Long> createLeagueClassOrder(LocalDateTime orderTime, LifeOrderAndSpecificationVo orderAndSpecificationVo, Long userId);
 
 
     /**

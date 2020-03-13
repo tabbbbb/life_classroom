@@ -1,7 +1,6 @@
 package com.ruoyi.life.service.user;
 
 
-import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.life.domain.LifeOrder;
 import com.ruoyi.life.domain.vo.system.LifeOrderChartDataDto;
 import com.ruoyi.life.domain.vo.user.LifeDataVo;
@@ -93,12 +92,7 @@ public interface LifeOrderService
      */
     int donateOrder(Long userId,Long shareId,LocalDate start);
 
-    /**
-     * 获取总体验数量
-     * @param userId
-     * @return
-     */
-    Integer getSumOrderClassify(Long userId);
+
 
 
 
@@ -114,7 +108,7 @@ public interface LifeOrderService
      * 生成订单
      * @return
      */
-    List<Long> createOrder(LifeOrderAndSpecificationVo orderAndSpecificationVo, Long userId,boolean type);
+    List<Long> createOrder( LocalDateTime orderTime,LifeOrderAndSpecificationVo orderAndSpecificationVo, Long userId,boolean type);
 
 
     /**
@@ -192,4 +186,32 @@ public interface LifeOrderService
      */
     List<LifeDataVo.ScaleDrawing> get1WeekOrderCourseDuration(Long userId,LocalDate start,LocalDate end);
 
+
+    /**
+     * 根据userId设置shareId
+     * @param userId
+     * @return
+     */
+    int setShareIdByUserId(Long userId,Long shareId);
+
+
+    /**
+     * 获取用户是否有订单要核销
+     * @return
+     */
+    boolean getOrderVerificationFlag(Long userId);
+
+
+    /**
+     * 获取系统取消的订单id
+     * @return
+     */
+    List<Long> pastOrderIdData(LocalDateTime orderTime);
+
+
+    /**
+     * 系统取消订单
+     * @return
+     */
+    int past101Order(LocalDateTime orderTime);
 }

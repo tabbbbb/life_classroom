@@ -5,6 +5,7 @@ import com.ruoyi.life.domain.LifePoint;
 import com.ruoyi.life.domain.vo.system.LifePointVo;
 import com.ruoyi.life.domain.vo.user.LifeNotSetPointVo;
 import com.ruoyi.life.service.system.SysLifePointService;
+import org.apache.ibatis.annotations.Param;
 
 import java.awt.*;
 import java.math.BigDecimal;
@@ -91,13 +92,6 @@ public interface LifePointMapper
     int deleteAllPoint(Long shareId);
 
 
-    /**
-     * 获取最近过期的积分
-     * @param shareId
-     * @return
-     */
-    LifePoint getRecentlyPoint(Long shareId);
-
 
     /**
      * 获取用户积分详细
@@ -168,4 +162,20 @@ public interface LifePointMapper
      * @return
      */
     int reducePoint(Long pointId,Long point);
+
+
+
+    /**
+     * 根据userId设置shareId
+     * @param userId
+     * @return
+     */
+    int setShareIdByUserId(@Param("userId") Long userId, @Param("shareId") Long shareId);
+
+
+    /**
+     * 获取用户所有的积分信息
+     * @return
+     */
+    List<LifePoint> getUserPointInfo(Long shareId);
 }

@@ -3,6 +3,7 @@ package com.ruoyi.life.service.user;
 
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.life.domain.LifeCollect;
+import com.ruoyi.life.domain.vo.user.LifeCollectInfoVo;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface LifeCollectService
      * @param collectId 收藏ID
      * @return 收藏
      */
-    public LifeCollect selectLifeCollectById(Long collectId);
+    LifeCollect selectLifeCollectById(Long collectId);
 
     /**
      * 查询收藏列表
@@ -28,7 +29,7 @@ public interface LifeCollectService
      * @param lifeCollect 收藏
      * @return 收藏集合
      */
-    public List<LifeCollect> selectLifeCollectList(LifeCollect lifeCollect);
+    List<LifeCollect> selectLifeCollectList(LifeCollect lifeCollect);
 
     /**
      * 新增收藏
@@ -36,7 +37,7 @@ public interface LifeCollectService
      * @param lifeCollect 收藏
      * @return 结果
      */
-    public int insertLifeCollect(LifeCollect lifeCollect);
+    int insertLifeCollect(LifeCollect lifeCollect);
 
     /**
      * 修改收藏
@@ -44,7 +45,7 @@ public interface LifeCollectService
      * @param lifeCollect 收藏
      * @return 结果
      */
-    public int updateLifeCollect(LifeCollect lifeCollect);
+    int updateLifeCollect(LifeCollect lifeCollect);
 
     /**
      * 批量删除收藏
@@ -52,7 +53,7 @@ public interface LifeCollectService
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int deleteLifeCollectByIds(String ids);
+    int deleteLifeCollectByIds(String ids);
 
     /**
      * 删除收藏信息
@@ -60,7 +61,7 @@ public interface LifeCollectService
      * @param collectId 收藏ID
      * @return 结果
      */
-    public int deleteLifeCollectById(Long collectId);
+    int deleteLifeCollectById(Long collectId);
 
 
     /**
@@ -69,4 +70,12 @@ public interface LifeCollectService
      * @return
      */
     UserResponse collect(Long userId,String body);
+
+
+    /**
+     * 获取收藏信息
+     * @param userId
+     * @return
+     */
+    List<LifeCollectInfoVo> getCollectInfo(Long userId);
 }

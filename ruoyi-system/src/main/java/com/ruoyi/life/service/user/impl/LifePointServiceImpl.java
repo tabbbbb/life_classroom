@@ -2,12 +2,14 @@ package com.ruoyi.life.service.user.impl;
 
 
 import com.ruoyi.life.domain.LifePoint;
+import com.ruoyi.life.domain.LifeUser;
 import com.ruoyi.life.domain.vo.system.LifePointVo;
 import com.ruoyi.life.domain.vo.user.LifeNotSetPointVo;
 import com.ruoyi.life.mapper.LifePointMapper;
 import com.ruoyi.life.service.user.LifePointChildService;
 import com.ruoyi.life.service.user.LifePointService;
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.life.service.user.LifeUserService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -29,6 +31,9 @@ public class LifePointServiceImpl implements LifePointService
 
     @Resource
     private LifePointChildService pointChildService;
+
+    @Resource
+    private LifeUserService userService;
 
     /**
      * 查询会员积分和开通记录
@@ -78,30 +83,6 @@ public class LifePointServiceImpl implements LifePointService
         return pointMapper.updateLifePoint(lifePoint);
     }
 
-    /**
-     * 删除会员积分和开通记录对象
-     * 
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-    @Override
-    public int deleteLifePointByIds(String ids)
-    {
-        return pointMapper.deleteLifePointByIds(Convert.toStrArray(ids));
-    }
-
-    /**
-     * 删除会员积分和开通记录信息
-     * 
-     * @param pointId 会员积分和开通记录ID
-     * @return 结果
-     */
-    @Override
-    public int deleteLifePointById(Long pointId)
-    {
-        return pointMapper.deleteLifePointById(pointId);
-    }
-
 
 
 
@@ -146,15 +127,6 @@ public class LifePointServiceImpl implements LifePointService
     }
 
 
-    /**
-     * 获取最近过期的积分
-     *
-     * @return
-     */
-    @Override
-    public LifePoint getRecentlyPoint(Long shareId) {
-        return pointMapper.getRecentlyPoint(shareId);
-    }
 
     /**
      * 获取积分中最大的vip
@@ -199,5 +171,29 @@ public class LifePointServiceImpl implements LifePointService
     @Override
     public List<LifeNotSetPointVo> getUserNotSetChildPoint(Long userId) {
         return pointMapper.getUserNotSetChildPoint(userId);
+    }
+
+
+    /**
+     * 根据userId设置shareId
+     * @param userId
+     * @param shareId
+     * @return
+     */
+    @Override
+    public int setShareIdByUserId(Long userId, Long shareId) {
+        return pointMapper.setShareIdByUserId(userId,shareId);
+    }
+
+    /**
+     * 获取用户所有的积分信息
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<LifePoint> getUserPointInfo(Long userId) {
+        LifeUser user = userService.selectLifeUserById(userId);
+        return pointMapper.getUserPointInfo(user.getShareId());
     }
 }

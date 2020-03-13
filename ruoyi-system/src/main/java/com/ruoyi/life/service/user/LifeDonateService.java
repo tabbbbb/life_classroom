@@ -23,7 +23,7 @@ public interface LifeDonateService
      * 获取用户这一周的捐赠时间
      * @return
      */
-    long getDonateTimeByUser(Long userId,LocalDate start);
+    Long getDonateTimeByUser(Long userId,LocalDate start);
 
 
     /**
@@ -39,4 +39,6 @@ public interface LifeDonateService
      * @return
      */
     List<LifeDonateVo> getDonate(Long userId);
+
+
 }

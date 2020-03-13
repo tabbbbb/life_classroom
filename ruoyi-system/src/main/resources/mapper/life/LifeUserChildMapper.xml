@@ -97,4 +97,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
         group by share_id
     </select>
+
+
+
+    <update id="setShareIdByUserId">
+        update life_user_child set share_id = #{userId}
+        where share_id  = #{shareId}
+    </update>
 </mapper>

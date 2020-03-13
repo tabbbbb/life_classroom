@@ -21,12 +21,14 @@ import com.ruoyi.life.domain.vo.user.LifePayOrderVo;
 import com.ruoyi.life.service.system.SysLifeOrderService;
 import com.ruoyi.life.service.user.LifeOrderService;
 import com.ruoyi.life.service.user.LifeUserChildService;
+import com.ruoyi.quartz.LifeScheduler;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,14 +55,18 @@ public class LifeOrderController {
     private WxOperation wxOperation;
 
 
-
+    @Resource
+    private LifeScheduler lifeScheduler;
 
     @PutMapping("order")
     @ApiOperation(value = "生成订单")
     public UserResponse payCourse(@LoginInfo @ApiIgnore UserLoginInfo loginInfo, @ApiParam(name = "orderAndSpecificationVo",value = "订单创建") @RequestBody LifeOrderAndSpecificationVo orderAndSpecificationVo){
         UserResponse response = LoginResponse.toMessage(loginInfo);
         if (response != null) return response;
-        return UserResponse.succeed( orderService.createOrder(orderAndSpecificationVo,loginInfo.getId(),false));
+        LocalDateTime now = LocalDateTime.now();
+        List<Long> orderIds = orderService.createOrder(now,orderAndSpecificationVo,loginInfo.getId(),false);
+        lifeScheduler.past101Order(now);
+        return UserResponse.succeed(orderIds);
     }
 
 

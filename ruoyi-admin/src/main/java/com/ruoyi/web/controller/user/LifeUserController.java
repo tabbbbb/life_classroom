@@ -2,6 +2,7 @@ package com.ruoyi.web.controller.user;
 
 import com.ruoyi.life.domain.LifeUser;
 import com.ruoyi.life.domain.vo.user.LifeSetOrUpdatePayPasswordVo;
+import com.ruoyi.life.domain.vo.user.LifeShareUserVo;
 import com.ruoyi.life.service.user.LifeUserService;
 import com.ruoyi.common.config.Global;
 import com.ruoyi.common.config.ServerConfig;
@@ -99,14 +100,6 @@ public class LifeUserController extends BaseController
     }
 
 
-    @GetMapping ("userHome")
-    @ApiOperation(value = "用户信息")
-    public UserResponse userHome(@ApiIgnore @LoginInfo UserLoginInfo loginInfo){
-        UserResponse response = LoginResponse.toMessage(loginInfo);
-        if (response != null) return response;
-        return userService.getUserHome(loginInfo.getId());
-    }
-
 
     @PostMapping("updatepwdlogin")
     @ApiOperation(value = "修改密码，输入旧密码，更改新密码")
@@ -131,7 +124,7 @@ public class LifeUserController extends BaseController
     @GetMapping("userCapital")
     @ApiOperation(value = "获取此用户的星星，余额，最近到期的星星信息",notes = "需要token,返回值：{point:总积分，balance：余额，beOnTheVergeOfPoint：最近过期的积分记录}")
     public UserResponse userCapital(@ApiIgnore @LoginInfo UserLoginInfo loginInfo){
-        return userService.userCapital(loginInfo.getId());
+        return UserResponse.succeed(userService.userCapital(loginInfo.getId()));
     }
 
 
@@ -213,5 +206,23 @@ public class LifeUserController extends BaseController
         return UserResponse.succeed(userService.getPersonInfo(loginInfo.getId()));
     }
 
+
+
+    @PostMapping("bindShareUser")
+    @ApiOperation(value = "绑定其他用户",notes = "")
+    public UserResponse bindShareUser(@ApiIgnore @LoginInfo UserLoginInfo loginInfo,@RequestBody LifeShareUserVo shareUserVo){
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null) return response;
+        userService.bindShareUser(loginInfo.getId(),shareUserVo);
+        return UserResponse.succeed();
+    }
+
+    @GetMapping ("userHome")
+    @ApiOperation(value = "我的页面")
+    public UserResponse userHome(@ApiIgnore @LoginInfo UserLoginInfo loginInfo){
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null) return response;
+        return UserResponse.succeed(userService.getUserHome(loginInfo.getId()));
+    }
 
 }
