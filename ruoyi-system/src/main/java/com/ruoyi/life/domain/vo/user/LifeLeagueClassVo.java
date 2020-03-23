@@ -68,6 +68,12 @@ public class LifeLeagueClassVo {
          */
         private Long leagueClassId;
 
+
+        /**
+         * 唯一
+         */
+        private String sole;
+
         /**
          * 课程图片
          */
@@ -147,6 +153,32 @@ public class LifeLeagueClassVo {
          * 课程类别 为1不是团课，提醒删除
          */
         private int courseType;
+
+
+        /**
+         * 地址名称
+         */
+        private String addressName;
+
+        /**
+         * 地址详细
+         */
+        private String address;
+
+
+        private Integer reserveNum;
+
+
+        private Integer reserveSum;
+
+
+        public Integer getReserveSum() {
+            return reserveSum;
+        }
+
+        public void setReserveSum(Integer reserveSum) {
+            this.reserveSum = reserveSum;
+        }
 
         public Long getLeagueClassId() {
             return leagueClassId;
@@ -275,6 +307,38 @@ public class LifeLeagueClassVo {
 
         public void setCourseType(int courseType) {
             this.courseType = courseType;
+        }
+
+        public String getAddressName() {
+            return addressName;
+        }
+
+        public void setAddressName(String addressName) {
+            this.addressName = addressName;
+        }
+
+        public String getAddress() {
+            return address;
+        }
+
+        public void setAddress(String address) {
+            this.address = address;
+        }
+
+        public Integer getReserveNum() {
+            return reserveNum;
+        }
+
+        public void setReserveNum(Integer reserveNum) {
+            this.reserveNum = reserveNum;
+        }
+
+        public String getSole() {
+            return sole;
+        }
+
+        public void setSole(String sole) {
+            this.sole = sole;
         }
     }
 }

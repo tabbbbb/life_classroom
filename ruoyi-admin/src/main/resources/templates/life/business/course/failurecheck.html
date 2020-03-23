@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('错误设置')" />
+</head>
+<body class="white-bg">
+
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form" >
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <select id="cp" class="form-control m-b" style="width: 50%;">
+                    </select>
+                    <button class="btn btn-primary" type="button" style="float: right; margin-top: -49px"  onclick="add()" ><i class="glyphicon glyphicon-plus" ></i>&nbsp;增加</button>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label class="col-sm-1 control-label">总结错误：</label>
+                <div class="col-sm-4">
+                    <textarea name="failure" class="lncu" style="width: 90%"></textarea>
+                </div>
+            </div>
+
+        </form>
+</div>
+<th:block th:include="include :: footer" />
+</body>
+<script>
+    var column = ['courseName','price','courseType','classifyId',
+        'number','age','information','teacherName','teacherExplain',
+        'imgUrl','carouselUrl','ruleUrl','courseSpecification','courseDetail']
+    var parameter = ['课程名称','价格','课程类型','目标标签',
+        '数量','适合年龄段','详细信息','老师名称','师资介绍',
+        '课程图片','轮播图','预约规则','课程规格','上课时间']
+    for (var i = 0; i < column.length; i++) {
+        $('#cp').append('<option value='+column[i]+'>'+parameter[i]+'</option>')
+    }
+
+    function add () {
+        var selectOption = $("#cp option[value="+$('#cp').val()+"]")
+        $('#form').append(' <div class="form-group">\n' +
+            '                <label class="col-sm-1 control-label">'+selectOption.text()+'：</label>\n' +
+            '                <div class="col-sm-4">\n' +
+            '                    <input name=\"'+selectOption.val()+'\" class="lncu form-control col-md-1" style="width: 80%"/>\n' +
+            '<a href="javascript:void(0)"  style="font-size: 30px;float: right;margin-top: -40px" onclick="re(this)" >-</a>'+
+            '                </div>\n' +
+            '            </div>')
+        selectOption.remove();
+        if ($("#cp option").length == 0){
+            $("#cp").parent().parent().remove()
+        }
+    }
+
+    function re (i) {
+        var $this = $(i)
+        var value = $this.prev().attr('name')
+        var text = $this.parent().prev().text()
+        text = text.substring(0,text.length-1)
+        $this.parent().parent().remove()
+        var selectcp = $('#cp');
+        if (selectcp.length == 0){
+            $('#form').prepend('<div class="form-group">\n' +
+                '                <div class="col-sm-12">\n' +
+                '                    <select id="cp" class="form-control m-b" style="width: 50%;">\n' +
+                '\n' +
+                '                    </select>\n' +
+                '                    <button class="btn btn-primary" type="button" style="float: right; margin-top: -49px"  onclick="add()"><i class="glyphicon glyphicon-plus" ></i>&nbsp;增加</button>\n' +
+                '                </div>')
+            selectcp = $('#cp');
+        }
+        selectcp.append('<option value='+value+'>'+text+'</option>')
+    }
+    
+    function getFormData() {
+        var lncus = $('.lncu')
+        var data = {}
+        for (var i = 0; i < lncus.length; i++) {
+            var lncu = $(lncus[i])
+            var name = lncu.attr('name')
+            data[name] = lncu.val()
+        }
+        return data;
+    }
+    
+    function submitHandler(index, layero) {
+        $.modal.confirm("确定提交错误报告吗?", function() {
+            console.log(JSON.stringify(getFormData()))
+            $.ajax({
+                cache : false,
+                type : "POST",
+                url :"/life/businesscourse/checkfailure",
+                data:{'businessCourseId':getUrlParam('courseId'),'checkContent':JSON.stringify(getFormData())},
+                success : function(data) {
+                    if (data.code == 500) {
+                        $.modal.alert(data.msg, 'error')
+                    } else {
+                        parent.reParentTable()
+                        $.modal.close()
+                    }
+                }
+            })
+        });
+
+    }
+
+</script>
+</html>

@@ -15,12 +15,9 @@ import com.ruoyi.common.weixin.WxOperation;
 import com.ruoyi.framework.userlogin.LoginResponse;
 import com.ruoyi.framework.userlogin.annotation.LoginInfo;
 import com.ruoyi.framework.userlogin.info.UserLoginInfo;
-import com.ruoyi.life.domain.vo.user.LifeCreateOrderVo;
 import com.ruoyi.life.domain.vo.user.LifeOrderAndSpecificationVo;
 import com.ruoyi.life.domain.vo.user.LifePayOrderVo;
-import com.ruoyi.life.service.system.SysLifeOrderService;
 import com.ruoyi.life.service.user.LifeOrderService;
-import com.ruoyi.life.service.user.LifeUserChildService;
 import com.ruoyi.quartz.LifeScheduler;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +26,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 〈一句话功能简述〉<br> 

@@ -32,7 +32,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectLifeUpdateVo"/>
         where update_id = #{updateId}
     </select>
-        
+
+
+
     <insert id="insertLifeUpdate" parameterType="LifeUpdate">
         insert into life_update
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -79,4 +81,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update life_update set update_type = #{param2},failure_explain = #{param3},check_time = now()
         where update_id = #{param1} and update_type = 0
     </update>
+
+    <select id="getLifeUpdateByBusinessId" resultMap="LifeUpdateResult">
+        <include refid="selectLifeUpdateVo"/>
+        where update_id = #{updateId}
+        order by update_time desc
+        limit 1
+    </select>
+
 </mapper>

@@ -6,7 +6,6 @@ import com.ruoyi.life.domain.LifeBusinessCourseSpecification;
 import com.ruoyi.life.mapper.LifeBusinessCourseSpecificationMapper;
 
 import com.ruoyi.life.service.system.SysLifeBusinessCourseSpecificationService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

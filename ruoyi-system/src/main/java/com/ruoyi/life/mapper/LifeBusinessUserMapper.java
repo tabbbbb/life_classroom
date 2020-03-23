@@ -4,6 +4,7 @@ package com.ruoyi.life.mapper;
 import com.ruoyi.life.domain.LifeBusinessUser;
 import com.ruoyi.life.domain.vo.system.LifeBusinessUserSearchVo;
 import com.ruoyi.life.domain.vo.system.LifeBusinessUserVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public interface LifeBusinessUserMapper
      * @param userId 商户用户ID
      * @return 商户用户
      */
-    public LifeBusinessUser selectLifeBusinessUserById(Long userId);
+    LifeBusinessUser selectLifeBusinessUserById(Long userId);
 
     /**
      * 查询商户用户列表
@@ -29,7 +30,7 @@ public interface LifeBusinessUserMapper
      * @param lifeBusinessUser 商户用户
      * @return 商户用户集合
      */
-    public List<LifeBusinessUser> selectLifeBusinessUserList(LifeBusinessUser lifeBusinessUser);
+    List<LifeBusinessUser> selectLifeBusinessUserList(LifeBusinessUser lifeBusinessUser);
 
     /**
      * 新增商户用户
@@ -37,7 +38,7 @@ public interface LifeBusinessUserMapper
      * @param lifeBusinessUser 商户用户
      * @return 结果
      */
-    public int insertLifeBusinessUser(LifeBusinessUser lifeBusinessUser);
+    int insertLifeBusinessUser(LifeBusinessUser lifeBusinessUser);
 
     /**
      * 修改商户用户
@@ -45,23 +46,9 @@ public interface LifeBusinessUserMapper
      * @param lifeBusinessUser 商户用户
      * @return 结果
      */
-    public int updateLifeBusinessUser(LifeBusinessUser lifeBusinessUser);
+    int updateLifeBusinessUser(LifeBusinessUser lifeBusinessUser);
 
-    /**
-     * 删除商户用户
-     * 
-     * @param userId 商户用户ID
-     * @return 结果
-     */
-    public int deleteLifeBusinessUserById(Long userId);
 
-    /**
-     * 批量删除商户用户
-     * 
-     * @param userIds 需要删除的数据ID
-     * @return 结果
-     */
-    public int deleteLifeBusinessUserByIds(String[] userIds);
 
 
     /**
@@ -70,18 +57,36 @@ public interface LifeBusinessUserMapper
      */
     List<LifeBusinessUserVo> selectLifeBusinessUserVoBySearchVo(LifeBusinessUserSearchVo searchVo);
 
+
     /**
-     *根据手机号获取用户信息
-     * @param phone
+     * 根据openId获取商户用户
+     * @return
+     */
+    LifeBusinessUser selectLifeBusinessUserByOpenId(String openId);
+
+
+
+    /**
+     * 根据phone获取商户用户
      * @return
      */
     LifeBusinessUser selectLifeBusinessUserByPhone(String phone);
 
 
     /**
-     * 根据openId获取user
-     * @param openId
+     * 获取非管理员的商户用户
+     * @param businessId
      * @return
      */
-    LifeBusinessUser selectLifeBusinessUserByOpenId(String openId);
+    List<LifeBusinessUser> getNotIsAdminBusinessUser(Long businessId);
+
+
+    /**
+     * 将用户从商户中剥离
+     * @param businessId
+     * @param userIds
+     * @return
+     */
+    int deleteBusinessUser(@Param("businessId") Long businessId,@Param("userIds") Long[]userIds);
+
 }

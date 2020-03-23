@@ -52,7 +52,6 @@
             var options = {
                 url: prefix + "/list",
                 updateUrl: prefix + "/edit/{id}",
-                clickToSelect: true,
                 modalName: "vip规则",
                 onEditableSave: onEditableSave,
                 columns: [{
@@ -100,7 +99,7 @@
                         return bindString[value*1];
                     }
                 },
-                {
+                /*{
                     field : 'enable', 
                     title : '状态',
                     align: 'center',
@@ -119,7 +118,7 @@
                             }
                         ]
                     }
-                },
+                },*/
                 {
                     title: '操作',
                     align: 'center',

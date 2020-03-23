@@ -78,4 +78,11 @@ public interface LifeBusinessCourseDetailMapper
     int deleteLifeBusinessCourseDetailByBusinessCourseId(Long businessCourseId);
 
 
+
+
+    /**
+     * 插入集合
+     * @return
+     */
+    int insertList(List<LifeBusinessCourseDetail> courseDetails);
 }

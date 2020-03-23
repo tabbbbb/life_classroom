@@ -35,4 +35,8 @@ public class LifeConfig {
     public static  String getStyMap(String key){
         return styMap.get(key);
     }
+
+    public static Map<String, String> getStyMap() {
+        return styMap;
+    }
 }

@@ -5,6 +5,8 @@ import com.ruoyi.life.domain.LifeOrder;
 import com.ruoyi.life.domain.LifeReserve;
 import com.ruoyi.life.domain.dto.user.LifeDataDetailDto;
 import com.ruoyi.life.domain.dto.user.LifePayOrderDto;
+import com.ruoyi.life.domain.vo.mch.LifeMchOrderDetailVo;
+import com.ruoyi.life.domain.vo.mch.LifeMchOrderVo;
 import com.ruoyi.life.domain.vo.system.*;
 import com.ruoyi.life.domain.vo.user.LifeDataVo;
 import com.ruoyi.life.domain.vo.user.LifeDonateVo;
@@ -12,6 +14,7 @@ import com.ruoyi.life.domain.vo.user.LifeOrderDataVo;
 import com.ruoyi.life.domain.vo.user.LifeOrderDetailDataVo;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,13 +35,7 @@ public interface LifeOrderMapper
      */
     LifeOrder selectLifeOrderById(Long orderId);
 
-    /**
-     * 查询订单列表
-     * 
-     * @param lifeOrder 订单
-     * @return 订单集合
-     */
-    List<LifeOrder> selectLifeOrderList(LifeOrder lifeOrder);
+
 
     /**
      * 新增订单
@@ -48,36 +45,15 @@ public interface LifeOrderMapper
      */
     int insertLifeOrder(LifeOrder lifeOrder);
 
-    /**
-     * 修改订单
-     * 
-     * @param lifeOrder 订单
-     * @return 结果
-     */
-    int updateLifeOrder(LifeOrder lifeOrder);
 
-    /**
-     * 删除订单
-     * 
-     * @param orderId 订单ID
-     * @return 结果
-     */
-    int deleteLifeOrderById(String orderId);
 
-    /**
-     * 批量删除订单
-     * 
-     * @param orderIds 需要删除的数据ID
-     * @return 结果
-     */
-    int deleteLifeOrderByIds(String[] orderIds);
 
 
     /**
      * 查询今天需要发短信的订单
      * @return
      */
-    String[] selectNowOrder(Long  courseId);
+    String[] selectNowOrder(Long  courseDetailId);
 
 
 
@@ -104,11 +80,6 @@ public interface LifeOrderMapper
      * @return
      */
     long getNowCourseDuration(@Param("start") LocalDate start,@Param("userId") Long userId,@Param("shareId") Long shareId);
-
-
-
-
-
 
 
 
@@ -303,4 +274,59 @@ public interface LifeOrderMapper
      */
     int past101Order(LocalDateTime orderTime);
 
+
+    /**
+     * 根据核销码获取订单
+     * @return
+     */
+    LifeOrder selectLifeOrderByVerificationCode(String verificationCode);
+
+
+
+    /**
+     * 获取商户订单
+     * @param businessId
+     * @param status
+     * @return
+     */
+    List<LifeMchOrderVo> getMchOrder(@Param("businessId")Long businessId, @Param("statues") Integer [] status,@Param("start") LocalDate start);
+
+
+    /**
+     * 获取商户完成订单价格
+     * @return
+     */
+    BigDecimal getStatisticsMchPrice(@Param("businessId") Long businessId,@Param("start") LocalDate start);
+
+
+    /**
+     * 获取商户完成订单数量
+     * @return
+     */
+    Long getStatisticsMchCount(@Param("businessId") Long businessId,@Param("start") LocalDate start);
+
+
+    /**
+     * 获取商户订单详细
+     * @param verificationCode
+     * @return
+     */
+    LifeMchOrderDetailVo getMchOrderDetail(String verificationCode);
+
+
+
+    /**
+     * 给商家留言
+     * @param orderId
+     * @param remark
+     */
+    int giveBusinessRemark(Long orderId,String remark);
+
+
+
+    /**
+     * 将订单状态设置为402
+     * @return
+     */
+    int set402Order();
 }

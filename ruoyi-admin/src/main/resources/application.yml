@@ -149,4 +149,7 @@ life:
     mch-id: 1546464881
     mch-key: 33cbc407ecf54de38d41cc3660924911
     notify-url:  http://7p2zs4.natappfree.cc/wx/order/pay-notify
+  wxmch:
+    app-id: wxd8e881d422cdaf44
+    app-secret: c7befefc95addc6f22a6acf8afe554ce
 

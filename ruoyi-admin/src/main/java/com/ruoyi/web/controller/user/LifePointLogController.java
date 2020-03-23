@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  *  积分日志
@@ -40,12 +41,7 @@ public class LifePointLogController {
 
     @PostMapping("getUserLog")
     @ApiOperation(value = "获取用户消费记录")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "logType",value = "日志类型,为null全部"),
-            @ApiImplicitParam(name = "page",value = "页码"),
-            @ApiImplicitParam(name = "limit",value = "条数")
-    })
-    public UserResponse getUserLog(@ApiIgnore @LoginInfo UserLoginInfo loginInfo,Integer logType ,Integer page,Integer limit){
+    public UserResponse getUserLog(@ApiIgnore @LoginInfo UserLoginInfo loginInfo, Integer[] logType , Integer page, Integer limit){
         UserResponse response = LoginResponse.toMessage(loginInfo);
         if (response != null) return response;
         return UserResponse.succeed(pointLogService.getUserLog(loginInfo.getId(),logType,page,limit));

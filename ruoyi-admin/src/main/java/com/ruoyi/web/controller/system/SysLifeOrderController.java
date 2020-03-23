@@ -144,6 +144,16 @@ public class SysLifeOrderController extends BaseController
     }
 
 
+    @RequiresPermissions("life:order:giveBusinessRemark")
+    @PostMapping("/giveBusinessRemark")
+    @ResponseBody
+    public void giveBusinessRemark(Long orderId,String remark){
+        orderService.giveBusinessRemark(orderId,remark);
+    }
+
+
+
+
 
 
 

@@ -12,9 +12,9 @@ import java.util.Date;
  * 课程审核对象 life_business_course
  * 
  * @author ruoyi
- * @date 2020-03-04
+ * @date 2020-03-14
  */
-public class LifeBusinessCourse extends BaseEntity
+public class LifeBusinessCourse
 {
     private static final long serialVersionUID = 1L;
 
@@ -67,8 +67,16 @@ public class LifeBusinessCourse extends BaseEntity
 
     /** 商户id
  */
-    @Excel(name = "商户id")
+    @Excel(name = "商户id ")
     private Long businessId;
+
+    /** 老师名称 */
+    @Excel(name = "老师名称")
+    private String teacherName;
+
+    /** 师资介绍 */
+    @Excel(name = "师资介绍")
+    private String teacherExplain;
 
     /** 商户地址id */
     @Excel(name = "商户地址id")
@@ -134,16 +142,20 @@ public class LifeBusinessCourse extends BaseEntity
     {
         return carouselUrl;
     }
-    public void setPrice(BigDecimal price)
-    {
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
-    public BigDecimal getPrice()
-    {
-        return price;
-    }
-    public void setCourseType(Integer courseType) 
+    public void setCourseType(Integer courseType)
     {
         this.courseType = courseType;
     }
@@ -214,6 +226,24 @@ public class LifeBusinessCourse extends BaseEntity
     public Long getBusinessId() 
     {
         return businessId;
+    }
+    public void setTeacherName(String teacherName) 
+    {
+        this.teacherName = teacherName;
+    }
+
+    public String getTeacherName() 
+    {
+        return teacherName;
+    }
+    public void setTeacherExplain(String teacherExplain) 
+    {
+        this.teacherExplain = teacherExplain;
+    }
+
+    public String getTeacherExplain() 
+    {
+        return teacherExplain;
     }
     public void setBusinessAddressId(Long businessAddressId) 
     {
@@ -295,6 +325,8 @@ public class LifeBusinessCourse extends BaseEntity
             .append("ageEnd", getAgeEnd())
             .append("describe", getDescribe())
             .append("businessId", getBusinessId())
+            .append("teacherName", getTeacherName())
+            .append("teacherExplain", getTeacherExplain())
             .append("businessAddressId", getBusinessAddressId())
             .append("ruleUrl", getRuleUrl())
             .append("information", getInformation())

@@ -11,7 +11,7 @@
 package com.ruoyi.framework.config;
 
 import com.ruoyi.life.domain.LifeConfig;
-import com.ruoyi.life.service.user.LifeConfigService;
+import com.ruoyi.life.service.system.SysLifeConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,7 +34,7 @@ public class LifeSystemConfig {
 
 
     @Autowired
-    private LifeConfigService configService;
+    private SysLifeConfigService configService;
 
     @PostConstruct
     public void into(){

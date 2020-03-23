@@ -3,8 +3,10 @@ package com.ruoyi.framework.web.exception;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ruoyi.common.exception.file.FileException;
+import com.ruoyi.common.exception.life.mch.MchOperationException;
 import com.ruoyi.common.exception.life.user.*;
 import com.ruoyi.common.exception.user.UserException;
+import com.ruoyi.common.response.MchResponse;
 import com.ruoyi.common.response.UserResponse;
 import org.apache.shiro.authz.AuthorizationException;
 import org.slf4j.Logger;
@@ -180,7 +182,11 @@ public class GlobalExceptionHandler
     }
 
 
-
+    @ExceptionHandler(MchOperationException.class)
+    public MchResponse userOperationException(MchOperationException e){
+        e.printStackTrace();
+        return e.getMchResponse();
+    }
 
 
 

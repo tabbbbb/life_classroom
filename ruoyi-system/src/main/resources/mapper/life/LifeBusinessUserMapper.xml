@@ -9,15 +9,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="nickName"    column="nick_name"    />
         <result property="loginName"    column="login_name"    />
         <result property="password"    column="password"    />
+        <result property="birthday"    column="birthday"    />
         <result property="sex"    column="sex"    />
         <result property="phone"    column="phone"    />
         <result property="businessId"    column="business_id"    />
-
+        <result property="openId"    column="open_id"    />
+        <result property="imgUrl"    column="img_url"    />
     </resultMap>
 
     <sql id="selectLifeBusinessUserVo">
-        select user_id, nick_name, login_name, password, sex, phone, business_id from life_business_user
+        select user_id, nick_name, login_name, password, birthday, sex, phone, business_id, open_id, img_url from life_business_user
     </sql>
+
 
     <select id="selectLifeBusinessUserList" parameterType="LifeBusinessUser" resultMap="LifeBusinessUserResult">
         <include refid="selectLifeBusinessUserVo"/>
@@ -25,10 +28,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="nickName != null  and nickName != ''"> and nick_name like concat('%', #{nickName}, '%')</if>
             <if test="loginName != null  and loginName != ''"> and login_name like concat('%', #{loginName}, '%')</if>
             <if test="password != null  and password != ''"> and password = #{password}</if>
+            <if test="birthday != null "> and birthday = #{birthday}</if>
             <if test="sex != null "> and sex = #{sex}</if>
             <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
             <if test="businessId != null "> and business_id = #{businessId}</if>
-
+            <if test="openId != null  and openId != ''"> and open_id = #{openId}</if>
+            <if test="imgUrl != null  and imgUrl != ''"> and img_url = #{imgUrl}</if>
         </where>
     </select>
     
@@ -36,27 +41,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectLifeBusinessUserVo"/>
         where user_id = #{userId}
     </select>
-
-
+        
     <insert id="insertLifeBusinessUser" parameterType="LifeBusinessUser" useGeneratedKeys="true" keyProperty="userId">
         insert into life_business_user
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="nickName != null  and nickName != ''">nick_name,</if>
             <if test="loginName != null  and loginName != ''">login_name,</if>
             <if test="password != null  and password != ''">password,</if>
+            <if test="birthday != null ">birthday,</if>
             <if test="sex != null ">sex,</if>
             <if test="phone != null  and phone != ''">phone,</if>
             <if test="businessId != null ">business_id,</if>
-
+            <if test="openId != null  and openId != ''">open_id,</if>
+            <if test="imgUrl != null  and imgUrl != ''">img_url,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="nickName != null  and nickName != ''">#{nickName},</if>
             <if test="loginName != null  and loginName != ''">#{loginName},</if>
             <if test="password != null  and password != ''">#{password},</if>
+            <if test="birthday != null ">#{birthday},</if>
             <if test="sex != null ">#{sex},</if>
             <if test="phone != null  and phone != ''">#{phone},</if>
             <if test="businessId != null ">#{businessId},</if>
-
+            <if test="openId != null  and openId != ''">#{openId},</if>
+            <if test="imgUrl != null  and imgUrl != ''">#{imgUrl},</if>
          </trim>
     </insert>
 
@@ -66,34 +74,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="nickName != null  and nickName != ''">nick_name = #{nickName},</if>
             <if test="loginName != null  and loginName != ''">login_name = #{loginName},</if>
             <if test="password != null  and password != ''">password = #{password},</if>
+            <if test="birthday != null ">birthday = #{birthday},</if>
             <if test="sex != null ">sex = #{sex},</if>
             <if test="phone != null  and phone != ''">phone = #{phone},</if>
             <if test="businessId != null ">business_id = #{businessId},</if>
-
+            <if test="openId != null  and openId != ''">open_id = #{openId},</if>
+            <if test="imgUrl != null  and imgUrl != ''">img_url = #{imgUrl},</if>
         </trim>
         where user_id = #{userId}
     </update>
-
-    <delete id="deleteLifeBusinessUserById" parameterType="Long">
-        delete from life_business_user where user_id = #{userId}
-    </delete>
-
-    <delete id="deleteLifeBusinessUserByIds" parameterType="String">
-        delete from life_business_user where user_id in
-        <foreach item="userId" collection="array" open="(" separator="," close=")">
-            #{userId}
-        </foreach>
-    </delete>
-
     <select id="selectLifeBusinessUserVoBySearchVo" resultType="com.ruoyi.life.domain.vo.system.LifeBusinessUserVo">
-       select
-            user.user_id as userId,
-            user.nick_name as nickName,
-            user.login_name as loginName,
-            user.sex as sex,
-            user.phone as phone,
-            business.name as businessName,
-            if(user.user_id = business.admin_user,1,0)
+        select
+        user.user_id as userId,
+        user.nick_name as nickName,
+        user.login_name as loginName,
+        user.sex as sex,
+        user.phone as phone,
+        business.name as businessName,
+        if(user.user_id = business.admin_user,1,0)
         from life_business_user as user
         left join life_business as business on business.business_id = user.business_id
         <trim prefix="where " suffixOverrides="and|or">
@@ -122,5 +120,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
 
     </select>
-    
+    <select id="selectLifeBusinessUserByOpenId" resultMap="LifeBusinessUserResult">
+        <include refid="selectLifeBusinessUserVo"/>
+        where open_id = #{openId}
+    </select>
+    <select id="selectLifeBusinessUserByPhone" resultMap="LifeBusinessUserResult">
+        <include refid="selectLifeBusinessUserVo"/>
+        where phone = #{phone}
+    </select>
+    <select id="getNotIsAdminBusinessUser" resultType="com.ruoyi.life.domain.LifeBusinessUser">
+        select
+            `user`.user_id as userId,
+            `user`.nick_name as nickName,
+            `user`.login_name as loginName,
+            `user`.password as password,
+            `user`.birthday as birthday,
+            `user`.sex as sex,
+            `user`.phone as phone,
+            `user`.business_id as businessId,
+            `user`.open_id as openId,
+            `user`.img_url as imgUrl
+        from life_business_user as `user`
+        inner join life_business as business on business.business_id = `user`.business_id
+        where business.business_id = #{businessId} and `user`.user_id != business.admin_user
+    </select>
+    <update id="deleteBusinessUser">
+        update life_business_user set business_id = null
+        where business_id = #{businessId} and  user_id in
+        <foreach collection="userIds" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
 </mapper>

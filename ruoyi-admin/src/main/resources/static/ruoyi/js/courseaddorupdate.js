@@ -146,14 +146,3 @@ function minus(reduce) {
     $(reduce).parent().remove()
 }
 
-
-
-
-
-function waiLianHide() {
-    if ($('[name=courseKind]').val() == 0){
-        return
-    }
-    $('[name=teacherName]').parent().parent().hide()
-    $('[name=teacher]').parent().parent().parent().hide()
-}

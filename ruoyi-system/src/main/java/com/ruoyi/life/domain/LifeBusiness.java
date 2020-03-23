@@ -4,16 +4,15 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
-
 import java.util.Date;
 
 /**
  * 商户信息对象 life_business
  * 
  * @author ruoyi
- * @date 2020-01-11
+ * @date 2020-03-14
  */
-public class LifeBusiness extends BaseEntity
+public class LifeBusiness
 {
     private static final long serialVersionUID = 1L;
 
@@ -45,46 +44,28 @@ public class LifeBusiness extends BaseEntity
     private String shopIntroduce;
 
     /** 商户审核标志 0提交 1通过 2不通过 */
-    @Excel(name = "商户审核标志",readConverterExp = " 0=待审核, 1=审核通过, 2=审核不通过")
+    @Excel(name = "商户审核标志",readConverterExp = " 0=提交,1=通过,2=不通过")
     private Long checkFlage;
 
     /** 审核内容 */
     @Excel(name = "审核内容")
     private String checkContent;
-    /**
-     * 管理员
-     */
-    @Excel(name = "管理员登录名")
+
+    /** 管理员 */
+    @Excel(name = "管理员")
     private Long adminUser;
-    /**
-     * 添加时间
-     */
-    @Excel(name = "添加时间",dateFormat = "yyyy-MM-dd HH:mm:ss")
+
+    /** 二维码 */
+    @Excel(name = "二维码")
+    private String qrCode;
+
+    /** 添加时间 */
+    @Excel(name = "添加时间", width = 30, dateFormat = "yyyy-MM-dd hh:mm:ss")
     private Date addTime;
 
-
-    /**
-     * 地址详细
-     */
-    @Excel(name = "审核时间",dateFormat = "yyyy-MM-dd HH:mm:ss")
+    /** 审核时间 */
+    @Excel(name = "审核时间", width = 30, dateFormat = "yyyy-MM-dd hh:mm:ss")
     private Date checkTime;
-
-
-    public Date getAddTime() {
-        return addTime;
-    }
-
-    public void setAddTime(Date addTime) {
-        this.addTime = addTime;
-    }
-
-    public Date getCheckTime() {
-        return checkTime;
-    }
-
-    public void setCheckTime(Date checkTime) {
-        this.checkTime = checkTime;
-    }
 
     public void setBusinessId(Long businessId) 
     {
@@ -167,13 +148,41 @@ public class LifeBusiness extends BaseEntity
     {
         return checkContent;
     }
-
-    public Long getAdminUser() {
-        return adminUser;
+    public void setAdminUser(Long adminUser) 
+    {
+        this.adminUser = adminUser;
     }
 
-    public void setAdminUser(Long adminUser) {
-        this.adminUser = adminUser;
+    public Long getAdminUser() 
+    {
+        return adminUser;
+    }
+    public void setQrCode(String qrCode) 
+    {
+        this.qrCode = qrCode;
+    }
+
+    public String getQrCode() 
+    {
+        return qrCode;
+    }
+    public void setAddTime(Date addTime) 
+    {
+        this.addTime = addTime;
+    }
+
+    public Date getAddTime() 
+    {
+        return addTime;
+    }
+    public void setCheckTime(Date checkTime) 
+    {
+        this.checkTime = checkTime;
+    }
+
+    public Date getCheckTime() 
+    {
+        return checkTime;
     }
 
     @Override
@@ -188,6 +197,10 @@ public class LifeBusiness extends BaseEntity
             .append("shopIntroduce", getShopIntroduce())
             .append("checkFlage", getCheckFlage())
             .append("checkContent", getCheckContent())
+            .append("adminUser", getAdminUser())
+            .append("qrCode", getQrCode())
+            .append("addTime", getAddTime())
+            .append("checkTime", getCheckTime())
             .toString();
     }
 }

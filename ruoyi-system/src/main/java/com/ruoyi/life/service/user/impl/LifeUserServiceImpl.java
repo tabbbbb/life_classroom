@@ -10,13 +10,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.ruoyi.common.exception.life.user.RechargerException;
 import com.ruoyi.common.exception.life.user.UserOperationException;
 import com.ruoyi.common.sms.cache.SmsCache;
 import com.ruoyi.common.weixin.WxOperation;
 import com.ruoyi.life.domain.*;
+import com.ruoyi.life.domain.vo.user.LifeUserQrCodeVo;
 import com.ruoyi.life.domain.vo.user.*;
 import com.ruoyi.life.mapper.LifeUserMapper;
 import com.ruoyi.common.response.UserResponse;
@@ -27,7 +27,6 @@ import com.ruoyi.life.service.user.*;
 import jodd.util.StringUtil;
 import org.springframework.stereotype.Service;
 
-import com.ruoyi.common.core.text.Convert;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -76,6 +75,10 @@ public class LifeUserServiceImpl implements LifeUserService
     @Resource
     private LifeDonateService donateService;
 
+
+    @Resource
+    private LifeShareService shareService;
+
     /**
      * 查询用户
      * @param userId 用户ID
@@ -112,6 +115,8 @@ public class LifeUserServiceImpl implements LifeUserService
     @Override
     public int insertLifeUser(LifeUser lifeUser)
     {
+        String invitationCard = lifeUser.getCardNumber().substring(3);
+        lifeUser.setQrcode(wxOperation.postMiniqrQr("invitationCard="+invitationCard+"","pages/login_Mode/login_Mode",0));
         return userMapper.insertLifeUser(lifeUser);
     }
 
@@ -127,29 +132,7 @@ public class LifeUserServiceImpl implements LifeUserService
         return userMapper.updateLifeUser(lifeUser);
     }
 
-    /**
-     * 删除用户对象
-     * 
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-    @Override
-    public int deleteLifeUserByIds(String ids)
-    {
-        return userMapper.deleteLifeUserByIds(Convert.toStrArray(ids));
-    }
 
-    /**
-     * 删除用户信息
-     * 
-     * @param userId 用户ID
-     * @return 结果
-     */
-    @Override
-    public int deleteLifeUserById(Long userId)
-    {
-        return userMapper.deleteLifeUserById(userId);
-    }
 
     /**
      * 设置密码
@@ -230,17 +213,16 @@ public class LifeUserServiceImpl implements LifeUserService
      * 充值余额
      *
      * @param userId
-     * @param body
      * @return
      */
     @Override
-    public UserResponse payBalance(Long userId, String body) {
-        Integer payPrice = JacksonUtil.parseInteger(body,"price");
-        String code = JacksonUtil.parseString(body,"code");
+    public Object payBalance(Long userId, LifeAddBalanceVo addBalance) {
+        Integer payPrice = addBalance.getPrice();
+        String code = addBalance.getCode();
         String outTradeNo = userId+"_"+System.currentTimeMillis()+"_price_"+payPrice;
-        String openId = wxOperation.getOpen(code);
+        String openId = wxOperation.getOpen(code,0);
         if (openId == null) return UserResponse.fail(UserResponseCode.USER_RECHARGE_BALANCE_ERROR,"微信拉起支付失败");
-        return UserResponse.succeed(wxOperation.pay(outTradeNo,openId,"充值余额"+payPrice,new BigDecimal(payPrice)));
+        return wxOperation.pay(outTradeNo,openId,"充值余额"+payPrice,new BigDecimal(payPrice));
     }
 
 
@@ -509,7 +491,6 @@ public class LifeUserServiceImpl implements LifeUserService
         }
         LifeUser user = selectLifeUserById(userId);
         map.put("inviteVo",inviteVos);
-        map.put("qrCode",user.getQrcode());
         map.put("rebatePoint",pointLogService.getRebatePoint(userId));
         return map;
     }
@@ -633,6 +614,7 @@ public class LifeUserServiceImpl implements LifeUserService
         userHomeVo.setInvitationCard(user.getInvitationCard());
         userHomeVo.setImgUrl(user.getImgUrl());
         userHomeVo.setChildList(userChildList);
+        userHomeVo.setVip(vipService.getBigVip(userId));
         userHomeVo.setPoint(pointService.getUserPoint(user.getShareId()));
         userHomeVo.setBalance(user.getBalance());
         userHomeVo.setCouponNum(couponNum);
@@ -643,4 +625,42 @@ public class LifeUserServiceImpl implements LifeUserService
         return userHomeVo;
     }
 
+
+    /**
+     * 设置上级用户和卓越用户
+     * @param userId
+     * @param invitationCard
+     */
+    public  void setParent(Long userId,String invitationCard,int type){
+        LifeUser parentUser = selectLifeUserByInvitationCard(invitationCard);
+        if (parentUser == null)return;
+        LifeUser user = selectLifeUserById(userId);
+        LifeVip vip = vipService.getBigVip(userId);
+        if (vip != null && vip.getVipLevel() == 1){
+            throw new UserOperationException(UserResponseCode.SET_PARENT_ERROR,"卓越会员不能设置上级");
+        }
+        if (user.getParentId() != null){
+            throw new UserOperationException(UserResponseCode.SET_PARENT_ERROR,"已经绑定了上级用户");
+        }
+        user.setParentId(parentUser.getUserId());
+        user.setLeadId(parentUser.getLeadId());
+        user.setBindDate(LocalDateTime.now());
+        updateLifeUser(user);
+        if (type == 1)shareService.inviteNewUser(parentUser.getUserId());
+    }
+
+    /**
+     * 二维码
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public LifeUserQrCodeVo getQrCode(Long id) {
+        LifeUser user = selectLifeUserById(id);
+        LifeUserQrCodeVo userQrCodeVo = new LifeUserQrCodeVo();
+        userQrCodeVo.setAvatar(user.getImgUrl());
+        userQrCodeVo.setQrCode(user.getQrcode());
+        return userQrCodeVo;
+    }
 }

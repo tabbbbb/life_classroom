@@ -148,6 +148,45 @@ public class Global
         return getProfile() + "/coupon";
     }
 
+    public static String getMchUserAvatar(){
+        return getProfile() + "/mchuser/avatar";
+    }
+
+    public static String getMchManageB(){
+        return getProfile() + "/mch/manageb";
+    }
+    public static String getMchManageF(){
+        return getProfile() + "/mch/managef";
+    }
+    public static String getMchShopImg(){
+        return getProfile() + "/mch/shop";
+    }
+    public static String getMchAround(){
+        return getProfile() + "/mch/around";
+    }
+    public static String getMchLicense(){
+        return getProfile() + "/mch/license";
+    }
+
+    public static String getMchCourseImg(){
+        return getProfile() + "/mchcourse/img";
+    }
+    public static String getMchCourseCarousel(){
+        return getProfile() + "/mchcourse/carousel";
+    }
+    public static String getMchCourseRule(){
+        return getProfile() + "/mchcourse/rule";
+    }
+    public static String getMchCourseTeacherExplain(){
+        return getProfile() + "/mchcourse/teacher";
+    }
+
+
+
+    public static String getQRCode(){
+        return getProfile() + "/qrcode";
+    }
+
     /**
      * 获取下载路径
      */

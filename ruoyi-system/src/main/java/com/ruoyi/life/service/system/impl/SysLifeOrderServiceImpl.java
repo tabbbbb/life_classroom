@@ -196,7 +196,7 @@ public class SysLifeOrderServiceImpl implements SysLifeOrderService
             throw new RuntimeException("核销订单失败，请重试");
         }
 
-        if ( courseService.coursePlusSales(order.getCourseId()) != 1){
+        if (courseService.coursePlusSales(order.getCourseId()) != 1){
             throw new RuntimeException("商品销量增加失败，请重试");
         }
         LifeCourse course = courseService.selectLifeCourseById(order.getCourseId());
@@ -207,9 +207,7 @@ public class SysLifeOrderServiceImpl implements SysLifeOrderService
                 userId = userService.getShareUser(userId).getUserId();
             }
         }
-        if (userTargetDetailService.accomplishLifeUserTargetDetail(userId,course.getCourseClassifyId(),order.getCourseDuration()) == 0){
-            throw new RuntimeException("用户目标完成失败，请重试");
-        }
+        userTargetDetailService.accomplishLifeUserTargetDetail(userId,course.getCourseClassifyId(),order.getCourseDuration());
     }
 
     /**
@@ -227,5 +225,17 @@ public class SysLifeOrderServiceImpl implements SysLifeOrderService
         }
 
         return orderMapper.getExcelOrderVo(leadId,year,month);
+    }
+
+
+    /**
+     * 给商家留言
+     *
+     * @param orderId
+     * @param remark
+     */
+    @Override
+    public void giveBusinessRemark(Long orderId, String remark) {
+         orderMapper.giveBusinessRemark(orderId,remark);
     }
 }

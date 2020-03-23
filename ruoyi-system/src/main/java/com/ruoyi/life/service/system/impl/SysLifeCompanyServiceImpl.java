@@ -88,8 +88,8 @@ public class SysLifeCompanyServiceImpl implements SysLifeCompanyService
             throw new RuntimeException("公司名称不能为空");
         }
         if (company.getInvitationCode() == null || company.getInvitationCode().trim() == ""){
-            int random = (int)(Math.random()*90000)+10000;
-            String invitationCode = Md5Utils.hash(System.currentTimeMillis()+"_"+random);
+            int random = (int)(Math.random()*900000000)+100000000;
+            String invitationCode = ""+random;
             company.setInvitationCode(invitationCode);
         }else{
             LifeCompany select = new LifeCompany();
@@ -98,8 +98,7 @@ public class SysLifeCompanyServiceImpl implements SysLifeCompanyService
                 throw new RuntimeException("邀请码重复");
             }
         }
-        //operation.getminiqrQr(company.getInvitationCode()); //设置二维码图片
-        company.setInvitationUrl(serverConfig.getUrl()+Constants.RESOURCE_PREFIX+"/"+company.getInvitationCode()+".png");
+        company.setInvitationUrl( operation.postMiniqrQr("invitationCode="+company.getInvitationCode(),"pages/login_Mode/login_Mode",0));
     }
 
     /**

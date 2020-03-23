@@ -660,6 +660,13 @@
             }
             return chk_value;
         },
+        getRowByIndex : function (index) {
+            if((index * 1+1)>this.options.data.length){
+                throw new Error("Unknown method: 没有当前序号!");
+            }
+            return this.options.data[index * 1];
+        }
+        ,
         // 刷新记录
         refresh: function(target, parms) {
             if (parms) {
@@ -733,4 +740,6 @@
             return false;
         }
     };
+
 })(jQuery);
+

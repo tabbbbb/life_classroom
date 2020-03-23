@@ -18,6 +18,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="ageEnd"    column="age_end"    />
         <result property="describe"    column="describe"    />
         <result property="businessId"    column="business_id"    />
+        <result property="teacherName"    column="teacher_name"    />
+        <result property="teacherExplain"    column="teacher_explain"    />
         <result property="businessAddressId"    column="business_address_id"    />
         <result property="ruleUrl"    column="rule_url"    />
         <result property="information"    column="information"    />
@@ -28,7 +30,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectLifeBusinessCourseVo">
-        select course_id, name, img_url, carousel_url, price, course_type, course_label_id, course_classify_id, number, age_start, age_end, `describe`, business_id, business_address_id, rule_url, information, add_time, status, delete_flag, bind_top_thread from life_business_course
+        select course_id, name, img_url, carousel_url, price, course_type,
+         course_label_id, course_classify_id, number, age_start, age_end, `describe`, business_id,
+         teacher_name, teacher_explain, business_address_id, rule_url, information, add_time, status, delete_flag, bind_top_thread from life_business_course
     </sql>
 
     <select id="selectLifeBusinessCourseList" parameterType="LifeBusinessCourse" resultMap="LifeBusinessCourseResult">
@@ -46,6 +50,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="ageEnd != null "> and age_end = #{ageEnd}</if>
             <if test="describe != null  and describe != ''"> and describe = #{describe}</if>
             <if test="businessId != null "> and business_id = #{businessId}</if>
+            <if test="teacherName != null  and teacherName != ''"> and teacher_name like concat('%', #{teacherName}, '%')</if>
+            <if test="teacherExplain != null  and teacherExplain != ''"> and teacher_explain = #{teacherExplain}</if>
             <if test="businessAddressId != null "> and business_address_id = #{businessAddressId}</if>
             <if test="ruleUrl != null  and ruleUrl != ''"> and rule_url = #{ruleUrl}</if>
             <if test="information != null  and information != ''"> and information = #{information}</if>
@@ -76,6 +82,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="ageEnd != null ">age_end,</if>
             <if test="describe != null  and describe != ''">describe,</if>
             <if test="businessId != null ">business_id,</if>
+            <if test="teacherName != null  and teacherName != ''">teacher_name,</if>
+            <if test="teacherExplain != null  and teacherExplain != ''">teacher_explain,</if>
             <if test="businessAddressId != null ">business_address_id,</if>
             <if test="ruleUrl != null  and ruleUrl != ''">rule_url,</if>
             <if test="information != null  and information != ''">information,</if>
@@ -97,6 +105,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="ageEnd != null ">#{ageEnd},</if>
             <if test="describe != null  and describe != ''">#{describe},</if>
             <if test="businessId != null ">#{businessId},</if>
+            <if test="teacherName != null  and teacherName != ''">#{teacherName},</if>
+            <if test="teacherExplain != null  and teacherExplain != ''">#{teacherExplain},</if>
             <if test="businessAddressId != null ">#{businessAddressId},</if>
             <if test="ruleUrl != null  and ruleUrl != ''">#{ruleUrl},</if>
             <if test="information != null  and information != ''">#{information},</if>
@@ -122,6 +132,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="ageEnd != null ">age_end = #{ageEnd},</if>
             <if test="describe != null  and describe != ''">describe = #{describe},</if>
             <if test="businessId != null ">business_id = #{businessId},</if>
+            <if test="teacherName != null  and teacherName != ''">teacher_name = #{teacherName},</if>
+            <if test="teacherExplain != null  and teacherExplain != ''">teacher_explain = #{teacherExplain},</if>
             <if test="businessAddressId != null ">business_address_id = #{businessAddressId},</if>
             <if test="ruleUrl != null  and ruleUrl != ''">rule_url = #{ruleUrl},</if>
             <if test="information != null  and information != ''">information = #{information},</if>
@@ -143,8 +155,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{courseId}
         </foreach>
     </delete>
-
-
     <select id="selectLifeBusinessCourseVoBySearchVo"
             resultType="com.ruoyi.life.domain.vo.system.LifeBusinessCourseVo">
         select
@@ -219,5 +229,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             `update`.update_time = (select update_time from life_update where update_id = course.course_id order by update_time desc limit 1)
         </trim>
     </select>
-    
+    <select id="getLifeMchCourseVoByCourseName" resultType="com.ruoyi.life.domain.vo.mch.LifeMchCourseVo">
+        select
+          course.course_id as businessCourseId,
+          course.img_url as courseImgUrl,
+          course.name as courseName,
+          classify.img as classifyImgUrl,
+          classify.course_classify_name as classifyName,
+          address.business_address_name as addressName,
+          course.age_start as ageOnset,
+          course.age_end as ageEnd,
+          course.status as status,
+          `update`.update_explain as updateExplain,
+          `update`.update_type as updateType,
+          `update`.update_time as updateTime
+        from
+        life_business_course as course
+        inner join life_business_address as address on address.business_address_id = course.business_address_id
+        inner join life_course_classify as classify on classify.course_classify_id = course.course_classify_id
+        inner join life_update as `update` on `update`.update_id = course.course_id
+        where
+        <if test="courseName != null">
+            course.name like concat('%',#{courseName},'%') and
+        </if>
+        `update`.update_type = #{updateType} and
+        course.business_id = #{businessId} and
+        `update`.update_time = (select update_time from life_update where update_id = course.course_id order by update_time desc limit 1)
+        order by course.course_id desc
+    </select>
+
+
 </mapper>

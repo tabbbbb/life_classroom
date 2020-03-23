@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.user;
 
 import com.ruoyi.life.domain.LifeUser;
+import com.ruoyi.life.domain.vo.user.LifeAddBalanceVo;
 import com.ruoyi.life.domain.vo.user.LifeSetOrUpdatePayPasswordVo;
 import com.ruoyi.life.domain.vo.user.LifeShareUserVo;
 import com.ruoyi.life.service.user.LifeUserService;
@@ -17,12 +18,10 @@ import com.ruoyi.framework.userlogin.info.UserLoginInfo;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.ruoyi.common.core.controller.BaseController;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 
 /**
  * 用户Controller
@@ -33,7 +32,7 @@ import java.math.BigDecimal;
 @RestController
 @RequestMapping("/user/user")
 @Api(value = "/user/user",description = "用户服务")
-public class LifeUserController extends BaseController
+public class LifeUserController
 {
 
 
@@ -90,14 +89,6 @@ public class LifeUserController extends BaseController
     }
 
 
-    @GetMapping ("succeedbalance")
-    @ApiImplicitParams({
-                    @ApiImplicitParam(name = "outTradeNo"),
-                    @ApiImplicitParam(name = "price")
-    })
-    public UserResponse succeedBalance(String outTradeNo,Integer price){
-        return userService.rechargeBalanceSucceed(outTradeNo,new BigDecimal(price));
-    }
 
 
 
@@ -225,4 +216,28 @@ public class LifeUserController extends BaseController
         return UserResponse.succeed(userService.getUserHome(loginInfo.getId()));
     }
 
+    @PostMapping("bindParentUser")
+    @ApiOperation(value = "绑定上级用户",notes = "成为另一个用户的下级")
+    public UserResponse bindShareUser(@ApiIgnore @LoginInfo UserLoginInfo loginInfo,String invitationCard){
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null) return response;
+        userService.setParent(loginInfo.getId(),invitationCard,0);
+        return UserResponse.succeed();
+    }
+
+    @GetMapping ("qrCode")
+    @ApiOperation(value = "二维码")
+    public UserResponse getQrCode(@ApiIgnore @LoginInfo UserLoginInfo loginInfo){
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null) return response;
+        return UserResponse.succeed(userService.getQrCode(loginInfo.getId()));
+    }
+
+    @PostMapping("addBalance")
+    @ApiOperation(value = "充值余额",notes = "")
+    public UserResponse addBalance(@ApiIgnore @LoginInfo UserLoginInfo loginInfo, LifeAddBalanceVo addBalanceVo){
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null) return response;
+        return UserResponse.succeed(userService.payBalance(loginInfo.getId(),addBalanceVo));
+    }
 }

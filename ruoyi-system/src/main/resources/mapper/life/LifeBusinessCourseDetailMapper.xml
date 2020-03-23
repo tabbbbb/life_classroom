@@ -61,6 +61,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
 
+
     <update id="updateLifeBusinessCourseDetail" parameterType="LifeBusinessCourseDetail">
         update life_business_course_detail
         <trim prefix="SET" suffixOverrides=",">
@@ -103,4 +104,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         delete from life_business_course_detail
         where course_id = #{businessCourseId}
     </delete>
+
+    <insert id="insertList">
+        insert into life_business_course_detail(course_id, week, start_hour, start_minute, course_duration, course_refund_hour, bind_top_thread)
+        values
+        <foreach collection="list" item="item" separator="," >
+            (#{item.courseId},#{item.week},#{item.startHour},#{item.startMinute},#{item.courseDuration},#{item.courseRefundHour},#{item.bindTopThread})
+        </foreach>
+    </insert>
 </mapper>

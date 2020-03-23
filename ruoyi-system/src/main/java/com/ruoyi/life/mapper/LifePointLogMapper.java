@@ -93,7 +93,7 @@ public interface LifePointLogMapper
      * 获取用户消费日志
      * @return
      */
-    List<LifePointLog> getUserLog(@Param("shareId") Long shareId, @Param("logType")Integer logType);
+    List<LifePointLog> getUserLog(@Param("shareId") Long shareId, @Param("logType")Integer[] logType);
 
 
 
@@ -102,7 +102,7 @@ public interface LifePointLogMapper
      * 获取返佣获取的积分
      * @return
      */
-    long getRebatePoint(Long userId);
+    Long getRebatePoint(Long userId);
 
 
 

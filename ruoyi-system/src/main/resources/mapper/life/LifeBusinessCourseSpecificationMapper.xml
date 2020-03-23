@@ -52,6 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
+
     <update id="updateLifeBusinessCourseSpecification" parameterType="LifeBusinessCourseSpecification">
         update life_business_course_specification
         <trim prefix="SET" suffixOverrides=",">
@@ -91,4 +92,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         delete from life_business_course_specification
         where course_id = #{businessCourseId}
     </delete>
+
+    <insert id="insertList">
+        insert into life_business_course_specification
+        (course_id, specification_name, specification_num, specification_discount)
+        values
+        <foreach collection="list" item="item" separator="," >
+            (#{item.courseId},#{item.specificationName},#{item.specificationNum},#{item.specificationDiscount})
+        </foreach>
+    </insert>
 </mapper>

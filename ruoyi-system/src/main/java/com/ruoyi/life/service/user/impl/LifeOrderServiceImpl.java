@@ -5,20 +5,15 @@ import com.github.pagehelper.PageHelper;
 import com.ruoyi.common.config.LifeConfig;
 import com.ruoyi.common.exception.life.user.OrderException;
 import com.ruoyi.common.exception.life.user.UserOperationException;
-import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.common.response.UserResponseCode;
 import com.ruoyi.common.utils.security.Md5Utils;
 import com.ruoyi.life.domain.*;
-import com.ruoyi.life.domain.dto.user.LifeDataDetailDto;
 import com.ruoyi.life.domain.dto.user.LifePayOrderDto;
 import com.ruoyi.life.domain.vo.system.LifeOrderChartDataDto;
 import com.ruoyi.life.domain.vo.user.*;
 
 import com.ruoyi.life.mapper.LifeOrderMapper;
-import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.life.service.user.*;
-import com.ruoyi.system.domain.SysConfig;
-import com.ruoyi.system.mapper.SysConfigMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -79,82 +74,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
     @Resource
     private LifeUserChildService userChildService;
 
-    @Resource
-    private LifeConfigService configService;
 
-
-
-    /**
-     * 查询订单
-     *
-     * @param orderId 订单ID
-     * @return 订单
-     */
-    @Override
-    public LifeOrder selectLifeOrderById(Long orderId)
-    {
-        return orderMapper.selectLifeOrderById(orderId);
-    }
-
-    /**
-     * 查询订单列表
-     *
-     * @param lifeOrder 订单
-     * @return 订单
-     */
-    @Override
-    public List<LifeOrder> selectLifeOrderList(LifeOrder lifeOrder)
-    {
-        return orderMapper.selectLifeOrderList(lifeOrder);
-    }
-
-    /**
-     * 新增订单
-     *
-     * @param lifeOrder 订单
-     * @return 结果
-     */
-    @Override
-    public int insertLifeOrder(LifeOrder lifeOrder)
-    {
-        return orderMapper.insertLifeOrder(lifeOrder);
-    }
-
-    /**
-     * 修改订单
-     *
-     * @param lifeOrder 订单
-     * @return 结果
-     */
-    @Override
-    public int updateLifeOrder(LifeOrder lifeOrder)
-    {
-        return orderMapper.updateLifeOrder(lifeOrder);
-    }
-
-    /**
-     * 删除订单对象
-     *
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-    @Override
-    public int deleteLifeOrderByIds(String ids)
-    {
-        return orderMapper.deleteLifeOrderByIds(Convert.toStrArray(ids));
-    }
-
-    /**
-     * 删除订单信息
-     *
-     * @param orderId 订单ID
-     * @return 结果
-     */
-    @Override
-    public int deleteLifeOrderById(String orderId)
-    {
-        return orderMapper.deleteLifeOrderById(orderId);
-    }
 
     /**
      * 查询今天需要发短信的订单
@@ -354,12 +274,12 @@ public class LifeOrderServiceImpl implements LifeOrderService
                 order.setSaleUser(childIds.get(j));
                 if (createOrderVo.getPayType() == 0){
                     Long point = course.getPoint();
+                    order.setTotal(new BigDecimal(point));
                     point = (long)Math.ceil(point*specificationDiscount*leagueClassDiscount/10000.0);
                     if (coupon != null){
                         point = (long)Math.ceil(point*coupon.getDiscount()/100.0);
-                        order.setDiscounts(new BigDecimal((int) (course.getPoint()-point)));
                     }
-                    order.setTotal(new BigDecimal(course.getPoint()));
+                    order.setDiscounts(new BigDecimal((course.getPoint()-point)));
                     order.setPay(new BigDecimal(point));
                 }else{
                     BigDecimal price = course.getPrice();
@@ -367,15 +287,14 @@ public class LifeOrderServiceImpl implements LifeOrderService
                     price = price.multiply(new BigDecimal(specificationDiscount*leagueClassDiscount/10000.0));
                     if (coupon != null){
                         if (toUsePrice.doubleValue() != 0 && toUsePrice.compareTo(price) == 1){
-                            order.setDiscounts(price);
                             toUsePrice = toUsePrice.subtract(price);
                             price = new BigDecimal(0);
                         }else if (toUsePrice.doubleValue() != 0){
-                            order.setDiscounts(toUsePrice);
                             price = price.subtract(toUsePrice);
                             toUsePrice = new BigDecimal(0);
                         }
                     }
+                    order.setDiscounts(course.getPrice().subtract(price));
                     order.setPay(price);
                 }
                 orders.add(order);
@@ -680,5 +599,16 @@ public class LifeOrderServiceImpl implements LifeOrderService
     @Override
     public int past101Order(LocalDateTime orderTime) {
         return orderMapper.past101Order(orderTime);
+    }
+
+
+    /**
+     * 将订单状态设置为402
+     *
+     * @return
+     */
+    @Override
+    public int set402Order() {
+        return orderMapper.set402Order();
     }
 }

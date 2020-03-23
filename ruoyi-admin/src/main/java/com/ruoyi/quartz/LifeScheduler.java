@@ -12,8 +12,10 @@ package com.ruoyi.quartz;
 
 import com.ruoyi.common.sms.NotifySms;
 import com.ruoyi.life.service.user.*;
+import com.ruoyi.quartz.job.order.OperationNowOrderJob;
+import com.ruoyi.quartz.job.order.Set101OrderJob;
+import com.ruoyi.quartz.job.order.Set402OrderJob;
 import com.ruoyi.quartz.job.order.SmsDayOrderJob;
-import com.ruoyi.quartz.job.order.SmsOrderJob;
 import com.ruoyi.quartz.job.past.PastCouponJob;
 import com.ruoyi.quartz.job.past.PastPointChildJob;
 import com.ruoyi.quartz.job.past.PastPointJob;
@@ -25,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 /**
@@ -105,7 +108,7 @@ public class LifeScheduler {
         JobDataMap jobDataMap= new JobDataMap();
         jobDataMap.put("courseDetailService",courseDetailService);
         jobDataMap.put("scheduler",this);
-        this.groupStart(SmsOrderJob.class,"20 0 0 1/1 * ? *",jobDataMap);
+        this.groupStart(OperationNowOrderJob.class,"20 0 0 1/1 * ? *",jobDataMap);
     }
 
 
@@ -126,6 +129,7 @@ public class LifeScheduler {
         jobDataMap.put("courseDetailService",courseDetailService);
         String cron = dateTime.getSecond()+" "+dateTime.getMinute()+" "+dateTime.getHour()+" "+dateTime.getDayOfMonth()+" "+dateTime.getMonth().getValue()+" ? "+dateTime.getYear();
         this.delayedStart(SmsDayOrderJob.class,cron,jobDataMap);
+
     }
 
 
@@ -136,8 +140,28 @@ public class LifeScheduler {
         jobDataMap.put("orderService",orderService);
         LocalDateTime pastTime = orderTime.plusMinutes(15);
         String cron = pastTime.getSecond()+" "+pastTime.getMinute()+" "+pastTime.getHour()+" "+pastTime.getDayOfMonth()+" "+pastTime.getMonth().getValue()+" ? "+pastTime.getYear();
-        this.delayedStart(SmsDayOrderJob.class,cron,jobDataMap);
+        this.delayedStart(Set101OrderJob.class,cron,jobDataMap);
     }
+
+
+
+    public void Set402Order( LocalDateTime dateTime) {
+        JobDataMap jobDataMap = new JobDataMap();
+        jobDataMap.put("orderService", orderService);
+        String cron = dateTime.getSecond() + " " + dateTime.getMinute() + " " + dateTime.getHour() + " " + dateTime.getDayOfMonth() + " " + dateTime.getMonth().getValue() + " ? " + dateTime.getYear();
+        delayedStart(Set402OrderJob.class,cron,jobDataMap);
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     private void start(JobDetail jobDetail,Trigger trigger){
         try {

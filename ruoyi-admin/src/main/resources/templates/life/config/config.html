@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="">
+<head>
+    <th:block th:include="include :: header('系统配置')" />
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="ibox-content">
+        <form class="form-horizontal">
+            <p>邀请好友设置</p>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">赠送积分：</label>
+
+                <div class="col-sm-8">
+                    <input type="number" placeholder="赠送积分" class="form-control" name="commission">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">有效时间：</label>
+
+                <div class="col-sm-8">
+                    <input type="number" placeholder="有效时间" class="form-control" name="commissionDays">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="ibox-content">
+        <form class="form-horizontal">
+            <p>团课设置</p>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">满足数量：</label>
+
+                <div class="col-sm-8">
+                    <input type="number" placeholder="满足数量" class="form-control" name="leagueClassMeetNum">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">折扣：</label>
+
+                <div class="col-sm-8">
+                    <input type="number" placeholder="折扣" class="form-control" name="leagueClassDiscount">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+</body>
+<script>
+    var point = ['commission']
+    var inputData = null;
+    $.ajax({
+        cache : false,
+        type : "GET",
+        url : ctx + "life/config/config",
+        success : function(data) {
+            inputData = data
+            var names = $('input')
+            for (var i = 0; i < names.length; i++) {
+                var input = $(names[i])
+                if (isE(input.attr('name'))){
+                    input.val(data[input.attr('name')]*1/2)
+                }else{
+                    input.val(data[input.attr('name')])
+                }
+            }
+        }
+    });
+    function isE(name) {
+        for (var i = 0; i < point.length; i++) {
+            if (point[i] == name){
+                return true;
+            }
+        }
+        return false;
+    }
+    $('input').blur(function () {
+        var input = $(this)
+        var name = input.attr('name')
+        var val = input.val()
+        var flag =isE(name)
+        var oldVal = inputData[name]
+        if (flag){
+            oldVal = inputData[name]*1/2
+        }
+        if (input.val() < 0){
+            $.modal.msg("数值小于0","error")
+            input.val(oldVal)
+        }else if (val % 0.5 != 0 && flag){
+            $.modal.msg("只能输入0.5的倍数","error")
+            input.val(oldVal)
+        }else if (val %1 != 0 && !flag){
+            $.modal.msg("只能输入1的倍数","error")
+            input.val(oldVal)
+        }else{
+            if (flag){
+                val = val * 2
+            }
+            if (val == inputData[name]){
+                return
+            }
+            $.ajax({
+                cache : false,
+                type : "POST",
+                url : ctx + "life/config/set",
+                data:{"name":input.attr('name'),"value":val},
+                success : function(data) {
+                    if (data.code == 500){
+                        $.modal.alert(data.msg,'error')
+                    }else{
+                        $.modal.msg("修改成功","success")
+                    }
+                }
+            });
+        }
+    })
+</script>
+</html>

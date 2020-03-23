@@ -13,6 +13,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectLifeConfigVo">
         select id, name, config from life_config
     </sql>
+    <update id="set">
+        update life_config set config = #{value}
+        where name = #{name}
+    </update>
 
     <select id="selectLifeConfigList" parameterType="LifeConfig" resultMap="LifeConfigResult">
         <include refid="selectLifeConfigVo"/>
@@ -22,40 +26,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
     
-    <select id="selectLifeConfigById" parameterType="Long" resultMap="LifeConfigResult">
-        <include refid="selectLifeConfigVo"/>
-        where id = #{id}
-    </select>
-        
-    <insert id="insertLifeConfig" parameterType="LifeConfig" useGeneratedKeys="true" keyProperty="id">
-        insert into life_config
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="name != null  and name != ''">name,</if>
-            <if test="config != null  and config != ''">config,</if>
-         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="name != null  and name != ''">#{name},</if>
-            <if test="config != null  and config != ''">#{config},</if>
-         </trim>
-    </insert>
 
-    <update id="updateLifeConfig" parameterType="LifeConfig">
-        update life_config
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="config != null  and config != ''">config = #{config},</if>
-        </trim>
-        where name = #{name}
-    </update>
-
-    <delete id="deleteLifeConfigById" parameterType="Long">
-        delete from life_config where id = #{id}
-    </delete>
-
-    <delete id="deleteLifeConfigByIds" parameterType="String">
-        delete from life_config where id in 
-        <foreach item="id" collection="array" open="(" separator="," close=")">
-            #{id}
-        </foreach>
-    </delete>
     
 </mapper>

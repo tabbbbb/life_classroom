@@ -238,6 +238,13 @@ public class SysLifeCourseServiceImpl implements SysLifeCourseService {
      */
     @Override
     public int updateLifeCourse(LifeCourse course) {
+        LifeCourse oldCourse = selectLifeCourseById(course.getCourseId());
+        if (oldCourse.getStatus() == 1 && course.getStatus() == 0){
+            course.setSoldOutDate(new Date());
+        }
+        if (oldCourse.getStatus() == 0 && course.getStatus() == 1){
+            course.setPutawayDate(new Date());
+        }
         return courseMapper.updateLifeCourse(course);
     }
 

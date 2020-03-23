@@ -2,8 +2,10 @@ package com.ruoyi.life.mapper;
 
 
 import com.ruoyi.life.domain.LifeBusinessCourse;
+import com.ruoyi.life.domain.vo.mch.LifeMchCourseVo;
 import com.ruoyi.life.domain.vo.system.LifeBusinessCourseSearchVo;
 import com.ruoyi.life.domain.vo.system.LifeBusinessCourseVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -69,4 +71,14 @@ public interface LifeBusinessCourseMapper
      * @return
      */
     List<LifeBusinessCourseVo> selectLifeBusinessCourseVoBySearchVo(LifeBusinessCourseSearchVo searchVo);
+
+
+    /**
+     * 根据名称获取商品集合
+     * @return
+     */
+    List<LifeMchCourseVo> getLifeMchCourseVoByCourseName(@Param("businessId") Long businessId, @Param("courseName")String courseName,@Param("updateType")int updateType);
+
+
+
 }

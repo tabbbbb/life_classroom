@@ -15,6 +15,7 @@ import com.ruoyi.life.domain.vo.system.LifeCourseUpdateOrAddVo;
 import com.ruoyi.life.domain.vo.system.LifeCourseVo;
 
 import com.ruoyi.life.service.system.SysLifeCourseService;
+import com.ruoyi.life.service.user.LifeFileUpService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,6 +43,9 @@ public class SysLifeCourseController extends BaseController
 
     @Resource
     private SysLifeCourseService courseService;
+
+    @Resource
+    private LifeFileUpService fileUpService;
 
 
 
@@ -157,34 +161,28 @@ public class SysLifeCourseController extends BaseController
 
 
 
-    @PutMapping("/upload")
+    @PutMapping("/uploadCourseImgUrl")
     @ResponseBody
-    public Object upCourseImg(HttpServletRequest request, MultipartFile file){
-        String url = serverConfig.getUrl();
-        Integer type = request.getIntHeader("type");
-        try {
-            if (file == null ){
-                return null;
-            }
-            if (type == 0){
-                url += FileUploadUtils.upload(Global.getSystemCourseImgUrl(),file);
-            }else if (type == 1){
-                url += FileUploadUtils.upload(Global.getSystemCourseCarouselUrl(),file);
-            }else if (type == 2){
-                url += FileUploadUtils.upload(Global.getSystemCourseTeacherExplain(),file);
-            }else if (type == 3){
-                url += FileUploadUtils.upload(Global.getSystemCourseRuleUrl(),file);
-            }else if (type == 4){
-                url += FileUploadUtils.upload(Global.getSystemCourseInformation(),file);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return AjaxResult.error(e.getMessage());
-        }
-        return url;
+    public Object uploadCourseImgUrl(MultipartFile file){
+        return fileUpService.fileUp(Global.getSystemCourseImgUrl(),file);
     }
 
+    @PutMapping("/uploadCourseCarouselUrl")
+    @ResponseBody
+    public String
+    uploadCourseCarouselUrl(MultipartFile file){
+        return fileUpService.fileUp(Global.getSystemCourseCarouselUrl(),file);
+    }
 
+    @PutMapping("/uploadCourseTeacherExplain")
+    @ResponseBody
+    public String uploadCourseTeacherExplain(MultipartFile file){
+        return fileUpService.fileUp(Global.getSystemCourseTeacherExplain(),file);
+    }
 
-
+    @PutMapping("/uploadCourseRuleUrl")
+    @ResponseBody
+    public String uploadCourseRuleUrl(MultipartFile file){
+        return fileUpService.fileUp(Global.getSystemCourseRuleUrl(),file);
+    }
 }

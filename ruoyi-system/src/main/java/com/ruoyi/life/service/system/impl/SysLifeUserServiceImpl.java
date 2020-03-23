@@ -19,6 +19,7 @@ import com.ruoyi.life.domain.vo.system.LifeUserVo;
 import com.ruoyi.life.mapper.LifeUserMapper;
 import com.ruoyi.life.service.system.*;
 import com.ruoyi.life.service.user.LifeCouponReceiveService;
+import com.ruoyi.life.service.user.LifePointLogService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,12 +52,6 @@ public class SysLifeUserServiceImpl implements SysLifeUserService {
     @Resource
     private SysLifeVipService vipService;
 
-    @Resource
-    private SysLifeVipCouponService vipCouponService;
-
-
-    @Resource
-    private SysLifeCouponService couponService;
 
 
 

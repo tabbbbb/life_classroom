@@ -71,6 +71,16 @@ public class LifeOrderVo {
     private Date OrderTime;
 
 
+    private String mchRemark;
+
+    public String getMchRemark() {
+        return mchRemark;
+    }
+
+    public void setMchRemark(String mchRemark) {
+        this.mchRemark = mchRemark;
+    }
+
     public Long getOrderId() {
         return orderId;
     }

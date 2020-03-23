@@ -12,16 +12,20 @@ import java.util.Date;
  * @author ruoyi
  * @date 2020-02-29
  */
-public class LifeUpdate extends BaseEntity
+public class LifeUpdate
 {
     private static final long serialVersionUID = 1L;
 
     /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    //@Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     private Long updateId;
 
+    /** $column.columnComment */
+    @Excel(name = "添加时间", width = 30, dateFormat = "yyyy-MM-dd hh:mm:ss")
+    private Date updateTime;
+
     /** 审核时间 */
-    @Excel(name = "审核时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "审核时间", width = 30, dateFormat = "yyyy-MM-dd hh:mm:ss")
     private Date checkTime;
 
     /** 修改说明 */
@@ -82,11 +86,18 @@ public class LifeUpdate extends BaseEntity
         return updateType;
     }
 
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("updateId", getUpdateId())
-            .append("updateTime", getUpdateTime())
             .append("checkTime", getCheckTime())
             .append("updateExplain", getUpdateExplain())
             .append("failureExplain", getFailureExplain())

@@ -83,6 +83,7 @@ public class LifeCourseByConditionVo {
      */
     private String addressOrTeacherName;
 
+
     /**
      * 总人数
      */
@@ -239,4 +240,6 @@ public class LifeCourseByConditionVo {
     public void setCourseDetailId(Long courseDetailId) {
         this.courseDetailId = courseDetailId;
     }
+
+
 }

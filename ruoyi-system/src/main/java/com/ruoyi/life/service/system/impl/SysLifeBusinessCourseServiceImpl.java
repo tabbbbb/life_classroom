@@ -80,17 +80,7 @@ public class SysLifeBusinessCourseServiceImpl implements SysLifeBusinessCourseSe
         return businessCourseMapper.selectLifeBusinessCourseList(lifeBusinessCourse);
     }
 
-    /**
-     * 新增课程审核
-     * 
-     * @param lifeBusinessCourse 课程审核
-     * @return 结果
-     */
-    @Override
-    public int insertLifeBusinessCourse(LifeBusinessCourse lifeBusinessCourse)
-    {
-        return businessCourseMapper.insertLifeBusinessCourse(lifeBusinessCourse);
-    }
+
 
     /**
      * 修改课程审核
@@ -104,17 +94,7 @@ public class SysLifeBusinessCourseServiceImpl implements SysLifeBusinessCourseSe
         return businessCourseMapper.updateLifeBusinessCourse(lifeBusinessCourse);
     }
 
-    /**
-     * 删除课程审核对象
-     * 
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-    @Override
-    public int deleteLifeBusinessCourseByIds(String ids)
-    {
-        return businessCourseMapper.deleteLifeBusinessCourseByIds(Convert.toStrArray(ids));
-    }
+
 
     /**
      * 删除课程审核信息
@@ -169,7 +149,7 @@ public class SysLifeBusinessCourseServiceImpl implements SysLifeBusinessCourseSe
         businessCourseDetailVo.setUpdates(updates);
         businessCourseDetailVo.setAddress(addressService.selectLifeBusinessAddressById(businessCourse.getBusinessAddressId()));
         businessCourseDetailVo.setCourseClassify(courseClassifyService.selectLifeCourseClassifyById(businessCourse.getCourseClassifyId()).getCourseClassifyName());
-        businessCourseDetailVo.setCourseLabel(courseLabelService.selectLifeCourseLabelById(businessCourse.getCourseLabelId()).getCourseLabelName());
+//        businessCourseDetailVo.setCourseLabel(courseLabelService.selectLifeCourseLabelById(businessCourse.getCourseLabelId()).getCourseLabelName());
         businessCourseDetailVo.setBusinessCourseSpecifications(businessCourseSpecificationService.selectLifeBusinessCourseSpecificationList(businessCourseSpecification));
         return businessCourseDetailVo;
     }
@@ -215,16 +195,18 @@ public class SysLifeBusinessCourseServiceImpl implements SysLifeBusinessCourseSe
         course.setNumber(businessCourse.getNumber());
         course.setDescribe(businessCourse.getDescribe());
         course.setBusinessId(businessCourse.getBusinessId());
+        course.setTeacherName(businessCourse.getTeacherName());
+        course.setTeacherExplain(businessCourse.getTeacherExplain());
         course.setRuleUrl(businessCourse.getRuleUrl());
         course.setInformation(businessCourse.getInformation());
         course.setPrice(businessCourse.getPrice());
         course.setBusinessAddressId(businessCourse.getBusinessAddressId());
         Long courseId = businessCourse.getBindTopThread();
-        if (courseService.selectLifeCourseByName(course.getName(),course.getCourseId()) != 0){
+        if (courseService.selectLifeCourseByName(course.getName(),courseId) != 0){
             throw new RuntimeException("课程名称重复");
         }
         //修改
-        if (courseId!= null){
+        if (courseId != null){
             course.setCourseId(courseId);
             course.setStatus(businessCourse.getStatus());
             if (businessCourse.getDeleteFlag() == 1){
@@ -235,7 +217,7 @@ public class SysLifeBusinessCourseServiceImpl implements SysLifeBusinessCourseSe
                     throw new RuntimeException("审核商品时出错");
                 }
 
-                List<LifeBusinessCourseDetail> businessCourseDetailList = businessCourseDetailService.getBusinessCourseDetailIsNullOrIsNotNull(businessCourseId,0L);
+               /* List<LifeBusinessCourseDetail> businessCourseDetailList = businessCourseDetailService.getBusinessCourseDetailIsNullOrIsNotNull(businessCourseId,0L);
                 courseDetailService.deleteNotInBusinessCourseDetail(businessCourseDetailList,courseId);
                 List<LifeCourseDetail> courseDetailList = businessCourseDetailToCourseDetail(businessCourseDetailList,courseId);
                 for (LifeCourseDetail courseDetail : courseDetailList) {
@@ -246,7 +228,9 @@ public class SysLifeBusinessCourseServiceImpl implements SysLifeBusinessCourseSe
                 List<LifeCourseSpecification> courseSpecificationList = businessCourseSpecificationToCourseSpecification(businessCourseSpecificationList,courseId);
                 for (LifeCourseSpecification courseSpecification : courseSpecificationList) {
                     courseSpecificationService.updateLifeCourseSpecification(courseSpecification);
-                }
+                }*/
+               courseDetailService.deleteCourseDetailByCourseId(courseId);
+               courseSpecificationService.deleteCourseDetailByCourseId(courseId);
             }
         //新增
         }else{
@@ -312,10 +296,10 @@ public class SysLifeBusinessCourseServiceImpl implements SysLifeBusinessCourseSe
             throw new RuntimeException("课程中包含的目标标签已被删除");
         }
         LifeCourseClassify level2Classify = courseClassifyService.selectLifeCourseClassifyById(level3Classify.getPid());
-        LifeCourseLabel courseLabel = courseLabelService.selectLifeCourseLabelById(businessCourse.getCourseLabelId());
-        if (courseLabel == null){
-            throw new RuntimeException("课程中包含的课程标签已被删除");
-        }
+//        LifeCourseLabel courseLabel = courseLabelService.selectLifeCourseLabelById(businessCourse.getCourseLabelId());
+//        if (courseLabel == null){
+//            throw new RuntimeException("课程中包含的课程标签已被删除");
+//        }
         return level2Classify.getPid();
     }
 

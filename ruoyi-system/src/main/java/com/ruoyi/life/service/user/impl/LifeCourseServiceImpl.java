@@ -63,65 +63,6 @@ public class LifeCourseServiceImpl implements LifeCourseService
         return courseMapper.selectLifeCourseById(courseId);
     }
 
-    /**
-     * 查询课程列表
-     * 
-     * @param lifeCourse 课程
-     * @return 课程
-     */
-    @Override
-    public List<LifeCourse> selectLifeCourseList(LifeCourse lifeCourse)
-    {
-        return courseMapper.selectLifeCourseList(lifeCourse);
-    }
-
-    /**
-     * 新增课程
-     * 
-     * @param lifeCourse 课程
-     * @return 结果
-     */
-    @Override
-    public int insertLifeCourse(LifeCourse lifeCourse)
-    {
-        return courseMapper.insertLifeCourse(lifeCourse);
-    }
-
-    /**
-     * 修改课程
-     * 
-     * @param lifeCourse 课程
-     * @return 结果
-     */
-    @Override
-    public int updateLifeCourse(LifeCourse lifeCourse)
-    {
-        return courseMapper.updateLifeCourse(lifeCourse);
-    }
-
-    /**
-     * 删除课程对象
-     * 
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-    @Override
-    public int deleteLifeCourseByIds(String ids)
-    {
-        return courseMapper.deleteLifeCourseByIds(Convert.toStrArray(ids));
-    }
-
-    /**
-     * 删除课程信息
-     * 
-     * @param courseId 课程ID
-     * @return 结果
-     */
-    @Override
-    public int deleteLifeCourseById(Long courseId)
-    {
-        return courseMapper.deleteLifeCourseById(courseId);
-    }
 
 
     /**

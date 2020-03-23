@@ -74,14 +74,14 @@ public interface LifePointLogService
      * 获取用户消费日志
      * @return
      */
-    List<LifePointLog> getUserLog(Long userId, Integer logType, Integer page, Integer limit);
+    List<LifePointLog> getUserLog(Long userId, Integer[] logType, Integer page, Integer limit);
 
 
     /**
      * 获取返佣获取的积分
      * @return
      */
-    long getRebatePoint(Long userId);
+    Long getRebatePoint(Long userId);
 
 
 

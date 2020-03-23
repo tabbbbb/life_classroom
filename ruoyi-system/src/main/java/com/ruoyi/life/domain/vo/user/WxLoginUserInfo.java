@@ -8,7 +8,7 @@
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package com.ruoyi.framework.userlogin;
+package com.ruoyi.life.domain.vo.user;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -70,6 +70,17 @@ public class WxLoginUserInfo {
      * 公司邀请码
      */
     private  String companyInvitationCard;
+
+    /**
+     * 手机号
+     */
+    private String phone;
+
+
+    /**
+     * 短信验证码
+     */
+    private String smsCode;
 
 
     public String getCompanyInvitationCard() {
@@ -147,6 +158,23 @@ public class WxLoginUserInfo {
 
     public void setGender(Byte gender) {
         this.gender = gender;
+    }
+
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getSmsCode() {
+        return smsCode;
+    }
+
+    public void setSmsCode(String smsCode) {
+        this.smsCode = smsCode;
     }
 
     public Map<String,String> toMap(){

@@ -21,37 +21,6 @@ public interface SysLifeUpdateService
      */
      List<LifeUpdate> selectLifeUpdateById(Long updateId);
 
-    /**
-     * 查询修改列表
-     * 
-     * @param lifeUpdate 修改
-     * @return 修改集合
-     */
-    List<LifeUpdate> selectLifeUpdateList(LifeUpdate lifeUpdate);
-
-    /**
-     * 新增修改
-     * 
-     * @param lifeUpdate 修改
-     * @return 结果
-     */
-    int insertLifeUpdate(LifeUpdate lifeUpdate);
-
-    /**
-     * 修改修改
-     * 
-     * @param lifeUpdate 修改
-     * @return 结果
-     */
-    int updateLifeUpdate(LifeUpdate lifeUpdate);
-
-    /**
-     * 批量删除修改
-     * 
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-    int deleteLifeUpdateByIds(String ids);
 
     /**
      * 删除修改信息

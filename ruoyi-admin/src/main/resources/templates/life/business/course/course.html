@@ -12,25 +12,22 @@
                         <ul>
                             <li>
                                 <p>审核结果：</p>
-                                <select name="checkFlage">
+                                <select name="checkFlag">
                                     <option value="">所有</option>
-                                    <option value="0">未审核</option>
-                                    <option value="1">审核通过</option>
-                                    <option value="2">审核不通过</option>
-                                    <option value="3">申请修改</option>
-                                    <option value="4">修改不通过</option>
-                                    <option value="5">修改通过</option>
+                                    <option value="0">待处理</option>
+                                    <option value="1">通过</option>
+                                    <option value="2">不通过</option>
                                 </select>
                             </li>
 
 
-                            <li>
+                          <!--  <li>
                                 <p>课程标签：</p>
                                 <select name="courseLabel" th:with="type=${@label.selectLifeCourseLabelList(null)}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.courseLabelName}" th:value="${dict.courseLabelId}"></option>
                                 </select>
-                            </li>
+                            </li>-->
                             <li>
                                 <p>目标一级标签：</p>
                                 <select name="courseClassifyPid" th:with="type=${@classify.getSingleClassify(0)}" onchange="changeType(false)">
@@ -139,13 +136,13 @@
                         return courseTypeFormatter(value);
                     }
                 },
-                {
+               /* {
                     field : 'courseLabel',
                     title : '课程标签',
                     formatter: function (value, row, index) {
                         return "<span class=\"label label-success\">"+value+"</span>"
                     }
-                },
+                },*/
                 {
                     field : 'courseClassify',
                     title : '目标标签',
@@ -168,13 +165,7 @@
                         return $.table.imageView(value);
                     }
                 },
-                {
-                    field : 'information',
-                    title : '详细信息',
-                    formatter: function(value, row, index) {
-                        return $.table.imageView(value);
-                    }
-                },
+
                 {
                     field : 'requestInstructions',
                     title : '请求说明'
@@ -188,7 +179,13 @@
                 },
                 {
                     field : 'checkContent',
-                    title : '处理内容'
+                    title : '处理内容',
+                    formatter: function(value, row, index) {
+                        if (row.checkFlag == 2){
+                            return "点击详细查看"
+                        }
+                        return value
+                    }
                 },
                 {
                     field : 'updateTime',

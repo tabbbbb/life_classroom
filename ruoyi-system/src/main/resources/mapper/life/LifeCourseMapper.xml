@@ -199,7 +199,7 @@
         course.price as price,
         course.age_onset as startAge,
         course.age_end as endAge,
-        IF(course.teacher_name is null ,address.business_address_name,course.teacher_name) as addressOrTeacherName,
+        IF(course.course_kind = 0 ,address.business_address_name,course.teacher_name) as addressOrTeacherName,
         course.number as maxPeople ,
         IF(reserve.reserve_num is null ,course.number,reserve.reserve_num)  as residuePeople,
         IF(collect.collect_id is null,'false','true') as isCollect,
@@ -275,10 +275,11 @@
         course.course_id as courseId,
         course.name as `name`,
         course.course_kind as courseKind,
+        course.course_type as courseType,
         classify.img as classifyUrl,
         classify.course_classify_name as classifyName,
         round(st_distance_sphere (point (#{lon},#{lat}),point (address.lon,address.lat))/1000,1) as addressNum,
-        address.business_address_name as address,
+        address.business_address as `address`,
         course.age_onset as startAge,
         course.age_end as endAge,
         course.img_url as courseUrl,
@@ -324,7 +325,7 @@
         course.sold_out_date as soldOutDate
         from life_course as course
         inner join life_course_classify as classify on classify.course_classify_id = course.course_classify_id
-        inner join life_course_label as label on label.course_label_id = course.course_label_id
+        left join life_course_label as label on label.course_label_id = course.course_label_id
         left join life_business as business on business.business_id = course.business_id
         <trim prefix="where" suffixOverrides="and|or">
             <if test="name != null and name != ''">

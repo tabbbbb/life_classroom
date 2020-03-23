@@ -11,7 +11,9 @@
 package com.ruoyi.framework.userlogin.resolver;
 
 import com.ruoyi.framework.userlogin.annotation.LoginInfo;
+import com.ruoyi.framework.userlogin.info.MchUserLoginInfo;
 import com.ruoyi.framework.userlogin.info.UserLoginInfo;
+import com.ruoyi.framework.userlogin.token.MchToken;
 import com.ruoyi.framework.userlogin.token.UserToken;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -19,15 +21,11 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 
 /**
- * 〈一句话功能简述〉<br> 
- * 〈token解析器〉
- *
- * @author Administrator
- * @create 2019/12/3 0003
- * @since 1.0.0
+ * token解析器
  */
 public class TokenResolver implements HandlerMethodArgumentResolver {
 
@@ -41,11 +39,11 @@ public class TokenResolver implements HandlerMethodArgumentResolver {
     @Override
     public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
         String token = nativeWebRequest.getHeader(USER_TOKEN);
-        UserLoginInfo userLoginInfo = UserToken.get(token);
-        if (userLoginInfo == null){
-            return null;
+        if (UserToken.getTokenFlag(token)){
+            UserLoginInfo userLoginInfo = UserToken.get(token);
+            userLoginInfo.setEndTime(LocalDateTime.now());
+            return userLoginInfo;
         }
-        userLoginInfo.setEndTime(LocalDateTime.now());
-        return userLoginInfo;
+        return null;
     }
 }

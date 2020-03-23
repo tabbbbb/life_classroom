@@ -62,4 +62,11 @@ public interface SysLifeOrderService
      */
     List<LifeExcelRebateOrderVo> getExcelOrderVo(Long leadId,Integer year, Integer month);
 
+
+    /**
+     * 给商家留言
+     * @param orderId
+     * @param remark
+     */
+    void giveBusinessRemark(Long orderId,String remark);
 }

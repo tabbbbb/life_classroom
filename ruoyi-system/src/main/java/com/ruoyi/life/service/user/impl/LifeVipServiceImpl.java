@@ -51,9 +51,6 @@ public class LifeVipServiceImpl implements LifeVipService
 
 
 
-
-
-
     /**
      * 查询vip规则
      * 
@@ -78,53 +75,6 @@ public class LifeVipServiceImpl implements LifeVipService
         return vipMapper.selectLifeVipList(lifeVip);
     }
 
-    /**
-     * 新增vip规则
-     * 
-     * @param lifeVip vip规则
-     * @return 结果
-     */
-    @Override
-    public int insertLifeVip(LifeVip lifeVip)
-    {
-        return vipMapper.insertLifeVip(lifeVip);
-    }
-
-    /**
-     * 修改vip规则
-     * 
-     * @param lifeVip vip规则
-     * @return 结果
-     */
-    @Override
-    public int updateLifeVip(LifeVip lifeVip)
-    {
-        return vipMapper.updateLifeVip(lifeVip);
-    }
-
-    /**
-     * 删除vip规则对象
-     * 
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-    @Override
-    public int deleteLifeVipByIds(String ids)
-    {
-        return vipMapper.deleteLifeVipByIds(Convert.toStrArray(ids));
-    }
-
-    /**
-     * 删除vip规则信息
-     * 
-     * @param vipId vip规则ID
-     * @return 结果
-     */
-    @Override
-    public int deleteLifeVipById(Long vipId)
-    {
-        return vipMapper.deleteLifeVipById(vipId);
-    }
 
 
     /**
@@ -146,7 +96,7 @@ public class LifeVipServiceImpl implements LifeVipService
         String unique = userId+"_"+System.currentTimeMillis()+"_"+vipId ;
         String message = "充值会员"+vip.getPrint();
         BigDecimal price = vip.getPrint();
-        String  openId = wxOperation.getOpen(code);
+        String  openId = wxOperation.getOpen(code,0);
         return  UserResponse.succeed(wxOperation.pay(unique,openId,message,price));
     }
 
@@ -217,16 +167,13 @@ public class LifeVipServiceImpl implements LifeVipService
         if (vip == null){
             throw new RechargerException(UserResponseCode.PRICE_RECHARGE_VIP_ERROR,"没有此vip类型",userId);
         }
-        if (vip.getEnable().equals(1)){
+       /* if (vip.getEnable().equals(1)){
             throw new RechargerException(UserResponseCode.PRICE_RECHARGE_VIP_ERROR,"vip不能充值",userId);
-        }
+        }*/
         int flag = userService.deductBalance(userId,vip.getPrint());
-        if (flag == -1){
+        if (flag == 0){
             throw new RechargerException(UserResponseCode.PRICE_RECHARGE_VIP_ERROR,"余额不足",userId);
-        }else if (flag == 0){
-            throw new RechargerException(UserResponseCode.PRICE_RECHARGE_VIP_ERROR,"请重试！",userId);
         }
-
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = start.plusMonths(vip.getValidity()).plusDays(1);
         Long shareId = user.getShareId();
@@ -245,45 +192,8 @@ public class LifeVipServiceImpl implements LifeVipService
             throw new RechargerException(UserResponseCode.USER_RECHARGE_ERROR,"积分添加失败，请联系管理员",userId);
         }
 
-        //返佣
-        LifeUser parentUser = userService.selectLifeUserById(user.getParentId());
-        if (parentUser != null){
-            LifePointLog pointLog = new LifePointLog();
-            pointLog.setLogType(2);
-            pointLog.setUserId(user.getUserId());
-            int num = pointLogService.selectLifePointLogList(pointLog).size();
-            if (num == 0){
-                Long commission = Long.valueOf(LifeConfig.getStyMap("commission"));
-                Long commissionDays =  Long.valueOf(LifeConfig.getStyMap("commissionDays"));
-                LifePoint pointCommission = new LifePoint();
-                pointCommission.setPoint(commission);
-                pointCommission.setStartDate(start);
-                pointCommission.setEndDate(start.plusDays(commissionDays));
-                pointCommission.setIsSetChild(0);
-                pointCommission.setPointType(0);
-                pointCommission.setVipId(-1L);
-                pointCommission.setUserId(parentUser.getUserId());
-                pointCommission.setShareId(parentUser.getShareId());
-                pointCommission.setUsePoint(commission);
-                pointCommission.setIsAddChild(0);
-                if (pointService.insertLifePoint(pointCommission) == 0){
-                    throw new RechargerException(UserResponseCode.USER_RECHARGE_ERROR,"返佣失败----上级用户id：",parentUser.getUserId());
-                }
-
-                //返佣积分日志
-                LifePointLog pointLogCommission = new LifePointLog();
-                pointLogCommission.setLogType(5);
-                pointLogCommission.setExplain("返佣"+commission+"积分");
-                pointLogCommission.setShareId(parentUser.getShareId());
-                pointLogCommission.setPoint(commission);
-                pointLogCommission.setUserId(parentUser.getUserId());
-                pointLogCommission.setAddTime(start);
-                if (pointLogService.insertLifePointLog(pointLogCommission) == 0){
-                    throw new RechargerException(UserResponseCode.USER_RECHARGE_ERROR,"返佣积分增加日志添加失败，请联系管理员",parentUser.getUserId());
-                }
-
-            }
-        }
+       //返佣
+        pointService.vipParentRebatePoint(userId);
 
         //余额减少日志
         LifePointLog pointLogPrice = new LifePointLog();

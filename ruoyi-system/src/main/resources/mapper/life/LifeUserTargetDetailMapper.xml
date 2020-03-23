@@ -115,6 +115,6 @@
         where target_detail_classify_id = #{param2} and target_id in (
           select target_id from life_user_target
           where user_id = #{param1}
-        )
+        ) and course_duration is null
     </update>
 </mapper>

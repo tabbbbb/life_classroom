@@ -8,7 +8,7 @@
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-    <form class="form-horizontal m" id="form-course-edit" >
+        <form class="form-horizontal m" id="form-course-edit" >
         <input name="courseId"  type="hidden">
         <div class="form-group">
             <label class="col-sm-3 control-label">名称：</label>
@@ -195,7 +195,7 @@
             <div class="fileinput fileinput-new col-sm-8" data-provides="fileinput">
                 <div class="fileinput-preview thumbnail" style="width: 200px; height: 150px;" onclick="clickImg(this)">
                     <img name="imgUrl"  />
-                    <span class="filenone"><input type="file" onchange="changeFile(this,0)"></span>
+                    <span class="filenone"><input type="file" onchange="changeFile(this,'uploadCourseImgUrl')"></span>
                 </div>
             </div>
         </div>
@@ -206,7 +206,7 @@
                     <a href="javascript:void(0)"  style="font-size: 30px" onclick="reduceUpload(this)">-</a>
                     <div class="fileinput-preview thumbnail" style="width: 200px; height: 150px;" onclick="clickImg(this)">
                         <img name="carousel"  />
-                        <span class="filenone"><input type="file" onchange="changeFile(this,1)"></span>
+                        <span class="filenone"><input type="file" onchange="changeFile(this,'uploadCourseCarouselUrl')"></span>
                     </div>
                     <a href="javascript:void(0)"  style="font-size: 30px" onclick="addUpload(this)">+</a>
                 </div>
@@ -219,7 +219,7 @@
             <div class="fileinput fileinput-new col-sm-8" data-provides="fileinput">
                 <div class="fileinput-preview thumbnail" style="width: 200px; height: 150px;" onclick="clickImg(this)">
                     <img name="teacher"  />
-                    <span class="filenone"><input type="file" onchange="changeFile(this,2)"></span>
+                    <span class="filenone"><input type="file" onchange="changeFile(this,'uploadCourseTeacherExplain')"></span>
                 </div>
             </div>
         </div>
@@ -228,13 +228,13 @@
             <div class="fileinput fileinput-new col-sm-8" data-provides="fileinput">
                 <div class="fileinput-preview thumbnail" style="width: 200px; height: 150px;" onclick="clickImg(this)">
                     <img name="rule"  />
-                    <span class="filenone"><input type="file" onchange="changeFile(this,3)"></span>
+                    <span class="filenone"><input type="file" onchange="changeFile(this,'uploadCourseRuleUrl')"></span>
                 </div>
             </div>
         </div>
 
     </form>
-</div>
+    </div>
     <th:block th:include="include :: footer" />
     <th:block th:include="include :: datetimepicker-js" />
     <script th:src="@{/ruoyi/js/course.js}"></script>

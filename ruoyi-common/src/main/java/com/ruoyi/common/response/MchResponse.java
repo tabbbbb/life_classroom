@@ -11,43 +11,38 @@
 package com.ruoyi.common.response;
 
 /**
- * 〈一句话功能简述〉<br> 
- * 〈〉
  *
- * @author Administrator
- * @create 2019/11/30 0030
- * @since 1.0.0
  */
-public class MchUserResponse {
+public class MchResponse {
     private Integer code;
 
     private String errmsg;
 
     private Object data;
 
-    public static MchUserResponse fail(){
-        MchUserResponse userResponse = new MchUserResponse();
+    public static MchResponse fail(){
+        MchResponse userResponse = new MchResponse();
         userResponse.code = UserResponseCode.ERROR;
         userResponse.errmsg = "错误";
         return userResponse;
     }
 
-    public static MchUserResponse fail(Integer code, String errmsg){
-        MchUserResponse userResponse = new MchUserResponse();
+    public static MchResponse fail(Integer code, String errmsg){
+        MchResponse userResponse = new MchResponse();
         userResponse.code = code;
         userResponse.errmsg = errmsg;
         return userResponse;
     }
 
-    public static MchUserResponse succeed(){
-        MchUserResponse userResponse = new MchUserResponse();
+    public static MchResponse succeed(){
+        MchResponse userResponse = new MchResponse();
         userResponse.code = UserResponseCode.SUCCEED;
         userResponse.errmsg = "成功";
         return userResponse;
     }
 
-    public static MchUserResponse succeed(Object data){
-        MchUserResponse userResponse = new MchUserResponse();
+    public static MchResponse succeed(Object data){
+        MchResponse userResponse = new MchResponse();
         userResponse.code = UserResponseCode.SUCCEED;
         userResponse.errmsg = "成功";
         userResponse.data = data;

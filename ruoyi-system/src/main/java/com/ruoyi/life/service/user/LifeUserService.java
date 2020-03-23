@@ -3,8 +3,8 @@ package com.ruoyi.life.service.user;
 
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.life.domain.LifeUser;
+import com.ruoyi.life.domain.vo.user.LifeUserQrCodeVo;
 import com.ruoyi.life.domain.vo.user.*;
-import org.apache.poi.ss.formula.ptg.MemAreaPtg;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -50,22 +50,6 @@ public interface LifeUserService
      */
      int updateLifeUser(LifeUser lifeUser);
 
-    /**
-     * 批量删除用户
-     * 
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-     int deleteLifeUserByIds(String ids);
-
-    /**
-     * 删除用户信息
-     * 
-     * @param userId 用户ID
-     * @return 结果
-     */
-     int deleteLifeUserById(Long userId);
-
 
     /**
      * 设置密码
@@ -86,7 +70,7 @@ public interface LifeUserService
      * 充值余额
      * @return
      */
-    UserResponse payBalance(Long userId,String body);
+    Object payBalance(Long userId,LifeAddBalanceVo addBalance);
 
     /**
      * 充值余额充值成功
@@ -242,4 +226,20 @@ public interface LifeUserService
      */
     LifeUserHomeVo getUserHome(Long userId);
 
+
+    /**
+     * 设置上级用户和卓越用户
+     * @param userId
+     * @param invitationCard
+     * @param type
+     */
+    void setParent(Long userId,String invitationCard,int type);
+
+
+    /**
+     * 二维码
+     * @param id
+     * @return
+     */
+    LifeUserQrCodeVo getQrCode(Long id);
 }

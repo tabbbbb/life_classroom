@@ -27,45 +27,6 @@ public interface LifeCourseService
      */
     LifeCourse selectLifeCourseById(Long courseId);
 
-    /**
-     * 查询课程列表
-     * 
-     * @param lifeCourse 课程
-     * @return 课程集合
-     */
-    List<LifeCourse> selectLifeCourseList(LifeCourse lifeCourse);
-
-    /**
-     * 新增课程
-     * 
-     * @param lifeCourse 课程
-     * @return 结果
-     */
-    int insertLifeCourse(LifeCourse lifeCourse);
-
-    /**
-     * 修改课程
-     * 
-     * @param lifeCourse 课程
-     * @return 结果
-     */
-    int updateLifeCourse(LifeCourse lifeCourse);
-
-    /**
-     * 批量删除课程
-     * 
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-    int deleteLifeCourseByIds(String ids);
-
-    /**
-     * 删除课程信息
-     * 
-     * @param courseId 课程ID
-     * @return 结果
-     */
-    int deleteLifeCourseById(Long courseId);
 
 
 

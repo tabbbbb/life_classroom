@@ -30,37 +30,6 @@ public interface LifeVipService
      */
     List<LifeVip> selectLifeVipList(LifeVip lifeVip);
 
-    /**
-     * 新增vip规则
-     * 
-     * @param lifeVip vip规则
-     * @return 结果
-     */
-    int insertLifeVip(LifeVip lifeVip);
-
-    /**
-     * 修改vip规则
-     * 
-     * @param lifeVip vip规则
-     * @return 结果
-     */
-    int updateLifeVip(LifeVip lifeVip);
-
-    /**
-     * 批量删除vip规则
-     * 
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-    int deleteLifeVipByIds(String ids);
-
-    /**
-     * 删除vip规则信息
-     * 
-     * @param vipId vip规则ID
-     * @return 结果
-     */
-    int deleteLifeVipById(Long vipId);
 
 
     /**
@@ -91,7 +60,7 @@ public interface LifeVipService
 
     /**
      * 获取用户最大的会员
-     * @param shareId
+     * @param userId
      * @return
      */
     LifeVip getBigVip(Long userId);

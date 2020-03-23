@@ -152,10 +152,25 @@
                     title : '订单时间'
                 },
                 {
+                    field : 'mchRemark',
+                    title : '商家留言'
+                },
+                {
                     title: '操作',
                     align: 'center',
                     formatter: function(value, row, index) {
                         var actions = [];
+                        var remark = row.mchRemark
+                        if (remark != null){
+                            var reg = new RegExp("\n","g")
+                            remark =  remark.replace(reg,'!@#')
+                        }else{
+                            remark = ""
+                        }
+
+                        if (row.status == 201){
+                            actions.push('<a class="btn btn-warning btn-xs" onclick="giveBusinessRemark('+row.orderId+',\''+remark+'\')"><i class="fa fa-paste"></i>&nbsp;给商家留言</a>')
+                        }
                         actions.push('<a class="btn btn-primary btn-xs" onclick="orderDetail('+row.orderId+')"><i class="fa fa-paste"></i>&nbsp;详细</a>')
                         if (row.status == 301){
                             actions.push('<a class="btn btn-danger btn-xs" onclick="refund('+row.orderId+','+row.payType+')"><i class="fa fa-paste"></i>&nbsp;退款</a>')
@@ -247,6 +262,29 @@
                 })
             });
 
+        }
+        function giveBusinessRemark(orderId,remark) {
+            var reg = new RegExp("!@#","g")
+            remark =  remark.replace(reg,'\n')
+            layer.prompt({title: '商家在核销订单时会看到此信息', formType: 2,value:remark}, function(text, index){
+                $.ajax({
+                    cache : false,
+                    type : "POST",
+                    url :"/life/order/giveBusinessRemark",
+                    data:{'orderId':orderId,'remark':text},
+                    success : function(data) {
+                        if (data.code == 500) {
+                            $.modal.alert(data.msg, 'error')
+                        }else{
+                            $.modal.msgSuccess("留言成功")
+                            $.table.refresh()
+                            layer.close(index);
+
+                        }
+                    }
+                })
+
+            });
         }
     </script>
 </body>

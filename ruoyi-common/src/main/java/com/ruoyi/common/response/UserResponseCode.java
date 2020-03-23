@@ -313,4 +313,21 @@ public class UserResponseCode {
      */
     public static final Integer BIND_SHARE_USER_ERROR = 100044;
 
+
+    /**
+     * 设置上级用户异常
+     */
+    public static final Integer SET_PARENT_ERROR = 100045;
+
+
+    /**
+     * 第一次wx登录异常
+     */
+    public static final Integer WX_FIRST_LOGIN_ERROR = 100046;
+
+
+    /**
+     * 生成二维码异常
+     */
+    public static final Integer WX_CREATE_QRCODE_ERROR = 100047;
 }

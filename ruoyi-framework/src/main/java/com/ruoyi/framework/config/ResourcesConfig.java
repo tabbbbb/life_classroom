@@ -1,5 +1,6 @@
 package com.ruoyi.framework.config;
 
+import com.ruoyi.framework.userlogin.resolver.MchTokenResolver;
 import com.ruoyi.framework.userlogin.resolver.TokenResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -64,5 +65,6 @@ public class ResourcesConfig implements WebMvcConfigurer
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(new TokenResolver());
+        resolvers.add(new MchTokenResolver());
     }
 }

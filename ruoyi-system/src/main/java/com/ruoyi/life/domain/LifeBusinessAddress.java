@@ -3,7 +3,6 @@ package com.ruoyi.life.domain;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
-import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 商家店铺地址对象 life_business_address
@@ -11,7 +10,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * @author ruoyi
  * @date 2020-01-11
  */
-public class LifeBusinessAddress extends BaseEntity
+public class LifeBusinessAddress
 {
     private static final long serialVersionUID = 1L;
 

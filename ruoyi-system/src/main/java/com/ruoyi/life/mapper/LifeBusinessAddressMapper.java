@@ -60,4 +60,7 @@ public interface LifeBusinessAddressMapper
      * @return 结果
      */
     int deleteLifeBusinessAddressByIds(String[] businessAddressIds);
+
+
+    int deleteAddressByBusinessId(Long businessId);
 }

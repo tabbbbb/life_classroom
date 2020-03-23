@@ -11,20 +11,15 @@
 package com.ruoyi.web.controller.user;
 
 import com.ruoyi.life.domain.LifeUser;
-import com.ruoyi.life.domain.vo.user.LifeCourseConditionVo;
+import com.ruoyi.life.domain.vo.user.LifeUserPhoneAndPasswordLoginVo;
 import com.ruoyi.life.service.user.LifeAutoService;
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.common.response.UserResponseCode;
-import com.ruoyi.common.sms.NotifySms;
-import com.ruoyi.common.sms.cache.SmsCache;
-import com.ruoyi.common.sms.enums.TemplatesType;
-import com.ruoyi.common.utils.JacksonUtil;
 import com.ruoyi.framework.userlogin.LoginResponse;
-import com.ruoyi.framework.userlogin.WxLoginUserInfo;
+import com.ruoyi.life.domain.vo.user.WxLoginUserInfo;
 import com.ruoyi.framework.userlogin.annotation.LoginInfo;
 import com.ruoyi.framework.userlogin.info.UserLoginInfo;
 import com.ruoyi.framework.userlogin.token.UserToken;
-import com.ruoyi.life.service.user.LifePointService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -41,8 +36,7 @@ import java.util.Map;
 @Api(value = "/user/auth",description = "用户认证")
 public class LifeAuthController {
 
-    @Autowired
-    private NotifySms notifySms;
+
 
     @Autowired
     private LifeAutoService autoService;
@@ -51,8 +45,8 @@ public class LifeAuthController {
 
     @PostMapping("phonelogin")
     @ApiOperation(value = "手机号登录")
-    public Object login(@ApiParam(name = "body",value = "phone:手机号,password:密码" ) @RequestBody String body){
-        UserResponse response = autoService.phoneLogin(body);
+    public Object login( @RequestBody LifeUserPhoneAndPasswordLoginVo userPhoneAndPasswordLoginVo){
+        UserResponse response = autoService.phoneLogin(userPhoneAndPasswordLoginVo);
         toResponse(response);
         return response;
     }
@@ -61,9 +55,8 @@ public class LifeAuthController {
     @PostMapping("wxlogin")
     @ApiOperation(value = "微信登录或注册")
     public Object wxLogin(@RequestBody  WxLoginUserInfo wxLoginUserInfo){
-        UserResponse response = autoService.wxLogin(wxLoginUserInfo.toMap());
-        toResponse(response);
-        return response;
+        Long userId = autoService.wxLogin(wxLoginUserInfo);
+        return UserResponse.succeed(UserToken.addToken(userId));
     }
 
 
@@ -77,22 +70,7 @@ public class LifeAuthController {
         return response;
     }
 
-    @PostMapping("send")
-    @ApiOperation(value = "发送验证码到手机",response = UserResponse.class,notes = "")
-    public Object send(@RequestBody @ApiParam(value = "phone:xxx",name = "body")  String body){
 
-        String phone = JacksonUtil.parseString(body,"phone");
-        if (phone == null || phone.length() != 11){
-            return UserResponse.fail(UserResponseCode.SEND_CODE_ERROR,"手机号输入错误");
-        }
-        Integer random = (int)(Math.floor(Math.random()*900000)) + 100000;
-        if (SmsCache.compareSmsCache(phone)){
-            return UserResponse.fail(UserResponseCode.SEND_CODE_ERROR,"验证码有效期内不能重复发送");
-        }
-        notifySms.notifySend(phone,TemplatesType.code,new String[]{random+"","2"});
-        SmsCache.putSmsCache(phone,random+"");
-        return UserResponse.succeed();
-    }
 
 
     @PostMapping("logout")
@@ -149,7 +127,6 @@ public class LifeAuthController {
     public Boolean getToken(String phone){
         return autoService.phoneIsBind(phone) != null;
     }
-
 
 
 

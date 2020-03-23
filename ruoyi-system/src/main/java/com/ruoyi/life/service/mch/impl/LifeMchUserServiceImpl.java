@@ -1,32 +1,18 @@
 package com.ruoyi.life.service.mch.impl;
 
-import com.ruoyi.common.core.text.Convert;
-import com.ruoyi.common.exception.life.user.RechargerException;
-import com.ruoyi.common.response.MchUserResponse;
+import com.ruoyi.common.exception.life.mch.MchOperationException;
 import com.ruoyi.common.response.MchUserResponseCode;
-import com.ruoyi.common.response.UserResponse;
-import com.ruoyi.common.response.UserResponseCode;
 import com.ruoyi.common.sms.cache.SmsCache;
-import com.ruoyi.common.utils.JacksonUtil;
-import com.ruoyi.common.utils.security.Md5Utils;
-import com.ruoyi.common.weixin.WxOperation;
 import com.ruoyi.life.domain.*;
-import com.ruoyi.life.domain.vo.system.LifeBusinessUserVo;
-import com.ruoyi.life.domain.vo.user.LifeUserHomeVo;
+import com.ruoyi.life.domain.vo.mch.LifeUpdatePhoneVo;
 import com.ruoyi.life.mapper.LifeBusinessUserMapper;
-import com.ruoyi.life.mapper.LifeUserMapper;
+import com.ruoyi.life.service.mch.LifeBusinessService;
 import com.ruoyi.life.service.mch.LifeMchUserService;
-import com.ruoyi.life.service.user.*;
-import jodd.util.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,166 +27,85 @@ public class LifeMchUserServiceImpl implements LifeMchUserService
     @Resource
     private LifeBusinessUserMapper businessUserMapper;
 
+
     @Resource
-    private WxOperation wxOperation;
+    private LifeBusinessService businessService;
 
 
     /**
-     * 查询用户
-     * @param userId 用户ID
-     * @return 用户
-     */
-    @Override
-    public LifeBusinessUser selectLifeBusinessUserById(Long userId)
-    {
-        LifeBusinessUser businessUser = businessUserMapper.selectLifeBusinessUserById(userId);
-        return  businessUser;
-    }
-
-    /**
-     * 查询用户列表
-     * 
-     * @param lifeBusinessUser 用户
-     * @return 用户
-     */
-    @Override
-    public List<LifeBusinessUser> selectLifeBusinessUserList(LifeBusinessUser lifeBusinessUser)
-    {
-        return businessUserMapper.selectLifeBusinessUserList(lifeBusinessUser);
-    }
-
-    /**
-     * 新增用户
-     * 
-     * @param lifeUser 用户
-     * @return 结果
-     */
-    @Override
-    public int insertLifeUser(LifeBusinessUser lifeUser)
-    {
-        return businessUserMapper.insertLifeBusinessUser(lifeUser);
-    }
-
-    /**
-     * 修改用户
-     * 
-     * @param lifeUser 用户
-     * @return 结果
-     */
-    @Override
-    public int updateLifeBusinessUser(LifeBusinessUser lifeUser)
-    {
-        return businessUserMapper.updateLifeBusinessUser(lifeUser);
-    }
-
-    /**
-     * 删除用户对象
+     * 修改商户用户参数
      *
-     * @param ids 需要删除的数据ID
-     * @return 结果
+     * @param businessUser
      */
     @Override
-    public int deleteLifeBusinessUserByIds(String ids)
-    {
-        return businessUserMapper.deleteLifeBusinessUserByIds(Convert.toStrArray(ids));
+    public void updateLifeBusinessUserParameter(Long businessUserId,LifeBusinessUser businessUser) {
+        businessUser.setUserId(businessUserId);
+        businessUser.setPhone(null);
+        businessUser.setLoginName(null);
+        businessUser.setOpenId(null);
+        businessUser.setBusinessId(null);
+        businessUser.setPassword(null);
+        businessUserMapper.updateLifeBusinessUser(businessUser);
     }
 
     /**
-     * 删除用户信息
-     * 
-     * @param userId 用户ID
-     * @return 结果
-     */
-    @Override
-    public int deleteLifeBusinessUserById(Long userId)
-    {
-        return businessUserMapper.deleteLifeBusinessUserById(userId);
-    }
-
-    /**
-     * 设置密码
-     * @param userId
-     * @param body
-     * @return
-     */
-    @Override
-    public MchUserResponse setPassword(Long userId, String body) {
-        String password = JacksonUtil.parseString(body,"password");
-        LifeBusinessUser user = businessUserMapper.selectLifeBusinessUserById(userId);
-        if (!StringUtil.isEmpty(user.getPassword())){
-            return MchUserResponse.fail(MchUserResponseCode.PASSWORD_EXIST_ERROR,"密码已存在，不能设置");
-        }
-        if (password.length() < 6){
-            return MchUserResponse.fail(MchUserResponseCode.REGISTER_ERROR,"密码小于6");
-        }
-        password = Md5Utils.hash(password);
-        LifeBusinessUser setBusinessUser = new LifeBusinessUser();
-        setBusinessUser.setUserId(user.getUserId());
-        setBusinessUser.setPassword(password);
-        if (businessUserMapper.updateLifeBusinessUser(setBusinessUser) == 1){
-            return MchUserResponse.succeed();
-        }
-        return MchUserResponse.fail(UserResponseCode.SET_PASSWORD_ERROR,"设置密码错误");
-    }
-
-    /**
-     * 修改用户信息
-     * @param userId
-     * @param body
-     * @return
-     */
-    @Override
-    public MchUserResponse setProperty(Long userId,String body) {
-        String nickName = JacksonUtil.parseString(body,"nickname");
-        String birthday = JacksonUtil.parseString(body,"birthday");
-        Long sex = JacksonUtil.parseLong(body,"sex");
-        String address = JacksonUtil.parseString(body,"address");
-        LifeBusinessUser businessUser = new LifeBusinessUser();
-        businessUser.setUserId(userId);
-        Integer errorCode = 0;
-        String updateType = "";
-        if (nickName != null){
-            errorCode = UserResponseCode.USER_NICKNAME_UPDATE_ERROR;
-            updateType = "昵称";
-            businessUser.setNickName(nickName);
-        }else if (sex != null){
-            errorCode = MchUserResponseCode.USER_SEX_UPDATE_ERROR;
-            updateType = "性别";
-            businessUser.setSex(sex);
-        }else{
-            return MchUserResponse.fail(UserResponseCode.USER_UPDATE_INFO_ERROR,"修改信息为空");
-        }
-
-        if (businessUserMapper.updateLifeBusinessUser(businessUser) == 0){
-            return MchUserResponse.fail(errorCode,updateType);
-        }
-
-        return MchUserResponse.succeed();
-    }
-
-
-
-
-    /**
-     * 获取用户页信息
+     * 修改手机号
      *
-     * @param userId
+     * @param updatePhoneVo
+     */
+    @Override
+    public void updatePhone(Long businessUserId,LifeUpdatePhoneVo updatePhoneVo) {
+        LifeBusinessUser businessUser = businessUserMapper.selectLifeBusinessUserById(businessUserId);
+        if (!SmsCache.compareSmsCache(businessUser.getPhone(),updatePhoneVo.getCode())){
+            throw new MchOperationException(MchUserResponseCode.UPDATE_PHONE_ERROR,"验证码输入错误");
+        }
+        if (getPhoneRegisterFlag(updatePhoneVo.getNewPhone())){
+            throw new MchOperationException(MchUserResponseCode.UPDATE_PHONE_ERROR,"此手机号已被注册");
+        }
+        if (!SmsCache.compareSmsCache(updatePhoneVo.getNewPhone(),updatePhoneVo.getNewCode())){
+            throw new MchOperationException(MchUserResponseCode.UPDATE_PHONE_ERROR,"验证码输入错误");
+        }
+        businessUser.setPhone(updatePhoneVo.getNewPhone());
+        businessUser.setLoginName(updatePhoneVo.getNewPhone());
+        businessUserMapper.updateLifeBusinessUser(businessUser);
+    }
+
+    /**
+     * 获取商户用户信息
+     *
+     * @param businessUserId
      * @return
      */
     @Override
-    public MchUserResponse getUserHome(Long userId) {
-        LifeBusinessUser user = this.selectLifeBusinessUserById(userId);
-        return MchUserResponse.succeed(user);
-    }
-
-    @Override
-    public LifeBusinessUser selectLifeUserByInvitationCard(String InvitationCard) {
-        return null;
+    public LifeBusinessUser getBusinessUserInfo(Long businessUserId) {
+        return businessUserMapper.selectLifeBusinessUserById(businessUserId);
     }
 
 
     /**
-     * 根据手机号获取用户信息
+     * 根据OpenID获取用户
+     *
+     * @param openId
+     * @return
+     */
+    @Override
+    public LifeBusinessUser selectLifeBusinessUserByOpenId(String openId) {
+        return businessUserMapper.selectLifeBusinessUserByOpenId(openId);
+    }
+
+    /**
+     * 增加用户
+     *
+     * @param businessUser
+     */
+    @Override
+    public void insertLifeBusinessUser(LifeBusinessUser businessUser) {
+        businessUserMapper.insertLifeBusinessUser(businessUser);
+    }
+
+    /**
+     * 根据手机号获取用户
+     *
      * @param phone
      * @return
      */
@@ -210,86 +115,145 @@ public class LifeMchUserServiceImpl implements LifeMchUserService
     }
 
     /**
-     * 根据openId获取user
-     * @param openId
+     * 获取此手机号有没有注册
+     *
+     * @param phone
      * @return
      */
     @Override
-    public LifeBusinessUser selectLifeBusinessUserByOpenId(String openId) {
-        return businessUserMapper.selectLifeBusinessUserByOpenId(openId);
+    public boolean getPhoneRegisterFlag(String phone) {
+        return selectLifeBusinessUserByPhone(phone) == null ?false:true;
     }
 
 
     /**
-     * 登录时修改密码
+     * 绑定商户
+     *
+     * @param businessUserId
+     * @param businessId
+     */
+    @Override
+    public void bindBusiness(Long businessUserId, Long businessId) {
+        LifeBusinessUser businessUser = businessUserMapper.selectLifeBusinessUserById(businessUserId);
+        LifeBusiness business = businessService.selectLifeBusinessById(businessId);
+        if (business.getCheckFlage() != 1){
+            throw new MchOperationException(MchUserResponseCode.SET_BUSINESS_ERROR,"商户不是审核通过的");
+        }
+        if (businessUser.getBusinessId() != null){
+            throw new MchOperationException(MchUserResponseCode.SET_BUSINESS_ERROR,"你已经绑定了一个商户");
+        }
+        businessUser.setBusinessId(businessId);
+        businessUserMapper.updateLifeBusinessUser(businessUser);
+    }
+
+
+    /**
+     * 根据id获取商户用户
+     *
+     * @param businessUserId
+     * @return
+     */
+    @Override
+    public LifeBusinessUser selectLifeBusinessUserById(Long businessUserId) {
+        return businessUserMapper.selectLifeBusinessUserById(businessUserId);
+    }
+
+    /**
+     * 获取商户的所有用户
      *
      * @param userId
-     * @param body
      * @return
      */
     @Override
-    public MchUserResponse loginUpdatePassword(Long userId, String body) {
-        LifeBusinessUser businessUser = selectLifeBusinessUserById(userId);
-        String oldPwd = JacksonUtil.parseString(body,"oldPwd");
-        String newPwd = JacksonUtil.parseString(body,"newPwd");
-        if (oldPwd == null || oldPwd == "" || newPwd == null || newPwd == "" || newPwd.length() < 6){
-            return MchUserResponse.fail(MchUserResponseCode.LOGIN_UPDATE_PASSWORD_ERROR,"密码输入错误");
+    public List<LifeBusinessUser> getBusinessAllUser(Long userId) {
+        LifeBusiness business = businessService.getUserBusiness(userId);
+        LifeBusinessUser adminUser = selectLifeBusinessUserById(business.getAdminUser());
+        List<LifeBusinessUser> list = new ArrayList<>();
+        list.add(adminUser);
+        list.addAll(businessUserMapper.getNotIsAdminBusinessUser(business.getBusinessId()));
+        return list;
+    }
+
+
+    /**
+     * 获取商户二维码
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public String getBusinessQrCode(Long userId) {
+        LifeBusiness business = businessService.getUserBusiness(userId);
+        if (business.getCheckFlage() != 1){
+            throw new MchOperationException(MchUserResponseCode.GET_QR_CODE_ERROR,"商户不是审核通过的");
         }
-        oldPwd = Md5Utils.hash(oldPwd);
-        if (!oldPwd.equals(businessUser.getPassword())){
-            return MchUserResponse.fail(MchUserResponseCode.LOGIN_UPDATE_PASSWORD_ERROR,"密码输入错误");
+        if (!business.getAdminUser().equals(userId)){
+            throw new MchOperationException(MchUserResponseCode.GET_QR_CODE_ERROR,"没有权限");
         }
-        LifeBusinessUser updateUser = new LifeBusinessUser();
-        updateUser.setUserId(userId);
-        updateUser.setPassword(Md5Utils.hash(newPwd));
-        if(updateLifeBusinessUser(updateUser) == 0){
-            return MchUserResponse.fail(MchUserResponseCode.LOGIN_UPDATE_PASSWORD_ERROR,"密码修改错误");
-        }
-        return MchUserResponse.succeed();
+        return business.getQrCode();
     }
 
     /**
-     * 根据手机号验证码修改密码
+     * 删除商户用户
      *
-     * @param body
-     * @return
+     * @param userId
+     * @param userIds
      */
     @Override
-    public MchUserResponse codeUpdatePassword(String body) {
-        String newPwd = JacksonUtil.parseString(body,"newPwd");
-        String phone = JacksonUtil.parseString(body,"phone");
-        String code = JacksonUtil.parseString(body,"code");
-        LifeBusinessUser user = selectLifeBusinessUserByPhone(phone);
-        if(user == null){
-            return MchUserResponse.fail(MchUserResponseCode.CODE_UPDATE_PASSWORD_ERROR,"该手机号不存在");
+    @Transactional
+    public void deleteBusinessUser(Long userId, Long[] userIds) {
+        LifeBusiness business = businessService.getUserBusiness(userId);
+        if (!business.getAdminUser().equals(userId)){
+            throw new MchOperationException(MchUserResponseCode.DELETE_BUSINESS_USER_ERROR,"没有权限");
         }
-        if (!SmsCache.compareSmsCache(phone,code)){
-            return MchUserResponse.fail(MchUserResponseCode.CODE_UPDATE_PASSWORD_ERROR,"验证码输入错误");
+        for (Long id : userIds) {
+            if (userId.equals(id)){
+                throw new MchOperationException(MchUserResponseCode.DELETE_BUSINESS_USER_ERROR,"不能删除管理员");
+            }
         }
-        if (newPwd == null || newPwd.length() <6){
-            return MchUserResponse.fail(MchUserResponseCode.CODE_UPDATE_PASSWORD_ERROR,"密码需大于6位");
+        if (businessUserMapper.deleteBusinessUser(business.getBusinessId(),userIds) != userIds.length){
+            throw new MchOperationException(MchUserResponseCode.DELETE_BUSINESS_USER_ERROR,"删除失败，有不是此店铺的成员");
         }
-        LifeBusinessUser updateUser = new LifeBusinessUser();
-        updateUser.setUserId(user.getUserId());
-        updateUser.setPassword(Md5Utils.hash(newPwd));
-        if (updateLifeBusinessUser(updateUser) == 0){
-            return MchUserResponse.fail(MchUserResponseCode.CODE_UPDATE_PASSWORD_ERROR,"修改密码失败");
-        }
-        return MchUserResponse.succeed();
     }
 
 
+    /**
+     * 获取商户中的用户详细信息
+     *
+     * @param userId
+     * @param selectUserId
+     * @return
+     */
+    @Override
+    public LifeBusinessUser getBusinessInUser(Long userId, Long selectUserId) {
+        LifeBusinessUser businessUser = selectLifeBusinessUserById(userId);
+        LifeBusinessUser selectBusinessUser = selectLifeBusinessUserById(selectUserId);
+        if (!businessUser.getBusinessId().equals(selectBusinessUser.getBusinessId())){
+            throw new MchOperationException(MchUserResponseCode.GET_BUSINESS_IN_USER_ERROR,"你不是此商户中的用户");
+        }
+        return selectBusinessUser;
+    }
 
 
-    private boolean verifyPayPassword(String payPassword){
-        if (payPassword == null || payPassword == ""){
-            return false;
-        }
-        try {
-            Integer.valueOf(payPassword);
-        }catch (NumberFormatException e){
-            return false;
-        }
-        return true;
+    /**
+     * 获取此用户是否是管理员
+     *
+     * @param businessUserId
+     * @return
+     */
+    @Override
+    public boolean getUserIsAdmin(Long businessUserId) {
+        return businessService.getUserBusiness(businessUserId).getBusinessId().equals(businessUserId) ?true:false;
+    }
+
+    /**
+     * 修改
+     *
+     * @param businessUser
+     * @return
+     */
+    @Override
+    public int updateLifeBusinessUser(LifeBusinessUser businessUser) {
+        return businessUserMapper.updateLifeBusinessUser(businessUser);
     }
 }

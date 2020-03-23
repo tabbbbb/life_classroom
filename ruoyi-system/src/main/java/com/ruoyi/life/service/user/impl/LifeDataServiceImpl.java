@@ -58,7 +58,7 @@ public class LifeDataServiceImpl implements LifeDataService {
         long sumNum = orderList.size();
         long sumTime = 0;
         long sumDay = 0;
-        long continuousDay = 1;
+        long continuousDay = 0;
         LocalDate date = LocalDate.of(2000,1,1);
         for (LifeOrder order : orderList) {
             LocalDate consumeDate = LocalDate.from(order.getConsumeTime());
@@ -67,8 +67,9 @@ public class LifeDataServiceImpl implements LifeDataService {
                 sumDay++;
                 if (date.plusDays(1).equals(consumeDate)){
                     continuousDay++;
+                }else{
+                    continuousDay = 0;
                 }
-                continuousDay = 1;
                 date = consumeDate;
             }
         }

@@ -115,27 +115,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="getLeagueClassInfo"
             resultType="com.ruoyi.life.domain.vo.user.LifeLeagueClassVo$LifeLeagueClassInfoVo">
         SELECT
-            class.league_class_id AS leagueClassId,
-            course.img_url AS courseImgUrl,
-            course.NAME AS courseName,
-            classify.img AS classifyImgUrl,
-            classify.course_classify_name AS classifyName,
-            course.point AS point,
-            course.price AS price,
-            class.choose_time AS chooseTime,
-            detail.course_detail_id AS courseDetailId,
-            detail.start_hour AS startHour,
-            detail.start_minute AS startMinute,
-            detail.course_duration AS courseDuration,
-            course.age_onset AS ageOnset,
-            course.age_end AS ageEnd,
-            detail.course_refund_hour AS courseRefundHour,
-            course.course_type as courseType
+	      class.league_class_id AS leagueClassId,
+	      course.img_url AS courseImgUrl,
+	      course.NAME AS courseName,
+	      classify.img AS classifyImgUrl,
+	      classify.course_classify_name AS classifyName,
+	      course.point AS point,
+	      course.price AS price,
+	      class.choose_time AS chooseTime,
+	      detail.course_detail_id AS courseDetailId,
+	      detail.start_hour AS startHour,
+	      detail.start_minute AS startMinute,
+	      detail.course_duration AS courseDuration,
+	      course.age_onset AS ageOnset,
+	      course.age_end AS ageEnd,
+	      detail.course_refund_hour AS courseRefundHour,
+	      course.course_type AS courseType,
+	      address.business_address_name AS addressName,
+	      address.business_address AS `address`,
+	      ifnull( reserve.reserve_num, course.number ) AS reserveNum,
+	      course.number as reserveSum,
+	      class.sole as sole
         FROM
-            life_league_class AS class
-            INNER JOIN life_course_detail AS detail ON detail.course_detail_id = class.course_detail_id
-            INNER JOIN life_course AS course ON course.course_id = detail.course_id
-            INNER JOIN life_course_classify AS classify ON classify.course_classify_id = course.course_classify_id
+        	life_league_class AS class
+        	INNER JOIN life_course_detail AS detail ON detail.course_detail_id = class.course_detail_id
+        	INNER JOIN life_course AS course ON course.course_id = detail.course_id
+        	INNER JOIN life_course_classify AS classify ON classify.course_classify_id = course.course_classify_id
+        	INNER JOIN life_business_address AS address ON address.business_address_id = course.business_address_id
+        	LEFT JOIN life_reserve AS reserve ON reserve.course_detail_id = detail.course_detail_id
+        	AND reserve.reserve_date = class.choose_time
         WHERE
             class.user_id = #{userId}
     </select>

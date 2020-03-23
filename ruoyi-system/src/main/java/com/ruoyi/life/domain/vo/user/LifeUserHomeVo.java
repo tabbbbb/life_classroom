@@ -12,6 +12,7 @@ package com.ruoyi.life.domain.vo.user;
 
 import com.ruoyi.life.domain.LifePoint;
 import com.ruoyi.life.domain.LifeUserChild;
+import com.ruoyi.life.domain.LifeVip;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -50,6 +51,12 @@ public class LifeUserHomeVo {
      * 孩子头像
      */
     private List<LifeUserChild> childList;
+
+
+    /**
+     * 最大的会员
+     */
+    private LifeVip vip;
 
 
     /**
@@ -196,5 +203,13 @@ public class LifeUserHomeVo {
 
     public void setExperienceNum(long experienceNum) {
         this.experienceNum = experienceNum;
+    }
+
+    public LifeVip getVip() {
+        return vip;
+    }
+
+    public void setVip(LifeVip vip) {
+        this.vip = vip;
     }
 }

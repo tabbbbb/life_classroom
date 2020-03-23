@@ -94,6 +94,8 @@ public class LifeOrderDetailVo {
 
     @Excel(name = "核销时间",dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date consumeTime;
+    @Excel(name = "商家留言")
+    private String mchRemark;
 
     public Long getOrderId() {
         return orderId;
@@ -286,5 +288,13 @@ public class LifeOrderDetailVo {
 
     public void setConsumeTime(Date consumeTime) {
         this.consumeTime = consumeTime;
+    }
+
+    public String getMchRemark() {
+        return mchRemark;
+    }
+
+    public void setMchRemark(String mchRemark) {
+        this.mchRemark = mchRemark;
     }
 }

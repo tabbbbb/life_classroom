@@ -73,5 +73,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{businessAddressId}
         </foreach>
     </delete>
-    
+    <delete id="deleteAddressByBusinessId">
+        delete from life_business_address
+        where business_id = #{businessId}
+    </delete>
+
 </mapper>

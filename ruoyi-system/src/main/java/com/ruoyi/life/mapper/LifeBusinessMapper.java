@@ -39,13 +39,7 @@ public interface LifeBusinessMapper
      */
     int insertLifeBusiness(LifeBusiness lifeBusiness);
 
-    /**
-     * 修改商户信息
-     * 
-     * @param lifeBusiness 商户信息
-     * @return 结果
-     */
-    int updateLifeBusiness(LifeBusiness lifeBusiness);
+
 
     /**
      * 删除商户信息
@@ -84,4 +78,23 @@ public interface LifeBusinessMapper
      * @return
      */
     int checkFailure(Long businessId,String checkContent);
+
+
+
+    /**
+     * 修改商户信息
+     *
+     * @param lifeBusiness 商户信息
+     * @return 结果
+     */
+    int anewLifeBusiness(LifeBusiness lifeBusiness);
+
+
+    /**
+     * 设置二维码
+     * @param businessId
+     * @param qrCode
+     * @return
+     */
+    int setQrCode(Long businessId,String qrCode);
 }

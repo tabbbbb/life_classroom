@@ -30,6 +30,7 @@
         <result property="useTime"    column="use_time"    />
         <result property="validRefundTime"    column="valid_refund_time"    />
         <result property="deleteFlag"    column="delete_flag"    />
+        <result property="mchRemark"    column="mch_remark"    />
     </resultMap>
 
     <sql id="selectLifeOrderVo">
@@ -39,39 +40,10 @@
          check_id, coupon_id, sale_user, total,
          discounts, pay, linkman, phone, donate,
          course_duration, consume_time, order_time,
-         use_time, valid_refund_time, delete_flag from life_order
+         use_time, valid_refund_time, delete_flag,mch_remark from life_order
     </sql>
 
-    <select id="selectLifeOrderList" parameterType="LifeOrder" resultMap="LifeOrderResult">
-        <include refid="selectLifeOrderVo"/>
-        <where>
-            <if test="verificationCode != null and verificationCode != ''">
-                and verification_code = #{verificationCode}
-            </if>
-            <if test="pid != null "> and pid = #{pid}</if>
-            <if test="courseType != null "> and course_type = #{courseType}</if>
-            <if test="status != null "> and status = #{status}</if>
-            <if test="userId != null "> and user_id = #{userId}</if>
-            <if test="shareId != null "> and share_id = #{shareId}</if>
-            <if test="courseId != null "> and course_id = #{courseId}</if>
-            <if test="courseDetailId != null "> and course_detail_id = #{courseDetailId}</if>
-            <if test="checkId != null "> and check_id = #{checkId}</if>
-            <if test="couponId != null "> and coupon_id = #{couponId}</if>
-            <if test="saleUser != null "> and sale_user = #{saleUser}</if>
-            <if test="total != null "> and total = #{total}</if>
-            <if test="discounts != null "> and discounts = #{discounts}</if>
-            <if test="pay != null "> and pay = #{pay}</if>
-            <if test="linkman != null  and linkman != ''"> and linkman = #{linkman}</if>
-            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
-            <if test="donate != null "> and donate = #{donate}</if>
-            <if test="courseDuration != null "> and course_duration = #{courseDuration}</if>
-            <if test="consumeTime != null "> and consume_time = #{consumeTime}</if>
-            <if test="orderTime != null "> and order_time = #{orderTime}</if>
-            <if test="useTime != null "> and use_time = #{useTime}</if>
-            <if test="validRefundTime != null "> and valid_refund_time = #{validRefundTime}</if>
-            <if test="deleteFlag != null "> and delete_flag = #{deleteFlag}</if>
-        </where>
-    </select>
+
 
     <select id="selectLifeOrderById" parameterType="long" resultMap="LifeOrderResult">
         <include refid="selectLifeOrderVo"/>
@@ -134,52 +106,15 @@
         </trim>
     </insert>
 
-    <update id="updateLifeOrder" parameterType="LifeOrder">
-        update life_order
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="pid != null ">pid = #{pid},</if>
-            <if test="courseType != null ">course_type = #{courseType},</if>
-            <if test="status != null ">status = #{status},</if>
-            <if test="userId != null ">user_id = #{userId},</if>
-            <if test="shareId != null ">share_id = #{shareId},</if>
-            <if test="courseId != null ">course_id = #{courseId},</if>
-            <if test="courseDetailId != null ">course_detail_id = #{courseDetailId},</if>
-            <if test="remark != null  and remark != ''">remark = #{remark},</if>
-            <if test="checkId != null ">check_id = #{checkId},</if>
-            <if test="couponId != null ">coupon_id = #{couponId},</if>
-            <if test="saleUser != null ">sale_user = #{saleUser},</if>
-            <if test="total != null ">total = #{total},</if>
-            <if test="discounts != null ">discounts = #{discounts},</if>
-            <if test="pay != null ">pay = #{pay},</if>
-            <if test="linkman != null  and linkman != ''">linkman = #{linkman},</if>
-            <if test="phone != null  and phone != ''">phone = #{phone},</if>
-            <if test="donate != null ">donate = #{donate},</if>
-            <if test="courseDuration != null ">course_duration = #{courseDuration},</if>
-            <if test="consumeTime != null ">consume_time = #{consumeTime},</if>
-            <if test="orderTime != null ">order_time = #{orderTime},</if>
-            <if test="useTime != null ">use_time = #{useTime},</if>
-            <if test="validRefundTime != null ">valid_refund_time = #{validRefundTime},</if>
-            <if test="deleteFlag != null ">delete_flag = #{deleteFlag},</if>
-        </trim>
-        where order_id = #{orderId}
-    </update>
 
-    <delete id="deleteLifeOrderById" parameterType="String">
-        delete from life_order where order_id = #{orderId}
-    </delete>
 
-    <delete id="deleteLifeOrderByIds" parameterType="String">
-        delete from life_order where order_id in
-        <foreach item="orderId" collection="array" open="(" separator="," close=")">
-            #{orderId}
-        </foreach>
-    </delete>
+
 
 
 
     <select id="selectNowOrder" resultType="string" >
         select distinct phone from life_order
-        where date_format(use_time,'%Y-%m-%d') = current_date and course_detail_id = #{courseId} and status = 201
+        where date_format(use_time,'%Y-%m-%d') = current_date and course_detail_id = #{courseDetailId} and status = 201
     </select>
 
 
@@ -299,8 +234,8 @@
             `order`.valid_refund_time as validRefundTime,
             if(course.course_kind = 0,'后台',business.name) as terrace,
             if(course.course_kind = 0,sysuser.user_name,businessuser.nick_name) as checkName,
-            `order`.consume_time as consumeTime
-
+            `order`.consume_time as consumeTime,
+            `order`.mch_remark as mchRemark
         from life_order as `order`
         inner join life_user as `user` on `user`.user_id = `order`.user_id
         inner join life_course as course on course.course_id = `order`.course_id
@@ -360,7 +295,8 @@
             `course`.name as courseName,
             `coupon`.name as couponName,
             `order`.pay as pay,
-            `order`.order_time as orderTime
+            `order`.order_time as orderTime,
+            `order`.mch_remark as mchRemark
         from life_order as `order`
         inner join life_user as `user` on `user`.user_id = `order`.user_id
         inner join life_course as course on course.course_id = `order`.course_id
@@ -606,11 +542,11 @@
         WHERE
         	share_id = #{shareId}
         	AND ( sale_user = - 1 AND user_id = #{userId} OR sale_user = 0 AND user_id != #{userId} )
-        	AND `order`.consume_time >= #{start}
-        	AND #{end} >= `order`.consume_time
+        	AND DATE_FORMAT(`order`.consume_time ,'%Y-%m-%d') >= #{start}
+        	AND #{end} >= DATE_FORMAT(`order`.consume_time ,'%Y-%m-%d')
         	AND `order`.STATUS = 401
         GROUP BY
-	        course.course_classify_pid
+	        course.course_classify_pid,classify.course_classify_name
     </select>
 
 
@@ -629,8 +565,118 @@
         select order_id from life_order
         where status = 101 and order_time = #{orderTime}
     </select>
+
     <update id="past101Order">
         update life_order set status = 103
         where status = 101 and order_time = #{orderTime}
     </update>
+
+    <select id="selectLifeOrderByVerificationCode" resultMap="LifeOrderResult">
+        <include refid="selectLifeOrderVo"/>
+        where verification_code = #{verificationCode}
+    </select>
+    <select id="getMchOrder" resultType="com.ruoyi.life.domain.vo.mch.LifeMchOrderVo">
+        SELECT
+	      `order`.order_id AS orderId,
+	      `order`.verification_code AS verificationCode,
+	      `user`.nick_name AS nickName,
+	      `order`.consume_time AS consumeTime,
+	      `order`.STATUS AS `status`,
+	      course.course_id AS courseId,
+	      course.img_url AS imgUrl,
+	      course.NAME AS courseName,
+	      classify.img AS classifyImgUrl,
+	      classify.course_classify_name AS classifyName,
+	      `order`.use_time AS useTime,
+	      address.business_address_name AS addressName,
+	      course.age_onset AS ageOnset,
+	      course.age_end AS ageEnd,
+	      course.price AS price
+      FROM
+	    life_order AS `order`
+	    INNER JOIN life_course AS course ON course.course_id = `order`.course_id
+	    INNER JOIN life_course_classify AS classify ON classify.course_classify_id = course.course_classify_id
+	    INNER JOIN life_user AS `user` ON `user`.user_id = `order`.user_id
+	    INNER JOIN life_business_address AS address ON address.business_address_id = course.business_address_id
+	  where course.business_id = #{businessId}
+        <if test="start != null">
+            and `order`.use_time >= #{start}
+        </if>
+	    <if test="statues != null">
+            <foreach collection="statues" item="item" open=" and `order`.status in (" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+      order by `order`.use_time desc
+    </select>
+    <select id="getStatisticsMchPrice" resultType="java.math.BigDecimal">
+        select sum(course.price) from life_order AS `order`
+        INNER JOIN life_course AS course ON course.course_id = `order`.course_id
+        where course.business_id = #{businessId} and `order`.status in (401,402)
+        <if test="start != null">
+            and `order`.use_time >= #{start}
+        </if>
+        group by course.business_id
+    </select>
+    <select id="getStatisticsMchCount" resultType="java.lang.Long">
+        select count(0) from life_order AS `order`
+        INNER JOIN life_course AS course ON course.course_id = `order`.course_id
+        where course.business_id = #{businessId} and `order`.status in (401,402)
+        <if test="start != null">
+            and `order`.use_time >= #{start}
+        </if>
+        group by course.business_id
+    </select>
+
+    <select id="getMchOrderDetail" resultType="com.ruoyi.life.domain.vo.mch.LifeMchOrderDetailVo">
+        SELECT
+        	`order`.order_id AS orderId,
+        	`order`.verification_code AS verificationCode,
+        	`user`.nick_name AS nickName,
+        	`order`.consume_time AS consumeTime,
+        	`order`.STATUS AS `status`,
+        	course.course_id AS courseId,
+        	course.img_url AS imgUrl,
+        	course.NAME AS courseName,
+        	classify.img AS classifyImgUrl,
+        	classify.course_classify_name AS classifyName,
+        	`order`.use_time AS useTime,
+        	address.business_address_name AS addressName,
+        	course.age_onset AS ageOnset,
+        	course.age_end AS ageEnd,
+        	course.price AS price,
+        	child.`name` AS salePeople,
+        	`order`.linkman AS linkman,
+        	`order`.phone AS linkmanPhone,
+        	`order`.order_time AS orderTime,
+        	coupon.NAME AS couponName,
+        	coupon.remarks AS couponRemark,
+        	`order`.remark AS remark,
+        	`order`.mch_remark as mchRemark
+        FROM
+        	life_order AS `order`
+        	INNER JOIN life_course AS course ON course.course_id = `order`.course_id
+        	INNER JOIN life_course_classify AS classify ON classify.course_classify_id = course.course_classify_id
+        	INNER JOIN life_user AS `user` ON `user`.user_id = `order`.user_id
+        	INNER JOIN life_business_address AS address ON address.business_address_id = course.business_address_id
+        	LEFT JOIN life_user_child AS child ON child.child_id = `order`.sale_user
+        	LEFT JOIN life_coupon_receive AS receive ON receive.receive_id = `order`.coupon_id
+        	LEFT JOIN life_coupon AS coupon ON coupon.coupon_id = receive.coupon_id
+        where
+            `order`.verification_code = #{verificationCode}
+    </select>
+
+
+
+    <update id="giveBusinessRemark">
+        update life_order set mch_remark = #{param2}
+        where order_id = #{param1}
+    </update>
+
+
+    <update id="set402Order">
+        update life_order set status = 402
+        where status = 201 and current_time >= date_add(use_time, interval course_duration minute)
+    </update>
+
 </mapper>

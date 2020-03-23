@@ -29,6 +29,12 @@
 <th:block th:include="include :: footer" />
 <script th:src="@{/ruoyi/js/show.js}"></script>
 <script type="text/javascript">
+    var column = ['failure','courseName','price','courseType','classifyId',
+        'number','age','information','teacherName','teacherExplain',
+        'imgUrl','carouselUrl','ruleUrl','courseSpecification','courseDetail']
+    var parameter = ['错误总结','课程名称','价格','课程类型','目标标签',
+        '数量','适合年龄段','详细信息','老师名称','师资介绍',
+        '课程图片','轮播图','预约规则','课程规格','上课时间']
     detail();
     function detail() {
         $.ajax({
@@ -44,7 +50,7 @@
                 cloneTr('课程名称',businessCourse.name)
                 cloneTr('价格',businessCourse.price+'￥')
                 cloneTr('课程类型',courseTypeFormatter(businessCourse.courseType))
-                cloneSpan('课程标签',data.courseLabel,'success')
+                // cloneSpan('课程标签',data.courseLabel,'success')
                 cloneSpan('目标标签',data.courseClassify,'warning')
                 cloneTr('数量',businessCourse.number)
                 if (businessCourse.ageEnd == -1){
@@ -54,10 +60,12 @@
                 }
 
                 cloneTr('商户名称',businessCourse.businessName)
+                cloneTr('详细信息',businessCourse.information)
                 cloneTr('描述',businessCourse.describe)
+                cloneTr('老师名称',businessCourse.teacherName)
+                cloneTrImg('师资介绍',businessCourse.teacherExplain)
                 cloneTrImg('课程图片',businessCourse.imgUrl)
                 cloneTrImg('预约规则',businessCourse.ruleUrl)
-                cloneTrImg('详细信息',businessCourse.information)
                 cloneTr('添加时间',businessCourse.addTime)
                 cloneTr('上课地址',data.address.businessAddressName+' —— '+data.address.businessAddress)
                 var businessCourseSpecifications = data.businessCourseSpecifications
@@ -74,6 +82,17 @@
                 updates.forEach(function (item,index) {
                     if (index == updates.length - 1 && item.updateType == 0){
                         ashow()
+                    }
+                    if (item.failureExplain != null){
+                        var data = JSON.parse(item.failureExplain)
+                        console.log(data)
+                        var data2 = ""
+                        for (var i = 0; i < column.length; i++) {
+                            if (data[column[i]] != null){
+                                data2 +=parameter[i]+" : "+data[column[i]]+'<br/>'
+                            }
+                        }
+                        item.failureExplain = data2
                     }
                     cloneTrFor(item.updateExplain,[checkFlagFormatter(item.updateType),updateFormatter(item.failureExplain,item.updateType),item.updateTime,updateFormatter(item.checkTime,item.updateType)])
                 })
@@ -112,26 +131,14 @@
     }
     
     function failure() {
-        layer.prompt({title: '随便写点啥，并确认', formType: 2}, function(text, index){
-            $.ajax({
-                cache : false,
-                type : "POST",
-                url :"/life/businesscourse/checkfailure",
-                data:{'businessCourseId':getUrlParam('courseId'),'checkContent':text},
-                success : function(data) {
-                    if (data.code == 500) {
-                        $.modal.alert(data.msg, 'error')
-                    } else {
-                        parent.flushTable()
-                        parent.failure()
-                        layer.close(index);
-                        $.modal.close()
-                    }
-                }
-            })
-
-        });
-
+        $.modal.open('错误设置','/life/businesscourse/failure?courseId='+getUrlParam("courseId"),400)
+    }
+    
+    
+    function reParentTable() {
+        parent.flushTable()
+        parent.failure()
+        $.modal.close()
     }
 
 

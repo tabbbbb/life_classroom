@@ -1,12 +1,9 @@
 package com.ruoyi.life.service.mch;
 
 
-import com.ruoyi.common.response.MchUserResponse;
-import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.life.domain.LifeBusinessUser;
-import com.ruoyi.life.domain.LifeUser;
+import com.ruoyi.life.domain.vo.mch.LifeUpdatePhoneVo;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -17,99 +14,29 @@ import java.util.List;
  */
 public interface LifeMchUserService
 {
+
     /**
-     * 查询用户
-     *
-     * @param userId 用户ID
-     * @return 用户
+     * 修改商户用户参数
      */
-    LifeBusinessUser selectLifeBusinessUserById(Long userId);
+    void updateLifeBusinessUserParameter(Long businessUserId,LifeBusinessUser businessUser);
+
 
     /**
-     * 查询用户列表
-     *
-     * @param lifeUser 用户
-     * @return 用户集合
+     * 修改手机号
      */
-     List<LifeBusinessUser> selectLifeBusinessUserList(LifeBusinessUser lifeUser);
-
-    /**
-     * 新增用户
-     *
-     * @param lifeUser 用户
-     * @return 结果
-     */
-     int insertLifeUser(LifeBusinessUser lifeUser);
-
-    /**
-     * 修改用户
-     *
-     * @param lifeUser 用户
-     * @return 结果
-     */
-     int updateLifeBusinessUser(LifeBusinessUser lifeUser);
-
-    /**
-     * 批量删除用户
-     *
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-     int deleteLifeBusinessUserByIds(String ids);
-
-    /**
-     * 删除用户信息
-     *
-     * @param userId 用户ID
-     * @return 结果
-     */
-     int deleteLifeBusinessUserById(Long userId);
+    void updatePhone(Long businessUserId,LifeUpdatePhoneVo updatePhoneVo);
 
 
     /**
-     * 设置密码
-     * @param body
-     * @return UserResponse
-     */
-    MchUserResponse setPassword(Long userId, String body);
-
-
-    /**
-     * 修改用户信息
-     * @param userId
-     * @param body
+     * 获取商户用户信息
+     * @param businessUserId
      * @return
      */
-    MchUserResponse setProperty(Long userId, String body);
-
-
-
-
-    /**
-     * 获取用户页信息
-     * @return
-     */
-    MchUserResponse getUserHome(Long userId);
+    LifeBusinessUser getBusinessUserInfo(Long businessUserId);
 
 
     /**
-     * 根据用户邀请码查询用户
-     * @param InvitationCard
-     * @return
-     */
-    LifeBusinessUser selectLifeUserByInvitationCard(String InvitationCard);
-
-
-    /**
-     *根据手机号获取用户信息
-     * @param phone
-     * @return
-     */
-    LifeBusinessUser selectLifeBusinessUserByPhone(String phone);
-
-
-    /**
-     * 根据openId获取user
+     * 根据OpenID获取用户
      * @param openId
      * @return
      */
@@ -117,18 +44,84 @@ public interface LifeMchUserService
 
 
     /**
-     * 登录时修改密码
-     * @return
+     * 增加用户
+     * @param businessUser
      */
-    MchUserResponse loginUpdatePassword(Long userId, String body);
+    void insertLifeBusinessUser(LifeBusinessUser businessUser);
 
 
     /**
-     * 根据手机号验证码修改密码
-     * @param body
+     * 根据手机号获取用户
+     * @param phone
      * @return
      */
-    MchUserResponse codeUpdatePassword(String body);
+    LifeBusinessUser selectLifeBusinessUserByPhone(String phone);
 
 
+
+    /**
+     * 获取此手机号有没有注册
+     * @return
+     */
+    boolean getPhoneRegisterFlag(String phone);
+
+
+    /**
+     * 绑定商户
+     * @param businessUserId
+     * @param businessId
+     */
+    void bindBusiness(Long businessUserId,Long businessId);
+
+
+    /**
+     * 根据id获取商户用户
+     * @return
+     */
+    LifeBusinessUser selectLifeBusinessUserById(Long businessUserId);
+
+
+    /**
+     * 获取商户的所有用户
+     * @return
+     */
+    List<LifeBusinessUser> getBusinessAllUser(Long userId);
+
+
+    /**
+     * 获取商户二维码
+     * @param userId
+     * @return
+     */
+    String getBusinessQrCode(Long userId);
+
+
+    /**
+     * 删除商户用户
+     * @param userId
+     * @param userIds
+     */
+    void deleteBusinessUser(Long userId,Long [] userIds);
+
+
+    /**
+     * 获取商户中的用户详细信息
+     * @return
+     */
+    LifeBusinessUser getBusinessInUser(Long userId,Long selectUserId);
+
+
+    /**
+     * 获取此用户是否是管理员
+     * @return
+     */
+    boolean getUserIsAdmin(Long businessUserId);
+
+
+    /**
+     * 修改
+     * @param businessUser
+     * @return
+     */
+    int updateLifeBusinessUser(LifeBusinessUser businessUser);
 }

@@ -93,7 +93,7 @@ public class SysLifeBusinessCourseController extends BaseController
     /**
      * 审核不通过
      */
-    @RequiresPermissions("life:businesscourse:update")
+    @RequiresPermissions("life:businesscourse:checkFailure")
     @PostMapping("/checkfailure")
     @ResponseBody
     public void checkFailure(Long businessCourseId,String checkContent)
@@ -101,17 +101,30 @@ public class SysLifeBusinessCourseController extends BaseController
         businessCourseService.checkFailure(businessCourseId,checkContent);
     }
 
+    /**
+     * 详细页面
+     */
+    @GetMapping("/failure")
+    @RequiresPermissions("life:businesscourse:checkFailure")
+    public String failure()
+    {
+        return prefix+"/failurecheck";
+    }
 
 
     /**
      * 审核通过
      */
-    @RequiresPermissions("life:businesscourse:update")
+    @RequiresPermissions("life:businesscourse:checkSuccess")
     @PostMapping("/checksuccess")
     @ResponseBody
     public void checkSuccess(Long businessCourseId)
     {
         businessCourseService.checkSuccess(businessCourseId);
     }
+
+
+
+
 
 }

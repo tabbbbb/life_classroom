@@ -121,7 +121,7 @@ public class LifePointLogServiceImpl implements LifePointLogService
      * @return
      */
     @Override
-    public List<LifePointLog> getUserLog(Long userId, Integer logType, Integer page, Integer limit) {
+    public List<LifePointLog> getUserLog(Long userId, Integer[] logType, Integer page, Integer limit) {
         PageHelper.startPage(page,limit);
         LifeUser user = userService.selectLifeUserById(userId);
         return pointLogMapper.getUserLog(user.getShareId(),logType);
@@ -135,7 +135,7 @@ public class LifePointLogServiceImpl implements LifePointLogService
      * @return
      */
     @Override
-    public long getRebatePoint(Long userId) {
+    public Long getRebatePoint(Long userId) {
         return pointLogMapper.getRebatePoint(userId);
     }
 

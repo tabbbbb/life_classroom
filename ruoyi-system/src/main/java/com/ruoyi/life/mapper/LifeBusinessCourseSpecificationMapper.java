@@ -2,6 +2,7 @@ package com.ruoyi.life.mapper;
 
 
 import com.ruoyi.life.domain.LifeBusinessCourseSpecification;
+import com.ruoyi.life.domain.LifeCourseSpecification;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -79,5 +80,16 @@ public interface LifeBusinessCourseSpecificationMapper
      * @return
      */
     int deleteLifeBusinessCourseSpecificationByBusinessCourseId(Long businessCourseId);
+
+
+    /**
+     * 添加一个集合
+     * @param list
+     * @return
+     */
+    int insertList(List<LifeBusinessCourseSpecification> list);
+
+
+
 
 }

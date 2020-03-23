@@ -63,10 +63,17 @@ public interface LifeUpdateMapper
 
 
 
-
     /**
      * 通过与不通过
      * @return
      */
     int confirmUpdate(Long updateId,Integer updateType,String failureExplain);
+
+
+    /**
+     * 根据id获取最近的修改记录
+     * @return
+     */
+    LifeUpdate getLifeUpdateByBusinessId(Long updateId);
+
 }

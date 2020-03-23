@@ -154,7 +154,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectLifePointLogVo"/>
         where share_id = #{shareId}
         <if test="logType != null">
-            log_type = #{logType}
+            <foreach collection="logType" item="item" open=" and log_type in (" separator="," close=")">
+                #{item}
+            </foreach>
         </if>
         order by add_time desc
     </select>

@@ -19,7 +19,7 @@ public interface LifeCourseClassifyMapper
      * @param courseClassifyId 目标标签ID
      * @return 目标标签
      */
-    public LifeCourseClassify selectLifeCourseClassifyById(Long courseClassifyId);
+    LifeCourseClassify selectLifeCourseClassifyById(Long courseClassifyId);
 
     /**
      * 查询目标标签列表
@@ -27,7 +27,7 @@ public interface LifeCourseClassifyMapper
      * @param lifeCourseClassify 目标标签
      * @return 目标标签集合
      */
-    public List<LifeCourseClassify> selectLifeCourseClassifyList(LifeCourseClassify lifeCourseClassify);
+    List<LifeCourseClassify> selectLifeCourseClassifyList(LifeCourseClassify lifeCourseClassify);
 
     /**
      * 新增目标标签
@@ -35,7 +35,7 @@ public interface LifeCourseClassifyMapper
      * @param lifeCourseClassify 目标标签
      * @return 结果
      */
-    public int insertLifeCourseClassify(LifeCourseClassify lifeCourseClassify);
+    int insertLifeCourseClassify(LifeCourseClassify lifeCourseClassify);
 
     /**
      * 修改目标标签
@@ -43,7 +43,7 @@ public interface LifeCourseClassifyMapper
      * @param lifeCourseClassify 目标标签
      * @return 结果
      */
-    public int updateLifeCourseClassify(LifeCourseClassify lifeCourseClassify);
+    int updateLifeCourseClassify(LifeCourseClassify lifeCourseClassify);
 
     /**
      * 删除目标标签
@@ -51,7 +51,7 @@ public interface LifeCourseClassifyMapper
      * @param courseClassifyId 目标标签ID
      * @return 结果
      */
-    public int deleteLifeCourseClassifyById(int level,Long courseClassifyId);
+    int deleteLifeCourseClassifyById(int level,Long courseClassifyId);
 
     /**
      * 批量删除目标标签
@@ -59,7 +59,7 @@ public interface LifeCourseClassifyMapper
      * @param courseClassifyIds 需要删除的数据ID
      * @return 结果
      */
-    public int deleteLifeCourseClassifyByIds(String[] courseClassifyIds);
+    int deleteLifeCourseClassifyByIds(String[] courseClassifyIds);
 
 
 

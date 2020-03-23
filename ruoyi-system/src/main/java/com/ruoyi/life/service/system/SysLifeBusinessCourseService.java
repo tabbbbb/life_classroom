@@ -32,13 +32,7 @@ public interface SysLifeBusinessCourseService
      */
     List<LifeBusinessCourse> selectLifeBusinessCourseList(LifeBusinessCourse lifeBusinessCourse);
 
-    /**
-     * 新增课程审核
-     *
-     * @param lifeBusinessCourse 课程审核
-     * @return 结果
-     */
-    int insertLifeBusinessCourse(LifeBusinessCourse lifeBusinessCourse);
+
 
     /**
      * 修改课程审核
@@ -48,13 +42,7 @@ public interface SysLifeBusinessCourseService
      */
     int updateLifeBusinessCourse(LifeBusinessCourse lifeBusinessCourse);
 
-    /**
-     * 批量删除课程审核
-     *
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-    int deleteLifeBusinessCourseByIds(String ids);
+
 
     /**
      * 删除课程审核信息

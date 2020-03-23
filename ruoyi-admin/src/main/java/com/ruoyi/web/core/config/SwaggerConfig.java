@@ -1,9 +1,12 @@
 package com.ruoyi.web.core.config;
 
+import com.google.common.base.Function;
+import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
+import com.ruoyi.common.config.Global;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import com.ruoyi.common.config.Global;
-import io.swagger.annotations.ApiOperation;
+import springfox.documentation.RequestHandler;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -48,7 +51,9 @@ public class SwaggerConfig
                 // 设置哪些接口暴露给Swagger展示
                 .select()
                 // 扫描所有有注解的api，用这种方式更灵活
-                .apis(RequestHandlerSelectors.basePackage("com.ruoyi.web.controller.user"))
+                .apis(basePackage("com.ruoyi.web.controller.user;" +
+                        "com.ruoyi.web.controller.mch;" +
+                        "com.ruoyi.web.controller.common"))
                 // 扫描指定包中的swagger注解
                 //.apis(RequestHandlerSelectors.basePackage("com.ruoyi.project.tool.swagger"))
                 // 扫描所有 .apis(RequestHandlerSelectors.any())
@@ -62,6 +67,7 @@ public class SwaggerConfig
      */
     private ApiInfo apiInfo()
     {
+
         // 用ApiInfoBuilder进行定制
         return new ApiInfoBuilder()
                 // 设置标题
@@ -73,5 +79,28 @@ public class SwaggerConfig
                 // 版本
                 .version("版本号:" + Global.getVersion())
                 .build();
+    }
+
+
+
+    public static Predicate<RequestHandler> basePackage(final String basePackage) {
+        return input -> declaringClass(input).transform(handlerPackage(basePackage)).or(true);
+    }
+
+    private static Function<Class<?>, Boolean> handlerPackage(final String basePackage) {
+        return input -> {
+            // 循环判断匹配
+            for (String strPackage : basePackage.split(";")) {
+                boolean isMatch = input.getPackage().getName().startsWith(strPackage);
+                if (isMatch) {
+                    return true;
+                }
+            }
+            return false;
+        };
+    }
+
+    private static Optional<? extends Class<?>> declaringClass(RequestHandler input) {
+        return Optional.fromNullable(input.declaringClass());
     }
 }

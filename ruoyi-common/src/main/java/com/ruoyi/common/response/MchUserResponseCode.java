@@ -20,236 +20,118 @@ package com.ruoyi.common.response;
  */
 public class MchUserResponseCode {
 
-    /**
-     * 成功
-     */
-    public static final Integer SUCCEED = 111111;
 
     /**
-     * 错误
+     * 登录信息提示
      */
-    public static final Integer ERROR = 100000;
-
-    /**
-     * 未登录
-     */
-    public static final Integer NO_LOGIN = 100001;
-
-    /**
-     * 注册错误（添加用户失败）
-     */
-    public static final Integer REGISTER_ERROR = 100002;
-
-    /**
-     * 验证码错误
-     */
-    public static final Integer CODE_ERROR = 100003;
-
-    /**
-     * 绑定或修改手机号错误
-     */
-    public static final Integer BIND_PHONE_ERROR = 100004;
+    public final static Integer LOGIN_STATIC_ERROR = 100001;
 
 
     /**
-     * 绑定微信错误
+     * 微信登录异常
      */
-    public static final Integer BIND_WX_ERROR = 100005;
+    public final static Integer WX_LOGIN_ERROR = 100002;
 
 
     /**
-     * 设置密码错误
+     * 微信注册异常
      */
-    public static final Integer SET_PASSWORD_ERROR = 100006;
+    public final static Integer WX_REGISTER_ERROR = 100003;
 
 
     /**
-     * 密码已存在，不能设置
+     * 手机号登录异常
      */
-    public static final Integer PASSWORD_EXIST_ERROR = 100007;
+    public final static Integer PHONE_LOGIN_ERROR = 100004;
 
 
     /**
-     * 登录状态异常
+     * 手机号注册异常
      */
-    public static final  Integer LOGIN_STATIC_ERROR = 100008;
+    public final static Integer PHONE_REGISTER_ERROR = 100005;
 
 
     /**
-     * 修改时间到期
+     * 修改手机号异常
      */
-    public static final Integer UPDATE_TIME_PAST = 100009;
-
-
-    /**
-     * 手机号未注册
-     */
-    public static final Integer PHONE_NOT_REGISTER = 100010;
-
-
-    /**
-     * 登录密码输入错误
-     */
-    public static final Integer LOGIN_PASSWORD_ERROR = 100011;
-
-
-    /**
-     * 微信登录错误
-     */
-    public static final Integer WX_LOGIN_ERROR = 100012;
-
-
-    /**
-     * 文件上传错误
-     */
-    public static final Integer UP_FILE_ERROR = 100013;
-
-
-    /**
-     * 头像修改错误
-     */
-    public static final Integer USER_AVATAR_UPDATE_ERROR = 100014;
-
-
-    /**
-     * 昵称修改错误
-     */
-    public static final Integer USER_NICKNAME_UPDATE_ERROR = 100015;
-
-
-    /**
-     * 生日修改错误
-     */
-    public static final Integer USER_BIRTHDAY_UPDATE_ERROR = 100016;
+    public final static Integer UPDATE_PHONE_ERROR = 100006;
 
 
 
     /**
-     * 性别修改错误
+     * 设置商户用户异常
      */
-    public static final Integer USER_SEX_UPDATE_ERROR = 100017;
+    public final static Integer SET_BUSINESS_ERROR = 100007;
+
+
+    /**
+     * 分享二维码异常
+     */
+    public final static Integer GET_QR_CODE_ERROR = 100008;
 
 
 
     /**
-     * 地址修改错误
+     * 删除商户用户异常
      */
-    public static final Integer USER_ADDRESS_UPDATE_ERROR = 100017;
+    public final static Integer DELETE_BUSINESS_USER_ERROR = 100009;
+
+
+    /**
+     * 获取商户中的用户异常
+     */
+    public final static Integer GET_BUSINESS_IN_USER_ERROR = 100010;
 
 
 
     /**
-     * 绑定家属错误
+     * 添加商户异常
      */
-    public static final Integer USER_BIND_RELATION_UPDATE_ERROR = 100017;
-
-
-    /**
-     * 修改用户信息错误
-     */
-    public static final Integer USER_UPDATE_INFO_ERROR = 100018;
-
-
-    /**
-     * 充值错误
-     */
-    public static final Integer USER_RECHARGE_ERROR = 100019;
-
-
-    /**
-     * 添加小孩错误
-     */
-    public static final Integer USER_ADD_CHILD_ERROR = 100020;
-
-
-    /**
-     * 绑定小孩错误
-     */
-    public static final Integer USER_BIND_CHILD_ERROR = 100021;
-
-
-    /**
-     * 充值余额错误
-     */
-    public static final Integer USER_RECHARGE_BALANCE_ERROR = 100022;
-
-
-    /**
-     * 发送验证码错误
-     */
-    public static final Integer SEND_CODE_ERROR = 100023;
-
-
-    /**
-     * 支付订单错误
-     */
-    public static final Integer PAY_ORDER_ERROR = 100024;
-
-
-    /**
-     * 操作收藏错误
-     */
-    public static final Integer COLLECT_ERROR = 100025;
-
-
-    /**
-     * 余额充值vip错误
-     */
-    public static final Integer PRICE_RECHARGE_VIP_ERROR = 100026;
-
-
-    /**
-     * 添加目标错误
-     */
-    public static final Integer ADD_TARGET_ERROR = 100027;
-
-
-    /**
-     * 捐赠时间错误
-     */
-    public static final Integer DONATE_ORDER_ERROR = 100028;
-
-
-    /**
-     * 登录验证旧密码修改密码错误
-     */
-    public static final Integer LOGIN_UPDATE_PASSWORD_ERROR = 100029;
-
-
-    /**
-     * 手机验证码修改密码错误
-     */
-    public static final Integer CODE_UPDATE_PASSWORD_ERROR = 100030;
-
+    public final static Integer ADD_BUSINESS_ERROR = 100011;
 
 
 
     /**
-     * 设置支付密码错误
+     * 核销订单异常
      */
-    public static final Integer SET_PAY_PASSWORD_ERROR = 100031;
+    public final static Integer VERIFICATION_ORDER_ERROR = 100012;
+
 
 
     /**
-     * 修改支付密码错误
+     * 商户课程添加或修改异常
      */
-    public static final Integer UPDATE_PAY_PASSWORD_ERROR = 100032;
+    public final static Integer ADD_UPDATE_BUSINESS_COURSE_ERROR = 100013;
+
 
 
     /**
-     * 生成订单错误
+     * 重新提交审核失败
      */
-    public static final Integer CREATE_ORDER_ERROR = 100033;
+    public final static Integer ANEW_BUSINESS_ERROR = 100014;
+
 
 
     /**
-     * 取消订单错误
+     * 微信第一次注册异常
      */
-    public static final Integer CANCEL_ORDER_ERROR = 100034;
+    public final static Integer WX_FIRST_REGISTER_ERROR = 100015;
 
 
     /**
-     * 支付密码错误
+     * 商品上下架异常
      */
-    public static final Integer PAY_PASSWORD_ERROR = 100035;
+    public final static Integer SOLD_OUT_OR_PUTAWAY = 100016;
+
+
+
+    /**
+     * 商品删除异常
+     */
+    public final static Integer COURSE_DELETE_ERROR = 100017;
+
+    /**
+     * 生成wx二维码失败
+     */
+    public static final Integer WX_CREATE_QRCODE_ERROR = 100018;
 }

@@ -4,6 +4,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -12,30 +13,32 @@ import java.util.Date;
  * 订单对象 life_order
  * 
  * @author ruoyi
- * @date 2020-01-08
+ * @date 2020-03-19
  */
-public class LifeOrder extends BaseEntity
+public class LifeOrder
 {
     private static final long serialVersionUID = 1L;
 
     /** 订单id */
     private Long orderId;
 
-    /**
-     * 核销码
-     */
+    /** 核销码 */
+    @Excel(name = "核销码")
     private String verificationCode;
 
-    /** 支付方式0积分 1余额 */
-    @Excel(name = "支付方式0积分 1余额")
+    /** 支付方式 0 积分 1余额 */
+    @Excel(name = "支付方式 0 积分 1余额")
     private Long pid;
 
     /** 课程类型 0普通课程 1小团课 */
     @Excel(name = "课程类型 0普通课程 1小团课")
     private Long courseType;
 
-    /** 101：已付款 201 退款中 202 退款成功 301已完成 */
-    @Excel(name = "101：已付款 201 退款中 202 退款成功 301已完成")
+    /** 101:待付款，102：用户取消，103：超时取消
+201：已支付
+301：退款中，302退款成功
+401：已核销，402：课程过期 */
+    @Excel(name = "101:待付款，102：用户取消，103：超时取消 201：已支付 301：退款中，302退款成功 401：已核销，402：课程过期")
     private Long status;
 
     /** 用户id */
@@ -54,12 +57,16 @@ public class LifeOrder extends BaseEntity
     @Excel(name = "课程详细id")
     private Long courseDetailId;
 
+
+    @Excel(name="备注")
+    private String remark;
+
     /** 核销员 */
     @Excel(name = "核销员")
     private Long checkId;
 
-    /** 用户优惠券id */
-    @Excel(name = "用户优惠券id")
+    /** 用户使用券id */
+    @Excel(name = "用户使用券id")
     private Long couponId;
 
     /** -1用户去 0 绑定家属去，<0 绑定成员 */
@@ -110,18 +117,19 @@ public class LifeOrder extends BaseEntity
     @Excel(name = "有效退款时间", width = 30, dateFormat = "yyyy-MM-dd")
     private LocalDateTime validRefundTime;
 
-    /** null */
-    @Excel(name = "null")
+    /** $column.columnComment */
     private Integer deleteFlag;
 
-    public void setOrderId(Long orderId)
-    {
-        this.orderId = orderId;
+    /** 商家备注 */
+    @Excel(name = "商家备注")
+    private String mchRemake;
+
+    public Long getOrderId() {
+        return orderId;
     }
 
-    public Long getOrderId()
-    {
-        return orderId;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
     public String getVerificationCode() {
@@ -132,158 +140,148 @@ public class LifeOrder extends BaseEntity
         this.verificationCode = verificationCode;
     }
 
-    public void setPid(Long pid)
-    {
+    public Long getPid() {
+        return pid;
+    }
+
+    public void setPid(Long pid) {
         this.pid = pid;
     }
 
-    public Long getPid() 
-    {
-        return pid;
+    public Long getCourseType() {
+        return courseType;
     }
-    public void setCourseType(Long courseType) 
-    {
+
+    public void setCourseType(Long courseType) {
         this.courseType = courseType;
     }
 
-    public Long getCourseType() 
-    {
-        return courseType;
+    public Long getStatus() {
+        return status;
     }
-    public void setStatus(Long status) 
-    {
+
+    public void setStatus(Long status) {
         this.status = status;
     }
 
-    public Long getStatus() 
-    {
-        return status;
+    public Long getUserId() {
+        return userId;
     }
-    public void setUserId(Long userId) 
-    {
+
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    public Long getUserId() 
-    {
-        return userId;
+    public Long getShareId() {
+        return shareId;
     }
-    public void setShareId(Long shareId) 
-    {
+
+    public void setShareId(Long shareId) {
         this.shareId = shareId;
     }
 
-    public Long getShareId() 
-    {
-        return shareId;
+    public Long getCourseId() {
+        return courseId;
     }
-    public void setCourseId(Long courseId) 
-    {
+
+    public void setCourseId(Long courseId) {
         this.courseId = courseId;
     }
 
-    public Long getCourseId() 
-    {
-        return courseId;
+    public Long getCourseDetailId() {
+        return courseDetailId;
     }
-    public void setCourseDetailId(Long courseDetailId) 
-    {
+
+    public void setCourseDetailId(Long courseDetailId) {
         this.courseDetailId = courseDetailId;
     }
 
-    public Long getCourseDetailId() 
-    {
-        return courseDetailId;
+    public Long getCheckId() {
+        return checkId;
     }
-    public void setCheckId(Long checkId) 
-    {
+
+    public void setCheckId(Long checkId) {
         this.checkId = checkId;
     }
 
-    public Long getCheckId() 
-    {
-        return checkId;
+    public Long getCouponId() {
+        return couponId;
     }
-    public void setCouponId(Long couponId) 
-    {
+
+    public void setCouponId(Long couponId) {
         this.couponId = couponId;
     }
 
-    public Long getCouponId() 
-    {
-        return couponId;
+    public Long getSaleUser() {
+        return saleUser;
     }
-    public void setSaleUser(Long saleUser) 
-    {
+
+    public void setSaleUser(Long saleUser) {
         this.saleUser = saleUser;
     }
 
-    public Long getSaleUser() 
-    {
-        return saleUser;
+    public BigDecimal getTotal() {
+        return total;
     }
-    public void setTotal(BigDecimal total) 
-    {
+
+    public void setTotal(BigDecimal total) {
         this.total = total;
     }
 
-    public BigDecimal getTotal() 
-    {
-        return total;
+    public BigDecimal getDiscounts() {
+        return discounts;
     }
-    public void setDiscounts(BigDecimal discounts) 
-    {
+
+    public void setDiscounts(BigDecimal discounts) {
         this.discounts = discounts;
     }
 
-    public BigDecimal getDiscounts() 
-    {
-        return discounts;
+    public BigDecimal getPay() {
+        return pay;
     }
-    public void setPay(BigDecimal pay) 
-    {
+
+    public void setPay(BigDecimal pay) {
         this.pay = pay;
     }
 
-    public BigDecimal getPay() 
-    {
-        return pay;
+    public String getRemark() {
+        return remark;
     }
-    public void setLinkman(String linkman) 
-    {
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getLinkman() {
+        return linkman;
+    }
+
+    public void setLinkman(String linkman) {
         this.linkman = linkman;
     }
 
-    public String getLinkman() 
-    {
-        return linkman;
+    public String getPhone() {
+        return phone;
     }
-    public void setPhone(String phone) 
-    {
+
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    public String getPhone() 
-    {
-        return phone;
+    public Integer getDonate() {
+        return donate;
     }
-    public void setDonate(Integer donate) 
-    {
+
+    public void setDonate(Integer donate) {
         this.donate = donate;
     }
 
-    public Integer getDonate() 
-    {
-        return donate;
-    }
-    public void setCourseDuration(Integer courseDuration) 
-    {
-        this.courseDuration = courseDuration;
+    public Integer getCourseDuration() {
+        return courseDuration;
     }
 
-    public Integer getCourseDuration() 
-    {
-        return courseDuration;
+    public void setCourseDuration(Integer courseDuration) {
+        this.courseDuration = courseDuration;
     }
 
     public LocalDateTime getConsumeTime() {
@@ -318,20 +316,27 @@ public class LifeOrder extends BaseEntity
         this.validRefundTime = validRefundTime;
     }
 
-    public void setDeleteFlag(Integer deleteFlag)
-    {
+    public Integer getDeleteFlag() {
+        return deleteFlag;
+    }
+
+    public void setDeleteFlag(Integer deleteFlag) {
         this.deleteFlag = deleteFlag;
     }
 
-    public Integer getDeleteFlag() 
-    {
-        return deleteFlag;
+    public String getMchRemake() {
+        return mchRemake;
+    }
+
+    public void setMchRemake(String mchRemake) {
+        this.mchRemake = mchRemake;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("orderId", getOrderId())
+            .append("verificationCode", getVerificationCode())
             .append("pid", getPid())
             .append("courseType", getCourseType())
             .append("status", getStatus())
@@ -355,6 +360,7 @@ public class LifeOrder extends BaseEntity
             .append("useTime", getUseTime())
             .append("validRefundTime", getValidRefundTime())
             .append("deleteFlag", getDeleteFlag())
+            .append("mchRemake", getMchRemake())
             .toString();
     }
 }

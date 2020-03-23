@@ -31,12 +31,15 @@ import org.springframework.context.annotation.Configuration;
  * @create 2019/11/30 0030
  * @since 1.0.0
  */
-@EnableConfigurationProperties(WxProperties.class)
+@EnableConfigurationProperties({WxProperties.class,WxMchProperties.class})
 @Configuration
 public class WxConfig {
 
     @Autowired
     private WxProperties properties;
+
+    @Autowired
+    private WxMchProperties mchProperties;
 
     @Bean
     public WxPayConfig wxPayConfig(){
@@ -73,9 +76,19 @@ public class WxConfig {
         return service;
     }
 
+    @Bean("wxMchMaService")
+    public WxMaService wxMchService(){
+        WxMaInMemoryConfig config = new WxMaInMemoryConfig();
+        config.setAppid(mchProperties.getAppId());
+        config.setSecret(mchProperties.getAppSecret());
+        WxMaService service = new WxMaServiceImpl();
+        service.setWxMaConfig(config);
+        return service;
+    }
+
     @Bean
     public WxOperation wxOperation(){
-        WxOperation wxOperation = new WxOperation(wxMaService(),wxPayService(),properties);
+        WxOperation wxOperation = new WxOperation(wxMaService(),wxPayService(),wxMchService());
         return wxOperation;
     }
 }

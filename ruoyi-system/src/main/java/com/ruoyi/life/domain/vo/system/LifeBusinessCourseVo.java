@@ -59,6 +59,7 @@ public class LifeBusinessCourseVo {
     @Excel(name = "商户名称")
     private String businessName;
 
+
     /** 预约规则图片 */
     private String ruleUrl;
 
@@ -274,4 +275,7 @@ public class LifeBusinessCourseVo {
     public void setCheckTime(Date checkTime) {
         this.checkTime = checkTime;
     }
+
+
+
 }

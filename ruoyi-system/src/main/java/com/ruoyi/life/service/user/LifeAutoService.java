@@ -12,6 +12,8 @@ package com.ruoyi.life.service.user;
 
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.life.domain.LifeUser;
+import com.ruoyi.life.domain.vo.user.LifeUserPhoneAndPasswordLoginVo;
+import com.ruoyi.life.domain.vo.user.WxLoginUserInfo;
 
 import java.util.Map;
 
@@ -30,18 +32,18 @@ public interface LifeAutoService {
 
     /**
      * 手机号登录
-     * @param body
+     * @param userPhoneAndPasswordLoginVo
      * @return
      */
-    UserResponse phoneLogin(String body);
+    UserResponse phoneLogin(LifeUserPhoneAndPasswordLoginVo userPhoneAndPasswordLoginVo);
 
 
     /**
      * 微信登录
-     * @param map
+     * @param wxLoginUserInfo
      * @return
      */
-    UserResponse wxLogin(Map<String,String> map);
+    Long wxLogin(WxLoginUserInfo wxLoginUserInfo);
 
 
     /**

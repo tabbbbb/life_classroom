@@ -103,9 +103,9 @@ public class SysLifeVipServiceImpl implements SysLifeVipService {
         if (vip.getBindRelative() == null || (vip.getBindRelative() != 0 && vip.getBindRelative() != 1)){
             throw new RuntimeException("绑定家属选择异常");
         }
-        if (vip.getEnable() == null || (vip.getEnable() != 0 && vip.getEnable() != 1)){
+        /*if (vip.getEnable() == null || (vip.getEnable() != 0 && vip.getEnable() != 1)){
             throw new RuntimeException("设置启用禁用异常");
-        }
+        }*/
 
         if (vip.getVipLevel() == 1){
             vip.setValidity(null);
