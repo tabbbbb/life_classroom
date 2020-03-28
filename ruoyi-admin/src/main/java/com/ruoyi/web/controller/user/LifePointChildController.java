@@ -35,7 +35,7 @@ import springfox.documentation.annotations.ApiIgnore;
  */
 @RestController
 @RequestMapping("/user/pointchild")
-@Api(value = "/user/pointchild",description = "小孩和会员期间关联")
+@Api(value = "/user/pointchild",description = "小孩和会员期间关联",tags = "用户端")
 public class LifePointChildController {
 
     @Autowired

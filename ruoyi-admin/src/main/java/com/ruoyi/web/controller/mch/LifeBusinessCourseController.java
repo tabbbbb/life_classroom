@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping("/mch/course")
-@Api(value = "/mch/course",description = "商户课程")
+@Api(value = "/mch/course",description = "商户课程",tags = "商户端")
 public class LifeBusinessCourseController {
 
     @Resource

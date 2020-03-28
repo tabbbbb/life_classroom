@@ -30,7 +30,7 @@ import springfox.documentation.annotations.ApiIgnore;
  */
 @RestController
 @RequestMapping("/mch/order")
-@Api(value = "/mch/order",description = "商户订单")
+@Api(value = "/mch/order",description = "商户订单",tags = "商户端")
 public class LifeBusinessOrderController {
 
     @Autowired

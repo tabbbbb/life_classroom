@@ -33,7 +33,7 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("/user/coupon")
-@Api(value = "/user/coupon",description = "优惠券")
+@Api(value = "/user/coupon",description = "优惠券",tags = "用户端")
 public class LifeCouponReceiveController {
 
     @Resource

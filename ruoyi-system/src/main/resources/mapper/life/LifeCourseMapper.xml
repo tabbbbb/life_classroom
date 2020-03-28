@@ -192,7 +192,8 @@
     <select id="selectLifeCourseBySearchVo" resultType="com.ruoyi.life.domain.vo.user.LifeCourseByConditionVo">
         select
         course.course_id as courseId,
-        course.img_url as url,course.name as `name`,
+        course.img_url as url,
+        course.name as `name`,
         classify.img as classifyUrl,
         classify.course_classify_name as classifyName,
         course.point as point,
@@ -212,6 +213,9 @@
         inner join life_course_detail as detail on detail.course_id = course.course_id
         left join life_reserve as reserve on reserve.course_detail_id = detail.course_detail_id and reserve.reserve_date = #{conditionVo.date}
         <where>
+            <if test="conditionVo.courseName != null">
+                `course`.name like concat('%',#{conditionVo.courseName},'%')  and
+            </if>
             <if test="conditionVo.date != null">
                 detail.course_detail_id =  (
                   select course_detail_id from life_course_detail

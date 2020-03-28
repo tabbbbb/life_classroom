@@ -30,7 +30,7 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("/user/point")
-@Api(value = "/user/point",description = "积分记录，又称vip充值记录")
+@Api(value = "/user/point",description = "积分记录，又称vip充值记录",tags = "用户端")
 public class LifePointController {
 
 

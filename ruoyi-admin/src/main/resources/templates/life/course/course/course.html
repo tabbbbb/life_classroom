@@ -161,6 +161,9 @@
                     field : 'courseLabel',
                     title : '课程标签',
                     formatter: function (value, row, index) {
+                        if (value == null){
+                            return "未选择"
+                        }
                         return "<span class=\"label label-success\">"+value+"</span>"
                     }
                 },

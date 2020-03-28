@@ -63,8 +63,8 @@ public class LifeDonateServiceImpl implements LifeDonateService
         LocalDate now = LocalDate.now();
         LocalDate start = now.minusDays(now.getDayOfWeek().getValue() - 1);
         Long shareId = user.getShareId();
-        long minute = orderService.donateOrderTime(userId,shareId,start);
-        if (minute == 0){
+        Long minute = orderService.donateOrderTime(userId,shareId,start);
+        if (minute == null || minute == 0){
             throw new UserOperationException(UserResponseCode.DONATE_ERROR,"捐赠时间不足");
         }
         if (orderService.donateOrder(userId,shareId,start) == 0){

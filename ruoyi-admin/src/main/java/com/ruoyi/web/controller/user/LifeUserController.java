@@ -31,7 +31,7 @@ import java.io.IOException;
  */
 @RestController
 @RequestMapping("/user/user")
-@Api(value = "/user/user",description = "用户服务")
+@Api(value = "/user/user",description = "用户服务",tags = "用户端")
 public class LifeUserController
 {
 

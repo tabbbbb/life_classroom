@@ -39,7 +39,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/user/homepage")
-@Api(value = "/user/homepage",description = "首页数据（活动专区）")
+@Api(value = "/user/homepage",description = "首页数据（活动专区）",tags = "用户端")
 public class LifeHomePageController extends BaseController {
     @Autowired
     private LifeHomePageService homePageService;

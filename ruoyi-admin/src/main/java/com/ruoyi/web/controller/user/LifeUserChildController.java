@@ -45,7 +45,7 @@ import java.io.IOException;
  */
 @RestController
 @RequestMapping("/user/child")
-@Api(value = "/user/child",description = "小孩")
+@Api(value = "/user/child",description = "小孩",tags = "用户端")
 public class LifeUserChildController {
 
 

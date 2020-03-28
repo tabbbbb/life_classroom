@@ -59,6 +59,9 @@ public class LifeMchAutoServiceImpl implements LifeMchAutoService {
             if (StringUtil.isEmpty(wxRegisterDataVo.getPhone())){
                 throw new MchOperationException(MchUserResponseCode.WX_FIRST_REGISTER_ERROR, "没有绑定手机号");
             }
+            if (getPhoneRegisterFlag(wxRegisterDataVo.getPhone())){
+                throw new MchOperationException(MchUserResponseCode.WX_REGISTER_ERROR, "此手机号已被注册");
+            }
             if (!SmsCache.compareSmsCache(wxRegisterDataVo.getPhone(), wxRegisterDataVo.getSmsCode())) {
                 throw new MchOperationException(MchUserResponseCode.WX_REGISTER_ERROR, "验证码输入错误");
             }

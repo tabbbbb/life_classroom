@@ -47,7 +47,7 @@ public class OperationNowOrderJob implements Job {
             LocalDateTime m15 = startTime.minusMinutes(15);
             LocalDateTime h2 = startTime.minusHours(2);
             LocalDateTime finishTime = startTime.plusMinutes(courseDetail.getStartMinute());
-            if (!timeIsOnFlag(set402Time,finishTime)){
+            if (finishTime.isAfter(now) && !timeIsOnFlag(set402Time,finishTime)){
                 set402Time.add(finishTime);
             }
             if (h2.isAfter(now) || h2.equals(now)){

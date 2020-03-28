@@ -36,7 +36,7 @@ import springfox.documentation.annotations.ApiIgnore;
  */
 @RestController
 @RequestMapping("/user/donate")
-@Api(value = "/user/donate",description = "捐赠")
+@Api(value = "/user/donate",description = "捐赠",tags = "用户端")
 public class LifeDonateController {
 
 

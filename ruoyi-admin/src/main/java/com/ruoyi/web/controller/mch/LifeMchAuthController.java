@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/mch/auth")
-@Api(value = "/mch/auth",description = "商户用户认证")
+@Api(value = "/mch/auth",description = "商户用户认证",tags = "商户端")
 public class LifeMchAuthController {
 
     @Autowired

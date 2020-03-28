@@ -101,7 +101,35 @@ public class LifeOrderDetailDataVo {
 
     private Long saleUser;
 
+    private String sole;
 
+    private Integer soleNum;
+
+    private Long specificationId;
+
+    public String getSole() {
+        return sole;
+    }
+
+    public void setSole(String sole) {
+        this.sole = sole;
+    }
+
+    public Integer getSoleNum() {
+        return soleNum;
+    }
+
+    public void setSoleNum(Integer soleNum) {
+        this.soleNum = soleNum;
+    }
+
+    public Long getSpecificationId() {
+        return specificationId;
+    }
+
+    public void setSpecificationId(Long specificationId) {
+        this.specificationId = specificationId;
+    }
 
     public Long getOrderId() {
         return orderId;

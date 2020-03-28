@@ -12,6 +12,7 @@ package com.ruoyi.web.controller.user;
 
 import com.ruoyi.life.domain.LifeUser;
 import com.ruoyi.life.domain.vo.user.LifeUserPhoneAndPasswordLoginVo;
+import com.ruoyi.life.domain.vo.user.LifeUserPhoneRegisterVo;
 import com.ruoyi.life.service.user.LifeAutoService;
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.common.response.UserResponseCode;
@@ -33,7 +34,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/user/auth")
-@Api(value = "/user/auth",description = "用户认证")
+@Api(value = "/user/auth",description = "用户认证",tags = "用户端")
 public class LifeAuthController {
 
 
@@ -63,11 +64,10 @@ public class LifeAuthController {
 
 
     @PutMapping("registerandlogin")
-    @ApiOperation(value = "手机号注册或登录")
-    public Object register(@ApiParam(name = "body",value = "phone:手机号,code:短信,invitationCard:邀请人邀请码,companyInvitationCard:公司邀请码") @RequestBody String body){
-        UserResponse response = autoService.register(body);
-        toResponse(response);
-        return response;
+    @ApiOperation(value = "手机号注册")
+    public Object register(@ApiParam(name = "body",value = "phone:手机号,code:短信,invitationCard:邀请人邀请码,companyInvitationCard:公司邀请码") @RequestBody LifeUserPhoneRegisterVo phoneRegisterVo ){
+        Long userId = autoService.register(phoneRegisterVo);
+        return UserResponse.succeed(UserToken.addToken(userId));
     }
 
 

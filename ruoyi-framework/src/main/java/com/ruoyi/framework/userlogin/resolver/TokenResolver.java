@@ -39,7 +39,7 @@ public class TokenResolver implements HandlerMethodArgumentResolver {
     @Override
     public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
         String token = nativeWebRequest.getHeader(USER_TOKEN);
-        if (UserToken.getTokenFlag(token)){
+        if (token != null && UserToken.getTokenFlag(token)){
             UserLoginInfo userLoginInfo = UserToken.get(token);
             userLoginInfo.setEndTime(LocalDateTime.now());
             return userLoginInfo;

@@ -3,10 +3,7 @@ package com.ruoyi.life.service.user;
 
 import com.ruoyi.life.domain.LifeOrder;
 import com.ruoyi.life.domain.vo.system.LifeOrderChartDataDto;
-import com.ruoyi.life.domain.vo.user.LifeDataVo;
-import com.ruoyi.life.domain.vo.user.LifeOrderDataVo;
-import com.ruoyi.life.domain.vo.user.LifeOrderAndSpecificationVo;
-import com.ruoyi.life.domain.vo.user.LifeOrderDetailDataVo;
+import com.ruoyi.life.domain.vo.user.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -35,7 +32,7 @@ public interface LifeOrderService
      * 捐赠时间
      * @return
      */
-    long donateOrderTime(Long userId,Long shareId,LocalDate start);
+    Long donateOrderTime(Long userId,Long shareId,LocalDate start);
 
 
     /**
@@ -44,8 +41,6 @@ public interface LifeOrderService
      * @return
      */
     int donateOrder(Long userId,Long shareId,LocalDate start);
-
-
 
 
 
@@ -174,4 +169,11 @@ public interface LifeOrderService
      * @return
      */
     int set402Order();
+
+
+    /**
+     * 获取支付订单的数据
+     * @return
+     */
+    LifeOrderPaySoleVo getPayOrder(Long orderId);
 }

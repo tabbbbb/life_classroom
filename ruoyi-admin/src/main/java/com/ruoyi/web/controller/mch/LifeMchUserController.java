@@ -24,7 +24,7 @@ import springfox.documentation.annotations.ApiIgnore;
  */
 @RestController
 @RequestMapping("/mch/user")
-@Api(value = "/mch/user",description = "商户用户服务")
+@Api(value = "/mch/user",description = "商户用户服务",tags = "商户端")
 public class LifeMchUserController extends BaseController
 {
     @Autowired

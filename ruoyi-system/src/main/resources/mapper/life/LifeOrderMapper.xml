@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.life.mapper.LifeOrderMapper">
 
     <resultMap type="LifeOrder" id="LifeOrderResult">
         <result property="orderId"    column="order_id"    />
-        <result property="verificationCode" column="verification_code"/>
+        <result property="verificationCode"    column="verification_code"    />
         <result property="pid"    column="pid"    />
         <result property="courseType"    column="course_type"    />
         <result property="status"    column="status"    />
@@ -25,6 +25,9 @@
         <result property="phone"    column="phone"    />
         <result property="donate"    column="donate"    />
         <result property="courseDuration"    column="course_duration"    />
+        <result property="sole"    column="sole"    />
+        <result property="soleNum"    column="sole_num"    />
+        <result property="specificationId"    column="specification_id"    />
         <result property="consumeTime"    column="consume_time"    />
         <result property="orderTime"    column="order_time"    />
         <result property="useTime"    column="use_time"    />
@@ -34,81 +37,16 @@
     </resultMap>
 
     <sql id="selectLifeOrderVo">
-        select order_id,verification_code, pid,
-         course_type, status, user_id, share_id,
-         course_id, course_detail_id, remark,
-         check_id, coupon_id, sale_user, total,
-         discounts, pay, linkman, phone, donate,
-         course_duration, consume_time, order_time,
-         use_time, valid_refund_time, delete_flag,mch_remark from life_order
+        select order_id, verification_code, pid, course_type, status, user_id, share_id, course_id, course_detail_id, remark, check_id, coupon_id, sale_user, total, discounts, pay, linkman, phone, donate, course_duration, sole, sole_num, specification_id, consume_time, order_time, use_time, valid_refund_time, delete_flag, mch_remark from life_order
     </sql>
 
 
 
-    <select id="selectLifeOrderById" parameterType="long" resultMap="LifeOrderResult">
+    <select id="selectLifeOrderById" parameterType="Long" resultMap="LifeOrderResult">
         <include refid="selectLifeOrderVo"/>
         where order_id = #{orderId}
     </select>
-
-    <insert id="insertLifeOrder" parameterType="LifeOrder">
-        insert into life_order
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="verificationCode != null  and verificationCode != ''">verification_code,</if>
-            <if test="pid != null ">pid,</if>
-            <if test="courseType != null ">course_type,</if>
-            <if test="status != null ">status,</if>
-            <if test="userId != null ">user_id,</if>
-            <if test="shareId != null ">share_id,</if>
-            <if test="courseId != null ">course_id,</if>
-            <if test="courseDetailId != null ">course_detail_id,</if>
-            <if test="remark != null  and remark != ''">remark,</if>
-            <if test="checkId != null ">check_id,</if>
-            <if test="couponId != null ">coupon_id,</if>
-            <if test="saleUser != null ">sale_user,</if>
-            <if test="total != null ">total,</if>
-            <if test="discounts != null ">discounts,</if>
-            <if test="pay != null ">pay,</if>
-            <if test="linkman != null  and linkman != ''">linkman,</if>
-            <if test="phone != null  and phone != ''">phone,</if>
-            <if test="donate != null ">donate,</if>
-            <if test="courseDuration != null ">course_duration,</if>
-            <if test="consumeTime != null ">consume_time,</if>
-            <if test="orderTime != null ">order_time,</if>
-            <if test="useTime != null ">use_time,</if>
-            <if test="validRefundTime != null ">valid_refund_time,</if>
-            <if test="deleteFlag != null ">delete_flag,</if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="verificationCode != null  and verificationCode != ''">#{verificationCode},</if>
-            <if test="pid != null ">#{pid},</if>
-            <if test="courseType != null ">#{courseType},</if>
-            <if test="status != null ">#{status},</if>
-            <if test="userId != null ">#{userId},</if>
-            <if test="shareId != null ">#{shareId},</if>
-            <if test="courseId != null ">#{courseId},</if>
-            <if test="courseDetailId != null ">#{courseDetailId},</if>
-            <if test="remark != null  and remark != ''">#{remark},</if>
-            <if test="checkId != null ">#{checkId},</if>
-            <if test="couponId != null ">#{couponId},</if>
-            <if test="saleUser != null ">#{saleUser},</if>
-            <if test="total != null ">#{total},</if>
-            <if test="discounts != null ">#{discounts},</if>
-            <if test="pay != null ">#{pay},</if>
-            <if test="linkman != null  and linkman != ''">#{linkman},</if>
-            <if test="phone != null  and phone != ''">#{phone},</if>
-            <if test="donate != null ">#{donate},</if>
-            <if test="courseDuration != null ">#{courseDuration},</if>
-            <if test="consumeTime != null ">#{consumeTime},</if>
-            <if test="orderTime != null ">#{orderTime},</if>
-            <if test="useTime != null ">#{useTime},</if>
-            <if test="validRefundTime != null ">#{validRefundTime},</if>
-            <if test="deleteFlag != null ">#{deleteFlag},</if>
-        </trim>
-    </insert>
-
-
-
-
+        
 
 
 
@@ -140,7 +78,10 @@
         course_duration,
         order_time,
         use_time,
-        valid_refund_time
+        valid_refund_time,
+        specification_id,
+        sole,
+        sole_num
         )
         values
         <foreach collection="list" item="item"  separator="," >
@@ -165,7 +106,10 @@
             #{item.courseDuration},
             #{item.orderTime},
             #{item.useTime},
-            #{item.validRefundTime}
+            #{item.validRefundTime},
+            #{item.specificationId},
+            #{item.sole},
+            #{item.soleNum}
             )
         </foreach>
     </insert>
@@ -211,31 +155,31 @@
     <select id="selectLifeOrderDetailBySearchVo"
             resultType="com.ruoyi.life.domain.vo.system.LifeOrderDetailVo">
         select
-            `order`.order_id as orderId,
-            `order`.verification_code as verificationCode,
-            course.course_type as courseType,
-            `order`.`status` as `status`,
-            `user`.phone as userPhone,
-            `order`.linkman as linkman,
-            `order`.phone as linkmanPhone,
-            course.course_id as courseId,
-            course.`name` as  courseName,
-            receive.receive_id as recerveId,
-            coupon.coupon_id as couponId,
-            coupon.name as couponName,
-            if(child.`name` is null ,`order`.sale_user,child.`name`)  as beneficiary ,
-            `order`.pid as payType,
-            `order`.total as total,
-            `order`.discounts as discounts,
-            `order`.pay as pay,
-            `order`.course_duration as courseDuration,
-            `order`.order_time as orderTime,
-            `order`.use_time as useTime,
-            `order`.valid_refund_time as validRefundTime,
-            if(course.course_kind = 0,'后台',business.name) as terrace,
-            if(course.course_kind = 0,sysuser.user_name,businessuser.nick_name) as checkName,
-            `order`.consume_time as consumeTime,
-            `order`.mch_remark as mchRemark
+        `order`.order_id as orderId,
+        `order`.verification_code as verificationCode,
+        course.course_type as courseType,
+        `order`.`status` as `status`,
+        `user`.phone as userPhone,
+        `order`.linkman as linkman,
+        `order`.phone as linkmanPhone,
+        course.course_id as courseId,
+        course.`name` as  courseName,
+        receive.receive_id as recerveId,
+        coupon.coupon_id as couponId,
+        coupon.name as couponName,
+        if(child.`name` is null ,`order`.sale_user,child.`name`)  as beneficiary ,
+        `order`.pid as payType,
+        `order`.total as total,
+        `order`.discounts as discounts,
+        `order`.pay as pay,
+        `order`.course_duration as courseDuration,
+        `order`.order_time as orderTime,
+        `order`.use_time as useTime,
+        `order`.valid_refund_time as validRefundTime,
+        if(course.course_kind = 0,'后台',business.name) as terrace,
+        if(course.course_kind = 0,sysuser.user_name,businessuser.nick_name) as checkName,
+        `order`.consume_time as consumeTime,
+        `order`.mch_remark as mchRemark
         from life_order as `order`
         inner join life_user as `user` on `user`.user_id = `order`.user_id
         inner join life_course as course on course.course_id = `order`.course_id
@@ -253,13 +197,13 @@
                 `order`.pid = #{payType} and
             </if>
             <if test="courseType">
-              `order`.course_type = #{courseType} and
+                `order`.course_type = #{courseType} and
             </if>
             <if test="status != null">
-              `order`.status = #{status} and
+                `order`.status = #{status} and
             </if>
             <if test="userPhone != null and userPhone !=''">
-              `user`.phone = #{userPhone} and
+                `user`.phone = #{userPhone} and
             </if>
             <if test="courseName != null and courseName != ''">
                 `course`.name like concat('%',#{courseName},'%')  and
@@ -286,17 +230,17 @@
     </select>
     <select id="selectLifeOrderVoBySearchVo" resultType="com.ruoyi.life.domain.vo.system.LifeOrderVo">
         select
-            `order`.order_id as orderId,
-            `order`.verification_code as verificationCode,
-            `order`.pid as payType,
-            `order`.course_type as courseType,
-            `order`.status as status,
-            `user`.phone as userPhone,
-            `course`.name as courseName,
-            `coupon`.name as couponName,
-            `order`.pay as pay,
-            `order`.order_time as orderTime,
-            `order`.mch_remark as mchRemark
+        `order`.order_id as orderId,
+        `order`.verification_code as verificationCode,
+        `order`.pid as payType,
+        `order`.course_type as courseType,
+        `order`.status as status,
+        `user`.phone as userPhone,
+        `course`.name as courseName,
+        `coupon`.name as couponName,
+        `order`.pay as pay,
+        `order`.order_time as orderTime,
+        `order`.mch_remark as mchRemark
         from life_order as `order`
         inner join life_user as `user` on `user`.user_id = `order`.user_id
         inner join life_course as course on course.course_id = `order`.course_id
@@ -345,7 +289,7 @@
 
     <select id="orderRefundFlag" resultType="java.lang.Integer">
         select count(0) from life_order
-        where status != 301 and order_id in 
+        where status != 301 and order_id in
         <foreach collection="list" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>
@@ -466,7 +410,10 @@
         `order`.total as total,
         `order`.pid as payType,
         child.`name` as saleName,
-        `order`.sale_user as saleUser
+        `order`.sale_user as saleUser,
+        `order`.sole as sole,
+        `order`.sole_num as soleNum,
+        `order`.specification_id as specificationId
         from life_order as `order`
         inner join life_course as course on course.course_id = `order`.course_id
         inner join life_course_classify as classify on classify.course_classify_id = course.course_classify_id
@@ -503,7 +450,10 @@
 		  address.business_address_name as address,
 		  `order`.valid_refund_time as validRefundTime,
 		  child.`name` as saleName,
-          `order`.sale_user as saleUser
+          `order`.sale_user as saleUser,
+          `order`.sole as sole,
+          `order`.sole_num as soleNum,
+          `order`.specification_id as specificationId
         from
           life_order as `order`
           inner join life_course as course on course.course_id = `order`.course_id
@@ -523,7 +473,7 @@
         <include refid="selectLifeOrderVo"/>
         where share_id = #{shareId}
         and (
-          sale_user = -1 and user_id = #{userId} or sale_user = 0 and user_id != #{userId}
+        sale_user = -1 and user_id = #{userId} or sale_user = 0 and user_id != #{userId}
         )
         and
         consume_time >= #{start}
@@ -577,37 +527,37 @@
     </select>
     <select id="getMchOrder" resultType="com.ruoyi.life.domain.vo.mch.LifeMchOrderVo">
         SELECT
-	      `order`.order_id AS orderId,
-	      `order`.verification_code AS verificationCode,
-	      `user`.nick_name AS nickName,
-	      `order`.consume_time AS consumeTime,
-	      `order`.STATUS AS `status`,
-	      course.course_id AS courseId,
-	      course.img_url AS imgUrl,
-	      course.NAME AS courseName,
-	      classify.img AS classifyImgUrl,
-	      classify.course_classify_name AS classifyName,
-	      `order`.use_time AS useTime,
-	      address.business_address_name AS addressName,
-	      course.age_onset AS ageOnset,
-	      course.age_end AS ageEnd,
-	      course.price AS price
-      FROM
-	    life_order AS `order`
-	    INNER JOIN life_course AS course ON course.course_id = `order`.course_id
-	    INNER JOIN life_course_classify AS classify ON classify.course_classify_id = course.course_classify_id
-	    INNER JOIN life_user AS `user` ON `user`.user_id = `order`.user_id
-	    INNER JOIN life_business_address AS address ON address.business_address_id = course.business_address_id
-	  where course.business_id = #{businessId}
+        `order`.order_id AS orderId,
+        `order`.verification_code AS verificationCode,
+        `user`.nick_name AS nickName,
+        `order`.consume_time AS consumeTime,
+        `order`.STATUS AS `status`,
+        course.course_id AS courseId,
+        course.img_url AS imgUrl,
+        course.NAME AS courseName,
+        classify.img AS classifyImgUrl,
+        classify.course_classify_name AS classifyName,
+        `order`.use_time AS useTime,
+        address.business_address_name AS addressName,
+        course.age_onset AS ageOnset,
+        course.age_end AS ageEnd,
+        course.price AS price
+        FROM
+        life_order AS `order`
+        INNER JOIN life_course AS course ON course.course_id = `order`.course_id
+        INNER JOIN life_course_classify AS classify ON classify.course_classify_id = course.course_classify_id
+        INNER JOIN life_user AS `user` ON `user`.user_id = `order`.user_id
+        INNER JOIN life_business_address AS address ON address.business_address_id = course.business_address_id
+        where course.business_id = #{businessId}
         <if test="start != null">
             and `order`.use_time >= #{start}
         </if>
-	    <if test="statues != null">
+        <if test="statues != null">
             <foreach collection="statues" item="item" open=" and `order`.status in (" separator="," close=")">
                 #{item}
             </foreach>
         </if>
-      order by `order`.use_time desc
+        order by `order`.use_time desc
     </select>
     <select id="getStatisticsMchPrice" resultType="java.math.BigDecimal">
         select sum(course.price) from life_order AS `order`
@@ -678,5 +628,20 @@
         update life_order set status = 402
         where status = 201 and current_time >= date_add(use_time, interval course_duration minute)
     </update>
+    <select id="getOrderSoleAll" resultType="java.lang.Integer">
+        select count(0) from life_order
+        where sole in (
+          select sole from life_order
+          where order_id in
+          <foreach collection="orderIds" item="item" open="(" close=")" separator=",">
+              #{item}
+          </foreach>
+        )
+    </select>
+    <select id="getOrderPaySole" resultType="com.ruoyi.life.domain.dto.user.LifeOrderPaySoleDto">
+        select order_id as orderId , pay from life_order
+        where sole = (select sole from life_order where order_id = #{orderId})
+    </select>
+
 
 </mapper>

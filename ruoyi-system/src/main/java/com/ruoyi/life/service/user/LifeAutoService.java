@@ -13,6 +13,7 @@ package com.ruoyi.life.service.user;
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.life.domain.LifeUser;
 import com.ruoyi.life.domain.vo.user.LifeUserPhoneAndPasswordLoginVo;
+import com.ruoyi.life.domain.vo.user.LifeUserPhoneRegisterVo;
 import com.ruoyi.life.domain.vo.user.WxLoginUserInfo;
 
 import java.util.Map;
@@ -25,10 +26,10 @@ public interface LifeAutoService {
 
     /**
      * 手机号注册和登录
-     * @param body
+     * @param phoneRegisterVo
      * @return
      */
-    UserResponse register(String body);
+    Long register(LifeUserPhoneRegisterVo phoneRegisterVo );
 
     /**
      * 手机号登录

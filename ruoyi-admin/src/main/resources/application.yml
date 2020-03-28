@@ -9,6 +9,7 @@ ruoyi:
   # 实例演示开关
   demoEnabled: true
   # 文件路径 示例（ Windows配置D:/lanh/uploadPath，Linux配置 /home/lanh/uploadPath）
+  #服务器配置
   profile: D:/lanh/uploadPath
   # 获取ip地址开关
   addressEnabled: true
@@ -42,6 +43,8 @@ user:
 
 # Spring配置
 spring:
+  profiles:
+    active: druid
   # 模板引擎
   thymeleaf:
     mode: HTML
@@ -55,8 +58,6 @@ spring:
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
-  profiles: 
-    active: druid
   # 文件上传
   servlet:
      multipart:
@@ -72,6 +73,7 @@ spring:
 
 
 
+
 # MyBatis
 mybatis:
     # 搜索指定包别名
@@ -84,7 +86,7 @@ mybatis:
 # PageHelper分页插件
 pagehelper: 
   helperDialect: mysql
-  reasonable: true
+  reasonable: false
   supportMethodsArguments: true
   params: count=countSql 
 
@@ -134,22 +136,23 @@ xss:
 sms:
   tencent:
     enable: true
-    appid: 1400254922
-    appkey: 4f203cce3b07e03bf2471e44b2a5bb21
+    appid: 1400338174
+    appkey: a4124b8f0ce9f0eec6573e2676f49024
     template:
-      verificationCode: 418781
-      beginsRemind: 496176
+      verificationCode: 561852
+      beginsRemind: 561853
       payRemind: 496174
       rechargeRemind: 496169
+
+
 
 life:
   wx:
     app-id: wxd8e881d422cdaf44
     app-secret: c7befefc95addc6f22a6acf8afe554ce
-    mch-id: 1546464881
-    mch-key: 33cbc407ecf54de38d41cc3660924911
+    mch-id: 1581901121
+    mch-key: 4adc9ad20dd41cc0d5cb48e2102de694
     notify-url:  http://7p2zs4.natappfree.cc/wx/order/pay-notify
   wxmch:
-    app-id: wxd8e881d422cdaf44
-    app-secret: c7befefc95addc6f22a6acf8afe554ce
-
+    app-id: wx3066f136136d3cd0
+    app-secret: 5b4f9b9ee074f8501d8210f7791967f3

@@ -59,7 +59,7 @@ public class RuoYiApplication
 
     /**
      * 配置文件上传大小
-     */
+     *//*
     @Bean
     public MultipartConfigElement multipartConfigElement(){
         MultipartConfigFactory factory = new MultipartConfigFactory();
@@ -68,5 +68,5 @@ public class RuoYiApplication
         /// 总上传数据大小 10M
         factory.setMaxRequestSize("500MB");
         return factory.createMultipartConfig();
-    }
+    }*/
 }

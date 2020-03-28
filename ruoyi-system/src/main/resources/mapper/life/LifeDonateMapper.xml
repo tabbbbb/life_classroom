@@ -74,5 +74,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         inner join life_user as `user` on `user`.user_id = donate.user_id
         where `donate`.user_id = #{param1} and `donate`.donate_date >= #{param2}
         group by `user`.user_id , `user`.wx_img_url , `user`.wx_nick_name
+        order by `min` desc
     </select>
 </mapper>

@@ -100,6 +100,9 @@ public class LifeCourseConditionVo {
     private int courseKind;
 
 
+    private String courseName;
+
+
     /**
      * 页数
      */
@@ -111,6 +114,13 @@ public class LifeCourseConditionVo {
      */
     private int limit = 10;
 
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
 
     public LocalDateTime getDate() {
         return date;

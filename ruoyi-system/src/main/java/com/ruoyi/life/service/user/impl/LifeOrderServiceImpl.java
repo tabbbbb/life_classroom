@@ -8,6 +8,7 @@ import com.ruoyi.common.exception.life.user.UserOperationException;
 import com.ruoyi.common.response.UserResponseCode;
 import com.ruoyi.common.utils.security.Md5Utils;
 import com.ruoyi.life.domain.*;
+import com.ruoyi.life.domain.dto.user.LifeOrderPaySoleDto;
 import com.ruoyi.life.domain.dto.user.LifePayOrderDto;
 import com.ruoyi.life.domain.vo.system.LifeOrderChartDataDto;
 import com.ruoyi.life.domain.vo.user.*;
@@ -93,7 +94,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
      * @return
      */
     @Override
-    public long donateOrderTime(Long userId,Long shareId,LocalDate start) {
+    public Long donateOrderTime(Long userId,Long shareId,LocalDate start) {
         return orderMapper.getNowCourseDuration(start,userId,shareId);
     }
 
@@ -137,6 +138,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
         List<LifeCreateOrderVo> createOrderVos = orderAndSpecificationVo.getCreateOrderVoList();
         Integer specificationDiscount = 100;
         Integer leagueClassDiscount = 100;
+        Long specificationId = orderAndSpecificationVo.getSpecificationId();
         if (!type){
             LifeCourseSpecification specification = courseSpecificationService.selectLifeCourseSpecificationById(orderAndSpecificationVo.getSpecificationId());
             if (specification == null){
@@ -153,6 +155,8 @@ public class LifeOrderServiceImpl implements LifeOrderService
                 throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"团课数量未满足");
             }
         }
+        String sole = System.currentTimeMillis()+"_"+specificationId;
+
         for (int i = 0; i < createOrderVos.size(); i++) {
             LifeCreateOrderVo createOrderVo = createOrderVos.get(i);
             LifeCourseDetail courseDetail = courseDetailService.selectLifeCourseDetailById(createOrderVo.getCourseDetailId());
@@ -181,7 +185,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
 
             if(childIds != null && childIds.size() != 0){
                 int peopleNum = pointChildService.getLifePointChildByListNum(childIds);
-                if (peopleNum!= childIds.size()){
+                if ( peopleNum < childIds.size()){
                     throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"非法选择绑定用户");
                 }
                 if (vipService.getBigVip(user.getShareId()).getChild() < childIds.size()){
@@ -252,6 +256,7 @@ public class LifeOrderServiceImpl implements LifeOrderService
             }
 
             LocalDateTime refundTime = useTime.minusHours(courseDetail.getCourseRefundHour());
+
             for (int j = 0; j < childIds.size(); j++) {
                 LifeOrder order = new LifeOrder();
                 order.setVerificationCode(createTheVerificationCode(childIds.get(j)));
@@ -272,6 +277,8 @@ public class LifeOrderServiceImpl implements LifeOrderService
                 order.setPhone(createOrderVo.getPhone());
                 order.setCouponId(createOrderVo.getCouponReceive());
                 order.setSaleUser(childIds.get(j));
+                order.setSole(sole);
+                order.setSpecificationId(specificationId);
                 if (createOrderVo.getPayType() == 0){
                     Long point = course.getPoint();
                     order.setTotal(new BigDecimal(point));
@@ -300,6 +307,9 @@ public class LifeOrderServiceImpl implements LifeOrderService
                 orders.add(order);
             }
         }
+        for (LifeOrder order : orders) {
+            order.setSoleNum(orders.size());
+        }
         if (orderMapper.insertLifeOrders(orders) != orders.size()){
             throw new OrderException(UserResponseCode.CREATE_ORDER_ERROR,"订单添加失败");
         }
@@ -307,7 +317,6 @@ public class LifeOrderServiceImpl implements LifeOrderService
         for (LifeOrder order : orders) {
             orderIds.add(order.getOrderId());
         }
-
         return orderIds;
     }
 
@@ -335,7 +344,12 @@ public class LifeOrderServiceImpl implements LifeOrderService
     public void cancelOrder(Long userId, List<Long> orderIds) {
         LifeUser user = userService.selectLifeUserById(userId);
         Long shareId = user.getShareId();
-
+        if (orderIds == null || orderIds.size() == 0){
+            throw new UserOperationException(UserResponseCode.REFUND_ORDER_ERROR,"选择一个订单来进行取消");
+        }
+        if (!operationOrderMeetSole(orderIds)){
+            throw new OrderException(UserResponseCode.CANCEL_ORDER_ERROR,"必须取消生成时相同规格的订单");
+        }
         if (orderMapper.cancelOrder(shareId,orderIds) != orderIds.size()){
             throw new OrderException(UserResponseCode.CANCEL_ORDER_ERROR,"取消订单列表中有不能取消的");
         }
@@ -376,6 +390,12 @@ public class LifeOrderServiceImpl implements LifeOrderService
     @Transactional
     public void payOrder(Long userId,String payPassword, List<Long> orderIds) {
         LifeUser user = userService.selectLifeUserById(userId);
+        if (orderIds == null || orderIds.size() == 0){
+            throw new UserOperationException(UserResponseCode.REFUND_ORDER_ERROR,"选择一个订单来进行支付");
+        }
+        if (!operationOrderMeetSole(orderIds)){
+            throw new OrderException(UserResponseCode.PAY_PASSWORD_ERROR,"必须取消生成时相同规格的订单");
+        }
         if (user.getPaymentCode() == null ){
             throw new OrderException(UserResponseCode.PAY_PASSWORD_ERROR,"没有设置支付密码");
         }
@@ -429,6 +449,9 @@ public class LifeOrderServiceImpl implements LifeOrderService
         if (orderMapper.refund(user.getShareId(),orderIds) != orderIds.size()){
             throw new UserOperationException(UserResponseCode.REFUND_ORDER_ERROR,"有订单不能退款，请刷新重试");
         }
+        if (!operationOrderMeetSole(orderIds)){
+            throw new OrderException(UserResponseCode.REFUND_ORDER_ERROR,"必须取消生成时相同规格的订单");
+        }
     }
 
 
@@ -446,6 +469,9 @@ public class LifeOrderServiceImpl implements LifeOrderService
         }
         if (orderMapper.cancelRefund(user.getShareId(),orderIds) != orderIds.size()){
             throw new UserOperationException(UserResponseCode.REFUND_ORDER_ERROR,"有订单不能取消退款，请刷新重试");
+        }
+        if (!operationOrderMeetSole(orderIds)){
+            throw new OrderException(UserResponseCode.REFUND_ORDER_ERROR,"必须取消生成时相同规格的订单");
         }
     }
 
@@ -610,5 +636,34 @@ public class LifeOrderServiceImpl implements LifeOrderService
     @Override
     public int set402Order() {
         return orderMapper.set402Order();
+    }
+
+
+    private boolean operationOrderMeetSole(List<Long> orderIds){
+        if (orderMapper.getOrderSoleAll(orderIds) != orderIds.size()){
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 获取支付订单的数据
+     *
+     * @param orderId
+     * @return
+     */
+    @Override
+    public LifeOrderPaySoleVo getPayOrder(Long orderId) {
+        List<LifeOrderPaySoleDto> list = orderMapper.getOrderPaySole(orderId);
+        LifeOrderPaySoleVo orderPaySoleVo = new LifeOrderPaySoleVo();
+        BigDecimal pay = new BigDecimal(0);
+        List<Long> orderIds = new ArrayList<>();
+        for (LifeOrderPaySoleDto paySoleDto : list) {
+            pay = pay.add(paySoleDto.getPay());
+            orderIds.add(paySoleDto.getOrderIds());
+        }
+        orderPaySoleVo.setOrderIds(orderIds);
+        orderPaySoleVo.setPay(pay);
+        return orderPaySoleVo;
     }
 }

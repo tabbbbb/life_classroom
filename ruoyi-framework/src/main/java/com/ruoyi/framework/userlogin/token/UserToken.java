@@ -25,15 +25,16 @@ import com.ruoyi.framework.userlogin.info.UserLoginInfo;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 /**
  * 用户token保存
  */
 public class UserToken {
-    private static Map<String,UserLoginInfo> tokenMap = new HashMap<>();
+    private static Map<String,UserLoginInfo> tokenMap = new Hashtable<>();
 
-    private static Map<Long,UserLoginInfo> idTokenMap = new HashMap<>();
+    private static Map<Long,UserLoginInfo> idTokenMap = new Hashtable<>();
 
 
 

@@ -3,6 +3,7 @@ package com.ruoyi.life.service.user;
 
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.life.domain.LifeVip;
+import com.ruoyi.life.domain.vo.user.LifeWxPayVipVo;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -35,10 +36,10 @@ public interface LifeVipService
     /**
      * 充值
      * @param userId 用户id
-     * @param body 内容
+     * @param wxPayVipVo 内容
      * @return
      */
-    UserResponse recharge(Long userId,String body);
+    Object recharge(Long userId,LifeWxPayVipVo wxPayVipVo);
 
 
     /**

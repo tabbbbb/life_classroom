@@ -17,6 +17,7 @@ import com.ruoyi.life.domain.LifeCouponReceive;
 import com.ruoyi.life.domain.LifeShare;
 import com.ruoyi.life.domain.LifeUser;
 import com.ruoyi.life.domain.vo.user.LifeUserPhoneAndPasswordLoginVo;
+import com.ruoyi.life.domain.vo.user.LifeUserPhoneRegisterVo;
 import com.ruoyi.life.domain.vo.user.WxLoginUserInfo;
 import com.ruoyi.life.service.user.*;
 import com.ruoyi.common.response.UserResponse;
@@ -53,38 +54,37 @@ public class LifeAutoServiceImpl implements LifeAutoService {
     private LifeCouponReceiveService couponReceiveService;
 
     /**
-     * 手机号注册和登录
-     * @param body
+     * 手机号注册
+     * @param phoneRegisterVo
      * @return
      */
     @Override
     @Transactional
-    public UserResponse register(String body) {
-        String phone = JacksonUtil.parseString(body,"phone");
-        String code = JacksonUtil.parseString(body,"code");
-        String invitationCard = JacksonUtil.parseString(body,"invitationCard");
-        String companyInvitationCard = JacksonUtil.parseString(body,"companyInvitationCard");
-        int type = 0;
-        if (SmsCache.compareSmsCache(phone,code)){
-            LifeUser user = this.phoneIsBind(phone);
-            if (user == null){
-                user = new LifeUser();
-                String random = this.random();
-                user.setPhone(phone);
-                user.setCardNumber(phone.substring(7)+random);
-                user.setNickName("用户"+phone);
-                user.setCreateDate(LocalDateTime.now());
-                this.setCompany(user,companyInvitationCard);
-                if (userService.insertLifeUser(user) == 0){
-                    return UserResponse.fail(UserResponseCode.REGISTER_ERROR,"用户添加失败");
-                }
-                type = 1;
-                this.newUserGiveCoupon(user.getUserId());
-            }
-            userService.setParent(user.getUserId(),invitationCard,type);
-            return UserResponse.succeed(user);
+    public Long register(LifeUserPhoneRegisterVo phoneRegisterVo) {
+        String phone = phoneRegisterVo.getPhone();
+        String code = phoneRegisterVo.getCode();
+        String invitationCard = phoneRegisterVo.getInvitationCard();
+        String companyInvitationCard = phoneRegisterVo.getCompanyInvitationCard();
+        if (phoneIsBind(phone) != null){
+            throw new UserOperationException(UserResponseCode.REGISTER_ERROR,"手机号已注册");
         }
-        return UserResponse.fail(UserResponseCode.CODE_ERROR,"验证码输入有误");
+        if (!SmsCache.compareSmsCache(phone,code)){
+            throw new UserOperationException(UserResponseCode.CODE_ERROR,"验证码输入有误");
+        }
+        LifeUser user = new LifeUser();
+        String random = this.random();
+        user.setPhone(phone);
+        user.setCardNumber(phone.substring(7)+random);
+        user.setNickName("用户"+phone);
+        user.setCreateDate(LocalDateTime.now());
+        user.setPassword(Md5Utils.hash(phoneRegisterVo.getPassword()));
+        this.setCompany(user,companyInvitationCard);
+        if (userService.insertLifeUser(user) == 0){
+            throw new UserOperationException(UserResponseCode.REGISTER_ERROR,"用户添加失败");
+        }
+        this.newUserGiveCoupon(user.getUserId());
+        userService.setParent(user.getUserId(),invitationCard,1);
+       return user.getUserId();
     }
 
 
@@ -181,6 +181,9 @@ public class LifeAutoServiceImpl implements LifeAutoService {
         if (user == null){
             if (StringUtil.isEmpty(wxLoginUserInfo.getPhone())){
                 throw new UserOperationException(UserResponseCode.WX_FIRST_LOGIN_ERROR,"没有绑定手机号");
+            }
+            if (phoneIsBind(wxLoginUserInfo.getPhone()) != null){
+                throw new UserOperationException(UserResponseCode.REGISTER_ERROR,"手机号已被绑定");
             }
             if (!SmsCache.compareSmsCache(wxLoginUserInfo.getPhone(),wxLoginUserInfo.getSmsCode())){
                 throw new UserOperationException(UserResponseCode.REGISTER_ERROR,"验证码输入错误");

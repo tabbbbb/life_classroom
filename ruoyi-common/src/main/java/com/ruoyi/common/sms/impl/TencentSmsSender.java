@@ -49,7 +49,7 @@ public class TencentSmsSender implements SmsSender {
     @Override
     public void sendWithTemplate(String phone, int template, String[] params) {
         try {
-            SmsSingleSenderResult result = smsSingleSender.sendWithParam("86", phone, template, params, "", "", "");
+            SmsSingleSenderResult result = smsSingleSender.sendWithParam("86", phone, template, params, "宁波楼宇食间网络科技", "", "");
             logger.debug(result.toString());
         } catch (HTTPException e) {
             e.printStackTrace();
@@ -61,7 +61,7 @@ public class TencentSmsSender implements SmsSender {
     @Override
     public void sendWithTemplate(String[] phone, int template, String[] params) {
         try {
-            SmsMultiSenderResult result =smsMultiSender.sendWithParam("86",phone,template,params,"","","");
+            SmsMultiSenderResult result =smsMultiSender.sendWithParam("86",phone,template,params,"宁波楼宇食间网络科技","","");
             logger.debug(result.toString());
         } catch (HTTPException e) {
             e.printStackTrace();

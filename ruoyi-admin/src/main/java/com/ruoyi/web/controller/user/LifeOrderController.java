@@ -38,7 +38,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/user/order")
-@Api(value = "/user/order",description = "订单")
+@Api(value = "/user/order",description = "订单",tags = "用户端")
 public class LifeOrderController {
 
 
@@ -148,6 +148,15 @@ public class LifeOrderController {
         UserResponse response = LoginResponse.toMessage(loginInfo);
         if (response != null) return response;
         return UserResponse.succeed(orderService.getSaleUser(loginInfo.getId()));
+    }
+
+
+    @ApiOperation(value = "获取订单详细页支付数据")
+    @GetMapping("paySole")
+    public UserResponse paySole(@ApiIgnore @LoginInfo UserLoginInfo loginInfo,Long orderId){
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null) return response;
+        return UserResponse.succeed(orderService.getPayOrder(orderId));
     }
 
 }

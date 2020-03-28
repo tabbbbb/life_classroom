@@ -16,7 +16,7 @@ import com.ruoyi.framework.userlogin.MchLoginResponse;
 import com.ruoyi.framework.userlogin.annotation.MchLoginInfo;
 import com.ruoyi.framework.userlogin.info.MchUserLoginInfo;
 import com.ruoyi.life.domain.LifeBusiness;
-import com.ruoyi.life.domain.LifeBusinessAddress;
+
 import com.ruoyi.life.domain.vo.mch.LifeAddBusinessVo;
 import com.ruoyi.life.service.mch.LifeBusinessService;
 import com.ruoyi.life.service.mch.LifeMchAddressService;
@@ -35,7 +35,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping("/mch/business")
-@Api(value = "/mch/business",description = "商户服务")
+@Api(value = "/mch/business",description = "商户服务",tags = "商户端")
 public class LifeBusinessController {
 
     @Resource
@@ -104,6 +104,7 @@ public class LifeBusinessController {
                 path = fileUpService.fileUp(Global.getMchLicense(),file);
                 break;
         }
+
         return MchResponse.succeed(path);
     }
 

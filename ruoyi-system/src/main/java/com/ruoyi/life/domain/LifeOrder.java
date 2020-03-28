@@ -13,9 +13,9 @@ import java.util.Date;
  * 订单对象 life_order
  * 
  * @author ruoyi
- * @date 2020-03-19
+ * @date 2020-03-27
  */
-public class LifeOrder
+public class LifeOrder extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
@@ -57,10 +57,6 @@ public class LifeOrder
     @Excel(name = "课程详细id")
     private Long courseDetailId;
 
-
-    @Excel(name="备注")
-    private String remark;
-
     /** 核销员 */
     @Excel(name = "核销员")
     private Long checkId;
@@ -101,6 +97,18 @@ public class LifeOrder
     @Excel(name = "上课时长")
     private Integer courseDuration;
 
+    /** 唯一 */
+    @Excel(name = "唯一")
+    private String sole;
+
+    /** 数量 */
+    @Excel(name = "数量")
+    private Integer soleNum;
+
+    /** 规格id */
+    @Excel(name = "规格id")
+    private Long specificationId;
+
     /** 核销时间 */
     @Excel(name = "核销时间", width = 30, dateFormat = "yyyy-MM-dd")
     private LocalDateTime consumeTime;
@@ -118,106 +126,184 @@ public class LifeOrder
     private LocalDateTime validRefundTime;
 
     /** $column.columnComment */
+    @Excel(name = "有效退款时间")
     private Integer deleteFlag;
 
     /** 商家备注 */
     @Excel(name = "商家备注")
-    private String mchRemake;
+    private String mchRemark;
 
-    public Long getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(Long orderId) {
+    public void setOrderId(Long orderId) 
+    {
         this.orderId = orderId;
     }
 
-    public String getVerificationCode() {
-        return verificationCode;
+    public Long getOrderId() 
+    {
+        return orderId;
     }
-
-    public void setVerificationCode(String verificationCode) {
+    public void setVerificationCode(String verificationCode) 
+    {
         this.verificationCode = verificationCode;
     }
 
-    public Long getPid() {
-        return pid;
+    public String getVerificationCode() 
+    {
+        return verificationCode;
     }
-
-    public void setPid(Long pid) {
+    public void setPid(Long pid) 
+    {
         this.pid = pid;
     }
 
-    public Long getCourseType() {
-        return courseType;
+    public Long getPid() 
+    {
+        return pid;
     }
-
-    public void setCourseType(Long courseType) {
+    public void setCourseType(Long courseType) 
+    {
         this.courseType = courseType;
     }
 
-    public Long getStatus() {
-        return status;
+    public Long getCourseType() 
+    {
+        return courseType;
     }
-
-    public void setStatus(Long status) {
+    public void setStatus(Long status) 
+    {
         this.status = status;
     }
 
-    public Long getUserId() {
-        return userId;
+    public Long getStatus() 
+    {
+        return status;
     }
-
-    public void setUserId(Long userId) {
+    public void setUserId(Long userId) 
+    {
         this.userId = userId;
     }
 
-    public Long getShareId() {
-        return shareId;
+    public Long getUserId() 
+    {
+        return userId;
     }
-
-    public void setShareId(Long shareId) {
+    public void setShareId(Long shareId) 
+    {
         this.shareId = shareId;
     }
 
-    public Long getCourseId() {
-        return courseId;
+    public Long getShareId() 
+    {
+        return shareId;
     }
-
-    public void setCourseId(Long courseId) {
+    public void setCourseId(Long courseId) 
+    {
         this.courseId = courseId;
     }
 
-    public Long getCourseDetailId() {
-        return courseDetailId;
+    public Long getCourseId() 
+    {
+        return courseId;
     }
-
-    public void setCourseDetailId(Long courseDetailId) {
+    public void setCourseDetailId(Long courseDetailId) 
+    {
         this.courseDetailId = courseDetailId;
     }
 
-    public Long getCheckId() {
-        return checkId;
+    public Long getCourseDetailId() 
+    {
+        return courseDetailId;
     }
-
-    public void setCheckId(Long checkId) {
+    public void setCheckId(Long checkId) 
+    {
         this.checkId = checkId;
     }
 
-    public Long getCouponId() {
-        return couponId;
+    public Long getCheckId() 
+    {
+        return checkId;
     }
-
-    public void setCouponId(Long couponId) {
+    public void setCouponId(Long couponId) 
+    {
         this.couponId = couponId;
     }
 
-    public Long getSaleUser() {
+    public Long getCouponId() 
+    {
+        return couponId;
+    }
+    public void setSaleUser(Long saleUser) 
+    {
+        this.saleUser = saleUser;
+    }
+
+    public Long getSaleUser() 
+    {
         return saleUser;
     }
 
-    public void setSaleUser(Long saleUser) {
-        this.saleUser = saleUser;
+    public void setLinkman(String linkman) 
+    {
+        this.linkman = linkman;
+    }
+
+    public String getLinkman() 
+    {
+        return linkman;
+    }
+    public void setPhone(String phone) 
+    {
+        this.phone = phone;
+    }
+
+    public String getPhone() 
+    {
+        return phone;
+    }
+    public void setDonate(Integer donate) 
+    {
+        this.donate = donate;
+    }
+
+    public Integer getDonate() 
+    {
+        return donate;
+    }
+    public void setCourseDuration(Integer courseDuration) 
+    {
+        this.courseDuration = courseDuration;
+    }
+
+    public Integer getCourseDuration() 
+    {
+        return courseDuration;
+    }
+    public void setSole(String sole) 
+    {
+        this.sole = sole;
+    }
+
+    public String getSole() 
+    {
+        return sole;
+    }
+
+    public Integer getSoleNum() {
+        return soleNum;
+    }
+
+    public void setSoleNum(Integer soleNum) {
+        this.soleNum = soleNum;
+    }
+
+    public void setSpecificationId(Long specificationId)
+    {
+        this.specificationId = specificationId;
+    }
+
+    public Long getSpecificationId() 
+    {
+        return specificationId;
     }
 
     public BigDecimal getTotal() {
@@ -242,46 +328,6 @@ public class LifeOrder
 
     public void setPay(BigDecimal pay) {
         this.pay = pay;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    public String getLinkman() {
-        return linkman;
-    }
-
-    public void setLinkman(String linkman) {
-        this.linkman = linkman;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public Integer getDonate() {
-        return donate;
-    }
-
-    public void setDonate(Integer donate) {
-        this.donate = donate;
-    }
-
-    public Integer getCourseDuration() {
-        return courseDuration;
-    }
-
-    public void setCourseDuration(Integer courseDuration) {
-        this.courseDuration = courseDuration;
     }
 
     public LocalDateTime getConsumeTime() {
@@ -316,20 +362,23 @@ public class LifeOrder
         this.validRefundTime = validRefundTime;
     }
 
-    public Integer getDeleteFlag() {
-        return deleteFlag;
-    }
-
-    public void setDeleteFlag(Integer deleteFlag) {
+    public void setDeleteFlag(Integer deleteFlag)
+    {
         this.deleteFlag = deleteFlag;
     }
 
-    public String getMchRemake() {
-        return mchRemake;
+    public Integer getDeleteFlag() 
+    {
+        return deleteFlag;
+    }
+    public void setMchRemark(String mchRemark) 
+    {
+        this.mchRemark = mchRemark;
     }
 
-    public void setMchRemake(String mchRemake) {
-        this.mchRemake = mchRemake;
+    public String getMchRemark() 
+    {
+        return mchRemark;
     }
 
     @Override
@@ -355,12 +404,15 @@ public class LifeOrder
             .append("phone", getPhone())
             .append("donate", getDonate())
             .append("courseDuration", getCourseDuration())
+            .append("sole", getSole())
+            .append("soleNum", getSoleNum())
+            .append("specificationId", getSpecificationId())
             .append("consumeTime", getConsumeTime())
             .append("orderTime", getOrderTime())
             .append("useTime", getUseTime())
             .append("validRefundTime", getValidRefundTime())
             .append("deleteFlag", getDeleteFlag())
-            .append("mchRemake", getMchRemake())
+            .append("mchRemark", getMchRemark())
             .toString();
     }
 }

@@ -75,12 +75,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
 
-    <select id="getLifePointChildByListNum" resultType="java.lang.Integer">
-        select count(0) from life_point_child
+    <select id="getLifePointChildByListNum" resultType="int">
+        select count(user_child_id) from life_point_child
         where user_child_id in
         <foreach collection="list" item="item" separator="," open="(" close=")">
             #{item}
         </foreach>
+
     </select>
 
 </mapper>

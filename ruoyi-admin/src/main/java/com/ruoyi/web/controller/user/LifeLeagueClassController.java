@@ -39,7 +39,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/user/league")
-@Api(value = "/user/league",description = "小团课")
+@Api(value = "/user/league",description = "小团课",tags = "用户端")
 public class LifeLeagueClassController {
 
     @Resource

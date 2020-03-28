@@ -12,6 +12,7 @@ package com.ruoyi.web.controller.user;
 
 
 import com.ruoyi.common.utils.JacksonUtil;
+import com.ruoyi.life.domain.vo.user.LifeWxPayVipVo;
 import com.ruoyi.life.service.user.LifeVipService;
 import com.ruoyi.common.response.UserResponse;
 import com.ruoyi.framework.userlogin.LoginResponse;
@@ -31,7 +32,7 @@ import java.math.BigDecimal;
  */
 @RestController
 @RequestMapping("/user/vip")
-@Api(value = "/user/vip",description = "vip")
+@Api(value = "/user/vip",description = "vip",tags = "用户端")
 public class LifeVipController {
 
     @Resource
@@ -44,7 +45,7 @@ public class LifeVipController {
 
 
     @PostMapping("priceRechargeVip")
-    @ApiOperation(value = "会员充值")
+    @ApiOperation(value = "余额充值会员")
     public UserResponse priceRechargeVip(@ApiIgnore @LoginInfo UserLoginInfo loginInfo, @RequestBody @ApiParam(name = "body",value = "vipId:选择vip") String body){
         UserResponse response = LoginResponse.toMessage(loginInfo);
         if (response != null) return response;
@@ -73,6 +74,16 @@ public class LifeVipController {
     @ApiOperation(value = "获取会员列表",notes = "")
     public UserResponse getVipList(){
         return UserResponse.succeed(vipService.selectLifeVipList(null));
+    }
+
+
+
+    @PostMapping("wxRechargeVip")
+    @ApiOperation(value = "微信充值会员")
+    public UserResponse wxRechargeVip(@ApiIgnore @LoginInfo UserLoginInfo loginInfo, @RequestBody LifeWxPayVipVo wxPayVipVo){
+        UserResponse response = LoginResponse.toMessage(loginInfo);
+        if (response != null) return response;
+        return UserResponse.succeed(vipService.recharge(loginInfo.getId(),wxPayVipVo));
     }
 
 }

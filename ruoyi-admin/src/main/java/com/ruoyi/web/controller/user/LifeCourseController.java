@@ -40,7 +40,7 @@ import java.util.Date;
  */
 @RestController
 @RequestMapping("/user/course")
-@Api(value = "/user/course",description = "课程")
+@Api(value = "/user/course",description = "课程",tags = "用户端")
 public class LifeCourseController {
 
     @Autowired

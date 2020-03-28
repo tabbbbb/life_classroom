@@ -17,15 +17,16 @@ import com.ruoyi.framework.userlogin.info.UserLoginInfo;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 /**
  * 商户token
  */
 public class MchToken {
-    private static Map<String, MchUserLoginInfo> mchTokenMap = new HashMap<>();
+    private static Map<String, MchUserLoginInfo> mchTokenMap = new Hashtable<>();
 
-    private static Map<Long,MchUserLoginInfo> mchIdTokenMap = new HashMap<>();
+    private static Map<Long,MchUserLoginInfo> mchIdTokenMap = new Hashtable<>();
 
     /**
      * 获取token

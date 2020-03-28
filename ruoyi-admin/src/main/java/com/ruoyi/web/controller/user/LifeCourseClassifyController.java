@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/user/classify")
-@Api(value = "/user/classify",description = "目标类型（课程类别）")
+@Api(value = "/user/classify",description = "目标类型（课程类别）",tags = "用户端")
 public class LifeCourseClassifyController {
 
     @Autowired

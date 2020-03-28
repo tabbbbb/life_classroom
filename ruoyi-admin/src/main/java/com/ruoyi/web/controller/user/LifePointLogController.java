@@ -1,13 +1,3 @@
-/**
- * Copyright (C), 2020, 蓝煌信息科技公司
- * FileName: LifePointLogController
- * Author:   Administrator
- * Date:     2020-03-11 14:21
- * Description:
- * History:
- * <author>          <time>          <version>          <desc>
- * 作者姓名           修改时间           版本号              描述
- */
 package com.ruoyi.web.controller.user;
 
 import com.ruoyi.common.response.UserResponse;
@@ -31,7 +21,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/user/log")
-@Api(value = "/user/log",description = "积分日志")
+@Api(value = "/user/log",description = "积分日志",tags = "用户端")
 public class LifePointLogController {
 
     @Resource

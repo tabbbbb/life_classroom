@@ -24,21 +24,6 @@ public class JacksonUtil {
     }
 
 
-    public static List<String> parseStringList(String body, String field) {
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode node = null;
-        try {
-            node = mapper.readTree(body);
-            JsonNode leaf = node.get(field);
-
-            if (leaf != null)
-                return mapper.convertValue(leaf, new TypeReference<List<String>>() {
-                });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
     public static Integer parseInteger(String body, String field) {
         ObjectMapper mapper = new ObjectMapper();

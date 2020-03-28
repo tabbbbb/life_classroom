@@ -5,6 +5,7 @@ import com.ruoyi.common.config.LifeConfig;
 import com.ruoyi.common.exception.life.user.RechargerException;
 import com.ruoyi.common.sms.NotifySms;
 import com.ruoyi.life.domain.*;
+import com.ruoyi.life.domain.vo.user.LifeWxPayVipVo;
 import com.ruoyi.life.mapper.LifeVipMapper;
 
 import com.ruoyi.common.core.text.Convert;
@@ -78,16 +79,16 @@ public class LifeVipServiceImpl implements LifeVipService
 
 
     /**
-     * 充值
+     * 微信充值vip
      *
      * @param userId 用户id
-     * @param body   内容
+     * @param wxPayVipVo   内容
      * @return
      */
     @Override
-    public UserResponse recharge(Long userId, String body) {
-        Long vipId = JacksonUtil.parseLong(body,"vipId");
-        String code = JacksonUtil.parseString(body,"code");
+    public Object recharge(Long userId, LifeWxPayVipVo wxPayVipVo) {
+        Long vipId = wxPayVipVo.getVipId();
+        String code = wxPayVipVo.getCode();
         LifeVip vip = vipMapper.selectLifeVipById(vipId);
 
         if (vip.getVipLevel() == 1){
@@ -97,18 +98,17 @@ public class LifeVipServiceImpl implements LifeVipService
         String message = "充值会员"+vip.getPrint();
         BigDecimal price = vip.getPrint();
         String  openId = wxOperation.getOpen(code,0);
-        return  UserResponse.succeed(wxOperation.pay(unique,openId,message,price));
+        return  wxOperation.pay(unique,openId,message,price);
     }
 
     /**
-     * 充值成功
-     *
+     * 微信充值vip
      * @param outTradeNo
      * @return
      */
     @Override
     @Transactional
-    public  UserResponse rechargeSucceed(String outTradeNo, BigDecimal price) {
+    public UserResponse rechargeSucceed(String outTradeNo, BigDecimal price) {
         Long userId = Long.valueOf(outTradeNo.substring(0,outTradeNo.indexOf("_")));
         Long vipId = Long.valueOf(outTradeNo.substring(outTradeNo.lastIndexOf("_")+1));
         LifeUser user = userService.selectLifeUserById(userId);

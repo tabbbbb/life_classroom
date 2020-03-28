@@ -4,6 +4,7 @@ package com.ruoyi.life.mapper;
 import com.ruoyi.life.domain.LifeOrder;
 import com.ruoyi.life.domain.LifeReserve;
 import com.ruoyi.life.domain.dto.user.LifeDataDetailDto;
+import com.ruoyi.life.domain.dto.user.LifeOrderPaySoleDto;
 import com.ruoyi.life.domain.dto.user.LifePayOrderDto;
 import com.ruoyi.life.domain.vo.mch.LifeMchOrderDetailVo;
 import com.ruoyi.life.domain.vo.mch.LifeMchOrderVo;
@@ -36,14 +37,6 @@ public interface LifeOrderMapper
     LifeOrder selectLifeOrderById(Long orderId);
 
 
-
-    /**
-     * 新增订单
-     * 
-     * @param lifeOrder 订单
-     * @return 结果
-     */
-    int insertLifeOrder(LifeOrder lifeOrder);
 
 
 
@@ -79,7 +72,7 @@ public interface LifeOrderMapper
      * @param userId
      * @return
      */
-    long getNowCourseDuration(@Param("start") LocalDate start,@Param("userId") Long userId,@Param("shareId") Long shareId);
+    Long getNowCourseDuration(@Param("start") LocalDate start,@Param("userId") Long userId,@Param("shareId") Long shareId);
 
 
 
@@ -329,4 +322,11 @@ public interface LifeOrderMapper
      * @return
      */
     int set402Order();
+
+
+
+    int getOrderSoleAll(@Param("orderIds")List<Long>  orderIds);
+
+
+    List<LifeOrderPaySoleDto> getOrderPaySole(Long orderId);
 }
